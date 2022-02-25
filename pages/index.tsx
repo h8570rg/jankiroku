@@ -1,5 +1,5 @@
 function HomePage() {
-  return <div>Welcome!</div>;
+  return <div className="font-bold underline">Welcome!</div>;
 }
 
 export default HomePage;
