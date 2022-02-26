@@ -40,8 +40,7 @@ export default function Home() {
           Cloud Firestore Security Rules write permissions are required for
           adding users
         </p>
-        <button onClick={createUser}>Create 'nextjs_user'</button>
-
+        <button onClick={createUser}>{`Create 'nextjs_user'`}</button>
         <p className="description">
           Please press the link below after adding the user
         </p>
