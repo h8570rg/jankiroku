@@ -1,3 +1,7 @@
+/**
+ * @see https://github.com/vercel/next.js/tree/canary/examples/with-firebase
+ */
+
 import admin from "../firebase/nodeApp";
 
 export const getProfileData = async (username: string) => {

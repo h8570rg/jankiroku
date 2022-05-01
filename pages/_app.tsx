@@ -1,13 +1,11 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import UserProvider from "../context/user";
+import AuthProvider from "@/context/auth";
 
-function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <UserProvider>
+    <AuthProvider>
       <Component {...pageProps} />
-    </UserProvider>
+    </AuthProvider>
   );
 }
-
-export default MyApp;
