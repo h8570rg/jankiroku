@@ -1,11 +1,11 @@
-import { auth, getDoc, setDoc } from "@/firebase/clientApp";
-import { FIRESTORE } from "@/constants";
+import { auth, getDoc, setDoc } from "src/firebase/clientApp";
+import { FIRESTORE } from "src/constants";
 import {
   createUserWithEmailAndPassword,
   signInWithRedirect,
 } from "firebase/auth";
 import { provider as googleProvider } from "./googleProvider";
-import { User } from "types";
+import { User } from "src/types";
 
 export const createAccountWithEmailAndPassword = async (
   email: string,

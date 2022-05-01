@@ -1,4 +1,4 @@
-import { signInWithGoogle } from "@/apis/auth";
+import { signInWithGoogle } from "src/apis/auth";
 import Link from "next/link";
 import GoogleIconNormal from "public/google/vector/btn_google_light_normal_ios.svg";
 

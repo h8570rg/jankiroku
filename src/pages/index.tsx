@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "src/context/auth";
 
 export default function Home() {
   const { loadingUser, user, signOut, signedIn } = useAuth();
