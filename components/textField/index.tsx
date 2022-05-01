@@ -57,11 +57,7 @@ export const useTextField = (initialValue?: string) => {
     value,
     reset,
     setError,
-    bind: {
-      error,
-      value,
-      onChange,
-    },
+    bind,
   };
 };
 

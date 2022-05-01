@@ -11,12 +11,16 @@
     "format": "prettier --write \"**/*.{js,ts,tsx}\"",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
-    "deploy-firestore-rule": "firebase deploy --only firestore:rules"
+    "deploy-firestore-rule": "firebase deploy --only firestore:rules",
+    "type-check": "tsc --pretty --noEmit"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "bash -c 'npm run type-check'"
     ]
   },
   "repository": {
