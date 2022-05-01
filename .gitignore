@@ -4,3 +4,4 @@ node_modules
 .env.local
 .firebaserc
 .vscode
+tsconfig.tsbuildinfo
