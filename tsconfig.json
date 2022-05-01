@@ -16,11 +16,11 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/apis/*": ["apis/*"],
-      "@/components/*": ["components/*"],
-      "@/context/*": ["context/*"],
-      "@/firebase/*": ["firebase/*"],
-      "@/constants": ["constants"]
+      "@/apis/*": ["src/apis/*"],
+      "@/components/*": ["src/components/*"],
+      "@/context/*": ["src/context/*"],
+      "@/firebase/*": ["src/firebase/*"],
+      "@/constants": ["src/constants"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

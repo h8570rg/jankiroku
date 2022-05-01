@@ -2,10 +2,10 @@
  * @see https://github.com/vercel/next.js/tree/canary/examples/with-firebase
  */
 import { useState, useEffect, createContext, useContext, FC } from "react";
-import { auth } from "@/firebase/clientApp";
+import { auth } from "src/firebase/clientApp";
 import { onAuthStateChanged } from "firebase/auth";
-import { Auth, User } from "types";
-import { createUser, fetchUser } from "@/apis/auth";
+import { Auth, User } from "src/types";
+import { createUser, fetchUser } from "src/apis/auth";
 
 export const AuthContext = createContext<Auth>({
   loadingUser: true,

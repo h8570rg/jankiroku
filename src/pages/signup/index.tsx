@@ -1,6 +1,6 @@
-import TextField, { useTextField } from "@/components/textField";
+import TextField, { useTextField } from "src/components/textField";
 import { useCallback, useEffect, useState } from "react";
-import { createAccountWithEmailAndPassword } from "@/apis/auth";
+import { createAccountWithEmailAndPassword } from "src/apis/auth";
 
 export default function Signup() {
   const [submitConfirmed, setSubmitConfirmed] = useState(false);
