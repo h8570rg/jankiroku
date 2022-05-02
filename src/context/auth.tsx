@@ -1,7 +1,13 @@
 /**
  * @see https://github.com/vercel/next.js/tree/canary/examples/with-firebase
  */
-import { useState, useEffect, createContext, useContext, FC } from "react";
+import {
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+  ReactNode,
+} from "react";
 import { auth } from "src/firebase/clientApp";
 import { onAuthStateChanged } from "firebase/auth";
 import { Auth, User } from "src/types";
@@ -14,7 +20,7 @@ export const AuthContext = createContext<Auth>({
   user: undefined,
 });
 
-const AuthContextComp: FC = ({ children }) => {
+const AuthContextComp = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>();
   const [loadingUser, setLoadingUser] = useState(true); // Helpful, to update the UI accordingly.
 
