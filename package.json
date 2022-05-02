@@ -16,10 +16,10 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
-      "eslint --fix"
+      "eslint --fix",
+      "prettier --write"
     ],
-    "*": [
-      "prettier --write",
+    "*.{ts,tsx}": [
       "bash -c tsc"
     ]
   },
@@ -41,6 +41,8 @@
     "react-dom": "^18.1.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^16.2.4",
+    "@commitlint/config-conventional": "^16.2.4",
     "@svgr/webpack": "^6.2.1",
     "@types/node": "^17.0.31",
     "@types/react": "^18.0.8",
