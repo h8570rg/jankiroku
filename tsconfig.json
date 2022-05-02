@@ -21,7 +21,7 @@
       "@/constants": ["src/constants"],
       "@/context/*": ["src/context/*"],
       "@/firebase/*": ["src/firebase/*"],
-      "@/public": ["src/public"]
+      "@/public/*": ["src/public/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
