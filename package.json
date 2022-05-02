@@ -15,11 +15,11 @@
     "type-check": "tsc --pretty"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
     ],
-    "*.{ts,tsx}": [
+    "*": [
+      "prettier --write",
       "bash -c tsc"
     ]
   },

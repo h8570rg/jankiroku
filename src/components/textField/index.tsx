@@ -11,13 +11,13 @@ type Props = {
   label?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const TextField: React.FC<Props> = ({
+const TextField = ({
   className,
   error,
   label,
   onChange,
   ...inputHTMLAttributes
-}) => {
+}: Props) => {
   return (
     <label className={className}>
       {label}
