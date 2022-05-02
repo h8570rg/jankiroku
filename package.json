@@ -11,7 +11,8 @@
     "format": "prettier --write \"**/*.{js,ts,tsx}\"",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
-    "deploy-firestore-rule": "firebase deploy --only firestore:rules"
+    "deploy-firestore-rule": "firebase deploy --only firestore:rules",
+    "type-check": "tsc --pretty"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -19,7 +20,7 @@
       "prettier --write"
     ],
     "*.{ts,tsx}": [
-      "bash -c 'tsc'"
+      "bash -c tsc"
     ]
   },
   "repository": {

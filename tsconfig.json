@@ -18,9 +18,10 @@
     "paths": {
       "@/apis/*": ["src/apis/*"],
       "@/components/*": ["src/components/*"],
+      "@/constants": ["src/constants"],
       "@/context/*": ["src/context/*"],
       "@/firebase/*": ["src/firebase/*"],
-      "@/constants": ["src/constants"]
+      "@/public/*": ["src/public/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
