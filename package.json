@@ -34,25 +34,25 @@
   },
   "homepage": "https://github.com/h8570rg/janreco#readme",
   "dependencies": {
-    "firebase": "^9.6.7",
-    "firebase-admin": "^10.0.2",
-    "next": "^12.1.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "firebase": "^9.7.0",
+    "firebase-admin": "^10.1.0",
+    "next": "^12.1.5",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^6.2.1",
-    "@types/node": "^17.0.21",
-    "@types/react": "^17.0.39",
-    "autoprefixer": "^10.4.2",
-    "eslint": "8.9.0",
-    "eslint-config-next": "12.1.0",
-    "eslint-config-prettier": "^8.4.0",
+    "@types/node": "^17.0.31",
+    "@types/react": "^18.0.8",
+    "autoprefixer": "^10.4.6",
+    "eslint": "8.14.0",
+    "eslint-config-next": "12.1.5",
+    "eslint-config-prettier": "^8.5.0",
     "husky": "^7.0.4",
-    "lint-staged": "^12.3.4",
-    "postcss": "^8.4.7",
-    "prettier": "^2.5.1",
-    "tailwindcss": "^3.0.23",
-    "typescript": "^4.5.5"
+    "lint-staged": "^12.4.1",
+    "postcss": "^8.4.13",
+    "prettier": "^2.6.2",
+    "tailwindcss": "^3.0.24",
+    "typescript": "^4.6.4"
   }
 }
