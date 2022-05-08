@@ -1,5 +1,5 @@
-import { initializeApp, getApps } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import {
   doc,
@@ -40,7 +40,7 @@ const app = createFirebaseApp();
 export const auth = getAuth(app);
 
 // db
-const db = getFirestore(app);
+const firestore = getFirestore(app);
 
 const getDocref = <T>(path: string, ...pathSegments: string[]) => {
   const converter: FirestoreDataConverter<T> = {
@@ -51,13 +51,13 @@ const getDocref = <T>(path: string, ...pathSegments: string[]) => {
       return model;
     },
   };
-  return doc(db, path, ...pathSegments).withConverter(converter);
+  return doc(firestore, path, ...pathSegments).withConverter(converter);
 };
 
 const getDocSnap = <T>(path: string, ...pathSegments: string[]) =>
   getDocFS(getDocref<T>(path, ...pathSegments));
 
-export const getDoc = async <T>(path: string, ...pathSegments: string[]) => {
+const getDoc = async <T>(path: string, ...pathSegments: string[]) => {
   try {
     const docSnap = await getDocSnap<T>(path, ...pathSegments);
     return docSnap.data();
@@ -66,5 +66,10 @@ export const getDoc = async <T>(path: string, ...pathSegments: string[]) => {
   }
 };
 
-export const setDoc = <T>(data: T, path: string, ...pathSegments: string[]) =>
+const setDoc = <T>(data: T, path: string, ...pathSegments: string[]) =>
   setDocFS(getDocref<T>(path, ...pathSegments), data);
+
+export const db = {
+  getDoc,
+  setDoc,
+};

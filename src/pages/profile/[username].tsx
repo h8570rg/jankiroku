@@ -1,12 +1,12 @@
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-
 import { getProfileData } from "../../fetchData/getProfileData";
 
 type Props = {
   data: { username: string; profile: { message: string } };
 };
-export default function SSRPage({ data }: Props) {
+
+const SSRPage = ({ data }: Props) => {
   const { username, profile } = data;
 
   return (
@@ -23,7 +23,7 @@ export default function SSRPage({ data }: Props) {
       </main>
     </div>
   );
-}
+};
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const username = params?.username;
@@ -36,3 +36,5 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }
   return { props: { data: { username, profile } } };
 };
+
+export default SSRPage;

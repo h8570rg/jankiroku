@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useAuth } from "src/context/auth";
 
-export default function Home() {
+const Home = () => {
   const { loadingUser, user, signOut, signedIn } = useAuth();
   const profile = { username: "nextjs_user", message: "Awesome!!" };
 
@@ -29,4 +29,6 @@ export default function Home() {
       </main>
     </>
   );
-}
+};
+
+export default Home;

@@ -1,8 +1,8 @@
-import TextField, { useTextField } from "src/components/textField";
 import { useCallback, useEffect, useState } from "react";
-import { createAccountWithEmailAndPassword } from "src/apis/auth";
+import { createAccountWithEmailAndPassword } from "@/apis/auth";
+import TextField, { useTextField } from "src/components/textField";
 
-export default function Signup() {
+const Signup = () => {
   const [submitConfirmed, setSubmitConfirmed] = useState(false);
   const [isValid, setIsValid] = useState(true);
 
@@ -68,4 +68,6 @@ export default function Signup() {
       </form>
     </>
   );
-}
+};
+
+export default Signup;
