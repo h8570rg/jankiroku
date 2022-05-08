@@ -1,8 +1,8 @@
-@tailwind base;
+/* https://mui.com/material-ui/guides/interoperability/#tailwind-css */
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+@layer components {
   a,
   label {
     @apply block;

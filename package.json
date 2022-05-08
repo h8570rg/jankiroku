@@ -34,6 +34,10 @@
   },
   "homepage": "https://github.com/h8570rg/janreco#readme",
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@fontsource/roboto": "^4.5.5",
+    "@mui/material": "^5.6.4",
     "firebase": "^9.7.0",
     "firebase-admin": "^10.1.0",
     "next": "^12.1.5",
