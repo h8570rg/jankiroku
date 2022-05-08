@@ -1,5 +1,6 @@
 import {
   ChangeEventHandler,
+  forwardRef,
   InputHTMLAttributes,
   useCallback,
   useState,
@@ -11,21 +12,24 @@ type Props = {
   label?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const TextField = ({
-  className,
-  error,
-  label,
-  onChange,
-  ...inputHTMLAttributes
-}: Props) => {
-  return (
-    <label className={className}>
-      {label}
-      <input className="border" onChange={onChange} {...inputHTMLAttributes} />
-      {!!error && <p className="text-red-500 text-xs">{error}</p>}
-    </label>
-  );
-};
+const TextField = forwardRef<HTMLInputElement, Props>(
+  ({ className, error, label, onChange, ...inputHTMLAttributes }, ref) => {
+    return (
+      <label className={className}>
+        {label}
+        <input
+          className="border"
+          onChange={onChange}
+          {...inputHTMLAttributes}
+          ref={ref}
+        />
+        {!!error && <p className="text-red-500 text-xs">{error}</p>}
+      </label>
+    );
+  }
+);
+
+TextField.displayName = TextField.displayName || TextField.name;
 
 export const useTextField = (initialValue?: string) => {
   const [value, setValue] = useState<string | undefined>(initialValue);
