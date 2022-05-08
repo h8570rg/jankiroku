@@ -1,11 +1,11 @@
-import { auth, getDoc, setDoc } from "src/firebase/clientApp";
-import { FIRESTORE } from "src/constants";
 import {
   createUserWithEmailAndPassword,
   signInWithRedirect,
 } from "firebase/auth";
+import { FIRESTORE } from "@/constants";
+import { auth, db } from "@/firebase/clientApp";
+import { User } from "@/types";
 import { provider as googleProvider } from "./googleProvider";
-import { User } from "src/types";
 
 export const createAccountWithEmailAndPassword = async (
   email: string,
@@ -33,7 +33,7 @@ export const signInWithGoogle = async () => {
 };
 
 export const fetchUser = async (uid: string) =>
-  getDoc<User>(FIRESTORE.COLLECTION.USERS, uid);
+  db.getDoc<User>(FIRESTORE.COLLECTION.USERS, uid);
 
 export const createUser = async (user: User) =>
-  setDoc<User>(user, FIRESTORE.COLLECTION.USERS, user.uid);
+  db.setDoc<User>(user, FIRESTORE.COLLECTION.USERS, user.uid);
