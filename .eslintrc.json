@@ -22,6 +22,7 @@
         "newlines-between": "never",
         "warnOnUnassignedImports": true
       }
-    ]
+    ],
+    "no-unused-vars": "warn"
   }
 }

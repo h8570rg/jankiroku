@@ -1,71 +1,62 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { createAccountWithEmailAndPassword } from "@/apis/auth";
-import TextField, { useTextField } from "src/components/textField";
+import { FIREBASE_AUTH } from "@/constants";
+import TextField from "src/components/textField";
+
+type Inputs = {
+  email: string;
+  password: string;
+};
 
 const Signup = () => {
-  const [submitConfirmed, setSubmitConfirmed] = useState(false);
-  const [isValid, setIsValid] = useState(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const [error, setError] = useState<string>();
 
-  const email = useTextField();
-  const password = useTextField();
-
-  // TODO: refactor
-  const validate = useCallback(() => {
-    let _isValid = true;
-    if (!email.value) {
-      _isValid = false;
-      email.setError("メールアドレスが入力されていません");
-    } else {
-      _isValid = true;
-      email.setError(undefined);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      setError(undefined);
+      await createAccountWithEmailAndPassword(data.email, data.password);
+    } catch (error: any) {
+      const errorMessage =
+        FIREBASE_AUTH.ERROR_MESSAGE[error.code] ?? "エラーが発生しました";
+      setError(errorMessage);
     }
-    if (!password.value) {
-      _isValid = false;
-      password.setError("パスワードが入力されていません");
-    } else {
-      _isValid = true;
-      password.setError(undefined);
-    }
-    setIsValid(_isValid);
-  }, [email, password]);
-
-  const signup = useCallback((email: string, password: string) => {
-    createAccountWithEmailAndPassword(email, password);
-  }, []);
-
-  const handleSubmitClick = useCallback(() => {
-    validate();
-    setSubmitConfirmed(true);
-  }, [validate]);
-
-  useEffect(() => {
-    if (!submitConfirmed || !isValid || !email.value || !password.value) {
-      return;
-    }
-    signup(email.value, password.value);
-    setSubmitConfirmed(false);
-  }, [email.value, isValid, password.value, signup, submitConfirmed]);
+  };
 
   return (
     <>
       <h1>アカウントを作成</h1>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
           label="email"
           type="email"
           autoComplete="email"
-          {...email.bind}
+          placeholder="メールアドレス"
+          error={errors.email?.message}
+          {...register("email", { required: true })}
         />
         <TextField
           label="password"
           type="password"
           autoComplete="new-password"
-          {...password.bind}
+          placeholder="パスワード"
+          error={errors.password?.message}
+          {...register("password", {
+            required: true,
+            minLength: {
+              value: 6,
+              message: "パスワードは6文字以上にしてください",
+            },
+          })}
         />
-        <button type="button" onClick={handleSubmitClick}>
-          送信
-        </button>
+        <input type="submit" value="送信" />
       </form>
+      {error}
     </>
   );
 };
