@@ -1,8 +1,11 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createAccountWithEmailAndPassword } from "@/apis/auth";
+import Alert from "@/components/alert";
+import Button from "@/components/button";
+import TextField from "@/components/textField";
 import { FIREBASE_AUTH } from "@/constants";
-import TextField from "src/components/textField";
 
 type Inputs = {
   email: string;
@@ -15,37 +18,49 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+  const router = useRouter();
   const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
+      setLoading(true);
       setError(undefined);
       await createAccountWithEmailAndPassword(data.email, data.password);
+      router.push("/");
+      // TODO: toast
     } catch (error: any) {
       const errorMessage =
         FIREBASE_AUTH.ERROR_MESSAGE[error.code] ?? "エラーが発生しました";
       setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <>
+    <main className="p-2">
       <h1>アカウントを作成</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
         <TextField
+          className="block text-red-900 border-red-500"
           label="email"
           type="email"
           autoComplete="email"
           placeholder="メールアドレス"
-          error={errors.email?.message}
+          error={!!errors.email}
+          color="primary"
+          helperText={errors.email?.message}
           {...register("email", { required: true })}
         />
         <TextField
+          className="block"
           label="password"
           type="password"
           autoComplete="new-password"
           placeholder="パスワード"
-          error={errors.password?.message}
+          error={!!errors.password}
+          helperText={errors.password?.message}
           {...register("password", {
             required: true,
             minLength: {
@@ -54,10 +69,12 @@ const Signup = () => {
             },
           })}
         />
-        <input type="submit" value="送信" />
+        {!!error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" type="submit" loading={loading}>
+          送信
+        </Button>
       </form>
-      {error}
-    </>
+    </main>
   );
 };
 
