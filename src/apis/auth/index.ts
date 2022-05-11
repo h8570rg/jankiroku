@@ -10,26 +10,16 @@ import { provider as googleProvider } from "./googleProvider";
 export const createAccountWithEmailAndPassword = async (
   email: string,
   password: string
-) => {
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-  } catch (error) {
-    throw error;
-  }
-};
+) => createUserWithEmailAndPassword(auth, email, password);
 
 /**
  * @see https://firebase.google.com/docs/auth/web/google-signin
  */
 export const signInWithGoogle = async () => {
-  try {
-    await signInWithRedirect(auth, googleProvider);
-    // This gives you a Google Access Token. You can use it to access Google APIs.
-    // const credential = GoogleAuthProvider.credentialFromResult(result);
-    // const token = credential.accessToken;
-  } catch (error) {
-    throw error;
-  }
+  return signInWithRedirect(auth, googleProvider);
+  // This gives you a Google Access Token. You can use it to access Google APIs.
+  // const credential = GoogleAuthProvider.credentialFromResult(result);
+  // const token = credential.accessToken;
 };
 
 export const fetchUser = async (uid: string) =>

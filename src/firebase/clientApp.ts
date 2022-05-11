@@ -58,12 +58,8 @@ const getDocSnap = <T>(path: string, ...pathSegments: string[]) =>
   getDocFS(getDocref<T>(path, ...pathSegments));
 
 const getDoc = async <T>(path: string, ...pathSegments: string[]) => {
-  try {
-    const docSnap = await getDocSnap<T>(path, ...pathSegments);
-    return docSnap.data();
-  } catch (error) {
-    throw error;
-  }
+  const docSnap = await getDocSnap<T>(path, ...pathSegments);
+  return docSnap.data();
 };
 
 const setDoc = <T>(data: T, path: string, ...pathSegments: string[]) =>

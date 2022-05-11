@@ -21,6 +21,7 @@
       "@/constants": ["src/constants"],
       "@/context/*": ["src/context/*"],
       "@/firebase/*": ["src/firebase/*"],
+      "@/hooks/*": ["src/hooks/*"],
       "@/public/*": ["src/public/*"],
       "@/styles/*": ["src/styles/*"],
       "@/types": ["src/types"]

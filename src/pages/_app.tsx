@@ -9,11 +9,11 @@ import type { AppProps } from "next/app";
 import { ReactElement, ReactNode } from "react";
 import BasicLayout from "@/components/layout/basic";
 import AuthProvider from "@/context/auth";
+import ToastProvider from "@/context/toast";
 import { theme } from "@/styles/theme";
 import "../styles/globals.css";
 
 type NextPageWithLayout = NextPage & {
-  // eslint-disable-next-line no-unused-vars
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
@@ -28,7 +28,9 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
+      <AuthProvider>
+        <ToastProvider>{getLayout(<Component {...pageProps} />)}</ToastProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 };

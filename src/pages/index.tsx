@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useAuth } from "src/context/auth";
+import { useAuth } from "@/hooks/auth";
 
 const Home = () => {
   const { loadingUser, user, signOut, signedIn } = useAuth();
@@ -20,6 +20,7 @@ const Home = () => {
         <Link href="/signin" passHref>
           <a className="text-blue-900 underline">ログイン</a>
         </Link>
+        <Link href={"/debug"}>aaa</Link>
         <div className="mt-5">
           <p>{`ログイン状態: ${signedIn}`}</p>
           <p className="">{`loadingUser: ${loadingUser}`}</p>
