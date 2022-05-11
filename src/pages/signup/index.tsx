@@ -6,6 +6,7 @@ import Alert from "@/components/alert";
 import Button from "@/components/button";
 import TextField from "@/components/textField";
 import { FIREBASE_AUTH } from "@/constants";
+import { useToast } from "@/hooks/toast";
 
 type Inputs = {
   email: string;
@@ -19,6 +20,7 @@ const Signup = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const router = useRouter();
+  const toast = useToast();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
 
@@ -27,8 +29,8 @@ const Signup = () => {
       setLoading(true);
       setError(undefined);
       await createAccountWithEmailAndPassword(data.email, data.password);
+      toast.add({ content: "ログインしました" });
       router.push("/");
-      // TODO: toast
     } catch (error: any) {
       const errorMessage =
         FIREBASE_AUTH.ERROR_MESSAGE[error.code] ?? "エラーが発生しました";

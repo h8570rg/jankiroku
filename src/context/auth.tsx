@@ -2,13 +2,7 @@
  * @see https://github.com/vercel/next.js/tree/canary/examples/with-firebase
  */
 import { onAuthStateChanged } from "firebase/auth";
-import {
-  useState,
-  useEffect,
-  createContext,
-  useContext,
-  ReactNode,
-} from "react";
+import { useState, useEffect, createContext, ReactNode } from "react";
 import { createUser, fetchUser } from "@/apis/auth";
 import { auth } from "@/firebase/clientApp";
 import { Auth, User } from "@/types";
@@ -20,7 +14,7 @@ export const AuthContext = createContext<Auth>({
   user: undefined,
 });
 
-const AuthContextComp = ({ children }: { children: ReactNode }) => {
+const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>();
   const [loadingUser, setLoadingUser] = useState(true); // Helpful, to update the UI accordingly.
 
@@ -32,7 +26,7 @@ const AuthContextComp = ({ children }: { children: ReactNode }) => {
           // User is signed in.
           const { uid, displayName, email, photoURL } = user;
           const data = await fetchUser(uid);
-          if (!!data) {
+          if (data) {
             setUser(data);
           } else {
             const _user: User = {
@@ -45,9 +39,6 @@ const AuthContextComp = ({ children }: { children: ReactNode }) => {
             setUser(_user);
           }
         }
-      } catch (error) {
-        throw error;
-        // Most probably a connection error. Handle appropriately.
       } finally {
         setLoadingUser(false);
       }
@@ -71,7 +62,4 @@ const AuthContextComp = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook that shorthands the context!
-export const useAuth = () => useContext(AuthContext);
-
-export default AuthContextComp;
+export default AuthProvider;
