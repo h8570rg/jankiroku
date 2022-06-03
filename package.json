@@ -4,24 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "env-cmd -f config/.env.local next",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --dir src",
+    "lint": "next lint --dir .",
     "format": "prettier --write .",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "deploy-firestore-rule": "firebase deploy --only firestore:rules",
-    "type-check": "tsc --pretty"
-  },
-  "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{ts,tsx}": [
-      "bash -c tsc"
-    ]
+    "type-check": "tsc --pretty --noEmit"
   },
   "repository": {
     "type": "git",
@@ -55,6 +46,7 @@
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
     "autoprefixer": "^10.4.6",
+    "env-cmd": "^10.1.0",
     "eslint": "8.14.0",
     "eslint-config-next": "12.1.5",
     "eslint-config-prettier": "^8.5.0",
