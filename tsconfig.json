@@ -20,11 +20,11 @@
       "@/components/*": ["src/components/*"],
       "@/constants": ["src/constants"],
       "@/context/*": ["src/context/*"],
-      "@/firebase/*": ["src/firebase/*"],
       "@/hooks/*": ["src/hooks/*"],
       "@/public/*": ["src/public/*"],
       "@/styles/*": ["src/styles/*"],
-      "@/types": ["src/types"]
+      "@/types": ["src/types"],
+      "@/utils/*": ["src/utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
