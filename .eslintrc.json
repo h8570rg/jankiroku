@@ -1,11 +1,9 @@
 {
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["import", "@typescript-eslint"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
     "next/core-web-vitals",
-    "plugin:import/recommended",
     "prettier"
   ],
   "rules": {
@@ -19,7 +17,8 @@
           "internal",
           "parent",
           "sibling",
-          "index"
+          "index",
+          "object"
         ],
         "pathGroups": [
           {
@@ -31,9 +30,6 @@
         "warnOnUnassignedImports": true
       }
     ],
-    "no-unused-vars": "off",
-    "no-console": "error",
-    "react-hooks/exhaustive-deps": "error",
-    "@typescript-eslint/no-unused-vars": "error"
+    "no-console": "error"
   }
 }
