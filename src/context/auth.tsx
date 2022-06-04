@@ -4,8 +4,8 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect, createContext, ReactNode } from "react";
 import { createUser, fetchUser } from "@/apis/auth";
-import { auth } from "@/firebase/clientApp";
 import { Auth, User } from "@/types";
+import { auth } from "@/utils/firebase/clientApp";
 
 export const AuthContext = createContext<Auth>({
   loadingUser: true,

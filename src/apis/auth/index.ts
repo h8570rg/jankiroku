@@ -3,8 +3,8 @@ import {
   signInWithRedirect,
 } from "firebase/auth";
 import { FIRESTORE } from "@/constants";
-import { auth, db } from "@/firebase/clientApp";
 import { User } from "@/types";
+import { auth, db } from "@/utils/firebase/clientApp";
 import { provider as googleProvider } from "./googleProvider";
 
 export const createAccountWithEmailAndPassword = async (
