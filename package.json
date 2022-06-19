@@ -10,7 +10,7 @@
     "lint": "next lint --dir .",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "lint-staged": "lint-staged",
+    "pre-commit": "lint-staged && tsc",
     "deploy-firestore-rule": "firebase deploy --only firestore:rules",
     "type-check": "tsc --pretty --noEmit"
   },
