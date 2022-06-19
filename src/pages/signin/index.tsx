@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { signInWithGoogle } from "@/apis/auth";
+import { signInWithGoogle } from "@/apis/client/auth";
 import GoogleIconNormal from "@/public/google/vector/btn_google_light_normal_ios.svg";
 
 const Signin = () => {

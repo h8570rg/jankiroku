@@ -2,10 +2,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithRedirect,
 } from "firebase/auth";
-import { FIRESTORE } from "@/constants";
-import { User } from "@/types";
-import { auth, db } from "@/utils/firebase/clientApp";
-import { provider as googleProvider } from "./googleProvider";
+import { GoogleAuthProvider } from "firebase/auth";
+import { auth } from "@/utils/firebase/client";
+
+export const googleProvider = new GoogleAuthProvider();
 
 export const createAccountWithEmailAndPassword = async (
   email: string,
@@ -21,9 +21,3 @@ export const signInWithGoogle = async () => {
   // const credential = GoogleAuthProvider.credentialFromResult(result);
   // const token = credential.accessToken;
 };
-
-export const fetchUser = async (uid: string) =>
-  db.getDoc<User>(FIRESTORE.COLLECTION.USERS, uid);
-
-export const createUser = async (user: User) =>
-  db.setDoc<User>(user, FIRESTORE.COLLECTION.USERS, user.uid);

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { createAccountWithEmailAndPassword } from "@/apis/auth";
+import { createAccountWithEmailAndPassword } from "@/apis/client/auth";
 import Alert from "@/components/alert";
 import Button from "@/components/button";
 import TextField from "@/components/textField";
