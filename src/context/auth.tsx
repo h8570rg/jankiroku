@@ -3,9 +3,10 @@
  */
 import { onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect, createContext, ReactNode } from "react";
-import { createUser, fetchUser } from "@/apis/auth";
+import { fetchUser } from "@/apis/client/users";
+import Splash from "@/components/splash";
 import { Auth, User } from "@/types";
-import { auth } from "@/utils/firebase/clientApp";
+import { auth } from "@/utils/firebase/client";
 
 export const AuthContext = createContext<Auth>({
   loadingUser: true,
@@ -16,7 +17,7 @@ export const AuthContext = createContext<Auth>({
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>();
-  const [loadingUser, setLoadingUser] = useState(true); // Helpful, to update the UI accordingly.
+  const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
     // Listen authenticated user
@@ -24,19 +25,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         if (user) {
           // User is signed in.
-          const { uid, displayName, email, photoURL } = user;
+          const { uid } = user;
           const data = await fetchUser(uid);
           if (data) {
             setUser(data);
           } else {
-            const _user: User = {
-              uid,
-              name: displayName,
-              email,
-              photoURL,
-            };
-            createUser(_user);
-            setUser(_user);
+            // TODO: リダイレクト
           }
         }
       } finally {
@@ -57,7 +51,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
       }}
     >
-      {children}
+      {loadingUser ? <Splash /> : children}
     </AuthContext.Provider>
   );
 };
