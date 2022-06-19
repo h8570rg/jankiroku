@@ -7,5 +7,4 @@ const buildEslintCommand = (filenames) =>
 
 module.exports = {
   "*.{js,ts,tsx}": [buildEslintCommand, "prettier --write"],
-  "*.{ts,tsx}": ["bash -c 'npm run type-check'"],
 };
