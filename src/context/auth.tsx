@@ -3,10 +3,11 @@
  */
 import { onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect, createContext, ReactNode } from "react";
-import { fetchUser } from "@/apis/client/users";
+import { createUser, fetchUser } from "@/apis/client/users";
 import Splash from "@/components/splash";
 import { Auth, User } from "@/types";
 import { auth } from "@/utils/firebase/client";
+import { convertFirebaseAuthUserToUser } from "@/utils/user";
 
 export const AuthContext = createContext<Auth>({
   loadingUser: true,
@@ -21,21 +22,31 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Listen authenticated user
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      try {
-        if (user) {
-          // User is signed in.
-          const { uid } = user;
-          const data = await fetchUser(uid);
-          if (data) {
-            setUser(data);
-          } else {
-            // TODO: リダイレクト
-          }
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseAuthUser) => {
+      setLoadingUser(true);
+      setUser(undefined);
+      await (async () => {
+        if (!firebaseAuthUser) {
+          // TODO: https://nextjs.org/docs/going-to-production#logging
+          return;
         }
-      } finally {
-        setLoadingUser(false);
-      }
+
+        // ログイン済み(匿名含む)
+        const { uid } = firebaseAuthUser;
+        const user = await fetchUser(uid);
+
+        // dbにユーザーデータがある場合それをセット
+        if (user) {
+          setUser(user);
+          return;
+        }
+
+        // dbにユーザーデータがない場合create
+        const newUser = convertFirebaseAuthUserToUser(firebaseAuthUser);
+        const createdUser = await createUser(newUser);
+        setUser(createdUser);
+      })();
+      setLoadingUser(false);
     });
 
     // Unsubscribe auth listener on unmount

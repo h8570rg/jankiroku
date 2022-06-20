@@ -18,8 +18,6 @@ class App {
   private _app: FirebaseApp;
 
   constructor() {
-    // eslint-disable-next-line no-console
-    console.log("Firebase app init.");
     this._app = initializeApp(clientCredentials);
     // Check that `window` is in scope for the analytics module!
     if (typeof window !== "undefined") {
