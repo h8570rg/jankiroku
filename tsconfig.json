@@ -24,7 +24,10 @@
       "@/public/*": ["public/*"],
       "@/styles/*": ["src/styles/*"],
       "@/types": ["src/types"],
-      "@/utils/*": ["src/utils/*"]
+      "@/utils/*": ["src/utils/*"],
+      // new
+      "@images/*": ["src/assets/images/*"],
+      "@svgs/*": ["src/assets/svgs/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

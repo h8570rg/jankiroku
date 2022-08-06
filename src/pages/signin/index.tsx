@@ -1,14 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { signInWithGoogle } from "@/apis/client/auth";
-import GoogleIconNormal from "@/public/google/vector/btn_google_light_normal_ios.svg";
 import { NextPageWithLayout } from "@/types";
+import bgMahjong1Image from "@images/bg/mahjong1.jpeg";
+import GoogleIconNormalSvg from "@svgs/google/btn_google_light_normal_ios.svg";
 
 const Signin: NextPageWithLayout = () => {
   return (
     <div className="h- w-full relative">
       <div className="h-screen w-full relative">
-        <Image src="/bg/mahjong1.jpeg" alt="bg" layout="fill" />
+        <Image src={bgMahjong1Image} alt="bg" layout="fill" />
         <div className="absolute inset-0 backdrop-blur-sm"></div>
       </div>
       <div className="absolute top-0">
@@ -19,7 +20,7 @@ const Signin: NextPageWithLayout = () => {
         <a>メールアドレスでログイン</a>
       </Link> */}
         <button onClick={signInWithGoogle}>
-          <GoogleIconNormal />
+          <GoogleIconNormalSvg />
         </button>
       </div>
     </div>
