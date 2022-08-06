@@ -26,6 +26,7 @@
       "@/types": ["src/types"],
       "@/utils/*": ["src/utils/*"],
       // new
+      "~/*": ["src/*"],
       "@images/*": ["src/assets/images/*"],
       "@svgs/*": ["src/assets/svgs/*"]
     }

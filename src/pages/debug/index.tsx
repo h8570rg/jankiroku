@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { fetchUser } from "@/apis/node/users";
 import { useToast } from "@/hooks/toast";
 import { User } from "@/types";
-import { auth as authAdmin } from "@/utils/firebase/admin";
+import { auth as authAdmin } from "src/firebase/admin";
 
 // type ServerSideProps = {
 //   user: User;

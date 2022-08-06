@@ -6,8 +6,8 @@ import { useState, useEffect, createContext, ReactNode } from "react";
 import { createUser, fetchUser } from "@/apis/client/users";
 import Splash from "@/components/splash";
 import { Auth, User } from "@/types";
-import { auth } from "@/utils/firebase/client";
 import { convertFirebaseAuthUserToUser } from "@/utils/user";
+import { auth } from "src/firebase/client";
 
 export const AuthContext = createContext<Auth>({
   loadingUser: true,
