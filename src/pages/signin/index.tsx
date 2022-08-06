@@ -1,9 +1,9 @@
+import bgMahjong1Image from "@images/bg/mahjong1.jpeg";
+import GoogleIconNormalSvg from "@svgs/google/btn_google_light_normal_ios.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { signInWithGoogle } from "@/apis/client/auth";
 import { NextPageWithLayout } from "@/types";
-import bgMahjong1Image from "@images/bg/mahjong1.jpeg";
-import GoogleIconNormalSvg from "@svgs/google/btn_google_light_normal_ios.svg";
 
 const Signin: NextPageWithLayout = () => {
   return (
