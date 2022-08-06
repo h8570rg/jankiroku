@@ -1,6 +1,6 @@
 import { FIRESTORE } from "@/constants";
 import { User } from "@/types";
-import { firestore } from "@/utils/firebase/admin";
+import { firestore } from "src/firebase/admin";
 
 export const fetchUser = async (uid: string) => {
   const doc = await firestore
