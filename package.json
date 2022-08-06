@@ -11,7 +11,7 @@
     "format": "prettier --write . --config config/.prettierrc.json --ignore-path config/.prettierignore",
     "prepare": "husky install",
     "pre-commit": "lint-staged -c config/.lintstagedrc.json && npm run lint && npm run type-check",
-    "deploy-firestore-rule": "firebase deploy --only firestore:rules",
+    "deploy-firestore-rule": "firebase deploy --only firestore:rules --config config/firebase.json",
     "type-check": "tsc --pretty --noEmit"
   },
   "repository": {
