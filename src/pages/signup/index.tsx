@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { createAccountWithEmailAndPassword } from "@/apis/client/auth";
 import Alert from "@/components/alert";
 import Button from "@/components/button";
 import TextField from "@/components/textField";
 import { FIREBASE_AUTH } from "@/constants";
 import { useToast } from "@/hooks/toast";
+import { signup } from "~/services/auth";
 
 type Inputs = {
   email: string;
@@ -28,7 +28,7 @@ const Signup = () => {
     try {
       setLoading(true);
       setError(undefined);
-      await createAccountWithEmailAndPassword(data.email, data.password);
+      await signup.email(data.email, data.password);
       toast.add({ content: "ログインしました" });
       router.push("/");
     } catch (error: any) {

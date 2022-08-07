@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { signInWithGoogle } from "@/apis/client/auth";
 import { NextPageWithLayout } from "@/types";
 import bgMahjong1Image from "@images/bg/mahjong1.jpeg";
 import GoogleIconNormalSvg from "@svgs/google/btn_google_light_normal_ios.svg";
+import { signin } from "~/services/auth";
 
 const Signin: NextPageWithLayout = () => {
   return (
@@ -19,7 +19,7 @@ const Signin: NextPageWithLayout = () => {
         {/* <Link href="/login/email" passHref>
         <a>メールアドレスでログイン</a>
       </Link> */}
-        <button onClick={signInWithGoogle}>
+        <button onClick={signin.google}>
           <GoogleIconNormalSvg />
         </button>
       </div>

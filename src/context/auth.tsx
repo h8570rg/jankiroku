@@ -3,11 +3,11 @@
  */
 import { onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect, createContext, ReactNode } from "react";
-import { createUser, fetchUser } from "@/apis/client/users";
 import Splash from "@/components/splash";
 import { Auth, User } from "@/types";
 import { convertFirebaseAuthUserToUser } from "@/utils/user";
 import { auth } from "src/firebase/client";
+// import { createUser, fetchUser } from "~/services/user";
 
 export const AuthContext = createContext<Auth>({
   loadingUser: true,
@@ -31,20 +31,20 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
           return;
         }
 
-        // ログイン済み(匿名含む)
-        const { uid } = firebaseAuthUser;
-        const user = await fetchUser(uid);
+        // // ログイン済み(匿名含む)
+        // const { uid } = firebaseAuthUser;
+        // const user = await fetchUser(uid);
 
-        // dbにユーザーデータがある場合それをセット
-        if (user) {
-          setUser(user);
-          return;
-        }
+        // // dbにユーザーデータがある場合それをセット
+        // if (user) {
+        //   setUser(user);
+        //   return;
+        // }
 
-        // dbにユーザーデータがない場合create
-        const newUser = convertFirebaseAuthUserToUser(firebaseAuthUser);
-        const createdUser = await createUser(newUser);
-        setUser(createdUser);
+        // // dbにユーザーデータがない場合create
+        // const newUser = convertFirebaseAuthUserToUser(firebaseAuthUser);
+        // const createdUser = await createUser(newUser);
+        // setUser(createdUser);
       })();
       setLoadingUser(false);
     });

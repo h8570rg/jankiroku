@@ -5,8 +5,9 @@ import "@fontsource/roboto/700.css";
 import { ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import type { AppProps } from "next/app";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import BasicLayout from "@/components/layout/basic";
-import AuthProvider from "@/context/auth";
+// import AuthProvider from "@/context/auth";
 import ToastProvider from "@/context/toast";
 import { theme } from "@/styles/theme";
 import { NextPageWithLayout } from "@/types";
@@ -21,12 +22,14 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     Component.getLayout || ((page) => <BasicLayout>{page}</BasicLayout>);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AuthProvider>
+    <ErrorBoundary>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {/* <AuthProvider> */}
         <ToastProvider>{getLayout(<Component {...pageProps} />)}</ToastProvider>
-      </AuthProvider>
-    </ThemeProvider>
+        {/* </AuthProvider> */}
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 };
 
