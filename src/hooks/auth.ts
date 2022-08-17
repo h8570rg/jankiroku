@@ -1,14 +1,8 @@
-import { useContext } from "react";
-import { AuthContext } from "@/context/auth";
+import { useEffect } from "react";
+import { subscribeAuthTokenChangeAndRefresh } from "~/services/auth";
 
-export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-
-  if (!ctx) {
-    throw Error(
-      "`useAuth` hook must be called from a descendent of the `AuthProvider`."
-    );
-  }
-
-  return ctx;
+export const useAuthTokenRefresh = () => {
+  useEffect(() => {
+    return subscribeAuthTokenChangeAndRefresh();
+  }, []);
 };

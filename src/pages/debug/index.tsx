@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import nookies from "nookies";
 import { useCallback } from "react";
-import { fetchUser } from "@/apis/node/users";
+// import { fetchUser } from "@/apis/node/users";
 import { useToast } from "@/hooks/toast";
 import { User } from "@/types";
 import { auth as authAdmin } from "src/firebase/admin";
