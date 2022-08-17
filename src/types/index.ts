@@ -1,3 +1,4 @@
+import { DecodedIdToken } from "firebase-admin/auth";
 import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
 
@@ -7,6 +8,8 @@ export type Auth = {
   signOut: VoidFunction;
   user: User | undefined;
 };
+
+export type AuthInfo = DecodedIdToken;
 
 export type User = {
   uid: string;

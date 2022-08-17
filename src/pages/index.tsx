@@ -1,11 +1,20 @@
+import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useAuth } from "@/hooks/auth";
+import { withAuth } from "~/routes/ssr";
+import { signOut } from "~/services/auth";
 
-const Home = () => {
-  const { loadingUser, user, signOut, signedIn } = useAuth();
-  const profile = { username: "nextjs_user", message: "Awesome!!" };
+export const getServerSideProps = withAuth(async (_, { uid }) => {
+  return {
+    props: {
+      uid,
+    },
+  };
+});
 
+export default function Home({
+  uid,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <Head>
@@ -14,22 +23,14 @@ const Home = () => {
       </Head>
 
       <main>
-        <Link href={`/profile/${profile.username}`} passHref>
-          <a className="text-blue-900 underline">Go to SSR Page</a>
-        </Link>
         <Link href="/signin" passHref>
           <a className="text-blue-900 underline">ログイン</a>
         </Link>
-        <Link href={"/debug"}>aaa</Link>
-        <div className="mt-5">
-          <p>{`ログイン状態: ${signedIn}`}</p>
-          <p className="">{`loadingUser: ${loadingUser}`}</p>
-          <p className="break-all">{`user: ${JSON.stringify(user)}`}</p>
-        </div>
+        <Link href={"/debug"}>debug page</Link>
+        <p>認証情報</p>
+        <p>{`uid: ${uid}`}</p>
         <button onClick={signOut}>ログアウト</button>
       </main>
     </>
   );
-};
-
-export default Home;
+}
