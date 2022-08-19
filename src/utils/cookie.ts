@@ -1,44 +1,55 @@
-import { destroyCookie, parseCookies, setCookie } from "nookies";
+import { GetServerSidePropsContext } from "next";
+import nookies, { destroyCookie, parseCookies, setCookie } from "nookies";
 import { isBrowser } from "./common";
 
-export const COOKIE_NAME = {
-  AUTH_TOKEN: "auth_token",
-} as const;
-
-type CookieName = "auth_token";
-
-const cookie = (
-  cookieName: CookieName,
+export const cookie = (
+  cookieName: string,
   options?: {
     maxAge?: number;
     path?: string;
   }
 ) => {
   return {
-    get: () => {
-      if (!isBrowser()) {
-        throw new Error("'cookie.get' function must be called in browser.");
-      }
-      const cookies = parseCookies();
-      const cookie = cookieName in cookies ? undefined : cookies[cookieName];
-      return cookie;
+    client: {
+      get: () => {
+        if (!isBrowser()) {
+          throw new Error(
+            "'cookie.client.get' function must be called in browser."
+          );
+        }
+        const cookies = parseCookies();
+        const cookie = cookieName in cookies ? cookies[cookieName] : undefined;
+        return cookie;
+      },
+      set: (value: string) => {
+        if (!isBrowser()) {
+          throw new Error(
+            "'cookie.client.set' function must be called in browser."
+          );
+        }
+        setCookie(null, cookieName, value, options);
+      },
+      destory: () => {
+        if (!isBrowser()) {
+          throw new Error(
+            "'cookie.client.destory' function must be called in browser."
+          );
+        }
+        destroyCookie(null, cookieName);
+      },
     },
-    set: (value: string) => {
-      if (!isBrowser()) {
-        throw new Error("'cookie.set' function must be called in browser.");
-      }
-      setCookie(null, cookieName, value, options);
-    },
-    destory: () => {
-      if (!isBrowser()) {
-        throw new Error("'cookie.destory' function must be called in browser.");
-      }
-      destroyCookie(null, cookieName);
+    ssr: {
+      get: (ctx: GetServerSidePropsContext) => {
+        const cookies = nookies.get(ctx);
+        const cookie = cookieName in cookies ? cookies[cookieName] : undefined;
+        return cookie;
+      },
+      set: (ctx: GetServerSidePropsContext, value: string) => {
+        nookies.set(ctx, cookieName, value, options);
+      },
+      destory: (ctx: GetServerSidePropsContext) => {
+        destroyCookie(ctx, cookieName);
+      },
     },
   };
 };
-
-export const authTokenCookie = cookie(COOKIE_NAME.AUTH_TOKEN, {
-  maxAge: 60 * 60 * 24 * 365,
-  path: "/",
-});

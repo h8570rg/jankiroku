@@ -1,6 +1,6 @@
 import { UserCredential } from "firebase/auth";
 import router from "next/router";
-import { authTokenCookie } from "@/utils/cookie";
+import { authTokenCookie } from "@lib/cookie";
 import {
   createAccountWithEmailAndPassword,
   signInWithGoogle,
@@ -42,16 +42,16 @@ export const signin: Record<Method, VoidFunction> = {
 
 export const signOut = () => {
   _signOut();
-  authTokenCookie.destory();
+  authTokenCookie.client.destory();
   router.push("/signin");
 };
 
 export const subscribeAuthTokenChangeAndRefresh = () => {
   return subscribeAuthTokenChanged((authToken) => {
     if (authToken) {
-      authTokenCookie.set(authToken);
+      authTokenCookie.client.set(authToken);
     } else {
-      authTokenCookie.destory();
+      authTokenCookie.client.destory();
     }
   });
 };

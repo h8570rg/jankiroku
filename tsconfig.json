@@ -28,7 +28,8 @@
       // new
       "~/*": ["src/*"],
       "@images/*": ["src/assets/images/*"],
-      "@svgs/*": ["src/assets/svgs/*"]
+      "@svgs/*": ["src/assets/svgs/*"],
+      "@lib/*": ["src/lib/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

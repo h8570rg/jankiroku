@@ -2,7 +2,7 @@ import { getRedirectResult } from "firebase/auth";
 import router from "next/router";
 import { useEffect } from "react";
 import { NextPageWithLayout } from "@/types";
-import { authTokenCookie } from "@/utils/cookie";
+import { authTokenCookie } from "@lib/cookie";
 import { auth } from "~/firebase/client";
 import { Method, METHOD, signin } from "~/services/auth";
 
@@ -33,7 +33,7 @@ const Signin: NextPageWithLayout = () => {
     }
 
     // リダイレクトしたときにすでにcookieがセットされているように
-    authTokenCookie.set(authToken);
+    authTokenCookie.client.set(authToken);
 
     router.push("/");
 
