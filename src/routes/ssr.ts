@@ -4,7 +4,7 @@ import {
   GetServerSidePropsResult,
   PreviewData,
 } from "next";
-import { AuthInfo } from "@/types";
+import { AuthInfo } from "@types";
 import { auth } from "~/firebase/admin";
 import { authTokenCookie } from "~/lib/cookie";
 

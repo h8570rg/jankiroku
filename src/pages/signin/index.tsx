@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
-import { NextPageWithLayout } from "@/types";
+import { NextPageWithLayout } from "@types";
 import bgMahjong1Image from "@images/bg/mahjong1.jpeg";
 import GoogleIconNormalSvg from "@svgs/google/btn_google_light_normal_ios.svg";
 import { METHOD } from "~/services/auth";

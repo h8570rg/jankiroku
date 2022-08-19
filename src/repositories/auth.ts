@@ -7,9 +7,30 @@ import {
   signOut as firebaseAuthSignOut,
   onIdTokenChanged,
 } from "firebase/auth";
-import { User } from "@/types";
-import { convertFirebaseAuthUserToUser } from "@/utils/user";
+import { User } from "@types";
+import { convertFirebaseAuthUserToUser } from "@utils/user";
 import { auth } from "src/firebase/client";
+
+type AuthError = {
+  code: string;
+  message: string;
+  name: string;
+};
+
+export const isAuthError = (e: unknown): e is AuthError => {
+  return e instanceof Error && "code" in e && "message" in e && "name" in e;
+};
+
+export const CREATE_ACCOUNT_WITH_EMAIL_AND_PASSWORD_ERROR_CODE = {
+  EMAIL_EXISTS: "auth/email-already-in-use",
+  INVALID_EMAIL: "auth/invalid-email",
+  INVALID_PASSWORD: "auth/wrong-password",
+  POPUP_BLOCKED: "auth/popup-blocked",
+  USER_DELETED: "auth/user-not-found",
+  USER_DISABLED: "auth/user-disabled",
+  USER_MISMATCH: "auth/user-mismatch",
+  WEAK_PASSWORD: "auth/weak-password",
+} as const;
 
 export const createAccountWithEmailAndPassword = async (
   email: string,

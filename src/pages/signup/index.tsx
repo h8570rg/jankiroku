@@ -1,11 +1,10 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import Alert from "@/components/alert";
-import Button from "@/components/button";
-import TextField from "@/components/textField";
-import { FIREBASE_AUTH } from "@/constants";
-import { useToast } from "@/hooks/toast";
+import { useToast } from "@hooks/toast";
+import Alert from "@components/alert";
+import Button from "@components/button";
+import TextField from "@components/textField";
 import { signup } from "~/services/auth";
 
 type Inputs = {
@@ -25,19 +24,16 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      setLoading(true);
-      setError(undefined);
-      await signup.email(data.email, data.password);
+    setLoading(true);
+    setError(undefined);
+    const result = await signup.email(data.email, data.password);
+    if (result.success) {
       toast.add({ content: "ログインしました" });
       router.push("/");
-    } catch (error: any) {
-      const errorMessage =
-        FIREBASE_AUTH.ERROR_MESSAGE[error.code] ?? "エラーが発生しました";
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
+    } else {
+      setError(result.message);
     }
+    setLoading(false);
   };
 
   return (
