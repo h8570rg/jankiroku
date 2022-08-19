@@ -5,8 +5,8 @@ import {
   PreviewData,
 } from "next";
 import { AuthInfo } from "@/types";
-import { COOKIE_NAME } from "@/utils/cookie";
 import { auth } from "~/firebase/admin";
+import { authTokenCookie } from "~/lib/cookie";
 
 export function withBase(next: GetServerSideProps): GetServerSideProps {
   return async function (ssrContext: GetServerSidePropsContext) {
@@ -20,8 +20,8 @@ export type GetServerSidePropsWithAuth<
   // eslint-disable-next-line @typescript-eslint/ban-types
   Q extends NodeJS.Dict<string | string[]> = {},
   D extends PreviewData = PreviewData
-> = GetServerSideProps<P, Q, D> extends (contest: infer U) => infer R
-  ? (contest: U, authInfo: AuthInfo) => R
+> = GetServerSideProps<P, Q, D> extends (context: infer U) => infer R
+  ? (context: U, authInfo: AuthInfo) => R
   : never;
 
 /**
@@ -30,7 +30,7 @@ export type GetServerSidePropsWithAuth<
 export function withAuth(next: GetServerSidePropsWithAuth): GetServerSideProps {
   // TODO: middlewareでもいいかも
   return withBase(async (ssrContext) => {
-    const authToken = ssrContext.req.cookies[COOKIE_NAME.AUTH_TOKEN];
+    const authToken = authTokenCookie.ssr.get(ssrContext);
 
     const redirectSigninPage: GetServerSidePropsResult<{ uid: string }> = {
       redirect: {
