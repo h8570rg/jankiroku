@@ -1,5 +1,5 @@
 import { User as FirebaseAuthUser } from "firebase/auth";
-import { User } from "@/types";
+import { User } from "@types";
 
 export const convertFirebaseAuthUserToUser = (user: FirebaseAuthUser): User => {
   const { uid, email, displayName, photoURL } = user;

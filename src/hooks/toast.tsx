@@ -1,5 +1,11 @@
-import React, { createContext, ReactNode, useCallback, useState } from "react";
-import Toast from "@/components/toast";
+import React, {
+  createContext,
+  ReactNode,
+  useCallback,
+  useState,
+  useContext,
+} from "react";
+import Toast from "@components/toast";
 
 type ToastContent = string;
 type Toast = {
@@ -10,12 +16,12 @@ type ToastContext = {
 };
 type AddToast = ({ content }: { content: ToastContent }) => void;
 
-export const ToastContext = createContext<ToastContext>({
+const ToastContext = createContext<ToastContext>({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   add: () => {},
 });
 
-const ToastProvider = ({ children }: { children: ReactNode }) => {
+export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const add = useCallback<AddToast>(({ content }) => {
@@ -39,4 +45,14 @@ const ToastProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default ToastProvider;
+export const useToast = () => {
+  const ctx = useContext(ToastContext);
+
+  if (!ctx) {
+    throw Error(
+      "`useToast` hook must be called from a descendent of the `ToastProvider`."
+    );
+  }
+
+  return ctx;
+};
