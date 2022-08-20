@@ -4,7 +4,7 @@ import Link from "next/link";
 import { withAuth } from "~/routes/ssr";
 import { signOut } from "~/services/auth";
 
-export const getServerSideProps = withAuth(async (_, { uid }) => {
+export const getServerSideProps = withAuth(async (_, uid) => {
   return {
     props: {
       uid,

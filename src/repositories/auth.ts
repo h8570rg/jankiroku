@@ -6,9 +6,8 @@ import {
   Unsubscribe,
   signOut as firebaseAuthSignOut,
   onIdTokenChanged,
+  User as FirebaseAuthUser,
 } from "firebase/auth";
-import { User } from "@types";
-import { convertFirebaseAuthUserToUser } from "@utils/user";
 import { auth } from "src/firebase/client";
 
 type AuthError = {
@@ -50,7 +49,7 @@ export const signInWithGoogle = async () => {
 
 export const signOut = () => firebaseAuthSignOut(auth);
 
-export type AuthStateChangeHandler = (user: User | null) => void;
+export type AuthStateChangeHandler = (user: FirebaseAuthUser | null) => void;
 
 export const subscribeAuthStateChanged = (
   handler: AuthStateChangeHandler,
@@ -59,9 +58,7 @@ export const subscribeAuthStateChanged = (
 ): Unsubscribe =>
   onAuthStateChanged(
     auth,
-    (firebaseAuthUser) => {
-      const user =
-        firebaseAuthUser && convertFirebaseAuthUserToUser(firebaseAuthUser);
+    (user) => {
       handler(user);
     },
     error,
@@ -69,19 +66,3 @@ export const subscribeAuthStateChanged = (
   );
 
 export type AuthTokenChangeHandler = (authToken: string | null) => void;
-
-export const subscribeAuthTokenChanged = (
-  handler: AuthTokenChangeHandler,
-  error?: (error: Error) => void,
-  complete?: () => void
-) =>
-  onIdTokenChanged(
-    auth,
-    async (firebaseAuthUser) => {
-      const authToken =
-        firebaseAuthUser && (await firebaseAuthUser.getIdToken());
-      handler(authToken);
-    },
-    error,
-    complete
-  );
