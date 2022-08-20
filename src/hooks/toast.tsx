@@ -5,7 +5,7 @@ import React, {
   useState,
   useContext,
 } from "react";
-import Toast from "@components/toast";
+import Toast from "@components/Toast";
 
 type ToastContent = string;
 type Toast = {

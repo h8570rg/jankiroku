@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
-import AppBar from "@components/appBar";
-import { IconButton } from "@components/button";
-import Icon from "@components/icon";
+import AppBar from "@components/AppBar";
+import { IconButton } from "@components/Button";
+import Icon from "@components/Icon";
 
 const BasicLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
