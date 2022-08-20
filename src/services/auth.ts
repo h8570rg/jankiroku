@@ -4,9 +4,9 @@ import {
   createAccountWithEmailAndPassword,
   signInWithGoogle,
   signOut as _signOut,
-  subscribeAuthTokenChanged,
   isAuthError,
   CREATE_ACCOUNT_WITH_EMAIL_AND_PASSWORD_ERROR_CODE,
+  subscribeAuthStateChanged,
 } from "~/repositories/auth";
 
 const SIGNUP_EMAIL_ERROR_MESSAGE: { [key: string]: string } = {
@@ -79,12 +79,15 @@ export const signOut = () => {
   router.push("/signin");
 };
 
-export const subscribeAuthTokenChangeAndRefresh = () => {
-  return subscribeAuthTokenChanged((authToken) => {
-    if (authToken) {
-      authTokenCookie.client.set(authToken);
-    } else {
-      authTokenCookie.client.destory();
-    }
+export const subscribeAuthTokenChange = (
+  handler: (
+    authToken: string | undefined,
+    refreshToken: string | undefined
+  ) => void
+) => {
+  return subscribeAuthStateChanged(async (user) => {
+    const authToken = await user?.getIdToken();
+    const refreshToken = user?.refreshToken;
+    handler(authToken, refreshToken);
   });
 };
