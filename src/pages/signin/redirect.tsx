@@ -2,8 +2,8 @@ import { getRedirectResult } from "firebase/auth";
 import router from "next/router";
 import { useEffect } from "react";
 import { authTokenCookie } from "@lib/cookie";
+import { auth } from "@lib/firebase/client";
 import { NextPageWithLayout } from "@types";
-import { auth } from "~/firebase/client";
 import { Method, METHOD, signin } from "~/services/auth";
 
 const Signin: NextPageWithLayout = () => {

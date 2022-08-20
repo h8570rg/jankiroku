@@ -8,7 +8,7 @@ import {
   onIdTokenChanged,
   User as FirebaseAuthUser,
 } from "firebase/auth";
-import { auth } from "src/firebase/client";
+import { auth } from "@lib/firebase/client";
 
 type AuthError = {
   code: string;

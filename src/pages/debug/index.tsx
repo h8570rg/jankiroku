@@ -3,8 +3,8 @@ import nookies from "nookies";
 import { useCallback } from "react";
 // import { fetchUser } from "@/apis/node/users";
 import { useToast } from "@hooks/toast";
+import { auth as authAdmin } from "@lib/firebase/admin";
 import { User } from "@types";
-import { auth as authAdmin } from "src/firebase/admin";
 
 // type ServerSideProps = {
 //   user: User;

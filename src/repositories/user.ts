@@ -1,5 +1,5 @@
+import { firestore } from "@lib/firebase/client";
 import { User } from "@types";
-import { firestore } from "src/firebase/client";
 
 export const fetchUser = async (uid: string) =>
   firestore.getDoc<User>("users", uid);
