@@ -1,5 +1,5 @@
 import router from "next/router";
-import { authTokenCookie } from "@lib/cookie";
+import { authTokenCookie } from "~/lib/cookie";
 import {
   createAccountWithEmailAndPassword,
   signInWithGoogle,

@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import Alert from "@components/Alert";
-import Button from "@components/Button";
-import TextField from "@components/TextField";
-import { useToast } from "@hooks/toast";
+import Alert from "~/components/Alert";
+import Button from "~/components/Button";
+import TextField from "~/components/TextField";
+import { useToast } from "~/hooks/toast";
 import { signup } from "~/services/auth";
 
 type Inputs = {

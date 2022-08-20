@@ -16,13 +16,6 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@images/*": ["src/assets/images/*"],
-      "@lib/*": ["src/lib/*"],
-      "@svgs/*": ["src/assets/svgs/*"],
-      "@types": ["src/types"],
-      "@utils/*": ["src/utils/*"],
       "~/*": ["src/*"]
     }
   },

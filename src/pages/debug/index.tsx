@@ -2,9 +2,9 @@ import { GetServerSideProps } from "next";
 import nookies from "nookies";
 import { useCallback } from "react";
 // import { fetchUser } from "@/apis/node/users";
-import { useToast } from "@hooks/toast";
-import { auth as authAdmin } from "@lib/firebase/admin";
-import { User } from "@types";
+import { useToast } from "~/hooks/toast";
+import { auth as authAdmin } from "~/lib/firebase/admin";
+import { User } from "~/types";
 
 // type ServerSideProps = {
 //   user: User;
