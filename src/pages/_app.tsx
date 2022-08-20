@@ -9,7 +9,6 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { useAuthTokenRefresh } from "@hooks/auth";
 import { ToastProvider } from "@hooks/toast";
 import { NextPageWithLayout } from "@types";
-import BasicLayout from "~/layout/basic";
 import { theme } from "~/styles/theme";
 import "../styles/globals.css";
 
@@ -19,14 +18,15 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   useAuthTokenRefresh();
-  const getLayout =
-    Component.getLayout || ((page) => <BasicLayout>{page}</BasicLayout>);
+
+  const component = <Component {...pageProps} />;
+  const page = Component.getLayout ? Component.getLayout(component) : component;
 
   return (
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <ToastProvider>{getLayout(<Component {...pageProps} />)}</ToastProvider>
+        <ToastProvider>{page}</ToastProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
