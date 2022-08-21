@@ -22,7 +22,7 @@
         ],
         "pathGroups": [
           {
-            "pattern": "@/**",
+            "pattern": "~/**",
             "group": "internal"
           }
         ],

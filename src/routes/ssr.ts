@@ -5,8 +5,8 @@ import {
   PreviewData,
 } from "next";
 import { config } from "~/core/config";
-import { auth } from "~/firebase/admin";
 import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
+import { auth } from "~/lib/firebase/admin";
 
 export function withBase(next: GetServerSideProps): GetServerSideProps {
   return async function (ssrContext: GetServerSidePropsContext) {

@@ -5,12 +5,11 @@ import "@fontsource/roboto/700.css";
 import { ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import type { AppProps } from "next/app";
-import ErrorBoundary from "@components/ErrorBoundary";
-import BasicLayout from "@components/layout/basic";
-import { useAuthTokenRefresh } from "@hooks/auth";
-import { ToastProvider } from "@hooks/toast";
-import { NextPageWithLayout } from "@types";
+import ErrorBoundary from "~/components/ErrorBoundary";
+import { useAuthTokenRefresh } from "~/hooks/auth";
+import { ToastProvider } from "~/hooks/toast";
 import { theme } from "~/styles/theme";
+import { NextPageWithLayout } from "~/types";
 import "../styles/globals.css";
 
 type AppPropsWithLayout = AppProps & {
@@ -19,14 +18,15 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   useAuthTokenRefresh();
-  const getLayout =
-    Component.getLayout || ((page) => <BasicLayout>{page}</BasicLayout>);
+
+  const component = <Component {...pageProps} />;
+  const page = Component.getLayout ? Component.getLayout(component) : component;
 
   return (
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <ToastProvider>{getLayout(<Component {...pageProps} />)}</ToastProvider>
+        <ToastProvider>{page}</ToastProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
