@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "env-cmd -f config/.env.local next",
+    "dev": "next",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -49,7 +49,6 @@
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
     "autoprefixer": "^10.4.6",
-    "env-cmd": "^10.1.0",
     "eslint": "8.14.0",
     "eslint-config-next": "^12.2.5",
     "eslint-config-prettier": "^8.5.0",
