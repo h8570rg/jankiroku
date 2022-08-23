@@ -1,3 +1,4 @@
+import { UserCredential } from "firebase/auth";
 import router from "next/router";
 import { authTokenCookie } from "~/lib/cookie";
 import {
@@ -7,6 +8,9 @@ import {
   isAuthError,
   CREATE_ACCOUNT_WITH_EMAIL_AND_PASSWORD_ERROR_CODE,
   subscribeAuthStateChanged,
+  signinWithEmailAndPassword,
+  SigninWithEmailAndPasswordErrorCode,
+  isSigninWithEmailAndPasswordError,
 } from "~/repositories/auth";
 
 const SIGNUP_EMAIL_ERROR_MESSAGE: { [key: string]: string } = {
@@ -58,18 +62,61 @@ export const signup = {
   },
 };
 
-export const signin: Record<Method, VoidFunction> = {
-  google: async () => {
-    try {
-      await signInWithGoogle();
-      router.push("/signin/redirect");
-    } catch (error: any) {
-      // TODO
-      throw new Error(error);
-    }
+const SIGNIN_EMAIL_ERROR: Record<
+  SigninWithEmailAndPasswordErrorCode,
+  {
+    cause: "email" | "password";
+    message: string;
+  }
+> = {
+  "auth/invalid-email": {
+    cause: "email",
+    message: "メールアドレスの形式が正しくありません",
   },
-  email: () => {
-    // todo
+  "auth/user-disabled": {
+    cause: "email",
+    message: "無効なユーザーです",
+  },
+  "auth/user-not-found": {
+    cause: "email",
+    message: "ユーザーが見つかりませんでした",
+  },
+  "auth/wrong-password": {
+    cause: "password",
+    message: "パスワードが間違っています",
+  },
+};
+
+export const signin = {
+  google: async () => {
+    await signInWithGoogle();
+    router.push("/signin/redirect");
+  },
+  email: async (
+    email: string,
+    password: string
+  ): Promise<
+    | { success: true; userCredential: UserCredential }
+    | { success: false; cause: "email" | "password"; message: string }
+  > => {
+    try {
+      const userCredential = await signinWithEmailAndPassword(email, password);
+      const authToken = await userCredential.user.getIdToken();
+      authTokenCookie.client.set(authToken);
+      return {
+        success: true,
+        userCredential,
+      };
+    } catch (e) {
+      if (isSigninWithEmailAndPasswordError(e)) {
+        return {
+          success: false,
+          ...SIGNIN_EMAIL_ERROR[e.code],
+        };
+      } else {
+        throw e;
+      }
+    }
   },
 };
 
