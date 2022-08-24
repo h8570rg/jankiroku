@@ -2,6 +2,22 @@ import { PaletteMode } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { createTheme, ThemeOptions } from "@mui/material/styles";
 
+declare module "@mui/material/styles" {
+  interface Palette {
+    "primary-inverted": Palette["primary"];
+  }
+  interface PaletteOptions {
+    "primary-inverted"?: PaletteOptions["primary"];
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Button" {
+  interface ButtonPropsColorOverrides {
+    "primary-inverted": true;
+  }
+}
+
 const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
   palette: {
     mode,
@@ -12,6 +28,10 @@ const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
           },
           primary: {
             main: red[900],
+          },
+          "primary-inverted": {
+            main: "#fff",
+            contrastText: red[900],
           },
 
           // palette values for light mode

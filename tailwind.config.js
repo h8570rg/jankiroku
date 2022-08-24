@@ -5,7 +5,22 @@ module.exports = {
   ],
   important: "#__next",
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        expansion: "expansion 5s ease-in-out forwards",
+      },
+      keyframes: {
+        expansion: {
+          "0%": {
+            transformOrigin: "center",
+            transform: "scale(1)",
+          },
+          "100%": {
+            transform: "scale(1.2)",
+          },
+        },
+      },
+    },
   },
   plugins: [],
   corePlugins: {

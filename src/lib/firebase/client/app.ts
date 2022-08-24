@@ -1,4 +1,4 @@
-import { getAnalytics } from "firebase/analytics";
+// import { getAnalytics } from "firebase/analytics";
 import { initializeApp, FirebaseApp } from "firebase/app";
 import { Config, config } from "~/core/config";
 import { getAuth } from "./auth";
@@ -24,9 +24,9 @@ class App {
     // Check that `window` is in scope for the analytics module!
     if (typeof window !== "undefined") {
       // Enable analytics. https://firebase.google.com/docs/analytics/get-started
-      if ("measurementId" in clientCredentials) {
-        getAnalytics();
-      }
+      // if ("measurementId" in clientCredentials) {
+      //   getAnalytics();
+      // }
     }
   }
 

@@ -1,4 +1,6 @@
 import LoadingButton from "@mui/lab/LoadingButton";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -6,6 +8,7 @@ import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import classNames from "classnames";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -18,9 +21,63 @@ import {
   ControllerProps,
 } from "react-hook-form";
 import GoogleIcon from "~/assets/images/g-logo.png";
+import MahJong1Image from "~/assets/images/mahjong1.jpeg";
+import Logo from "~/components/Logo";
 import { useLoading } from "~/hooks/loading";
 import { Method, METHOD, signin } from "~/services/auth";
 import { NextPageWithLayout } from "~/types";
+
+const AnonymousSelectionOverlay = ({ className }: { className?: string }) => {
+  return (
+    <div className={classNames("relative h-full", className)}>
+      <Image
+        src={MahJong1Image}
+        layout="fill"
+        objectFit="cover"
+        className="animate-expansion"
+        alt="mahjong"
+      />
+      <Box
+        className="absolute inset-0 opacity-95"
+        sx={{ backgroundColor: "primary.main" }}
+      ></Box>
+      <Box className="absolute inset-0 flex items-center">
+        <Container className="max-w-sm">
+          <Logo
+            variant="h2"
+            className="w-fit mx-auto mb-10"
+            sx={{
+              color: "primary-inverted.main",
+              fontFamily: '"Righteous", cursive',
+            }}
+          >
+            Janreco
+          </Logo>
+          <Stack className="space-y-4">
+            <Button
+              variant="contained"
+              size="large"
+              className="rounded-full font-bold"
+              disableElevation
+              color="primary-inverted"
+            >
+              ログイン/新規登録
+            </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              className="rounded-full font-bold"
+              disableElevation
+              color="primary-inverted"
+            >
+              ログインせずはじめる
+            </Button>
+          </Stack>
+        </Container>
+      </Box>
+    </div>
+  );
+};
 
 type FormInput = {
   email: string;
@@ -98,7 +155,7 @@ const Signin: NextPageWithLayout = () => {
   }, [signinSns]);
 
   return (
-    <Div100vh className="flex items-center">
+    <Div100vh className="flex items-center relative">
       <Container className="max-w-sm px-6 max-h-full overflow-y-auto py-10">
         <Typography
           variant="h5"
@@ -180,6 +237,9 @@ const Signin: NextPageWithLayout = () => {
           </NextLink>
         </p>
       </Container>
+      <Box className="absolute inset-0">
+        <AnonymousSelectionOverlay />
+      </Box>
     </Div100vh>
   );
 };
