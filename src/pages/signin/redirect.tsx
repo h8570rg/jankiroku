@@ -16,7 +16,7 @@ const Signin: NextPageWithLayout = () => {
 
       switch (method) {
         case METHOD.GOOGLE:
-          signin.google();
+          signin.redirect.google();
           break;
         case METHOD.EMAIL:
           // TODO
@@ -29,7 +29,7 @@ const Signin: NextPageWithLayout = () => {
     const authToken = await auth.currentUser?.getIdToken();
 
     if (!authToken) {
-      throw new Error("No user is found.");
+      throw new Error("User is not found.");
     }
 
     // リダイレクトしたときにすでにcookieがセットされているように

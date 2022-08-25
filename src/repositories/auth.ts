@@ -7,6 +7,7 @@ import {
   signOut as firebaseAuthSignOut,
   User as FirebaseAuthUser,
   signInWithEmailAndPassword as firebaseSignInWithEmailAndPassword,
+  signInAnonymously,
 } from "firebase/auth";
 import { auth } from "~/lib/firebase/client";
 
@@ -36,7 +37,6 @@ export const createAccountWithEmailAndPassword = async (
   password: string
 ) => createUserWithEmailAndPassword(auth, email, password);
 
-// メールサインイン
 const signinWithEmailAndPasswordErrorCodes = [
   "auth/invalid-email",
   "auth/user-disabled",
@@ -60,24 +60,31 @@ export const isSigninWithEmailAndPasswordError = (
   );
 };
 /**
+ * メールサインイン
  * @see https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinwithemailandpassword
  */
 export const signinWithEmailAndPassword = (email: string, password: string) => {
   return firebaseSignInWithEmailAndPassword(auth, email, password);
 };
 
-// Googleサインイン
 /**
+ * Googleサインイン
  * @see https://firebase.google.com/docs/auth/web/google-signin
  * @see https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinwithredirect
  */
-export const signInWithGoogle = async () => {
+export const signinWithGoogle = async () => {
   const googleProvider = new GoogleAuthProvider();
   return signInWithRedirect(auth, googleProvider);
   // This gives you a Google Access Token. You can use it to access Google APIs.
   // const credential = GoogleAuthProvider.credentialFromResult(result);
   // const token = credential.accessToken;
 };
+
+/**
+ * 匿名サインイン
+ * @see https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinanonymously
+ */
+export const signinAnonymously = () => signInAnonymously(auth);
 
 export const signOut = () => firebaseAuthSignOut(auth);
 

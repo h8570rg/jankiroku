@@ -1,6 +1,5 @@
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -12,7 +11,7 @@ import classNames from "classnames";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import Div100vh from "react-div-100vh";
 import {
   useForm,
@@ -27,7 +26,17 @@ import { useLoading } from "~/hooks/loading";
 import { Method, METHOD, signin } from "~/services/auth";
 import { NextPageWithLayout } from "~/types";
 
-const AnonymousSelectionOverlay = ({ className }: { className?: string }) => {
+const AnonymousSelectionOverlay = ({
+  className,
+  onSigninButtonClick,
+  onAnonymousSigninButtonClick,
+  loading,
+}: {
+  className?: string;
+  onSigninButtonClick: VoidFunction;
+  onAnonymousSigninButtonClick: VoidFunction;
+  loading: boolean;
+}) => {
   return (
     <div className={classNames("relative h-full", className)}>
       <Image
@@ -54,24 +63,28 @@ const AnonymousSelectionOverlay = ({ className }: { className?: string }) => {
             Janreco
           </Logo>
           <Stack className="space-y-4">
-            <Button
+            <LoadingButton
+              loading={loading}
               variant="contained"
               size="large"
               className="rounded-full font-bold"
               disableElevation
               color="primary-inverted"
+              onClick={onSigninButtonClick}
             >
               ログイン/新規登録
-            </Button>
-            <Button
+            </LoadingButton>
+            <LoadingButton
+              loading={loading}
               variant="outlined"
               size="large"
               className="rounded-full font-bold"
               disableElevation
               color="primary-inverted"
+              onClick={onAnonymousSigninButtonClick}
             >
-              ログインせずはじめる
-            </Button>
+              ログインせずに始める
+            </LoadingButton>
           </Stack>
         </Container>
       </Box>
@@ -108,6 +121,7 @@ const Signin: NextPageWithLayout = () => {
     handleSubmit,
     setError,
   } = useForm<FormInput>({ reValidateMode: "onSubmit" });
+  const [showOverlay, setShowOverlay] = useState(true);
 
   const signinEmail = useCallback(
     async (email: string, password: string) => {
@@ -143,6 +157,11 @@ const Signin: NextPageWithLayout = () => {
     [router]
   );
 
+  const signInAnonymous = useCallback(async () => {
+    await signin.anonymous();
+    router.push("/");
+  }, [router]);
+
   const onSubmit: SubmitHandler<FormInput> = useCallback(
     async ({ email, password }) => {
       loading.wait(signinEmail(email, password));
@@ -154,8 +173,16 @@ const Signin: NextPageWithLayout = () => {
     signinSns(METHOD.GOOGLE);
   }, [signinSns]);
 
+  const handleSigninButtonClick = useCallback(() => {
+    setShowOverlay(false);
+  }, []);
+
+  const handleAnonymousSigninButtonClick = useCallback(() => {
+    loading.wait(signInAnonymous());
+  }, [loading, signInAnonymous]);
+
   return (
-    <Div100vh className="flex items-center relative">
+    <Div100vh className="flex items-center relative overflow-hidden">
       <Container className="max-w-sm px-6 max-h-full overflow-y-auto py-10">
         <Typography
           variant="h5"
@@ -237,8 +264,17 @@ const Signin: NextPageWithLayout = () => {
           </NextLink>
         </p>
       </Container>
-      <Box className="absolute inset-0">
-        <AnonymousSelectionOverlay />
+      <Box
+        className={classNames(
+          "absolute inset-0 transition-transform duration-[1.2s] ease-in-out",
+          { "-translate-y-full": !showOverlay }
+        )}
+      >
+        <AnonymousSelectionOverlay
+          loading={loading.value}
+          onSigninButtonClick={handleSigninButtonClick}
+          onAnonymousSigninButtonClick={handleAnonymousSigninButtonClick}
+        />
       </Box>
     </Div100vh>
   );
