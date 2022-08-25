@@ -3,7 +3,7 @@ import router from "next/router";
 import { authTokenCookie } from "~/lib/cookie";
 import {
   createAccountWithEmailAndPassword,
-  signInWithGoogle,
+  signinWithGoogle,
   signOut as _signOut,
   isAuthError,
   CREATE_ACCOUNT_WITH_EMAIL_AND_PASSWORD_ERROR_CODE,
@@ -11,6 +11,7 @@ import {
   signinWithEmailAndPassword,
   SigninWithEmailAndPasswordErrorCode,
   isSigninWithEmailAndPasswordError,
+  signinAnonymously,
 } from "~/repositories/auth";
 
 const SIGNUP_EMAIL_ERROR_MESSAGE: { [key: string]: string } = {
@@ -88,9 +89,8 @@ const SIGNIN_EMAIL_ERROR: Record<
 };
 
 export const signin = {
-  google: async () => {
-    await signInWithGoogle();
-    router.push("/signin/redirect");
+  redirect: {
+    google: signinWithGoogle,
   },
   email: async (
     email: string,
@@ -118,6 +118,7 @@ export const signin = {
       }
     }
   },
+  anonymous: signinAnonymously,
 };
 
 export const signOut = () => {
