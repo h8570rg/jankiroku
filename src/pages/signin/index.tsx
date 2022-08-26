@@ -24,7 +24,6 @@ import MahJong1Image from "~/assets/images/mahjong1.jpeg";
 import Logo from "~/components/Logo";
 import { useLoading } from "~/hooks/loading";
 import { Method, METHOD, signin } from "~/services/auth";
-import { NextPageWithLayout } from "~/types";
 
 const AnonymousSelectionOverlay = ({
   className,
@@ -112,7 +111,7 @@ const rules: Record<keyof FormInput, ControllerProps["rules"]> = {
   },
 };
 
-const Signin: NextPageWithLayout = () => {
+export default function Signin() {
   const loading = useLoading();
   const router = useRouter();
   const {
@@ -278,6 +277,4 @@ const Signin: NextPageWithLayout = () => {
       </Box>
     </Div100vh>
   );
-};
-
-export default Signin;
+}

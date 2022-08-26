@@ -5,10 +5,6 @@ const Document = () => {
     <Html>
       <Head>
         <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        />
-        <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Righteous&display=swap"
           rel="stylesheet"
         />

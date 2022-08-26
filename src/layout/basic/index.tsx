@@ -1,20 +1,11 @@
-import { useRouter } from "next/router";
-import { ReactNode } from "react";
 import AppBar from "~/components/AppBar";
-import { IconButton } from "~/components/Button";
-import Icon from "~/components/Icon";
+import { GetLayout } from "..";
 
-const BasicLayout = ({ children }: { children: ReactNode }) => {
-  const router = useRouter();
-
+const BasicLayout: GetLayout = (page) => {
   return (
     <>
-      <AppBar>
-        <IconButton onClick={router.back}>
-          <Icon name="back" />
-        </IconButton>
-      </AppBar>
-      {children}
+      <AppBar>a</AppBar>
+      {page}
     </>
   );
 };

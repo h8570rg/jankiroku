@@ -4,9 +4,8 @@ import { useEffect } from "react";
 import { authTokenCookie } from "~/lib/cookie";
 import { auth } from "~/lib/firebase/client";
 import { Method, METHOD, signin } from "~/services/auth";
-import { NextPageWithLayout } from "~/types";
 
-const Signin: NextPageWithLayout = () => {
+export default function Signin() {
   const onLoad = async () => {
     const result = await getRedirectResult(auth);
 
@@ -46,8 +45,4 @@ const Signin: NextPageWithLayout = () => {
   }, []);
 
   return <div>...redirecting</div>;
-};
-
-Signin.getLayout = (page) => page;
-
-export default Signin;
+}
