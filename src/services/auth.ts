@@ -1,6 +1,6 @@
 import { UserCredential } from "firebase/auth";
 import router from "next/router";
-import { authTokenCookie } from "~/lib/cookie";
+import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
 import {
   createAccountWithEmailAndPassword,
   signinWithGoogle,
@@ -124,6 +124,7 @@ export const signin = {
 export const signOut = () => {
   _signOut();
   authTokenCookie.client.destory();
+  refreshTokenCookie.client.destory();
   router.push("/signin");
 };
 
