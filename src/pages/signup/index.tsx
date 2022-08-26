@@ -1,9 +1,9 @@
+import LoadingButton from "@mui/lab/LoadingButton";
+import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Alert from "~/components/Alert";
-import Button from "~/components/Button";
-import TextField from "~/components/TextField";
 import { useToast } from "~/hooks/toast";
 import { signup } from "~/services/auth";
 
@@ -68,9 +68,9 @@ const Signup = () => {
           })}
         />
         {!!error && <Alert severity="error">{error}</Alert>}
-        <Button variant="contained" type="submit" loading={loading}>
+        <LoadingButton variant="contained" type="submit" loading={loading}>
           送信
-        </Button>
+        </LoadingButton>
       </form>
     </main>
   );
