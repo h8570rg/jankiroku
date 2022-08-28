@@ -38,6 +38,10 @@ const AnonymousSelectionOverlay = ({
 }) => {
   return (
     <div className={classNames("relative h-full", className)}>
+      <Box
+        className="absolute inset-0"
+        sx={{ backgroundColor: "primary.main" }}
+      ></Box>
       <Image
         src={MahJong1Image}
         layout="fill"
@@ -56,7 +60,6 @@ const AnonymousSelectionOverlay = ({
             className="w-fit mx-auto mb-10"
             sx={{
               color: "primary-inverted.main",
-              fontFamily: '"Righteous", cursive',
             }}
           >
             Janreco

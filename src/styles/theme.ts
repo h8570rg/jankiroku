@@ -1,5 +1,5 @@
 import { PaletteMode } from "@mui/material";
-import { red } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import { createTheme, ThemeOptions } from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
@@ -31,6 +31,8 @@ const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
           },
           "primary-inverted": {
             main: "#fff",
+            light: "#fff",
+            dark: "#ccc",
             contrastText: red[900],
           },
 
