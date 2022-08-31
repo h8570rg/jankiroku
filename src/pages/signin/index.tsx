@@ -130,15 +130,17 @@ export default function Signin() {
       const res = await signin.email(email, password);
 
       if (!res.success) {
-        if (res.cause === "email") {
-          setError("email", { type: "custom", message: res.message });
-          return;
+        switch (res.cause) {
+          case "email":
+            setError("email", { type: "custom", message: res.message });
+            return;
+          case "password":
+            setError("password", { type: "custom", message: res.message });
+            return;
+          case "other":
+            setError("email", { type: "custom", message: res.message });
+            return;
         }
-        if (res.cause === "password") {
-          setError("password", { type: "custom", message: res.message });
-          return;
-        }
-        throw new Error("Sign in failed because of unknown reason.");
       }
 
       router.push("/");

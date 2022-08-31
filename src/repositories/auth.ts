@@ -8,70 +8,81 @@ import {
   User as FirebaseAuthUser,
   signInWithEmailAndPassword as firebaseSignInWithEmailAndPassword,
   signInAnonymously,
+  AuthErrorCodes,
+  sendPasswordResetEmail as firebaseSendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "~/lib/firebase/client";
+export { AuthErrorCodes } from "firebase/auth";
+
+const AUTH_ERROR_DETAIL: {
+  [key: string]: {
+    cause: "email" | "password" | "other";
+    message: string;
+  };
+} = {
+  [AuthErrorCodes.EMAIL_EXISTS]: {
+    cause: "email",
+    message: "このメールアドレスは使用されています",
+  },
+  [AuthErrorCodes.INVALID_EMAIL]: {
+    cause: "email",
+    message: "メールアドレスの形式が正しくありません",
+  },
+  [AuthErrorCodes.INVALID_PASSWORD]: {
+    cause: "password",
+    message: "パスワードが間違っています",
+  },
+  [AuthErrorCodes.USER_DELETED]: {
+    cause: "email",
+    message: "ユーザーが見つかりませんでした",
+  },
+  [AuthErrorCodes.USER_DISABLED]: {
+    cause: "email",
+    message: "サービスの利用が停止されています",
+  },
+  [AuthErrorCodes.USER_MISMATCH]: {
+    cause: "other",
+    message: "メールアドレスまたはパスワードが違います",
+  },
+  [AuthErrorCodes.WEAK_PASSWORD]: {
+    cause: "password",
+    message: "パスワードが弱すぎます",
+  },
+} as const;
 
 type AuthError = {
   code: string;
   message: string;
 };
 
-export const isAuthError = (e: unknown): e is AuthError => {
-  return e instanceof Error && "code" in e && "message" in e;
+const isAuthError = (e: unknown): e is AuthError => {
+  return (
+    e instanceof Error &&
+    "code" in e &&
+    "message" in e &&
+    e["code"] in AUTH_ERROR_DETAIL
+  );
+};
+
+export const getErrorDetail = (e: unknown) => {
+  if (isAuthError(e) && AUTH_ERROR_DETAIL[e.code]) {
+    return AUTH_ERROR_DETAIL[e.code];
+  } else {
+    throw e;
+  }
 };
 
 // サインアップ系
-export const CREATE_ACCOUNT_WITH_EMAIL_AND_PASSWORD_ERROR_CODE = {
-  EMAIL_EXISTS: "auth/email-already-in-use",
-  INVALID_EMAIL: "auth/invalid-email",
-  INVALID_PASSWORD: "auth/wrong-password",
-  POPUP_BLOCKED: "auth/popup-blocked",
-  USER_DELETED: "auth/user-not-found",
-  USER_DISABLED: "auth/user-disabled",
-  USER_MISMATCH: "auth/user-mismatch",
-  WEAK_PASSWORD: "auth/weak-password",
-} as const;
 
 export const createAccountWithEmailAndPassword = async (
   email: string,
   password: string
 ) => createUserWithEmailAndPassword(auth, email, password);
 
-const signinWithEmailAndPasswordErrorCodes = [
-  "auth/invalid-email",
-  "auth/user-disabled",
-  "auth/user-not-found",
-  "auth/wrong-password",
-] as const;
-export type SigninWithEmailAndPasswordErrorCode =
-  typeof signinWithEmailAndPasswordErrorCodes[number];
-type SigninWithEmailAndPasswordError = {
-  code: SigninWithEmailAndPasswordErrorCode;
-  message: string;
-};
-export const isSigninWithEmailAndPasswordError = (
-  e: unknown
-): e is SigninWithEmailAndPasswordError => {
-  return (
-    e instanceof Error &&
-    "code" in e &&
-    "message" in e &&
-    signinWithEmailAndPasswordErrorCodes.includes(e["code"])
-  );
-};
-/**
- * メールサインイン
- * @see https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinwithemailandpassword
- */
 export const signinWithEmailAndPassword = (email: string, password: string) => {
   return firebaseSignInWithEmailAndPassword(auth, email, password);
 };
 
-/**
- * Googleサインイン
- * @see https://firebase.google.com/docs/auth/web/google-signin
- * @see https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinwithredirect
- */
 export const signinWithGoogle = async () => {
   const googleProvider = new GoogleAuthProvider();
   return signInWithRedirect(auth, googleProvider);
@@ -80,18 +91,12 @@ export const signinWithGoogle = async () => {
   // const token = credential.accessToken;
 };
 
-/**
- * 匿名サインイン
- * @see https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinanonymously
- */
 export const signinAnonymously = () => signInAnonymously(auth);
 
 export const signOut = () => firebaseAuthSignOut(auth);
 
-export type AuthStateChangeHandler = (user: FirebaseAuthUser | null) => void;
-
 export const subscribeAuthStateChanged = (
-  handler: AuthStateChangeHandler,
+  handler: (user: FirebaseAuthUser | null) => void,
   error?: (error: Error) => void,
   complete?: () => void
 ): Unsubscribe =>
@@ -104,4 +109,5 @@ export const subscribeAuthStateChanged = (
     complete
   );
 
-export type AuthTokenChangeHandler = (authToken: string | null) => void;
+export const sendPasswordResetEmail = (email: string) =>
+  firebaseSendPasswordResetEmail(auth, email);
