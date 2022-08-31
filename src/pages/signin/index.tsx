@@ -38,6 +38,10 @@ const AnonymousSelectionOverlay = ({
 }) => {
   return (
     <div className={classNames("relative h-full", className)}>
+      <Box
+        className="absolute inset-0"
+        sx={{ backgroundColor: "primary.main" }}
+      ></Box>
       <Image
         src={MahJong1Image}
         layout="fill"
@@ -56,7 +60,6 @@ const AnonymousSelectionOverlay = ({
             className="w-fit mx-auto mb-10"
             sx={{
               color: "primary-inverted.main",
-              fontFamily: '"Righteous", cursive',
             }}
           >
             Janreco
@@ -127,15 +130,17 @@ export default function Signin() {
       const res = await signin.email(email, password);
 
       if (!res.success) {
-        if (res.cause === "email") {
-          setError("email", { type: "custom", message: res.message });
-          return;
+        switch (res.cause) {
+          case "email":
+            setError("email", { type: "custom", message: res.message });
+            return;
+          case "password":
+            setError("password", { type: "custom", message: res.message });
+            return;
+          case "other":
+            setError("email", { type: "custom", message: res.message });
+            return;
         }
-        if (res.cause === "password") {
-          setError("password", { type: "custom", message: res.message });
-          return;
-        }
-        throw new Error("Sign in failed because of unknown reason.");
       }
 
       router.push("/");
