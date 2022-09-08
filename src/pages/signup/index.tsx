@@ -1,40 +1,77 @@
 import LoadingButton from "@mui/lab/LoadingButton";
 import TextField from "@mui/material/TextField";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import Alert from "~/components/Alert";
+import { useCallback, useRef } from "react";
+import { useForm, SubmitHandler, ControllerProps } from "react-hook-form";
+import { useLoading } from "~/hooks/loading";
 import { useToast } from "~/hooks/toast";
-import { signup } from "~/services/auth";
+import { sendEmailVerification, signup } from "~/services/auth";
 
-type Inputs = {
+type FormInput = {
   email: string;
   password: string;
+  passwordRepeat: string;
 };
 
-const Signup = () => {
+export default function Signup() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
-  const router = useRouter();
+    setError,
+    watch,
+  } = useForm<FormInput>({ reValidateMode: "onSubmit" });
+  const loading = useLoading();
   const toast = useToast();
-  const [error, setError] = useState<string>();
-  const [loading, setLoading] = useState(false);
+  const password = useRef({});
+  password.current = watch("password", "");
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    setLoading(true);
-    setError(undefined);
-    const result = await signup.email(data.email, data.password);
-    if (result.success) {
-      toast.add({ content: "ログインしました" });
-      router.push("/");
-    } else {
-      setError(result.message);
-    }
-    setLoading(false);
+  const rules: Record<keyof FormInput, ControllerProps["rules"]> = {
+    email: {
+      required: {
+        value: true,
+        message: "入力してください",
+      },
+    },
+    password: {
+      required: {
+        value: true,
+        message: "入力してください",
+      },
+    },
+    passwordRepeat: {
+      validate: (value) =>
+        value === password.current || "パスワードが一致しません",
+    },
   };
+
+  const signupEmail = useCallback(
+    async (email: string, password: string) => {
+      const res = await signup.email(email, password);
+      if (!res.success) {
+        switch (res.cause) {
+          case "email":
+            setError("email", { type: "custom", message: res.message });
+            return;
+          case "password":
+            setError("password", { type: "custom", message: res.message });
+            return;
+          case "other":
+            setError("email", { type: "custom", message: res.message });
+            return;
+        }
+      }
+      await sendEmailVerification();
+      toast.add({ content: "email send" });
+    },
+    [setError, toast]
+  );
+
+  const onSubmit: SubmitHandler<FormInput> = useCallback(
+    async ({ email, password }) => {
+      loading.wait(signupEmail(email, password));
+    },
+    [loading, signupEmail]
+  );
 
   return (
     <main className="p-2">
@@ -43,13 +80,13 @@ const Signup = () => {
         <TextField
           className="block text-red-900 border-red-500"
           label="email"
-          type="email"
+          type="text"
           autoComplete="email"
           placeholder="メールアドレス"
           error={!!errors.email}
           color="primary"
           helperText={errors.email?.message}
-          {...register("email", { required: true })}
+          {...register("email", rules.email)}
         />
         <TextField
           className="block"
@@ -59,21 +96,26 @@ const Signup = () => {
           placeholder="パスワード"
           error={!!errors.password}
           helperText={errors.password?.message}
-          {...register("password", {
-            required: true,
-            minLength: {
-              value: 6,
-              message: "パスワードは6文字以上にしてください",
-            },
-          })}
+          {...register("password", rules.password)}
         />
-        {!!error && <Alert severity="error">{error}</Alert>}
-        <LoadingButton variant="contained" type="submit" loading={loading}>
+        <TextField
+          className="block"
+          label="password"
+          type="password"
+          autoComplete="new-password"
+          placeholder="パスワード"
+          error={!!errors.passwordRepeat}
+          helperText={errors.passwordRepeat?.message}
+          {...register("passwordRepeat", rules.passwordRepeat)}
+        />
+        <LoadingButton
+          variant="contained"
+          type="submit"
+          loading={loading.value}
+        >
           送信
         </LoadingButton>
       </form>
     </main>
   );
-};
-
-export default Signup;
+}
