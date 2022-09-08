@@ -1,5 +1,7 @@
 export const config = {
   public: {
+    origin: process.env.NEXT_PUBLIC_ORIGIN,
+    serviceName: process.env.NEXT_PUBLIC_SERVICE_NAME,
     firebase: {
       apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
       authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -10,7 +12,6 @@ export const config = {
       appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
       measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
     },
-    serviceName: process.env.NEXT_PUBLIC_SERVICE_NAME,
   },
   firebase: {
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,

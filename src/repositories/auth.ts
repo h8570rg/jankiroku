@@ -10,8 +10,10 @@ import {
   signInAnonymously,
   AuthErrorCodes,
   sendPasswordResetEmail as firebaseSendPasswordResetEmail,
+  sendEmailVerification as firebaseSendEmailVerification,
+  ActionCodeSettings,
 } from "firebase/auth";
-import { auth } from "~/lib/firebase/client";
+import { auth, firebase } from "~/lib/firebase/client";
 export { AuthErrorCodes } from "firebase/auth";
 
 const AUTH_ERROR_DETAIL: {
@@ -111,3 +113,13 @@ export const subscribeAuthStateChanged = (
 
 export const sendPasswordResetEmail = (email: string) =>
   firebaseSendPasswordResetEmail(auth, email);
+
+export const sendEmailVerification = (
+  actionCodeSettings: ActionCodeSettings
+) => {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("User is not found.");
+  }
+  return firebaseSendEmailVerification(user, actionCodeSettings);
+};

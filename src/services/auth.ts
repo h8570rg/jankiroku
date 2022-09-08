@@ -1,5 +1,6 @@
 import { UserCredential } from "firebase/auth";
 import router from "next/router";
+import { config } from "~/core/config";
 import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
 import {
   createAccountWithEmailAndPassword,
@@ -10,6 +11,7 @@ import {
   signinAnonymously,
   getErrorDetail,
   sendPasswordResetEmail as _sendPasswordResetEmail,
+  sendEmailVerification as _sendEmailVerification,
 } from "~/repositories/auth";
 
 export const METHOD = {
@@ -19,12 +21,20 @@ export const METHOD = {
 export type Method = typeof METHOD[keyof typeof METHOD];
 
 export const signup = {
-  email: async (email: string, password: string) => {
+  email: async (
+    email: string,
+    password: string
+  ): Promise<
+    | { success: true; userCredential: UserCredential }
+    | { success: false; cause: "email" | "password" | "other"; message: string } // TODO: ここの型定義
+  > => {
     try {
       const userCredential = await createAccountWithEmailAndPassword(
         email,
         password
       );
+      const authToken = await userCredential.user.getIdToken();
+      authTokenCookie.client.set(authToken);
       return {
         success: true,
         userCredential,
@@ -32,7 +42,7 @@ export const signup = {
     } catch (e) {
       return {
         success: false,
-        message: getErrorDetail(e).message,
+        ...getErrorDetail(e),
       };
     }
   },
@@ -105,3 +115,6 @@ export const sendPasswordResetEmail = async (
     };
   }
 };
+
+export const sendEmailVerification = () =>
+  _sendEmailVerification({ url: `${config.public.origin}/` });
