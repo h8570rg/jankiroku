@@ -61,6 +61,16 @@ const domainErrors: { [p in DomainErrorName]: DomainErrorFactory } = {
 
 export const genError = (name: DomainErrorName) => domainErrors[name]();
 
-export const isDomainError = (e: any): e is DomainError => {
-  return "code" in e && e.code.startsWith(domainErrorCodePrefix);
+export const isDomainError = (value: unknown): value is DomainError => {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const domainError = value as Record<keyof DomainError, unknown>;
+  if (
+    typeof domainError.code !== "string" ||
+    !domainError.code.startsWith(domainErrorCodePrefix)
+  ) {
+    return false;
+  }
+  return true;
 };

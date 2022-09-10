@@ -14,7 +14,7 @@ export function withBase(next: GetServerSideProps): GetServerSideProps {
   return async function (ssrContext: GetServerSidePropsContext) {
     try {
       return await next(ssrContext);
-    } catch (e: any) {
+    } catch (e) {
       if (isDomainError(e)) {
         switch (e.name) {
           case "missingRefreshToken":
