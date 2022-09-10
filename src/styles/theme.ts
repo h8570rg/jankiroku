@@ -1,5 +1,5 @@
 import { PaletteMode } from "@mui/material";
-import { grey, indigo, red } from "@mui/material/colors";
+import { grey, indigo } from "@mui/material/colors";
 import { createTheme, ThemeOptions } from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
