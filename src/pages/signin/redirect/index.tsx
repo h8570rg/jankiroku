@@ -1,11 +1,12 @@
 import { Typography } from "@mui/material";
 import { getRedirectResult } from "firebase/auth";
-import router from "next/router";
+import Router from "next/router";
 import React, { useEffect } from "react";
 import Div100vh from "react-div-100vh";
 import { authTokenCookie } from "~/lib/cookie";
 import { auth } from "~/lib/firebase/client";
 import { Method, METHOD, signin } from "~/services/auth";
+import { getMe } from "~/services/user";
 
 export default function Signin() {
   const loadingText = "Loading";
@@ -16,11 +17,11 @@ export default function Signin() {
     } as React.CSSProperties);
 
   const onLoad = async () => {
-    const result = await getRedirectResult(auth);
+    const userCredential = await getRedirectResult(auth);
 
     // リダイレクト前
-    if (!result) {
-      const method = router.query.method as Method;
+    if (!userCredential) {
+      const method = Router.query.method as Method;
 
       switch (method) {
         case METHOD.GOOGLE:
@@ -30,7 +31,7 @@ export default function Signin() {
           // TODO
           return;
         default:
-          router.push("/");
+          Router.push("/");
           return;
       }
     }
@@ -39,13 +40,22 @@ export default function Signin() {
     const authToken = await auth.currentUser?.getIdToken();
 
     if (!authToken) {
-      throw new Error("User is not found.");
+      throw "aaaaa";
+      Router.push("/signin");
+      return;
     }
 
     // リダイレクトしたときにすでにcookieがセットされているように
     authTokenCookie.client.set(authToken);
 
-    router.push("/");
+    const user = getMe(userCredential.user.uid);
+
+    if (!user) {
+      Router.push("/signup/user");
+      return;
+    }
+
+    Router.push("/");
 
     // TODO
     // オープンリダイレクタ等を回避するために検証が必要だが、ここでは省略
