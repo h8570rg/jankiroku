@@ -4,9 +4,10 @@ import Router from "next/router";
 import React, { useEffect } from "react";
 import Div100vh from "react-div-100vh";
 import { authTokenCookie } from "~/lib/cookie";
+import { genError } from "~/lib/error";
 import { auth } from "~/lib/firebase/client";
 import { Method, METHOD, signin } from "~/services/auth";
-import { getMe } from "~/services/user";
+import { getUser } from "~/services/user";
 
 export default function Signin() {
   const loadingText = "Loading";
@@ -27,9 +28,6 @@ export default function Signin() {
         case METHOD.GOOGLE:
           signin.redirect.google();
           return;
-        case METHOD.EMAIL:
-          // TODO
-          return;
         default:
           Router.push("/");
           return;
@@ -40,15 +38,13 @@ export default function Signin() {
     const authToken = await auth.currentUser?.getIdToken();
 
     if (!authToken) {
-      throw "aaaaa";
-      Router.push("/signin");
-      return;
+      throw genError("missingAuthToken");
     }
 
     // リダイレクトしたときにすでにcookieがセットされているように
     authTokenCookie.client.set(authToken);
 
-    const user = getMe(userCredential.user.uid);
+    const user = getUser(userCredential.user.uid);
 
     if (!user) {
       Router.push("/signup/user");
@@ -56,9 +52,6 @@ export default function Signin() {
     }
 
     Router.push("/");
-
-    // TODO
-    // オープンリダイレクタ等を回避するために検証が必要だが、ここでは省略
   };
 
   useEffect(() => {

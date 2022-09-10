@@ -26,7 +26,7 @@ export const signup = {
     password: string
   ): Promise<
     | { success: true; userCredential: UserCredential }
-    | { success: false; cause: "email" | "password" | "other"; message: string } // TODO: ここの型定義
+    | { success: false; cause: "email" | "password" | "other"; message: string }
   > => {
     try {
       const userCredential = await createAccountWithEmailAndPassword(
@@ -57,7 +57,7 @@ export const signin = {
     password: string
   ): Promise<
     | { success: true; userCredential: UserCredential }
-    | { success: false; cause: "email" | "password" | "other"; message: string } // TODO: ここの型定義
+    | { success: false; cause: "email" | "password" | "other"; message: string }
   > => {
     try {
       const userCredential = await signinWithEmailAndPassword(email, password);
