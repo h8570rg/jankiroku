@@ -1,5 +1,14 @@
-import useSWR from "swr";
-import { fetchUser } from "~/repositories/user";
+import * as userRepo from "~/repositories/user";
 
-export const useUser = (uid: string) =>
-  useSWR(`/api/user/${uid}`, (uid) => fetchUser(uid));
+// TODO: uidをcontextから取るように
+export const getMe = (uid: string) => userRepo.fetchUser(uid);
+
+// export const createUser = (authInfo: AuthInfo) => {
+//   if (isAnonymous(authInfo)) {
+//     const user: User = {
+//       uid: authInfo.uid,
+//       jrId:
+//     }
+//   }
+//   userRepo.createUser(user);
+// }

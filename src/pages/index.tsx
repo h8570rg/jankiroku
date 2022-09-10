@@ -4,16 +4,16 @@ import Link from "next/link";
 import { withAuth } from "~/routes/ssr";
 import { signOut } from "~/services/auth";
 
-export const getServerSideProps = withAuth(async (_, uid) => {
+export const getServerSideProps = withAuth(async (_, user) => {
   return {
     props: {
-      uid,
+      user,
     },
   };
 });
 
 export default function Home({
-  uid,
+  user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
@@ -28,7 +28,7 @@ export default function Home({
         </Link>
         <Link href={"/debug"}>debug page</Link>
         <p>認証情報</p>
-        <p>{`uid: ${uid}`}</p>
+        <p>{`uid: ${user.uid}`}</p>
         <button onClick={signOut}>ログアウト</button>
       </main>
     </>
