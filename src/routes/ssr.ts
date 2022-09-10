@@ -6,7 +6,7 @@ import {
 import { config } from "~/core/config";
 import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
 import { genError, isDomainError } from "~/lib/error";
-import { auth, firestore } from "~/lib/firebase/admin";
+import { auth, firestore } from "~/lib/server/firebase";
 import { AuthInfo, User } from "~/types";
 import { isAnonymous } from "~/utils/common";
 

@@ -13,7 +13,7 @@ import {
   sendEmailVerification as firebaseSendEmailVerification,
   ActionCodeSettings,
 } from "firebase/auth";
-import { auth } from "~/lib/firebase/client";
+import { auth } from "~/lib/firebase";
 export { AuthErrorCodes } from "firebase/auth";
 
 const AUTH_ERROR_DETAIL: {

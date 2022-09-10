@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import Div100vh from "react-div-100vh";
 import { authTokenCookie } from "~/lib/cookie";
 import { genError } from "~/lib/error";
-import { auth } from "~/lib/firebase/client";
+import { auth } from "~/lib/firebase";
 import { Method, METHOD, signin } from "~/services/auth";
 import { getUser } from "~/services/user";
 
