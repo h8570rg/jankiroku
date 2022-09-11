@@ -1,4 +1,4 @@
-import * as userRepo from "~/repositories/user";
+import * as userRepo from "~/lib/repositories/user";
 
 export const getUser = (uid: string) => userRepo.fetchUser(uid);
 

@@ -6,8 +6,8 @@ import Div100vh from "react-div-100vh";
 import { authTokenCookie } from "~/lib/cookie";
 import { genError } from "~/lib/error";
 import { auth } from "~/lib/firebase";
-import { Method, METHOD, signin } from "~/services/auth";
-import { getUser } from "~/services/user";
+import { Method, METHOD, signin } from "~/lib/services/auth";
+import { getUser } from "~/lib/services/user";
 
 export default function Signin() {
   const loadingText = "Loading";

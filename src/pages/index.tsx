@@ -1,8 +1,8 @@
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { withAuth } from "~/routes/ssr";
-import { signOut } from "~/services/auth";
+import { withAuth } from "~/lib/routes/ssr";
+import { signOut } from "~/lib/services/auth";
 
 export const getServerSideProps = withAuth(async (_, user) => {
   return {

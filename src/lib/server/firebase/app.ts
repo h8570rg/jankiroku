@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import { config, Config } from "~/core/config";
+import { config, Config } from "~/lib/config";
 import { getAuth } from "./auth";
 import { getFirestore } from "./firestore";
 
