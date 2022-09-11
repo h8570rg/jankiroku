@@ -6,9 +6,11 @@ import {
 import { config } from "~/lib/config";
 import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
 import { genError, isDomainError } from "~/lib/error";
-import { auth, firestore } from "~/lib/server/firebase";
+import { auth } from "~/lib/server/firebase";
+import { getUser } from "~/lib/server/services/user";
 import { AuthInfo, User } from "~/types";
 import { isAnonymous } from "~/utils/common";
+import { refreshAuthToken, verifyAuthToken } from "../server/services/auth";
 
 export function withBase(next: GetServerSideProps): GetServerSideProps {
   return async function (ssrContext: GetServerSidePropsContext) {
@@ -77,74 +79,46 @@ export type GetServerSidePropsWithAuth<
  */
 export function withAuth(next: GetServerSidePropsWithAuth): GetServerSideProps {
   return withBase(async (ssrContext) => {
-    const cookieAuthToken = authTokenCookie.ssr.get(ssrContext);
-    const cookieRefreshToken = refreshTokenCookie.ssr.get(ssrContext);
+    const refreshToken = refreshTokenCookie.ssr.get(ssrContext);
 
-    if (!cookieRefreshToken) {
+    if (!refreshToken) {
       throw genError("missingRefreshToken");
     }
 
-    let verifiedAuthToken: string | undefined = undefined;
+    let authToken = authTokenCookie.ssr.get(ssrContext);
     let authInfo: AuthInfo | undefined = undefined;
 
-    if (cookieAuthToken) {
-      const _authInfo = await auth.verifyIdToken(cookieAuthToken).catch(() => {
-        return;
-      });
-      if (_authInfo) {
-        verifiedAuthToken = cookieAuthToken;
-        // ここで取れた場合は代入。二回fetchしない。
-        authInfo = _authInfo;
+    if (authToken) {
+      const result = await verifyAuthToken(authToken);
+      if (!result.success) {
+        throw genError("authTokenNotVerified");
       }
+      // ここで取れた場合は代入。二回fetchしない。
+      authInfo = result.authInfo;
     }
 
-    if (!verifiedAuthToken) {
-      // refreshTokenを使い新しいauthTokenを取得
-      /**
-       * @see https://firebase.google.com/docs/reference/rest/auth/#section-refresh-token
-       */
-      const refreshTokenResult = await (
-        await fetch(
-          `https://securetoken.googleapis.com/v1/token?key=${config.public.firebase.apiKey}`,
-          {
-            method: "post",
-            body: JSON.stringify({
-              grant_type: "refresh_token",
-              cookieRefreshToken,
-            }),
-          }
-        )
-      ).json();
-
-      const refreshedAuthToken = refreshTokenResult["id_token"] as
-        | string
-        | undefined;
-
-      if (!refreshedAuthToken) {
+    if (!authToken) {
+      const refreshTokenResult = await refreshAuthToken(refreshToken);
+      if (!refreshTokenResult.success) {
         throw genError("missingRefreshToken");
       }
-
-      verifiedAuthToken = refreshedAuthToken;
+      authToken = refreshTokenResult.authToken;
     }
 
     if (!authInfo) {
-      const _authInfo = await auth
-        .verifyIdToken(verifiedAuthToken)
-        .catch(() => {
-          throw genError("authTokenNotVerified");
-        });
+      const _authInfo = await auth.verifyIdToken(authToken).catch(() => {
+        throw genError("authTokenNotVerified");
+      });
       authInfo = _authInfo;
     }
 
-    authTokenCookie.ssr.set(ssrContext, verifiedAuthToken);
+    authTokenCookie.ssr.set(ssrContext, authToken);
 
     if (!isAnonymous(authInfo) && !authInfo.email_verified) {
       throw genError("emailNotVerified");
     }
 
-    const user = (
-      await firestore.collection("users").doc(authInfo.uid).get()
-    ).data() as User; // TODO
+    const user = await getUser(authInfo.uid);
 
     if (!user) {
       throw genError("userNotFound");
