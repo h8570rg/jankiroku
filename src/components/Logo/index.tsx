@@ -1,6 +1,6 @@
 import Typography, { TypographyProps } from "@mui/material/Typography";
 import classNames from "classnames";
-import { config } from "~/core/config";
+import { config } from "~/lib/config";
 
 const Logo = (props: Omit<TypographyProps<"div">, "component">) => {
   const serviceName = config.public.serviceName;

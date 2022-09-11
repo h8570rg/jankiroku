@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
-import { subscribeAuthTokenChange } from "~/services/auth";
+import { subscribeAuthTokenChange } from "~/lib/services/auth";
 
 export const useAuthTokenRefresh = () => {
   useEffect(() => {

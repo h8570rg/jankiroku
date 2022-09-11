@@ -23,7 +23,7 @@ import GoogleIcon from "~/assets/images/g-logo.png";
 import MahJong1Image from "~/assets/images/mahjong1.jpeg";
 import Logo from "~/components/Logo";
 import { useLoading } from "~/hooks/loading";
-import { Method, METHOD, signin } from "~/services/auth";
+import { Method, METHOD, signin } from "~/lib/services/auth";
 
 const AnonymousSelectionOverlay = ({
   className,

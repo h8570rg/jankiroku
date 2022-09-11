@@ -1,6 +1,6 @@
 // import { getAnalytics } from "firebase/analytics";
 import { initializeApp, FirebaseApp } from "firebase/app";
-import { Config, config } from "~/core/config";
+import { Config, config } from "~/lib/config";
 import { getAuth } from "./auth";
 import { getFirestore } from "./firestore";
 

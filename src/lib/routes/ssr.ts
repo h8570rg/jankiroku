@@ -3,7 +3,7 @@ import {
   GetServerSidePropsContext,
   PreviewData,
 } from "next";
-import { config } from "~/core/config";
+import { config } from "~/lib/config";
 import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
 import { genError, isDomainError } from "~/lib/error";
 import { auth, firestore } from "~/lib/server/firebase";

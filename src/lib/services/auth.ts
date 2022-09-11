@@ -1,6 +1,6 @@
 import { UserCredential } from "firebase/auth";
 import router from "next/router";
-import { config } from "~/core/config";
+import { config } from "~/lib/config";
 import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
 import {
   createAccountWithEmailAndPassword,
@@ -12,7 +12,7 @@ import {
   getErrorDetail,
   sendPasswordResetEmail as _sendPasswordResetEmail,
   sendEmailVerification as _sendEmailVerification,
-} from "~/repositories/auth";
+} from "~/lib/repositories/auth";
 
 export const METHOD = {
   GOOGLE: "google",
