@@ -1,6 +1,8 @@
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import Router from "next/router";
+import { useCallback } from "react";
 import { withUser } from "~/lib/routes/ssr";
 import { signOut } from "~/lib/services/auth";
 
@@ -15,6 +17,10 @@ export const getServerSideProps = withUser(async (_, { user }) => {
 export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const handleSignOutClick = useCallback(async () => {
+    await signOut();
+    Router.push("/signin");
+  }, []);
   return (
     <>
       <Head>
@@ -29,7 +35,7 @@ export default function Home({
         <Link href={"/debug"}>debug page</Link>
         <p>認証情報</p>
         <p>{`uid: ${user.uid}`}</p>
-        <button onClick={signOut}>ログアウト</button>
+        <button onClick={handleSignOutClick}>ログアウト</button>
       </main>
     </>
   );

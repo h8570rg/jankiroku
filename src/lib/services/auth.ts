@@ -1,18 +1,7 @@
 import { UserCredential } from "firebase/auth";
-import router from "next/router";
 import { config } from "~/lib/config";
 import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
-import {
-  createAccountWithEmailAndPassword,
-  signinWithGoogle,
-  signOut as _signOut,
-  subscribeAuthStateChanged as _subscribeAuthStateChanged,
-  signinWithEmailAndPassword,
-  signinAnonymously,
-  getErrorDetail,
-  sendPasswordResetEmail as _sendPasswordResetEmail,
-  sendEmailVerification as _sendEmailVerification,
-} from "~/lib/repositories/auth";
+import * as authRepo from "~/lib/repositories/auth";
 
 export const METHOD = {
   GOOGLE: "google",
@@ -29,7 +18,7 @@ export const signup = {
     | { success: false; cause: "email" | "password" | "other"; message: string }
   > => {
     try {
-      const userCredential = await createAccountWithEmailAndPassword(
+      const userCredential = await authRepo.createAccountWithEmailAndPassword(
         email,
         password
       );
@@ -42,7 +31,7 @@ export const signup = {
     } catch (e) {
       return {
         success: false,
-        ...getErrorDetail(e),
+        ...authRepo.getErrorDetail(e),
       };
     }
   },
@@ -50,7 +39,7 @@ export const signup = {
 
 export const signin = {
   redirect: {
-    google: signinWithGoogle,
+    google: authRepo.signinWithGoogle,
   },
   email: async (
     email: string,
@@ -60,7 +49,10 @@ export const signin = {
     | { success: false; cause: "email" | "password" | "other"; message: string }
   > => {
     try {
-      const userCredential = await signinWithEmailAndPassword(email, password);
+      const userCredential = await authRepo.signinWithEmailAndPassword(
+        email,
+        password
+      );
       const authToken = await userCredential.user.getIdToken();
       authTokenCookie.client.set(authToken);
       return {
@@ -70,21 +62,20 @@ export const signin = {
     } catch (e) {
       return {
         success: false,
-        ...getErrorDetail(e),
+        ...authRepo.getErrorDetail(e),
       };
     }
   },
-  anonymous: signinAnonymously,
+  anonymous: authRepo.signinAnonymously,
 };
 
-export const signOut = () => {
-  _signOut();
+export const signOut = async () => {
+  await authRepo.signOut();
   authTokenCookie.client.destory();
   refreshTokenCookie.client.destory();
-  router.push("/signin");
 };
 
-export const subscribeAuthStateChanged = _subscribeAuthStateChanged;
+export const subscribeAuthStateChanged = authRepo.subscribeAuthStateChanged;
 
 export const sendPasswordResetEmail = async (
   email: string
@@ -93,19 +84,19 @@ export const sendPasswordResetEmail = async (
   | { success: false; cause: "email" | "password" | "other"; message: string }
 > => {
   try {
-    await _sendPasswordResetEmail(email);
+    await authRepo.sendPasswordResetEmail(email);
     return {
       success: true,
     };
   } catch (e) {
     return {
       success: false,
-      ...getErrorDetail(e),
+      ...authRepo.getErrorDetail(e),
     };
   }
 };
 
 export const sendEmailVerification = () =>
-  _sendEmailVerification({
+  authRepo.sendEmailVerification({
     url: `${config.public.origin}/signup/email-verify/redirect`,
   });
