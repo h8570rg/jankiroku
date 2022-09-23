@@ -1,8 +1,8 @@
-import { Typography } from "@mui/material";
 import { getRedirectResult } from "firebase/auth";
 import Router from "next/router";
 import React, { useEffect } from "react";
 import Div100vh from "react-div-100vh";
+import { BouncingText } from "~/components/BouncingText";
 import { authTokenCookie } from "~/lib/cookie";
 import { genError } from "~/lib/error";
 import { auth } from "~/lib/firebase";
@@ -10,13 +10,6 @@ import { Method, METHOD, signin } from "~/lib/services/auth";
 import { getUser } from "~/lib/services/user";
 
 export default function Signin() {
-  const loadingText = "Loading";
-
-  const getTextBouncingStyle = (i: number) =>
-    ({
-      animationDelay: `${i * 0.1}s`,
-    } as React.CSSProperties);
-
   const onLoad = async () => {
     const userCredential = await getRedirectResult(auth);
 
@@ -60,17 +53,10 @@ export default function Signin() {
 
   return (
     <Div100vh className="flex items-center">
-      <Typography className="w-fit mx-auto font-righteous tracking-widest text-2xl">
-        {loadingText.split("").map((t, i) => (
-          <span
-            key={i}
-            className="inline-block animate-waviy"
-            style={getTextBouncingStyle(i)}
-          >
-            {t}
-          </span>
-        ))}
-      </Typography>
+      <BouncingText
+        text="loading"
+        className="w-fit mx-auto font-righteous tracking-widest text-2xl"
+      />
     </Div100vh>
   );
 }

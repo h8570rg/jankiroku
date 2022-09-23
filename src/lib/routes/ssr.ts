@@ -6,7 +6,6 @@ import {
 } from "next";
 import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
 import { genError, isDomainError } from "~/lib/error";
-import { auth } from "~/lib/server/firebase";
 import { getUser } from "~/lib/server/services/user";
 import { AuthInfo, User } from "~/types";
 import { isAnonymous } from "~/utils/common";
@@ -82,16 +81,6 @@ export function withAuth(next: GetServerSidePropsWithAuth): GetServerSideProps {
     }
 
     let authToken = authTokenCookie.ssr.get(context);
-    let authInfo: AuthInfo | undefined = undefined;
-
-    if (authToken) {
-      const result = await verifyAuthToken(authToken);
-      if (!result.success) {
-        throw genError("authTokenNotVerified");
-      }
-      // ここで取れた場合は代入。二回fetchしない。
-      authInfo = result.authInfo;
-    }
 
     if (!authToken) {
       const refreshTokenResult = await refreshAuthToken(refreshToken);
@@ -99,16 +88,15 @@ export function withAuth(next: GetServerSidePropsWithAuth): GetServerSideProps {
         throw genError("missingRefreshToken");
       }
       authToken = refreshTokenResult.authToken;
+      authTokenCookie.ssr.set(context, authToken);
     }
 
-    if (!authInfo) {
-      const _authInfo = await auth.verifyIdToken(authToken).catch(() => {
-        throw genError("authTokenNotVerified");
-      });
-      authInfo = _authInfo;
+    const result = await verifyAuthToken(authToken);
+    if (!result.success) {
+      throw genError("authTokenNotVerified");
     }
+    const authInfo = result.authInfo;
 
-    authTokenCookie.ssr.set(context, authToken);
     return next(context, { authInfo });
   });
 }
