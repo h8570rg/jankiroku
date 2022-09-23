@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import classNames from "classnames";
 import Image from "next/image";
 import NextLink from "next/link";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { useCallback, useState } from "react";
 import Div100vh from "react-div-100vh";
 import {
@@ -116,7 +116,6 @@ const rules: Record<keyof FormInput, ControllerProps["rules"]> = {
 
 export default function Signin() {
   const loading = useLoading();
-  const router = useRouter();
   const {
     control,
     formState: { errors },
@@ -142,29 +141,25 @@ export default function Signin() {
             return;
         }
       }
-
-      router.push("/");
+      Router.push("/");
     },
-    [router, setError]
+    [setError]
   );
 
-  const signinSns = useCallback(
-    (method: Method) => {
-      // 認証後もとのページに戻ってくるので、先にリダイレクトページに遷移してから認証
-      router.push({
-        pathname: "/signin/redirect",
-        query: {
-          method,
-        },
-      });
-    },
-    [router]
-  );
+  const signinSns = useCallback((method: Method) => {
+    // 認証後もとのページに戻ってくるので、先にリダイレクトページに遷移してから認証
+    Router.push({
+      pathname: "/signin/redirect",
+      query: {
+        method,
+      },
+    });
+  }, []);
 
   const signInAnonymous = useCallback(async () => {
     await signin.anonymous();
-    router.push("/");
-  }, [router]);
+    Router.push("/");
+  }, []);
 
   const onSubmit: SubmitHandler<FormInput> = useCallback(
     async ({ email, password }) => {
