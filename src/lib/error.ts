@@ -44,7 +44,7 @@ const domainErrors: { [p in DomainErrorName]: DomainErrorFactory } = {
   emailNotVerified: () => {
     return {
       status: 401,
-      name: "authTokenNotVerified",
+      name: "emailNotVerified",
       code: "#JR-0401-0003",
       message: "Failed to verify a token for user authentication.",
     };
