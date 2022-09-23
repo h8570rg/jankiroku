@@ -6,7 +6,7 @@ import {
   createAccountWithEmailAndPassword,
   signinWithGoogle,
   signOut as _signOut,
-  subscribeAuthStateChanged,
+  subscribeAuthStateChanged as _subscribeAuthStateChanged,
   signinWithEmailAndPassword,
   signinAnonymously,
   getErrorDetail,
@@ -84,18 +84,7 @@ export const signOut = () => {
   router.push("/signin");
 };
 
-export const subscribeAuthTokenChange = (
-  handler: (
-    authToken: string | undefined,
-    refreshToken: string | undefined
-  ) => void
-) => {
-  return subscribeAuthStateChanged(async (user) => {
-    const authToken = await user?.getIdToken();
-    const refreshToken = user?.refreshToken;
-    handler(authToken, refreshToken);
-  });
-};
+export const subscribeAuthStateChanged = _subscribeAuthStateChanged;
 
 export const sendPasswordResetEmail = async (
   email: string
@@ -117,4 +106,6 @@ export const sendPasswordResetEmail = async (
 };
 
 export const sendEmailVerification = () =>
-  _sendEmailVerification({ url: `${config.public.origin}/` });
+  _sendEmailVerification({
+    url: `${config.public.origin}/signup/email-verify/redirect`,
+  });

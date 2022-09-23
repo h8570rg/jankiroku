@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { authTokenCookie, refreshTokenCookie } from "~/lib/cookie";
-import { subscribeAuthTokenChange } from "~/lib/services/auth";
+import { subscribeAuthStateChanged } from "~/lib/services/auth";
 
 export const useAuthTokenRefresh = () => {
   useEffect(() => {
-    return subscribeAuthTokenChange((authToken, refreshToken) => {
-      if (authToken) {
-        authTokenCookie.client.set(authToken);
+    return subscribeAuthStateChanged(async (user) => {
+      if (!user) {
+        return;
       }
-      if (refreshToken) {
-        refreshTokenCookie.client.set(refreshToken);
-      }
+      const authToken = await user.getIdToken();
+      const refreshToken = user.refreshToken;
+      authTokenCookie.client.set(authToken);
+      refreshTokenCookie.client.set(refreshToken);
     });
   }, []);
 };
