@@ -1,8 +1,3 @@
-import LoadingButton from "@mui/lab/LoadingButton";
-import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import NextLink from "next/link";
 import { useCallback } from "react";
 import Div100vh from "react-div-100vh";
@@ -59,42 +54,21 @@ export default function ResetPasswordPage() {
 
   return (
     <Div100vh className="flex items-center relative overflow-hidden">
-      <Container className="max-w-sm px-6 max-h-full overflow-y-auto py-10">
-        <Typography variant="h5" component="h1" className="mb-10">
-          パスワード再設定
-        </Typography>
+      <div className="max-w-sm px-6 max-h-full overflow-y-auto py-10">
+        <div className="mb-10">パスワード再設定</div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="email"
             control={control}
             defaultValue=""
             rules={rules.email}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label="メールアドレス"
-                type="text"
-                autoComplete="email"
-                error={!!errors.email}
-                helperText={errors.email?.message}
-              />
-            )}
+            render={({ field }) => <input type="text" autoComplete="email" />}
           />
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            size="large"
-            className="w-full rounded-full mt-4"
-            loading={loading.value}
-          >
+          <button type="submit" className="w-full rounded-full mt-4">
             再設定メールを送信
-          </LoadingButton>
+          </button>
         </form>
-        <NextLink href="/signin" passHref>
-          <Link className="inline">ログインに戻る</Link>
-        </NextLink>
-      </Container>
+      </div>
     </Div100vh>
   );
 }

@@ -39,7 +39,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
     >
       {children}
       {toasts.map((toast, idx) => (
-        <Toast message={toast.content} key={idx} autoHideDuration={3000} />
+        <Toast message={toast.content} key={idx} />
       ))}
     </ToastContext.Provider>
   );

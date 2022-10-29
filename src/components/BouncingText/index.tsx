@@ -1,5 +1,3 @@
-import Typography from "@mui/material/Typography";
-
 const getTextBouncingStyle = (i: number) =>
   ({
     animationDelay: `${i * 0.1}s`,
@@ -13,7 +11,7 @@ export const BouncingText = ({
   text: string;
 }) => {
   return (
-    <Typography className={className}>
+    <div className={className}>
       {text.split("").map((t, i) => (
         <span
           key={i}
@@ -23,6 +21,6 @@ export const BouncingText = ({
           {t}
         </span>
       ))}
-    </Typography>
+    </div>
   );
 };

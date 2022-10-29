@@ -1,5 +1,3 @@
-import LoadingButton from "@mui/lab/LoadingButton";
-import TextField from "@mui/material/TextField";
 import { useCallback, useRef } from "react";
 import { useForm, SubmitHandler, ControllerProps } from "react-hook-form";
 import { useLoading } from "~/hooks/loading";
@@ -77,44 +75,26 @@ export default function Signup() {
     <main className="p-2">
       <h1>アカウントを作成</h1>
       <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
-        <TextField
+        <input
           className="block text-red-900 border-red-500"
-          label="email"
           type="text"
           autoComplete="email"
           placeholder="メールアドレス"
-          error={!!errors.email}
-          color="primary"
-          helperText={errors.email?.message}
           {...register("email", rules.email)}
         />
-        <TextField
+        <input
           className="block"
-          label="password"
           type="password"
           autoComplete="new-password"
           placeholder="パスワード"
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          {...register("password", rules.password)}
         />
-        <TextField
+        <input
           className="block"
-          label="password"
           type="password"
           autoComplete="new-password"
           placeholder="パスワード"
-          error={!!errors.passwordRepeat}
-          helperText={errors.passwordRepeat?.message}
-          {...register("passwordRepeat", rules.passwordRepeat)}
         />
-        <LoadingButton
-          variant="contained"
-          type="submit"
-          loading={loading.value}
-        >
-          送信
-        </LoadingButton>
+        <button>送信</button>
       </form>
     </main>
   );
