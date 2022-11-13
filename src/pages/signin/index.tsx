@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import NextLink from "next/link";
 import Router from "next/router";
 import { useCallback, useState } from "react";
 import Div100vh from "react-div-100vh";
@@ -33,7 +32,6 @@ const AnonymousSelectionOverlay = ({
       <div className="absolute inset-0"></div>
       <Image
         src={MahJong1Image}
-        layout="fill"
         objectFit="cover"
         className="animate-expansion"
         alt="mahjong"
@@ -187,20 +185,19 @@ export default function Signin() {
             <button type="submit" className="w-full rounded-full">
               ログイン
             </button>
-            <NextLink href="/signin/reset-password" passHref>
-              <Link href="" className="w-fit ml-auto text-xs">
-                パスワードをお忘れの場合
-              </Link>
-            </NextLink>
+            <Link
+              href="/signin/reset-password"
+              className="w-fit ml-auto text-xs"
+            >
+              パスワードをお忘れの場合
+            </Link>
           </div>
         </form>
         <p className="text-xs w-fit mx-auto mt-20">
           <span className="mr-1">アカウントをお持ちでない場合</span>
-          <NextLink href="/signup" passHref>
-            <Link href="" className="inline">
-              アカウントを作成する
-            </Link>
-          </NextLink>
+          <Link href="/signup" className="inline">
+            アカウントを作成する
+          </Link>
         </p>
       </div>
       <div

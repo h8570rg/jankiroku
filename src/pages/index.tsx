@@ -29,8 +29,8 @@ export default function Home({
       </Head>
 
       <main>
-        <Link href="/signin" passHref>
-          <a className="text-blue-900 underline">ログイン</a>
+        <Link href="/signin" className="text-blue-900 underline">
+          ログイン
         </Link>
         <Link href={"/debug"}>debug page</Link>
         <p>認証情報</p>
