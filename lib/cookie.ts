@@ -1,4 +1,4 @@
-import { cookie } from "~/utils/cookie";
+import { cookie } from "~/lib/utils/cookie";
 
 export const authTokenCookie = cookie("auth_token", {
   maxAge: 60 * 60 * 1,

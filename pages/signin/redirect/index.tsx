@@ -5,7 +5,7 @@ import Div100vh from "react-div-100vh";
 import { BouncingText } from "~/components/BouncingText";
 import { authTokenCookie } from "~/lib/cookie";
 import { genError } from "~/lib/error";
-import { auth } from "~/lib/firebase";
+import { auth } from "~/lib/firebase/client";
 import { Method, METHOD, signin } from "~/lib/services/auth";
 import { getUser } from "~/lib/services/user";
 

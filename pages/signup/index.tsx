@@ -1,7 +1,7 @@
 import { useCallback, useRef } from "react";
 import { useForm, SubmitHandler, ControllerProps } from "react-hook-form";
-import { useLoading } from "~/hooks/loading";
-import { useToast } from "~/hooks/toast";
+import { useLoading } from "~/lib/hooks/loading";
+import { useToast } from "~/lib/hooks/toast";
 import { sendEmailVerification, signup } from "~/lib/services/auth";
 
 type FormInput = {

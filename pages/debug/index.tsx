@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { useToast } from "~/hooks/toast";
-import BasicLayout from "~/layout/basic";
+import { useToast } from "~/lib/hooks/toast";
+import BasicLayout from "~/lib/layout/basic";
 
 export default function Debug() {
   const toast = useToast();

@@ -6,8 +6,8 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import { useLoading } from "~/hooks/loading";
-import { useToast } from "~/hooks/toast";
+import { useLoading } from "~/lib/hooks/loading";
+import { useToast } from "~/lib/hooks/toast";
 import { sendPasswordResetEmail as _sendPasswordResetEmail } from "~/lib/services/auth";
 type FormInput = {
   email: string;

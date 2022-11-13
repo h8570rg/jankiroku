@@ -1,4 +1,4 @@
-import { AuthInfo } from "~/types";
+import { AuthInfo } from "~/lib/types";
 
 export const isBrowser = () => typeof window !== "undefined";
 

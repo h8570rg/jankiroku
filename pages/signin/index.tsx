@@ -10,10 +10,10 @@ import {
   SubmitHandler,
   ControllerProps,
 } from "react-hook-form";
-import GoogleIcon from "~/assets/images/g-logo.png";
-import MahJong1Image from "~/assets/images/mahjong1.jpeg";
 import Logo from "~/components/Logo";
-import { useLoading } from "~/hooks/loading";
+import GoogleIcon from "~/lib/assets/images/g-logo.png";
+import MahJong1Image from "~/lib/assets/images/mahjong1.jpeg";
+import { useLoading } from "~/lib/hooks/loading";
 import { Method, METHOD, signin } from "~/lib/services/auth";
 
 const AnonymousSelectionOverlay = ({

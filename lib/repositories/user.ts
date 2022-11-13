@@ -1,5 +1,5 @@
-import { firestore } from "~/lib/server/firebase";
-import { User } from "~/types";
+import { firestore } from "~/lib/firebase/client";
+import { User } from "~/lib/types";
 
 export const fetchUser = (uid: string) => firestore.getDoc<User>("users", uid);
 
