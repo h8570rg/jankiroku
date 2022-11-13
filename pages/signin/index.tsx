@@ -20,7 +20,6 @@ const AnonymousSelectionOverlay = ({
   className,
   onSigninButtonClick,
   onAnonymousSigninButtonClick,
-  loading,
 }: {
   className?: string;
   onSigninButtonClick: VoidFunction;
@@ -82,12 +81,9 @@ const rules: Record<keyof FormInput, ControllerProps["rules"]> = {
 
 export default function Signin() {
   const loading = useLoading();
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    setError,
-  } = useForm<FormInput>({ reValidateMode: "onSubmit" });
+  const { control, handleSubmit, setError } = useForm<FormInput>({
+    reValidateMode: "onSubmit",
+  });
   const [showOverlay, setShowOverlay] = useState(true);
 
   const signinEmail = useCallback(

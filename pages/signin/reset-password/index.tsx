@@ -25,12 +25,9 @@ const rules: Record<keyof FormInput, ControllerProps["rules"]> = {
 export default function ResetPasswordPage() {
   const loading = useLoading();
   const { add: addToast } = useToast();
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    setError,
-  } = useForm<FormInput>({ reValidateMode: "onSubmit" });
+  const { control, handleSubmit, setError } = useForm<FormInput>({
+    reValidateMode: "onSubmit",
+  });
 
   const sendPasswordResetEmail = useCallback(
     async (email: string) => {
@@ -61,7 +58,7 @@ export default function ResetPasswordPage() {
             control={control}
             defaultValue=""
             rules={rules.email}
-            render={({ field }) => <input type="text" autoComplete="email" />}
+            render={() => <input type="text" autoComplete="email" />}
           />
           <button type="submit" className="w-full rounded-full mt-4">
             再設定メールを送信

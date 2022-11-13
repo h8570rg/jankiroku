@@ -1,4 +1,7 @@
-import React, { Component, ErrorInfo, ReactNode } from "react";
+/**
+ * @see https://nextjs.org/docs/advanced-features/error-handling#handling-client-errors
+ */
+import React, { Component, ReactNode } from "react";
 interface Props {
   children?: ReactNode;
 }
@@ -13,12 +16,11 @@ class ErrorBoundary extends Component<Props, State> {
     // Define a state variable to track whether is an error or not
     this.state = { hasError: false };
   }
-  static getDerivedStateFromError(error: Error) {
+  static getDerivedStateFromError() {
     // Update state so the next render will show the fallback UI
-
     return { hasError: true };
   }
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch() {
     // You can use your own error logging service here
     // console.log({ error, errorInfo });
   }
@@ -32,8 +34,8 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   onUnhandledRejection = (event: PromiseRejectionEvent) => {
-    event.promise.catch((error) => {
-      this.setState(ErrorBoundary.getDerivedStateFromError(error));
+    event.promise.catch(() => {
+      this.setState(ErrorBoundary.getDerivedStateFromError());
     });
   };
   render() {

@@ -11,13 +11,9 @@ type FormInput = {
 };
 
 export default function Signup() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-    watch,
-  } = useForm<FormInput>({ reValidateMode: "onSubmit" });
+  const { register, handleSubmit, setError, watch } = useForm<FormInput>({
+    reValidateMode: "onSubmit",
+  });
   const loading = useLoading();
   const toast = useToast();
   const password = useRef({});

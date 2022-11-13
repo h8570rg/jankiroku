@@ -7,16 +7,15 @@
     "node": ">=16.18.0"
   },
   "scripts": {
+    "prepare": "husky install",
     "dev": "next",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "format": "prettier --write . --config config/.prettierrc.json --ignore-path config/.prettierignore",
-    "prepare": "husky install",
-    "pre-commit": "lint-staged -c config/.lintstagedrc.json && npm run lint && npm run type",
-    "deploy-firestore-rule": "firebase deploy --only firestore:rules --config config/firebase.json",
-    "type": "tsc --pretty --noEmit"
+    "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json,css,md}'",
+    "type": "tsc",
+    "pre-commit": "npm run format && npm run type && npm run lint",
+    "deploy-firestore-rule": "firebase deploy --only firestore:rules"
   },
   "repository": {
     "type": "git",
@@ -47,15 +46,12 @@
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
-    "@typescript-eslint/parser": "^5.42.1",
     "autoprefixer": "^10.4.13",
     "eslint": "8.27.0",
     "eslint-config-next": "^13.0.3",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-tailwindcss": "^3.6.2",
     "husky": "^8.0.2",
-    "lint-staged": "^13.0.3",
     "postcss": "^8.4.19",
     "prettier": "^2.7.1",
     "tailwindcss": "^3.2.4",
