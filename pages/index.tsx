@@ -16,6 +16,7 @@ export default function Home() {
   const handleSignOutClick = useCallback(async () => {
     Router.push("/signin");
   }, []);
+
   return (
     <>
       <Head>
