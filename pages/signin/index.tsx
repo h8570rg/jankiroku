@@ -1,20 +1,11 @@
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import Router from "next/router";
-import { useCallback, useState } from "react";
-import Div100vh from "react-div-100vh";
-import {
-  useForm,
-  Controller,
-  SubmitHandler,
-  ControllerProps,
-} from "react-hook-form";
+import { useState } from "react";
 import Logo from "~/components/Logo";
 import GoogleIcon from "~/lib/assets/images/g-logo.png";
 import MahJong1Image from "~/lib/assets/images/mahjong1.jpeg";
 import { useLoading } from "~/lib/hooks/loading";
-import { Method, METHOD, signin } from "~/lib/services/auth";
 
 const AnonymousSelectionOverlay = ({
   className,
@@ -22,8 +13,8 @@ const AnonymousSelectionOverlay = ({
   onAnonymousSigninButtonClick,
 }: {
   className?: string;
-  onSigninButtonClick: VoidFunction;
-  onAnonymousSigninButtonClick: VoidFunction;
+  onSigninButtonClick?: VoidFunction;
+  onAnonymousSigninButtonClick?: VoidFunction;
   loading: boolean;
 }) => {
   return (
@@ -38,7 +29,7 @@ const AnonymousSelectionOverlay = ({
       <div className="absolute inset-0 opacity-95"></div>
       <div className="absolute inset-0 flex items-center">
         <div className="max-w-sm">
-          <Logo className="w-fit mx-auto mb-10" />
+          <Logo className="mx-auto mb-10 w-fit" />
           <div className="space-y-4">
             <button
               className="rounded-full font-bold"
@@ -59,137 +50,36 @@ const AnonymousSelectionOverlay = ({
   );
 };
 
-type FormInput = {
-  email: string;
-  password: string;
-};
-
-const rules: Record<keyof FormInput, ControllerProps["rules"]> = {
-  email: {
-    required: {
-      value: true,
-      message: "入力してください",
-    },
-  },
-  password: {
-    required: {
-      value: true,
-      message: "入力してください",
-    },
-  },
-};
-
 export default function Signin() {
   const loading = useLoading();
-  const { control, handleSubmit, setError } = useForm<FormInput>({
-    reValidateMode: "onSubmit",
-  });
-  const [showOverlay, setShowOverlay] = useState(true);
-
-  const signinEmail = useCallback(
-    async (email: string, password: string) => {
-      const res = await signin.email(email, password);
-
-      if (!res.success) {
-        switch (res.cause) {
-          case "email":
-            setError("email", { type: "custom", message: res.message });
-            return;
-          case "password":
-            setError("password", { type: "custom", message: res.message });
-            return;
-          case "other":
-            setError("email", { type: "custom", message: res.message });
-            return;
-        }
-      }
-      Router.push("/");
-    },
-    [setError]
-  );
-
-  const signinSns = useCallback((method: Method) => {
-    // 認証後もとのページに戻ってくるので、先にリダイレクトページに遷移してから認証
-    Router.push({
-      pathname: "/signin/redirect",
-      query: {
-        method,
-      },
-    });
-  }, []);
-
-  const signInAnonymous = useCallback(async () => {
-    await signin.anonymous();
-    Router.push("/");
-  }, []);
-
-  const onSubmit: SubmitHandler<FormInput> = useCallback(
-    async ({ email, password }) => {
-      loading.wait(signinEmail(email, password));
-    },
-    [loading, signinEmail]
-  );
-
-  const handleGoogleSigninClick = useCallback(() => {
-    signinSns(METHOD.GOOGLE);
-  }, [signinSns]);
-
-  const handleSigninButtonClick = useCallback(() => {
-    setShowOverlay(false);
-  }, []);
-
-  const handleAnonymousSigninButtonClick = useCallback(() => {
-    loading.wait(signInAnonymous());
-  }, [loading, signInAnonymous]);
+  const [showOverlay] = useState(true);
 
   return (
-    <Div100vh className="flex items-center relative overflow-hidden">
-      <div className="max-w-sm px-6 max-h-full overflow-y-auto py-10">
-        <div className="font-bold mx-auto w-fit mb-10">ログイン</div>
-        <div className="w-[300px] mx-auto">
-          <button className="shadow" onClick={handleGoogleSigninClick}>
+    <div className="relative flex h-screen items-center overflow-hidden">
+      <div className="max-h-full max-w-sm overflow-y-auto px-6 py-10">
+        <div className="mx-auto mb-10 w-fit font-bold">ログイン</div>
+        <div className="mx-auto w-[300px]">
+          <button className="shadow">
             <Image src={GoogleIcon} height={32} width={32} alt="google" />
           </button>
         </div>
         <div className="my-10">
           <span className="px-3">or</span>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-5 mx-auto">
-            <Controller
-              name="email"
-              control={control}
-              defaultValue=""
-              rules={rules.email}
-              render={({ field }) => (
-                <input {...field} type="text" autoComplete="email" />
-              )}
-            />
-            <Controller
-              name="password"
-              control={control}
-              defaultValue=""
-              rules={rules.password}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="password"
-                  autoComplete="current-password"
-                />
-              )}
-            />
+        <form>
+          <div className="mx-auto space-y-5">
             <button type="submit" className="w-full rounded-full">
               ログイン
             </button>
             <Link
               href="/signin/reset-password"
-              className="w-fit ml-auto text-xs"
+              className="ml-auto w-fit text-xs"
             >
               パスワードをお忘れの場合
             </Link>
           </div>
         </form>
-        <p className="text-xs w-fit mx-auto mt-20">
+        <p className="mx-auto mt-20 w-fit text-xs">
           <span className="mr-1">アカウントをお持ちでない場合</span>
           <Link href="/signup" className="inline">
             アカウントを作成する
@@ -202,12 +92,8 @@ export default function Signin() {
           { "-translate-y-full": !showOverlay }
         )}
       >
-        <AnonymousSelectionOverlay
-          loading={loading.value}
-          onSigninButtonClick={handleSigninButtonClick}
-          onAnonymousSigninButtonClick={handleAnonymousSigninButtonClick}
-        />
+        <AnonymousSelectionOverlay loading={loading.value} />
       </div>
-    </Div100vh>
+    </div>
   );
 }

@@ -3,7 +3,6 @@ import Link from "next/link";
 import Router from "next/router";
 import { useCallback } from "react";
 // import { withUser } from "~/lib/routes/ssr";
-import { signOut } from "~/lib/services/auth";
 
 // export const getServerSideProps = withUser(async (_, { user }) => {
 //   return {
@@ -15,7 +14,6 @@ import { signOut } from "~/lib/services/auth";
 
 export default function Home() {
   const handleSignOutClick = useCallback(async () => {
-    await signOut();
     Router.push("/signin");
   }, []);
   return (
