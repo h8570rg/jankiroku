@@ -13,9 +13,6 @@ export default function Home() {
         <Link href="/signin" className="text-blue-900 underline">
           ログイン
         </Link>
-        <Link href={"/debug"}>debug page</Link>
-        <p>認証情報</p>
-        {/* <p>{`uid: ${user.uid}`}</p> */}
         <button onClick={handleSignOutClick}>ログアウト</button>
       </main>
     </>
