@@ -1,16 +1,6 @@
-import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
 import { useCallback } from "react";
-// import { withUser } from "~/lib/routes/ssr";
-
-// export const getServerSideProps = withUser(async (_, { user }) => {
-//   return {
-//     props: {
-//       user,
-//     },
-//   };
-// });
 
 export default function Home() {
   const handleSignOutClick = useCallback(async () => {
@@ -19,11 +9,6 @@ export default function Home() {
 
   return (
     <>
-      <Head>
-        <title>Next.js w/ Firebase Client-Side</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main>
         <Link href="/signin" className="text-blue-900 underline">
           ログイン
