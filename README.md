@@ -1,6 +1,6 @@
 # janreco
 
-janrecoは麻雀成績管理webアプリです。
+janreco は麻雀成績管理 web アプリです。
 
 ## Quick Start
 
@@ -18,28 +18,29 @@ env
 cp .env.example .env.local
 ```
 
-### supabaseと接続
+### supabase と接続
 
-docker desctopを準備。
+docker desctop を準備。
 
 https://www.docker.com/products/docker-desktop/
 
-productionのDBとlink
+production の DB と link
 
 ```shell
 npm run supabase:login
 npm run supabase:link
 npm run supabase:commit
 ```
-passwordはauthorに確認
 
-supabaseを起動
+password は author に確認
+
+supabase を起動
 
 ```shell
 npm run supabase
 ```
 
-出力されたAPI URL、anon keyを記録し、.env.localを編集
+出力された API URL、anon key を記録し、.env.local を編集
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=<API URL>
