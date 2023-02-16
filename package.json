@@ -25,7 +25,7 @@
     "type": "git",
     "url": "git+https://github.com/h8570rg/janreco.git"
   },
-  "author": "",
+  "author": "https://github.com/h8570rg",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/h8570rg/janreco/issues"
@@ -34,8 +34,6 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.8.0",
     "classnames": "^2.3.2",
-    "firebase": "^9.14.0",
-    "firebase-admin": "^11.2.1",
     "next": "^13.0.3",
     "nookies": "^2.5.2",
     "react": "^18.2.0",
