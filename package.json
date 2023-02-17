@@ -19,10 +19,7 @@
     "type": "tsc",
     "pre-commit": "npm run format && npm run type && npm run lint",
     "supabase": "supabase start",
-    "supabase:login": "supabase login",
-    "supabase:link": "supabase link --project-ref $npm_package_config_supabase_project_id",
-    "supabase:commit": "supabase db remote commit",
-    "supabase:reset": "supabase db reset"
+    "supabase:login": "supabase login"
   },
   "repository": {
     "type": "git",
