@@ -1,13 +1,14 @@
 module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx}",
-    "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "./lib/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
   ],
-  important: "#__next",
   theme: {
     extend: {
       animation: {
         expansion: "expansion 5s ease-in-out forwards",
+        waviy: "waviy 1s infinite",
       },
       keyframes: {
         expansion: {
@@ -19,7 +20,18 @@ module.exports = {
             transform: "scale(1.2)",
           },
         },
+        waviy: {
+          "0%, 40%, 100%": {
+            transform: "translateY(0)",
+          },
+          "20%": {
+            transform: "translateY(-20px)",
+          },
+        },
       },
+    },
+    fontFamily: {
+      righteous: ["Righteous"],
     },
   },
   plugins: [],
