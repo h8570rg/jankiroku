@@ -6,6 +6,9 @@
   "engines": {
     "node": ">=16.18.0"
   },
+  "config": {
+    "supabase_project_id": "ggkmppnjhrwzdsamzqbp"
+  },
   "scripts": {
     "prepare": "husky install",
     "dev": "next -p 3001",
@@ -17,7 +20,7 @@
     "pre-commit": "npm run format && npm run type && npm run lint",
     "supabase": "supabase start",
     "supabase:login": "supabase login",
-    "supabase:link": "supabase link --project-ref owagpoywxhbsckytdtoj",
+    "supabase:link": "supabase link --project-ref $npm_package_config_supabase_project_id",
     "supabase:commit": "supabase db remote commit",
     "supabase:reset": "supabase db reset"
   },
