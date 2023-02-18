@@ -28,8 +28,6 @@ production の DB と link
 
 ```shell
 npm run supabase:login
-npm run supabase:link
-npm run supabase:commit
 ```
 
 password は author に確認
@@ -47,6 +45,12 @@ NEXT_PUBLIC_SUPABASE_URL=<API URL>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key>
 ```
 
+localのDBにスキーマを適用
+
+```shell
+npm run supabase:reset
+```
+
 ### 起動
 
 ```shell
@@ -55,6 +59,27 @@ npm run dev
 
 url: http://localhost:3001
 supabase studio url: http://localhost:54323
+
+## DB操作
+
+### stg, prd
+
+ciによりstaging, productionのdbは自動的にmigrationされる。
+
+### local
+
+最後にマイグレーションした状態に戻す
+
+```shell
+npm run supabase:reset
+```
+
+ローカル側のスキーマ差分を新しいマイグレーションファイルに保存
+
+```shell
+npm run supabase:diff [ファイル名]
+```
+
 
 ## Links
 
