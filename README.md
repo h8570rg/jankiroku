@@ -45,7 +45,7 @@ NEXT_PUBLIC_SUPABASE_URL=<API URL>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key>
 ```
 
-localのDBにスキーマを適用
+local の DB にスキーマを適用
 
 ```shell
 npm run supabase:reset
@@ -60,11 +60,11 @@ npm run dev
 url: http://localhost:3001
 supabase studio url: http://localhost:54323
 
-## DB操作
+## DB 操作
 
 ### stg, prd
 
-ciによりstaging, productionのdbは自動的にmigrationされる。
+ci により staging, production の db は自動的に migration される。
 
 ### local
 
@@ -79,7 +79,6 @@ npm run supabase:reset
 ```shell
 npm run supabase:diff [ファイル名]
 ```
-
 
 ## Links
 
