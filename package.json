@@ -19,7 +19,9 @@
     "type": "tsc",
     "pre-commit": "npm run format && npm run type && npm run lint",
     "supabase": "supabase start",
-    "supabase:login": "supabase login"
+    "supabase:login": "supabase login",
+    "supabase:reset": "supabase db reset",
+    "supabase:diff": "supabase db diff -f"
   },
   "repository": {
     "type": "git",
