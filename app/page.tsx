@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Router from "next/router";
 import { useCallback } from "react";
