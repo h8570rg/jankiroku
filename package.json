@@ -34,9 +34,12 @@
   },
   "homepage": "https://github.com/h8570rg/janreco#readme",
   "dependencies": {
+    "@next/font": "^13.1.6",
+    "@supabase/auth-helpers-nextjs": "^0.5.4",
+    "@supabase/auth-helpers-react": "^0.3.1",
     "@supabase/supabase-js": "^2.8.0",
     "classnames": "^2.3.2",
-    "next": "^13.1.6",
+    "next": "^13.1.7-canary.25",
     "nookies": "^2.5.2",
     "react": "^18.2.0",
     "react-div-100vh": "^0.7.0",
