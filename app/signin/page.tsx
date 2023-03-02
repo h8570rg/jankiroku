@@ -1,3 +1,5 @@
+"use client";
+
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,8 +53,8 @@ const AnonymousSelectionOverlay = ({
 };
 
 export default function Signin() {
-  const loading = useLoading();
-  const [showOverlay] = useState(true);
+  // const loading = useLoading();
+  // const [showOverlay] = useState(true);
 
   return (
     <div className="relative flex h-screen items-center overflow-hidden">
@@ -86,14 +88,14 @@ export default function Signin() {
           </Link>
         </p>
       </div>
-      <div
+      {/* <div
         className={classNames(
           "absolute inset-0 transition-transform duration-[1.2s] ease-in-out",
           { "-translate-y-full": !showOverlay }
         )}
       >
         <AnonymousSelectionOverlay loading={loading.value} />
-      </div>
+      </div> */}
     </div>
   );
 }
