@@ -1,4 +1,5 @@
 import classNames from "classnames";
+
 import { config } from "~/lib/config";
 
 const Logo = ({ className }: { className: string }) => {
