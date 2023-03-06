@@ -1,6 +1,7 @@
 export const config = {
   public: {
     serviceName: process.env.NEXT_PUBLIC_SERVICE_NAME,
+    basePath: process.env.NEXT_PUBLIC_BASE_PATH,
     supabase: {
       apiURL: process.env.NEXT_PUBLIC_SUPABASE_URL,
       apiKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,

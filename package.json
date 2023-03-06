@@ -44,7 +44,9 @@
     "react-div-100vh": "^0.7.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.1",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "swr": "^2.0.4",
+    "zod": "^3.21.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",

@@ -41,36 +41,12 @@
 //   );
 // };
 
-"use client";
+import { Signin } from ".";
 
-import { useSupabase } from "~/components/SupabaseProvider";
-
-export default function Signin() {
-  const { supabase } = useSupabase();
-
-  const handleSignup = async () => {
-    await supabase.auth.signUp({
-      email: "test@gmail.com",
-      password: "aaaaa11111",
-    });
-  };
-
-  const handleEmailLogin = async () => {
-    await supabase.auth.signInWithPassword({
-      email: "test@gmail.com",
-      password: "aaaaa11111",
-    });
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-  };
-
+export default function Page() {
   return (
-    <div>
-      <button onClick={handleSignup}>signup</button>
-      <button onClick={handleEmailLogin}>Email Login</button>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
+    <>
+      <Signin />
+    </>
   );
 }
