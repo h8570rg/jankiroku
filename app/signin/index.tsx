@@ -1,28 +1,26 @@
 "use client";
 
-import { useSupabase } from "~/components/SupabaseProvider";
-import { useSignupEmail } from "~/lib/hooks/api/signup/email";
+import { useAuth } from "~/lib/hooks/useAuth";
 
 export const Signin = () => {
-  const { trigger: signupEmail } = useSignupEmail();
-  const { supabase } = useSupabase();
+  const { signinEmail, signup, signout } = useAuth();
 
   const handleSignup = async () => {
-    await signupEmail({
+    await signup({
       email: "namao0627@gmail.com",
       password: "test1234",
     });
   };
 
   const handleEmailLogin = async () => {
-    await supabase.auth.signInWithPassword({
+    await signinEmail({
       email: "namao0627@gmail.com",
       password: "test1234",
     });
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signout();
   };
 
   return (
