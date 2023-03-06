@@ -37,6 +37,7 @@ export default async function RootLayout({
       )}
     >
       <body className="font-sans">
+        <div>access_token: {session?.access_token}</div>
         <SupabaseProvider>
           <SupabaseListener serverAccessToken={session?.access_token} />
           {children}
