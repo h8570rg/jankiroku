@@ -1,7 +1,8 @@
 export const config = {
   public: {
+    vercelUrl: process.env.NEXT_PUBLIC_VERCEL_URL,
+    siteUrl: process.env.NEXT_PUBLIC_SITE_URL,
     serviceName: process.env.NEXT_PUBLIC_SERVICE_NAME,
-    basePath: process.env.NEXT_PUBLIC_BASE_PATH,
     supabase: {
       apiURL: process.env.NEXT_PUBLIC_SUPABASE_URL,
       apiKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,

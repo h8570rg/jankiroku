@@ -1,3 +1,4 @@
+import { getURL } from "next/dist/shared/lib/utils";
 import { z } from "zod";
 
 import { useSupabase } from "~/components/SupabaseProvider";
@@ -22,7 +23,13 @@ export const useAuth = () => {
   const { supabase } = useSupabase();
 
   const signup = ({ email, password }: authSchema.Signup) =>
-    supabase.auth.signUp({ email, password });
+    supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: getURL(),
+      },
+    });
 
   const signinEmail = ({ email, password }: authSchema.SigninEmail) =>
     supabase.auth.signInWithPassword({ email, password });
