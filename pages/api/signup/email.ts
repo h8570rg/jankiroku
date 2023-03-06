@@ -1,7 +1,6 @@
 import { NextApiHandler } from "next";
 import { z } from "zod";
 
-import { config } from "~/lib/config";
 import { withZod } from "~/lib/routes/api";
 import { commonSchema } from "~/lib/schema";
 import { createClient } from "~/lib/utils/supabase-api";
@@ -23,9 +22,9 @@ const handlePost = withZod(schema.post, async (req, res, { body }) => {
   const { data } = await supabase.auth.signUp({
     email,
     password,
-    options: {
-      emailRedirectTo: `${config.public.basePath}/`,
-    },
+    // options: {
+    //   emailRedirectTo: `${config.public.basePath}/`,
+    // },
   });
 
   res.status(200).send(data);
