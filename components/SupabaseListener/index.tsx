@@ -17,6 +17,9 @@ export default function SupabaseListener({
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
+      // eslint-disable-next-line no-console
+      console.debug({ event, session });
+
       if (session?.access_token !== serverAccessToken) {
         router.refresh();
       }
