@@ -27,7 +27,7 @@ export const useAuth = () => {
       email,
       password,
       options: {
-        emailRedirectTo: getURL(),
+        emailRedirectTo: `${getURL()}signup/email-confirm/`,
       },
     });
 
