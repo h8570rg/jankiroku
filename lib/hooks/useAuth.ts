@@ -1,8 +1,8 @@
-import { getURL } from "next/dist/shared/lib/utils";
 import { z } from "zod";
 
 import { useSupabase } from "~/components/SupabaseProvider";
 import { commonSchema } from "~/lib/schema";
+import { getURL } from "~/lib/utils/url";
 
 export namespace authSchema {
   export const signup = z.object({
