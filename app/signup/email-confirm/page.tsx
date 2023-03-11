@@ -3,30 +3,24 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-import { useSessionGet } from "~/lib/hooks/useAuth";
+import { useSessionGet } from "~/lib/hooks/auth";
 
 export default function EmailConfirm() {
   const router = useRouter();
   const { trigger: getSession } = useSessionGet();
-  const [success, setSuccess] = useState<boolean>();
-
-  const isValidating = success === undefined;
-  const failed = !isValidating && !success;
+  const [failed, setFailed] = useState<boolean>(false);
 
   const verify = useCallback(async () => {
     const session = await getSession();
-    setSuccess(!!session);
-  }, [getSession]);
+    if (!session) {
+      setFailed(true);
+    }
+    router.push("/dashboard");
+  }, [getSession, router]);
 
   useEffect(() => {
     verify();
   }, [verify]);
-
-  useEffect(() => {
-    if (!isValidating && !!success) {
-      router.push("/dashboard");
-    }
-  }, [isValidating, router, success]);
 
   if (failed) {
     return <div>認証に失敗しました</div>;

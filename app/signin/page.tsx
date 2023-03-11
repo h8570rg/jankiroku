@@ -43,34 +43,57 @@
 
 "use client";
 
-import { useAuth } from "~/lib/hooks/useAuth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+import {
+  useSigninEmail,
+  signinEmailSchema,
+  SigninEmailSchema,
+} from "~/lib/hooks/auth";
 
 export default function Signin() {
-  const { signinEmail, signup, signout } = useAuth();
+  const router = useRouter();
+  const { trigger: signinEmail } = useSigninEmail();
 
-  const handleSignup = async () => {
-    await signup({
-      email: "namao0627@gmail.com",
-      password: "test1234",
-    });
+  const { register, handleSubmit } = useForm<SigninEmailSchema>({
+    resolver: zodResolver(signinEmailSchema),
+  });
+
+  const onSubmit: SubmitHandler<SigninEmailSchema> = async (data) => {
+    await signinEmail(data);
+    router.push("/dashboard");
   };
 
-  const handleEmailLogin = async () => {
-    await signinEmail({
-      email: "namao0627@gmail.com",
-      password: "test1234",
-    });
-  };
-
-  const handleLogout = async () => {
-    await signout();
-  };
   return (
     <>
       <div>
-        <button onClick={handleSignup}>signup</button>
-        <button onClick={handleEmailLogin}>Email Login</button>
-        <button onClick={handleLogout}>Logout</button>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <section>
+            <label htmlFor="email">email</label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="username"
+              required
+              {...register("email")}
+            />
+          </section>
+          <section>
+            <label htmlFor="current-password">password</label>
+            <input
+              id="current-password"
+              type="password"
+              autoComplete="current-password"
+              required
+              {...register("password")}
+            />
+          </section>
+          <button>signin</button>
+        </form>
+        <Link href="/signup">新規登録</Link>
       </div>
     </>
   );

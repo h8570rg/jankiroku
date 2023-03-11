@@ -34,6 +34,7 @@
   },
   "homepage": "https://github.com/h8570rg/janreco#readme",
   "dependencies": {
+    "@hookform/resolvers": "^2.9.11",
     "@next/font": "^13.1.6",
     "@supabase/auth-helpers-nextjs": "^0.5.4",
     "@supabase/supabase-js": "^2.8.0",
