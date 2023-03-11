@@ -1,23 +1,36 @@
 "use client";
 
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
-import { useSupabase } from "~/components/SupabaseProvider";
+import { useSessionGet } from "~/lib/hooks/useAuth";
 
 export default function EmailConfirm() {
-  const { supabase } = useSupabase();
+  const router = useRouter();
+  const { trigger: getSession } = useSessionGet();
+  const [success, setSuccess] = useState<boolean>();
+
+  const isValidating = success === undefined;
+  const failed = !isValidating && !success;
+
+  const verify = useCallback(async () => {
+    const session = await getSession();
+    setSuccess(!!session);
+  }, [getSession]);
 
   useEffect(() => {
-    supabase.auth
-      .getSession()
-      .then((session) => {
-        // eslint-disable-next-line no-console
-        console.debug({ session });
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.debug({ err });
-      });
-  }, [supabase.auth]);
-  return "aaa";
+    verify();
+  }, [verify]);
+
+  useEffect(() => {
+    if (!isValidating && !!success) {
+      router.push("/dashboard");
+    }
+  }, [isValidating, router, success]);
+
+  if (failed) {
+    return <div>認証に失敗しました</div>;
+  }
+
+  return <div>認証中</div>;
 }

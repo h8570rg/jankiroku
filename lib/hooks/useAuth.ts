@@ -1,3 +1,4 @@
+import useSWRMutation from "swr/mutation";
 import { z } from "zod";
 
 import { useSupabase } from "~/components/SupabaseProvider";
@@ -17,6 +18,17 @@ export namespace authSchema {
   export type Signup = z.infer<typeof signup>;
   export type SigninEmail = z.infer<typeof signinEmail>;
 }
+
+export const useSessionGet = () => {
+  const { supabase } = useSupabase();
+  const swrMutation = useSWRMutation("session", async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    return session;
+  });
+  return swrMutation;
+};
 
 // clientから実行する必要があるので、api routesを介さない
 export const useAuth = () => {
