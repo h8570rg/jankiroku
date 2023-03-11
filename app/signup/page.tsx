@@ -16,7 +16,7 @@ export default function Signup() {
 
   const onSubmit: SubmitHandler<SignupSchema> = async (data) => {
     await signupEmail(data);
-    router.push("/dashboard");
+    router.push("/signup/complete");
   };
 
   return (
