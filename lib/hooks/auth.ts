@@ -2,7 +2,6 @@ import useSWRMutation from "swr/mutation";
 import { z } from "zod";
 
 import { useSupabase } from "~/components/SupabaseProvider";
-import { commonSchema } from "~/lib/schema";
 import { getURL } from "~/lib/utils/url";
 
 export const useSessionGet = () => {
@@ -18,8 +17,8 @@ export const useSessionGet = () => {
 };
 
 export const signupSchema = z.object({
-  email: commonSchema.email,
-  password: commonSchema.password,
+  email: z.string().email(),
+  password: z.string(),
 });
 export type SignupSchema = z.infer<typeof signupSchema>;
 
@@ -48,8 +47,8 @@ export const useSignup = () => {
 };
 
 export const signinEmailSchema = z.object({
-  email: commonSchema.email,
-  password: commonSchema.password,
+  email: z.string().email(),
+  password: z.string(),
 });
 
 export type SigninEmailSchema = z.infer<typeof signinEmailSchema>;

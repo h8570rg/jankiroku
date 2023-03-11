@@ -36,7 +36,6 @@
         "warnOnUnassignedImports": true
       }
     ],
-    "no-console": "error",
-    "@typescript-eslint/no-namespace": "off"
+    "no-console": "error"
   }
 }
