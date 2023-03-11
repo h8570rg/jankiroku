@@ -15,7 +15,7 @@ export default function EmailConfirm() {
     if (!session) {
       setFailed(true);
     }
-    router.push("/dashboard");
+    router.push("/");
   }, [getSession, router]);
 
   useEffect(() => {

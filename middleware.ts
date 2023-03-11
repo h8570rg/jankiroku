@@ -4,20 +4,33 @@ import type { NextRequest } from "next/server";
 
 import type { Database } from "~/lib/database.types";
 
+const authRoutes = ["/signin", "/signup"];
+
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
+  if (!authRoutes.some((path) => req.nextUrl.pathname.startsWith(path))) {
+    const res = NextResponse.next();
+    const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
 
-  const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-  const {
-    // sessionみてなにかする場合
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    data: { session },
-  } = await supabase.auth.getSession();
+    if (!session) {
+      return NextResponse.redirect(new URL("/signin", req.url));
+    }
 
-  return res;
+    return res;
+  }
 }
-
 export const config = {
-  matcher: "/about/:path*",
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
 };
