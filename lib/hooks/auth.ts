@@ -33,7 +33,7 @@ export const useSignup = () => {
       } = await supabase.auth.signUp({
         ...arg,
         options: {
-          emailRedirectTo: `${getURL()}signup/email-confirm/`,
+          emailRedirectTo: `${getURL()}signup/redirect/`,
         },
       });
       if (error) throw error;
@@ -72,7 +72,12 @@ export const useSigninEmail = () => {
 export const useSigninGoogle = () => {
   const { supabase } = useSupabase();
   return useSWRMutation("/auth/user", async () => {
-    await supabase.auth.signInWithOAuth({ provider: "google" });
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${getURL()}signup/redirect/`,
+      },
+    });
     const {
       data: { user },
       error,
