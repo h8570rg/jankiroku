@@ -64,7 +64,7 @@ export default function Signin() {
 
   const onSubmit: SubmitHandler<SigninEmailSchema> = async (data) => {
     await signinEmail(data);
-    router.push("/dashboard");
+    router.push("/");
   };
 
   return (
