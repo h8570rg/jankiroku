@@ -14,6 +14,7 @@ export default function Redirect() {
     const session = await getSession();
     if (!session) {
       setFailed(true);
+      return;
     }
     router.push("/");
   }, [getSession, router]);
