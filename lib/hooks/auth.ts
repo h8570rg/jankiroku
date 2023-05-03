@@ -33,7 +33,7 @@ export const useSignup = () => {
       } = await supabase.auth.signUp({
         ...arg,
         options: {
-          emailRedirectTo: `${getURL()}signup/email-confirm/`,
+          emailRedirectTo: `${getURL()}redirect/`,
         },
       });
       if (error) throw error;
@@ -67,6 +67,24 @@ export const useSigninEmail = () => {
     },
     { populateCache: (user) => user, revalidate: false }
   );
+};
+
+export const useSigninGoogle = () => {
+  const { supabase } = useSupabase();
+  return useSWRMutation("/auth/user", async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${getURL()}redirect/`,
+      },
+    });
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    if (error) throw error;
+    return user;
+  });
 };
 
 export const useSignout = () => {

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useSessionGet } from "~/lib/hooks/auth";
 
-export default function EmailConfirm() {
+export default function Redirect() {
   const router = useRouter();
   const { trigger: getSession } = useSessionGet();
   const [failed, setFailed] = useState<boolean>(false);
@@ -14,6 +14,7 @@ export default function EmailConfirm() {
     const session = await getSession();
     if (!session) {
       setFailed(true);
+      return;
     }
     router.push("/");
   }, [getSession, router]);

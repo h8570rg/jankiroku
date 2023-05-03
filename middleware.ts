@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 
 import type { Database } from "~/lib/database.types";
 
-const authRoutes = ["/signin", "/signup"];
+const authRoutes = ["/signin", "/signup", "/redirect"];
 
 export async function middleware(req: NextRequest) {
   if (!authRoutes.some((path) => req.nextUrl.pathname.startsWith(path))) {

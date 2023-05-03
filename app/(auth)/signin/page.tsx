@@ -52,11 +52,13 @@ import {
   useSigninEmail,
   signinEmailSchema,
   SigninEmailSchema,
+  useSigninGoogle,
 } from "~/lib/hooks/auth";
 
 export default function Signin() {
   const router = useRouter();
   const { trigger: signinEmail } = useSigninEmail();
+  const { trigger: signinGoogle } = useSigninGoogle();
 
   const { register, handleSubmit } = useForm<SigninEmailSchema>({
     resolver: zodResolver(signinEmailSchema),
@@ -67,9 +69,15 @@ export default function Signin() {
     router.push("/");
   };
 
+  const handleSigninGoogleClick = async () => {
+    await signinGoogle();
+    router.push("/");
+  };
+
   return (
     <>
       <div>
+        <button onClick={handleSigninGoogleClick}>google</button>
         <form onSubmit={handleSubmit(onSubmit)}>
           <section>
             <label htmlFor="email">email</label>
