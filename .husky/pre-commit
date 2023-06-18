@@ -2,4 +2,24 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npm run pre-commit
-npm run type
+
+# 生成されるファイルのパスを指定します。必要に応じて変更してください。
+generated_files=(
+  "lib/database.types.ts"
+  "supabase/migrations/*"
+)
+
+# supabase:diff と supabase:type を実行
+npm run supabase:diff
+npm run supabase:type
+
+# 変更されたファイルをチェック
+git_status=$(git status --porcelain "${generated_files[@]}")
+
+if [ -n "$git_status" ]; then
+  # 生成されたファイルのみをステージングエリアに追加
+  git add "${generated_files[@]}"
+  git commit --no-verify -m 'chore: Generated files'
+else
+  echo "No generated files to commit"
+fi

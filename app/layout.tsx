@@ -3,10 +3,10 @@ import { Metadata } from "next";
 
 import SupabaseListener from "~/components/SupabaseListener";
 import SupabaseProvider from "~/components/SupabaseProvider";
-import { createClient } from "~/lib/utils/supabase-server";
-import "~/styles/globals.css";
+import { services } from "~/lib/services";
 
 import { notoSansJp, righteous, roboto } from "./fonts";
+import "./globals.css";
 
 // do not cache this layout
 export const revalidate = 0;
@@ -21,11 +21,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createClient();
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const { session } = await services.auth.getSession();
 
   return (
     <html

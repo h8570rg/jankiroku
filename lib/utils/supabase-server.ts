@@ -5,7 +5,7 @@ import { headers, cookies } from "next/headers";
 
 import { Database } from "~/lib/database.types";
 
-export const createClient = () =>
+export const createSupabaseServerClient = () =>
   createServerComponentSupabaseClient<Database>({
     headers,
     cookies,
