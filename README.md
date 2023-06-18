@@ -1,10 +1,10 @@
 # janreco
 
-janreco は麻雀成績管理 web アプリです。
+Janreco is a Mahjong management application。
 
-## Quick Start
+# Quick Start
 
-### clone repository
+## Clone repository
 
 ```shell
 git clone https://github.com/h8570rg/janreco.git
@@ -12,74 +12,126 @@ cd janreco
 npm install
 ```
 
-env
+## Start supabase
+
+
+Install docker desktop.
+
+https://www.docker.com/products/docker-desktop/
+
+Start supabase.
+
+```shell
+npm run supabase:start
+```
+
+Once all of the Supabase services are running, you'll see output containing your local Supabase credentials. It should look like this, with urls and keys that you'll use in your local project:
+
+```
+Started supabase local development setup.
+
+         API URL: http://localhost:54321
+          DB URL: postgresql://postgres:postgres@localhost:54322/postgres
+      Studio URL: http://localhost:54323
+    Inbucket URL: http://localhost:54324
+        anon key: eyJh......
+service_role key: eyJh......
+```
+
+
+## Create env
 
 ```shell
 cp .env.example .env.local
 ```
 
-### supabase と接続
-
-docker desctop を準備。
-
-https://www.docker.com/products/docker-desktop/
-
-production の DB と link
-
-```shell
-npm run supabase:login
-```
-
-password は author に確認
-
-supabase を起動
-
-```shell
-npm run supabase
-```
-
-出力された API URL、anon key を記録し、.env.local を編集
-
+Set envs.
 ```
 NEXT_PUBLIC_SUPABASE_URL=<API URL>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key>
 ```
 
-local の DB にスキーマを適用
+## Apply DB schema
 
 ```shell
 npm run supabase:reset
 ```
 
-### 起動
+## Start
 
 ```shell
 npm run dev
 ```
 
 url: http://localhost:3001
+
 supabase studio url: http://localhost:54323
 
-## DB 操作
-
-### stg, prd
-
-ci により staging, production の db は自動的に migration される。
-
-### local
-
-最後にマイグレーションした状態に戻す
-
-```shell
-npm run supabase:reset
-```
-
-ローカル側のスキーマ差分を新しいマイグレーションファイルに保存
-
-```shell
-npm run supabase:diff [ファイル名]
-```
-
-## Links
+# Links
 
 - [supabase](https://supabase.com/docs)
+
+
+# Sequence
+
+## Client Component
+```mermaid
+sequenceDiagram
+  box  Client
+  participant CC as Client Component
+  participant H as Hooks
+  end
+  box  Next Server
+  participant AR as Api Routes
+  participant SC as Server Component
+  participant SV as Service
+  participant MD as Model
+  participant RP as Repository
+  end
+  box Supabase
+  participant SB as Supabase
+  end
+
+  %% server component
+  SC->>SV: 
+  SV->>RP: 
+  RP->>SB: 
+  SB->>RP: 
+  RP->>SV: 
+  SV->>MD: 
+  MD->>SV: 
+  SV->>SC: 
+```
+## Server Component
+
+```mermaid
+sequenceDiagram
+  box  Client
+  participant CC as Client Component
+  participant H as Hooks
+  end
+  box  Next Server
+  participant AR as Api Routes
+  participant SC as Server Component
+  participant SV as Service
+  participant MD as Model
+  participant RP as Repository
+  end
+  box Supabase
+  participant SB as Supabase
+  end
+
+  %% server component
+  CC->>H: 
+  H->>AR: 
+  AR->>SV: 
+  SV->>RP: 
+  RP->>SB: 
+  SB->>RP: 
+  RP->>SV: 
+  SV->>MD: 
+  MD->>SV: 
+  SV->>AR: 
+  AR->>H: 
+  H->>CC: 
+```
