@@ -54,14 +54,17 @@ export interface Database {
       matches: {
         Row: {
           created_at: string
+          description: string | null
           id: string
         }
         Insert: {
           created_at?: string
+          description?: string | null
           id?: string
         }
         Update: {
           created_at?: string
+          description?: string | null
           id?: string
         }
       }

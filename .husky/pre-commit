@@ -19,7 +19,7 @@ git_status=$(git status --porcelain "${generated_files[@]}")
 if [ -n "$git_status" ]; then
   # 生成されたファイルのみをステージングエリアに追加
   git add "${generated_files[@]}"
-  git commit -m 'chore: Generated files'
+  git commit --no-verify -m 'chore: Generated files'
 else
   echo "No generated files to commit"
 fi
