@@ -7,21 +7,32 @@ import type { Database } from "~/lib/database.types";
 const authRoutes = ["/signin", "/signup", "/redirect"];
 
 export async function middleware(req: NextRequest) {
-  if (!authRoutes.some((path) => req.nextUrl.pathname.startsWith(path))) {
-    const res = NextResponse.next();
-    const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
+  const { pathname } = req.nextUrl;
+  const res = NextResponse.next();
 
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (!session) {
-      return NextResponse.redirect(new URL("/signin", req.url));
-    }
-
+  // If the request is for an auth route, return the response
+  if (authRoutes.some((path) => pathname.startsWith(path))) {
     return res;
   }
+
+  const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    return NextResponse.redirect(new URL("/signin", req.url));
+  }
+
+  // If the request is for the root path, redirect to the matches page
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/matches", req.url));
+  }
+
+  return res;
 }
+
 export const config = {
   matcher: [
     /*

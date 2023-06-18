@@ -34,18 +34,86 @@ export interface Database {
   };
   public: {
     Tables: {
-      test: {
+      games: {
         Row: {
-          created_at: string | null;
-          id: number;
+          created_at: string;
+          id: string;
+          match_id: string;
         };
         Insert: {
-          created_at?: string | null;
-          id?: number;
+          created_at?: string;
+          id?: string;
+          match_id: string;
         };
         Update: {
-          created_at?: string | null;
-          id?: number;
+          created_at?: string;
+          id?: string;
+          match_id?: string;
+        };
+      };
+      matches: {
+        Row: {
+          created_at: string;
+          id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+        };
+      };
+      participants: {
+        Row: {
+          id: string;
+          match_id: string;
+          user_id: string;
+        };
+        Insert: {
+          id?: string;
+          match_id: string;
+          user_id: string;
+        };
+        Update: {
+          id?: string;
+          match_id?: string;
+          user_id?: string;
+        };
+      };
+      profiles: {
+        Row: {
+          id: string;
+          name: string | null;
+        };
+        Insert: {
+          id: string;
+          name?: string | null;
+        };
+        Update: {
+          id?: string;
+          name?: string | null;
+        };
+      };
+      scores: {
+        Row: {
+          game_id: string;
+          id: string;
+          score: number;
+          user_id: string;
+        };
+        Insert: {
+          game_id: string;
+          id?: string;
+          score: number;
+          user_id: string;
+        };
+        Update: {
+          game_id?: string;
+          id?: string;
+          score?: number;
+          user_id?: string;
         };
       };
     };
