@@ -1,5 +1,5 @@
-const Toast = ({ message }: { message: string }) => {
+function Toast({ message }: { message: string }) {
   return <div>{message}</div>;
-};
+}
 
 export default Toast;

@@ -2,7 +2,7 @@
 
 import { useMatchCreate } from "~/lib/hooks/api/match";
 
-export const MatchCreateButton = () => {
+export function MatchCreateButton() {
   const { trigger: createMatch } = useMatchCreate();
   const create = () => {
     createMatch();
@@ -15,4 +15,4 @@ export const MatchCreateButton = () => {
       Create Game
     </button>
   );
-};
+}

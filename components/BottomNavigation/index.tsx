@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 // bottom navigation component
-export const BottomNavigation = () => {
+export function BottomNavigation() {
   return (
     <footer className="fixed bottom-0 w-full border-t border-gray-300 bg-white">
       <nav className="flex justify-around">
@@ -56,4 +56,4 @@ export const BottomNavigation = () => {
       </nav>
     </footer>
   );
-};
+}

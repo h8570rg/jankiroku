@@ -3,7 +3,7 @@
 import { useMatches } from "~/lib/hooks/api/match";
 import { Matches } from "~/lib/models/match";
 
-export const MatchList = ({ initialMatches }: { initialMatches: Matches }) => {
+export function MatchList({ initialMatches }: { initialMatches: Matches }) {
   const { data: matches } = useMatches(initialMatches);
 
   return (
@@ -13,4 +13,4 @@ export const MatchList = ({ initialMatches }: { initialMatches: Matches }) => {
       ))}
     </>
   );
-};
+}

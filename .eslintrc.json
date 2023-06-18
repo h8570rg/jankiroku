@@ -36,6 +36,12 @@
         "warnOnUnassignedImports": true
       }
     ],
-    "no-console": "error"
+    "no-console": "error",
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "function-declaration"
+      }
+    ]
   }
 }
