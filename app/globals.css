@@ -18,6 +18,6 @@
 
 @layer utilities {
   .z-header {
-    @apply z-10
+    @apply z-10;
   }
 }
