@@ -7,7 +7,6 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
     "./lib/**/*.{js,ts,jsx,tsx}",
     "./app/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -34,14 +33,10 @@ module.exports = {
           },
         },
       },
-    },
-    fontFamily: {
-      sans: [
-        "var(--font-noto-sans-jp)",
-        "var(--font-roboto)",
-        ...defaultTheme.fontFamily.sans,
-      ],
-      logo: ["var(--font-righteous)", ...defaultTheme.fontFamily.sans],
+      fontFamily: {
+        sans: ["var(--font-noto-sans-jp)", ...defaultTheme.fontFamily.sans],
+        righteous: ["var(--font-righteous)", ...defaultTheme.fontFamily.sans],
+      },
     },
   },
   plugins: [],
