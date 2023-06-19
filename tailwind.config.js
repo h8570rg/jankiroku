@@ -7,13 +7,12 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
     "./lib/**/*.{js,ts,jsx,tsx}",
     "./app/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       animation: {
         expansion: "expansion 5s ease-in-out forwards",
-        waviy: "waviy 1s infinite",
+        wavy: "wavy 1s infinite",
       },
       keyframes: {
         expansion: {
@@ -25,7 +24,7 @@ module.exports = {
             transform: "scale(1.2)",
           },
         },
-        waviy: {
+        wavy: {
           "0%, 40%, 100%": {
             transform: "translateY(0)",
           },
@@ -34,14 +33,10 @@ module.exports = {
           },
         },
       },
-    },
-    fontFamily: {
-      sans: [
-        "var(--font-noto-sans-jp)",
-        "var(--font-roboto)",
-        ...defaultTheme.fontFamily.sans,
-      ],
-      logo: ["var(--font-righteous)", ...defaultTheme.fontFamily.sans],
+      fontFamily: {
+        sans: ["var(--font-noto-sans-jp)", ...defaultTheme.fontFamily.sans],
+        righteous: ["var(--font-righteous)", ...defaultTheme.fontFamily.sans],
+      },
     },
   },
   plugins: [],

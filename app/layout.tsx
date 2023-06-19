@@ -5,7 +5,7 @@ import SupabaseListener from "~/components/SupabaseListener";
 import SupabaseProvider from "~/components/SupabaseProvider";
 import { services } from "~/lib/services";
 
-import { notoSansJp, righteous, roboto } from "./fonts";
+import { notoSansJp, righteous } from "./fonts";
 import "./globals.css";
 
 // do not cache this layout
@@ -26,11 +26,7 @@ export default async function RootLayout({
   return (
     <html
       lang="ja"
-      className={classNames(
-        notoSansJp.variable,
-        righteous.variable,
-        roboto.variable
-      )}
+      className={classNames(notoSansJp.variable, righteous.variable)}
     >
       <body className="font-sans">
         <SupabaseProvider>
