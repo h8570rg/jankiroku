@@ -1,4 +1,4 @@
-import { Noto_Sans_JP, Righteous, Roboto } from "next/font/google";
+import { Noto_Sans_JP, Righteous } from "next/font/google";
 
 export const notoSansJp = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",

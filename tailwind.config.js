@@ -12,7 +12,7 @@ module.exports = {
     extend: {
       animation: {
         expansion: "expansion 5s ease-in-out forwards",
-        waviy: "waviy 1s infinite",
+        wavy: "wavy 1s infinite",
       },
       keyframes: {
         expansion: {
@@ -24,7 +24,7 @@ module.exports = {
             transform: "scale(1.2)",
           },
         },
-        waviy: {
+        wavy: {
           "0%, 40%, 100%": {
             transform: "translateY(0)",
           },

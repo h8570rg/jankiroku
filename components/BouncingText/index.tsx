@@ -15,7 +15,7 @@ export function BouncingText({
       {text.split("").map((t, i) => (
         <span
           key={i}
-          className="inline-block animate-waviy"
+          className="inline-block animate-wavy"
           style={getTextBouncingStyle(i)}
         >
           {t}
