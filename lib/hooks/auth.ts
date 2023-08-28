@@ -41,7 +41,7 @@ export const useGoogleSignIn = () => {
         },
       });
       // eslint-disable-next-line no-console
-      console.debug({ result });
+      console.debug({ data: result.data, error: result.error });
 
       const {
         data: { user },
