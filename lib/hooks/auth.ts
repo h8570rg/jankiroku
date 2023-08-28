@@ -34,12 +34,15 @@ export const useGoogleSignIn = () => {
   return useSWRMutation(
     "user",
     async () => {
-      await supabase.auth.signInWithOAuth({
+      const result = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
           redirectTo: `${getURL()}redirect/`,
         },
       });
+      // eslint-disable-next-line no-console
+      console.debug({ result });
+
       const {
         data: { user },
         error,
