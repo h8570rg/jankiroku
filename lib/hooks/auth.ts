@@ -81,3 +81,15 @@ export const emailSignUpSchema = z.object({
   password: schemas.password,
 });
 export type EmailSignUpSchema = z.infer<typeof emailSignInSchema>;
+
+export const useSessionGet = () => {
+  const supabase = createSupabaseClient();
+  return useSWRMutation("session", async () => {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
+    if (error) throw error;
+    return session;
+  });
+};
