@@ -1,12 +1,11 @@
 import classNames from "classnames";
 import { Metadata } from "next";
 
-import SupabaseListener from "~/components/SupabaseListener";
-import SupabaseProvider from "~/components/SupabaseProvider";
-import { services } from "~/lib/services";
+import { ToastContainer } from "~/lib/toast";
 
 import { notoSansJp, righteous } from "./fonts";
 import "./globals.css";
+import { NextUIProvider } from "./nextUiProvider";
 
 // do not cache this layout
 export const revalidate = 0;
@@ -21,18 +20,17 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { session } = await services.auth.getSession();
-
   return (
     <html
       lang="ja"
       className={classNames(notoSansJp.variable, righteous.variable)}
+      suppressHydrationWarning
     >
       <body className="font-sans">
-        <SupabaseProvider>
-          <SupabaseListener serverAccessToken={session?.access_token} />
-          {children}
-        </SupabaseProvider>
+        <NextUIProvider>
+          <main className="bg-background text-foreground">{children}</main>
+          <ToastContainer />
+        </NextUIProvider>
       </body>
     </html>
   );

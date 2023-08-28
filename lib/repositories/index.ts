@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createSupabaseServerClient as createSupabaseClient } from "~/lib/utils/supabase-server";
+import { createSupabaseClient } from "~/lib/utils/supabase/serverComponentClient";
 
 export const repositories = {
   auth: () => createSupabaseClient().auth,
