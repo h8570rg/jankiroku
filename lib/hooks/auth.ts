@@ -6,7 +6,6 @@ import { toast } from "~/lib/toast";
 import { post } from "~/lib/utils/request";
 import { schemas } from "~/lib/utils/schemas";
 import { createSupabaseClient } from "~/lib/utils/supabase/clientComponentClient";
-import { getURL } from "~/lib/utils/url";
 
 export const useEmailSignIn = () => {
   const router = useRouter();
@@ -34,25 +33,13 @@ export const useGoogleSignIn = () => {
   return useSWRMutation(
     "user",
     async () => {
-      const result = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: {
-          redirectTo: `${getURL()}redirect/`,
-        },
       });
-      // eslint-disable-next-line no-console
-      console.debug({ data: result.data, error: result.error });
-
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
       if (error) throw error;
-      return user;
     },
     {
       onSuccess: () => router.push("/"),
-      throwOnError: false,
     }
   );
 };
