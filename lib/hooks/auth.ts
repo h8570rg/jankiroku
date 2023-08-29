@@ -6,6 +6,7 @@ import { toast } from "~/lib/toast";
 import { post } from "~/lib/utils/request";
 import { schemas } from "~/lib/utils/schemas";
 import { createSupabaseClient } from "~/lib/utils/supabase/clientComponentClient";
+import { getURL } from "~/lib/utils/url";
 
 export const useEmailSignIn = () => {
   const router = useRouter();
@@ -28,20 +29,15 @@ export const emailSignInSchema = z.object({
 export type EmailSignInSchema = z.infer<typeof emailSignInSchema>;
 
 export const useGoogleSignIn = () => {
-  const router = useRouter();
   const supabase = createSupabaseClient();
-  return useSWRMutation(
-    "user",
-    async () => {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-      });
-      if (error) throw error;
-    },
-    {
-      onSuccess: () => router.push("/"),
-    }
-  );
+  return useSWRMutation("user", async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${getURL()}auth/callback`,
+      },
+    });
+  });
 };
 
 export const useEmailSignUp = () => {
