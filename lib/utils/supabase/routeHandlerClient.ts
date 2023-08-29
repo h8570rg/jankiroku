@@ -1,9 +1,9 @@
 import "server-only";
 
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 import { Database } from "~/lib/database.types";
 
-export const createSupabaseClient = () =>
+export const createSupabaseClient = (cookies: () => ReadonlyRequestCookies) =>
   createRouteHandlerClient<Database>({ cookies });
