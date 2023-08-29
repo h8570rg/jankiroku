@@ -16,6 +16,12 @@
  */
 @tailwind utilities;
 
+@layer components {
+  .link {
+    @apply text-primary underline;
+  }
+}
+
 @layer utilities {
   .z-header {
     @apply z-10;

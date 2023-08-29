@@ -1,12 +1,76 @@
+import { useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
 import { z } from "zod";
 
-import { useSupabase } from "~/components/SupabaseProvider";
+import { toast } from "~/lib/toast";
+import { post } from "~/lib/utils/request";
+import { schemas } from "~/lib/utils/schemas";
+import { createSupabaseClient } from "~/lib/utils/supabase/clientComponentClient";
 import { getURL } from "~/lib/utils/url";
 
+export const useEmailSignIn = () => {
+  const router = useRouter();
+  return useSWRMutation(
+    "user",
+    async (_, { arg }: { arg: EmailSignInSchema }) => {
+      await post("/api/auth/sign-in", arg);
+    },
+    {
+      onSuccess: () => router.push("/"),
+      onError: () => toast.error("メールアドレスまたはパスワードが違います"),
+      throwOnError: false,
+    }
+  );
+};
+export const emailSignInSchema = z.object({
+  email: schemas.email,
+  password: schemas.password,
+});
+export type EmailSignInSchema = z.infer<typeof emailSignInSchema>;
+
+export const useGoogleSignIn = () => {
+  const supabase = createSupabaseClient();
+  return useSWRMutation("user", async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${getURL()}api/auth/callback`,
+      },
+    });
+  });
+};
+
+export const useEmailSignUp = () => {
+  const router = useRouter();
+
+  return useSWRMutation(
+    "user",
+    async (_, { arg }: { arg: EmailSignUpSchema }) => {
+      await post("/api/auth/sign-up", arg);
+    },
+    {
+      onSuccess: () => {
+        toast.info("アカウントを作成しました");
+        router.push("/login");
+      },
+      onError: (error) => {
+        if (error.message === "User already registered") {
+          toast.error("既に登録されているメールアドレスです");
+        }
+      },
+      throwOnError: false,
+    }
+  );
+};
+export const emailSignUpSchema = z.object({
+  email: schemas.email,
+  password: schemas.password,
+});
+export type EmailSignUpSchema = z.infer<typeof emailSignInSchema>;
+
 export const useSessionGet = () => {
-  const { supabase } = useSupabase();
-  return useSWRMutation("/auth/session", async () => {
+  const supabase = createSupabaseClient();
+  return useSWRMutation("session", async () => {
     const {
       data: { session },
       error,
@@ -14,90 +78,4 @@ export const useSessionGet = () => {
     if (error) throw error;
     return session;
   });
-};
-
-export const signupSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-export type SignupSchema = z.infer<typeof signupSchema>;
-
-export const useSignup = () => {
-  const { supabase } = useSupabase();
-  return useSWRMutation(
-    "/auth/user",
-    async (_, { arg }: { arg: SignupSchema }) => {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.signUp({
-        ...arg,
-        options: {
-          emailRedirectTo: `${getURL()}redirect/`,
-        },
-      });
-      if (error) throw error;
-      return user;
-    },
-    {
-      populateCache: (user) => user,
-      revalidate: false,
-    }
-  );
-};
-
-export const signinEmailSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
-export type SigninEmailSchema = z.infer<typeof signinEmailSchema>;
-
-export const useSigninEmail = () => {
-  const { supabase } = useSupabase();
-  return useSWRMutation(
-    "/auth/user",
-    async (_, { arg }: { arg: SigninEmailSchema }) => {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.signInWithPassword(arg);
-      if (error) throw error;
-      return user;
-    },
-    { populateCache: (user) => user, revalidate: false }
-  );
-};
-
-export const useSigninGoogle = () => {
-  const { supabase } = useSupabase();
-  return useSWRMutation("/auth/user", async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${getURL()}redirect/`,
-      },
-    });
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
-    if (error) throw error;
-    return user;
-  });
-};
-
-export const useSignout = () => {
-  const { supabase } = useSupabase();
-  return useSWRMutation(
-    "/auth/user",
-    async () => {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-    },
-    {
-      populateCache: () => undefined,
-      revalidate: false,
-    }
-  );
 };

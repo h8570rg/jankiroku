@@ -1,12 +1,13 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const defaultTheme = require("tailwindcss/defaultTheme");
+import { nextui } from "@nextui-org/react";
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const config = {
   content: [
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./lib/**/*.{js,ts,jsx,tsx}",
-    "./app/**/*.{js,ts,jsx,tsx}",
+    "./assets/**/*.{jpeg,jpg,png,gif,svg,webp}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -34,10 +35,29 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-noto-sans-jp)", ...defaultTheme.fontFamily.sans],
-        righteous: ["var(--font-righteous)", ...defaultTheme.fontFamily.sans],
+        sans: ["var(--font-noto-sans-jp)"],
+        righteous: ["var(--font-righteous)"],
+      },
+      height: {
+        screen: ["100vh", "100dvh"],
+      },
+      minHeight: {
+        screen: ["100vh", "100dvh"],
+      },
+      maxHeight: {
+        screen: ["100vh", "100dvh"],
       },
     },
   },
-  plugins: [],
+  /**
+   * @see https://nextui.org/docs/frameworks/nextjs#tailwind-css-setup
+   */
+  darkMode: "class",
+  plugins: [
+    nextui({
+      addCommonColors: true,
+    }),
+  ],
 };
+
+export default config;
