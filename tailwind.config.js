@@ -1,14 +1,19 @@
-module.exports = {
+import { nextui } from "@nextui-org/react";
+
+/** @type {import('tailwindcss').Config} */
+const config = {
   content: [
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./lib/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./assets/**/*.{jpeg,jpg,png,gif,svg,webp}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       animation: {
         expansion: "expansion 5s ease-in-out forwards",
-        waviy: "waviy 1s infinite",
+        wavy: "wavy 1s infinite",
       },
       keyframes: {
         expansion: {
@@ -20,7 +25,7 @@ module.exports = {
             transform: "scale(1.2)",
           },
         },
-        waviy: {
+        wavy: {
           "0%, 40%, 100%": {
             transform: "translateY(0)",
           },
@@ -29,13 +34,30 @@ module.exports = {
           },
         },
       },
-    },
-    fontFamily: {
-      righteous: ["Righteous"],
+      fontFamily: {
+        sans: ["var(--font-noto-sans-jp)"],
+        righteous: ["var(--font-righteous)"],
+      },
+      height: {
+        screen: ["100vh", "100dvh"],
+      },
+      minHeight: {
+        screen: ["100vh", "100dvh"],
+      },
+      maxHeight: {
+        screen: ["100vh", "100dvh"],
+      },
     },
   },
-  plugins: [],
-  corePlugins: {
-    preflight: false,
-  },
+  /**
+   * @see https://nextui.org/docs/frameworks/nextjs#tailwind-css-setup
+   */
+  darkMode: "class",
+  plugins: [
+    nextui({
+      addCommonColors: true,
+    }),
+  ],
 };
+
+export default config;

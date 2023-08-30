@@ -24,12 +24,24 @@
           {
             "pattern": "~/**",
             "group": "internal"
+          },
+          {
+            "pattern": "server-only",
+            "group": "builtin",
+            "position": "before"
           }
         ],
-        "newlines-between": "never",
+        "pathGroupsExcludedImportTypes": ["server-only"],
+        "newlines-between": "always",
         "warnOnUnassignedImports": true
       }
     ],
-    "no-console": "error"
+    "no-console": "error",
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "function-declaration"
+      }
+    ]
   }
 }
