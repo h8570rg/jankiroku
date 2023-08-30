@@ -11,8 +11,11 @@ import { NextUIProvider } from "./nextUiProvider";
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: "Home",
-  description: "Welcome to Next.js",
+  title: {
+    template: "%s | Janreco",
+    default: "Janreco",
+  },
+  description: "麻雀成績管理アプリ",
 };
 
 export default async function RootLayout({

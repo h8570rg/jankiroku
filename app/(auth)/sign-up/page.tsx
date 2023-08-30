@@ -30,13 +30,14 @@ export default function Login() {
   return (
     <>
       <h1 className="mx-auto mb-2 w-fit text-lg font-bold">新規登録</h1>
-      <form className="space-y-2 py-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="space-y-2.5 py-4" onSubmit={handleSubmit(onSubmit)}>
         <Input
           id="email"
           type="email"
           autoComplete="username"
           required
           label="メールアドレス"
+          radius="sm"
           {...register("email")}
           errorMessage={errors.email?.message}
         />
@@ -46,8 +47,9 @@ export default function Login() {
           type="password"
           autoComplete="current-password"
           required
-          errorMessage={errors.password?.message}
+          radius="sm"
           {...register("password")}
+          errorMessage={errors.password?.message}
         />
         <Button
           isLoading={isSubmitting}
@@ -59,7 +61,7 @@ export default function Login() {
           新規登録
         </Button>
       </form>
-      <p className="text-xs">
+      <p className="text-sm">
         既にアカウントをお持ちですか？
         <Link className="link" href="/login">
           ログイン
