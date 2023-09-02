@@ -51,14 +51,14 @@ export default function Login() {
         <span>or</span>
         <Divider className="shrink" />
       </div>
-      <form className="space-y-2 py-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="space-y-2.5 py-4" onSubmit={handleSubmit(onSubmit)}>
         <Input
           id="email"
           type="email"
           autoComplete="username"
           required
           label="メールアドレス"
-          size="sm"
+          radius="sm"
           {...register("email")}
           errorMessage={errors.email?.message}
         />
@@ -67,9 +67,9 @@ export default function Login() {
           id="current-password"
           type="password"
           autoComplete="current-password"
-          size="sm"
           required
           errorMessage={errors.password?.message}
+          radius="sm"
           {...register("password")}
         />
         <Button
@@ -82,7 +82,7 @@ export default function Login() {
           ログイン
         </Button>
       </form>
-      <p className="text-xs">
+      <p className="text-sm">
         アカウントをお持ちでないですか？
         <Link className="link" href="/sign-up">
           新規登録
@@ -105,6 +105,7 @@ function SocialProviderItem({
     <li className="w-full">
       <Button
         className="flex w-full items-center justify-center gap-3 bg-content2"
+        size="lg"
         radius="sm"
         onClick={onClick}
       >
