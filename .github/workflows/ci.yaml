@@ -12,11 +12,13 @@ jobs:
 
       - uses: supabase/setup-cli@v1
 
+      - name: "Create env"
+        run: |
+          echo "GOOGLE_CLIENT_ID=xxxxx" >> .env
+          echo "GOOGLE_SECRET=xxxxx" >> .env
+
       - name: Start Supabase local development setup
         run: supabase start
-        env:
-          GOOGLE_CLIENT_ID: "xxxxx"
-          GOOGLE_SECRET: "xxxxx"
 
       - name: Verify generated types are up-to-date
         run: |
