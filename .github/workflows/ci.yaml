@@ -14,6 +14,9 @@ jobs:
 
       - name: Start Supabase local development setup
         run: supabase start
+        env:
+          GOOGLE_CLIENT_ID: ""
+          GOOGLE_SECRET: ""
 
       - name: Verify generated types are up-to-date
         run: |
