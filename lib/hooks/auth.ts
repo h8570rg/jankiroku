@@ -19,7 +19,7 @@ export const useEmailSignIn = () => {
       onSuccess: () => router.push("/"),
       onError: () => toast.error("メールアドレスまたはパスワードが違います"),
       throwOnError: false,
-    }
+    },
   );
 };
 export const emailSignInSchema = z.object({
@@ -34,10 +34,6 @@ export const useGoogleSignIn = () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        queryParams: {
-          access_type: "offline",
-          prompt: "consent",
-        },
         redirectTo: `${getURL()}api/auth/callback`,
       },
     });
@@ -63,7 +59,7 @@ export const useEmailSignUp = () => {
         }
       },
       throwOnError: false,
-    }
+    },
   );
 };
 export const emailSignUpSchema = z.object({
