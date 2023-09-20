@@ -1,1 +1,1 @@
-export { Button } from "@nextui-org/react";
+export { Button, ButtonGroup } from "@nextui-org/react";
