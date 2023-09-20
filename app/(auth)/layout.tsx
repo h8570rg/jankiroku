@@ -13,7 +13,7 @@ export default function Auth({ children }: { children: React.ReactNode }) {
           alt="mahjong"
         />
         <div className="absolute inset-0 backdrop-blur-sm" />
-        <div className="absolute inset-0 bg-background opacity-90" />
+        <div className="absolute inset-0 bg-background opacity-[0.98]" />
       </div>
       <div className="relative flex min-h-screen items-center justify-center px-6">
         <div className="w-full">
