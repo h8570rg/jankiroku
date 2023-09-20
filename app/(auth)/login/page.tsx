@@ -58,7 +58,6 @@ export default function Login() {
           autoComplete="username"
           required
           label="メールアドレス"
-          radius="sm"
           {...register("email")}
           errorMessage={errors.email?.message}
         />
@@ -69,14 +68,12 @@ export default function Login() {
           autoComplete="current-password"
           required
           errorMessage={errors.password?.message}
-          radius="sm"
           {...register("password")}
         />
         <Button
           isLoading={isSubmitting}
           className="w-full"
           color="primary"
-          radius="sm"
           type="submit"
         >
           ログイン
@@ -104,9 +101,9 @@ function SocialProviderItem({
   return (
     <li className="w-full">
       <Button
-        className="flex w-full items-center justify-center gap-3 bg-content2"
+        className="flex w-full items-center justify-center gap-3 bg-default-100"
         size="lg"
-        radius="sm"
+        radius="md"
         onClick={onClick}
       >
         <span className="w-5">{children}</span>
