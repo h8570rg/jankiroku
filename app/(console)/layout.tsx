@@ -1,6 +1,3 @@
-import { AppHeader } from "~/components/AppHeader";
-import { BottomNavigation } from "~/components/BottomNavigation";
-
 export default function ConsoleLayout({
   children,
 }: {
@@ -8,9 +5,7 @@ export default function ConsoleLayout({
 }) {
   return (
     <div>
-      <AppHeader />
-      <main>{children}</main>
-      <BottomNavigation />
+      <main className="relative min-h-screen px-4 py-5">{children}</main>
     </div>
   );
 }

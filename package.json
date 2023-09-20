@@ -25,6 +25,7 @@
     "supabase:login": "supabase login",
     "supabase:reset": "supabase db reset",
     "supabase:diff": "supabase db diff -f local",
+    "supabase:squash": "supabase migration squash",
     "supabase:type": "supabase gen types typescript --local > lib/database.types.ts"
   },
   "repository": {

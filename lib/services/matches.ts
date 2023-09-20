@@ -4,17 +4,17 @@ import { repositories } from "~/lib/repositories";
 
 export const matches = {
   get: async () => {
-    const { data } = await repositories.matches().select();
-    if (!data) {
-      throw new Error("Matches not found");
+    const { data, error } = await repositories.matches().select();
+    if (error) {
+      throw error;
     }
     return data;
   },
   create: async () => {
-    const { data } = await repositories.matches().insert({}).select();
-    if (!data) {
-      throw new Error("Match not created");
+    const { data, error } = await repositories.matches().insert({}).select();
+    if (error) {
+      throw error;
     }
-    return data;
+    return data[0];
   },
 };

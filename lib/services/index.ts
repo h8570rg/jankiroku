@@ -1,9 +1,9 @@
 import "server-only";
 
-import { auth } from "./auth";
 import { matches } from "./matches";
+import { rules } from "./rules";
 
 export const services = {
-  auth,
   matches,
+  rules,
 };

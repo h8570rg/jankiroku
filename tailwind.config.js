@@ -55,7 +55,26 @@ const config = {
   darkMode: "class",
   plugins: [
     nextui({
+      layout: {
+        radius: {
+          small: "2px",
+          medium: "4px",
+          large: "8px",
+        },
+      },
       addCommonColors: true,
+      themes: {
+        dark: {
+          colors: {
+            background: "#222831",
+            foreground: "#fdf6fd",
+            primary: {
+              DEFAULT: "#892CDC",
+              foreground: "#fdf6fd",
+            },
+          },
+        },
+      },
     }),
   ],
 };

@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { Metadata } from "next";
 
+import { IconDefs } from "~/components/Icon";
 import { ToastContainer } from "~/lib/toast";
 
 import { notoSansJp, righteous } from "./fonts";
@@ -30,6 +31,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="font-sans">
+        <IconDefs />
         <NextUIProvider>
           <main className="bg-background text-foreground">{children}</main>
           <ToastContainer />

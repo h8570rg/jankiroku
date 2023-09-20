@@ -12,9 +12,11 @@ export default async function Matches() {
   const [matches] = await Promise.all([matchesData]);
   return (
     <div>
-      matches
+      <h1 className="heading-1">ゲーム</h1>
       <MatchList initialMatches={matches} />
-      <MatchCreateButton />
+      <div className="absolute inset-x-0 bottom-0 p-4">
+        <MatchCreateButton className="w-full" />
+      </div>
     </div>
   );
 }
