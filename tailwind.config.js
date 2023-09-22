@@ -66,43 +66,10 @@ const config = {
       themes: {
         dark: {
           colors: {
-            // base colors
-            // neutralのいっこずらし
-            default: {
-              50: "#1d1b1e",
-              100: "#322f33",
-              200: "#49464a",
-              300: "#615d61",
-              400: "#7a767a",
-              500: "#948f94",
-              600: "#afaaae",
-              700: "#cac5c9",
-              800: "#e7e1e5",
-              foreground: "#ffffff",
-              DEFAULT: "#322f33",
-            },
-            background: "#1d1b1e",
-            foreground: "#e7e1e5",
-            content1: {
-              DEFAULT: "#1d1b1e",
-              foreground: "#cac5c9",
-            },
-            content2: {
-              DEFAULT: "#211f22",
-              foreground: "#cac5c9",
-            },
-            content3: {
-              DEFAULT: "#2c292d",
-              foreground: "#cac5c9",
-            },
-            content4: {
-              DEFAULT: "#373438",
-              foreground: "#cac5c9",
-            },
-            // theme colors
+            background: "#030711",
             primary: {
-              DEFAULT: "#dab9ff",
-              foreground: "#431475",
+              DEFAULT: "#7C3BED",
+              foreground: "#e7e1e5",
             },
           },
         },

@@ -85,42 +85,39 @@ export interface Database {
           {
             foreignKeyName: "matches_created_by_fkey";
             columns: ["created_by"];
-            referencedRelation: "users";
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "matches_updated_by_fkey";
             columns: ["updated_by"];
-            referencedRelation: "users";
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];
       };
-      participants: {
+      matches_profiles: {
         Row: {
-          id: string;
           match_id: string;
           user_id: string;
         };
         Insert: {
-          id?: string;
           match_id: string;
-          user_id: string;
+          user_id?: string;
         };
         Update: {
-          id?: string;
           match_id?: string;
           user_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "participants_match_id_fkey";
+            foreignKeyName: "matches_profiles_match_id_fkey";
             columns: ["match_id"];
             referencedRelation: "matches";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "participants_user_id_fkey";
+            foreignKeyName: "matches_profiles_user_id_fkey";
             columns: ["user_id"];
             referencedRelation: "profiles";
             referencedColumns: ["id"];
@@ -130,14 +127,17 @@ export interface Database {
       profiles: {
         Row: {
           id: string;
+          janrecoId: string | null;
           name: string | null;
         };
         Insert: {
           id: string;
+          janrecoId?: string | null;
           name?: string | null;
         };
         Update: {
           id?: string;
+          janrecoId?: string | null;
           name?: string | null;
         };
         Relationships: [
@@ -202,7 +202,7 @@ export interface Database {
           {
             foreignKeyName: "rules_created_by_fkey";
             columns: ["created_by"];
-            referencedRelation: "users";
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
           {
@@ -214,7 +214,7 @@ export interface Database {
           {
             foreignKeyName: "rules_updated_by_fkey";
             columns: ["updated_by"];
-            referencedRelation: "users";
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];
