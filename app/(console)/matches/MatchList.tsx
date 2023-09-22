@@ -1,16 +1,29 @@
 "use client";
 
-import { useMatches } from "~/lib/hooks/api/match";
-import { Matches } from "~/lib/models/match";
+import classNames from "classnames";
 
-export function MatchList({ initialMatches }: { initialMatches: Matches }) {
+import { Card, CardHeader } from "~/components/Card";
+import { useMatches } from "~/lib/hooks/api/match";
+import { Matches } from "~/lib/services/matches";
+
+export function MatchList({
+  initialMatches,
+  className,
+}: {
+  initialMatches: Matches;
+  className?: string;
+}) {
   const { data: matches } = useMatches(initialMatches);
 
   return (
-    <>
+    <ul className={classNames(className, "space-y-4")}>
       {matches?.map((match) => (
-        <div key={match.id}>{match.id}</div>
+        <li key={match.id}>
+          <Card>
+            <CardHeader>{match.date}</CardHeader>
+          </Card>
+        </li>
       ))}
-    </>
+    </ul>
   );
 }

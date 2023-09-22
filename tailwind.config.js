@@ -69,7 +69,7 @@ const config = {
             background: "#030711",
             primary: {
               DEFAULT: "#7C3BED",
-              foreground: "e7e1e5",
+              foreground: "#e7e1e5",
             },
           },
         },

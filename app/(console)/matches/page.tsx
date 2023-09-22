@@ -1,14 +1,10 @@
-import { services } from "~/lib/services";
+import { getMatches } from "~/lib/services/matches";
 
 import { MatchCreateButton } from "./MatchCreateButton";
 import { MatchList } from "./MatchList";
 
-async function getMatches() {
-  return await services.matches.get();
-}
-
 export default async function Matches() {
-  const matchesData = getMatches();
+  const matchesData = await getMatches();
   const [matches] = await Promise.all([matchesData]);
   return (
     <div>

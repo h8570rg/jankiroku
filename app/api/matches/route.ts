@@ -1,13 +1,18 @@
 import { NextResponse } from "next/server";
 
-import { services } from "~/lib/services";
+import {
+  CreateMatchPaylead,
+  createMatch,
+  getMatches,
+} from "~/lib/services/matches";
 
 export async function GET() {
-  const data = await services.matches.get();
+  const data = await getMatches();
   return NextResponse.json(data);
 }
 
-export async function POST() {
-  const data = await services.matches.create();
-  return NextResponse.json(data);
+export async function POST(request: Request) {
+  const body = (await request.json()) as CreateMatchPaylead;
+  await createMatch(body);
+  return NextResponse.json({});
 }
