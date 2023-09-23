@@ -127,17 +127,17 @@ export interface Database {
       profiles: {
         Row: {
           id: string;
-          janrecoId: string | null;
+          janreco_id: string | null;
           name: string | null;
         };
         Insert: {
           id: string;
-          janrecoId?: string | null;
+          janreco_id?: string | null;
           name?: string | null;
         };
         Update: {
           id?: string;
-          janrecoId?: string | null;
+          janreco_id?: string | null;
           name?: string | null;
         };
         Relationships: [

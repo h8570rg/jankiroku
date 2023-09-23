@@ -3,7 +3,7 @@ import { SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "~/lib/database.types";
 import { dayjs } from "~/lib/utils/date";
 
-export type CreateMatchPaylead = {
+export type CreateMatchPayload = {
   calcMethod: string;
   chipRate: number;
   crackBoxBonus: number;
@@ -35,7 +35,7 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       playersCount,
       rate,
       incline: { incline1, incline2, incline3, incline4 },
-    }: CreateMatchPaylead) => {
+    }: CreateMatchPayload) => {
       const createMatchResult = await supabaseClient
         .from("matches")
         .insert({})

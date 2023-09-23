@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { z } from "zod";
-import { CreateMatchPaylead, Matches } from "~/lib/services/matches";
+import { CreateMatchPayload, Matches } from "~/lib/services/matches";
 import { get, post } from "~/lib/utils/request";
 import { schemas } from "~/lib/utils/schemas";
 
@@ -15,7 +15,7 @@ export const useMatchCreate = () => {
   return useSWRMutation(
     "/api/matches",
     async (url, { arg }: { arg: MatchCreateSchema }) => {
-      const payload: CreateMatchPaylead = arg;
+      const payload: CreateMatchPayload = arg;
       await post(url, payload);
     },
   );

@@ -17,6 +17,16 @@ export const schemas = {
     .string()
     .min(1, "パスワードを入力してください")
     .min(6, "パスワードは6文字以上で入力してください"),
+  name: z
+    .string()
+    .min(1, "名前を入力してください")
+    .max(12, "名前は12文字以内で入力してください"),
+  janrecoId: z
+    .string()
+    .min(1, "ユーザーIDを入力してください")
+    .min(4, "ユーザーIDは4文字以上で入力してください")
+    .max(12, "ユーザーIDは12文字以内で入力してください")
+    .regex(/^[a-zA-Z0-9]+$/, "ユーザーIDは半角英数字のみで入力してください"),
   calcMethod: z.enum(calcMethods),
   chipRate: z
     .string()
