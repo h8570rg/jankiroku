@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { services } from "~/lib/services";
-import { CreateMatchPaylead } from "~/lib/services/matches";
+import { CreateMatchPayload } from "~/lib/services/matches";
 import { createSupabaseClient } from "~/lib/utils/supabase/routeHandlerClient";
 
 export async function GET() {
@@ -13,7 +13,7 @@ export async function GET() {
 export async function POST(request: Request) {
   const supabaseClient = createSupabaseClient();
   const { createMatch } = services(supabaseClient);
-  const body = (await request.json()) as CreateMatchPaylead;
+  const body = (await request.json()) as CreateMatchPayload;
   await createMatch(body);
   return NextResponse.json({});
 }
