@@ -1,6 +1,7 @@
 "use client";
 
 import classNames from "classnames";
+import Link from "next/link";
 
 import { Card, CardHeader } from "~/components/Card";
 import { useMatches } from "~/lib/hooks/api/match";
@@ -20,7 +21,9 @@ export function MatchList({
       {matches?.map((match) => (
         <li key={match.id}>
           <Card>
-            <CardHeader>{match.date}</CardHeader>
+            <Link href={`/matches/${match.id}`}>
+              <CardHeader>{match.date}</CardHeader>
+            </Link>
           </Card>
         </li>
       ))}

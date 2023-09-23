@@ -22,7 +22,7 @@
   }
 
   .heading-1 {
-    @apply text-xl font-bold mb-1;
+    @apply text-xl font-bold;
   }
 }
 
