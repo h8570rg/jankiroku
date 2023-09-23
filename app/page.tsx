@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import { getURL } from "~/lib/utils/url";
 
 export default function Root() {

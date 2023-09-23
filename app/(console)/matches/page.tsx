@@ -1,6 +1,5 @@
 import { services } from "~/lib/services";
 import { createSupabaseClient } from "~/lib/utils/supabase/serverComponentClient";
-
 import { MatchCreateButton } from "./MatchCreateButton";
 import { MatchList } from "./MatchList";
 

@@ -1,5 +1,4 @@
 import classNames from "classnames";
-
 import { config } from "~/lib/config";
 
 function Logo({ className }: { className?: string }) {
