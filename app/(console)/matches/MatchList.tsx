@@ -2,7 +2,6 @@
 
 import classNames from "classnames";
 import Link from "next/link";
-
 import { Card, CardHeader } from "~/components/Card";
 import { useMatches } from "~/lib/hooks/api/match";
 import { Matches } from "~/lib/services/matches";

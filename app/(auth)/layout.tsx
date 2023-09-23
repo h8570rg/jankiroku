@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 import MahJong1Image from "~/assets/images/mahjong1.jpeg";
 import Logo from "~/components/Logo";
 

@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import { Button } from "~/components/Button";
 import { Icon } from "~/components/Icon";
 import { services } from "~/lib/services";
@@ -11,7 +10,7 @@ export default async function Matche({
   params: { matchId: string };
 }) {
   const supabaseClient = createSupabaseClient();
-  const { getMatch } = services(supabaseClient).match;
+  const { getMatch } = services(supabaseClient);
 
   const match = await getMatch({ matchId });
   return (

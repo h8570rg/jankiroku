@@ -32,7 +32,7 @@
           }
         ],
         "pathGroupsExcludedImportTypes": ["server-only"],
-        "newlines-between": "always",
+        "newlines-between": "never",
         "warnOnUnassignedImports": true
       }
     ],

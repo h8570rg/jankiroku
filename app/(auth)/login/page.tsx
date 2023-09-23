@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
-
 import { Button } from "~/components/Button";
 import { Divider } from "~/components/Divider";
 import { Input } from "~/components/Input";
