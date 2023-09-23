@@ -11,7 +11,7 @@ export default async function Matche({
   params: { matchId: string };
 }) {
   const supabaseClient = createSupabaseClient();
-  const { getMatch } = services(supabaseClient).match;
+  const { getMatch } = services(supabaseClient);
 
   const match = await getMatch({ matchId });
   return (

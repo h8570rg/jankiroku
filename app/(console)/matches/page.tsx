@@ -6,7 +6,7 @@ import { MatchList } from "./MatchList";
 
 export default async function Matches() {
   const supabaseClient = createSupabaseClient();
-  const { getMatches } = services(supabaseClient).matches;
+  const { getMatches } = services(supabaseClient);
   const matchesData = await getMatches();
   const [matches] = await Promise.all([matchesData]);
   return (
