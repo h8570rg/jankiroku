@@ -1,60 +1,52 @@
-// import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-// import { NextResponse } from "next/server";
-// import type { NextRequest } from "next/server";
-
-// import type { Database } from "~/lib/database.types";
-
-// const authRoutes = ["/signin", "/signup", "/redirect"];
-
-// export async function middleware(req: NextRequest) {
-//   const { pathname } = req.nextUrl;
-//   const res = NextResponse.next();
-
-//   // If the request is for an auth route, return the response
-//   if (authRoutes.some((path) => pathname.startsWith(path))) {
-//     return res;
-//   }
-
-//   const supabase = createMiddlewareClient<Database>({ req, res });
-
-//   const {
-//     data: { session },
-//   } = await supabase.auth.getSession();
-
-//   if (!session) {
-//     return NextResponse.redirect(new URL("/signin", req.url));
-//   }
-
-//   // If the request is for the root path, redirect to the matches page
-//   if (pathname === "/") {
-//     return NextResponse.redirect(new URL("/matches", req.url));
-//   }
-
-//   return res;
-// }
-
-// export const config = {
-//   matcher: [
-//     /*
-//      * Match all request paths except for the ones starting with:
-//      * - api (API routes)
-//      * - _next/static (static files)
-//      * - _next/image (image optimization files)
-//      * - favicon.ico (favicon file)
-//      */
-//     "/((?!api|_next/static|_next/image|favicon.ico).*)",
-//   ],
-// };
-
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-
 import type { Database } from "~/lib/database.types";
+
+// 認証の必要ないページのパス
+const noAuthPaths = ["/login", "/sign-up"];
+const authPaths = ["/matches", "/match/[id]"];
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
+
+  /**
+   * @see https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
+   */
   const supabase = createMiddlewareClient<Database>({ req, res });
-  await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const { pathname } = req.nextUrl;
+
+  if (
+    noAuthPaths.some((path) => pathname.startsWith(path)) ||
+    pathname === "/"
+  ) {
+    return res;
+  }
+
+  if (authPaths.some((path) => pathname.startsWith(path))) {
+    if (!session) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+  }
+
   return res;
 }
+
+/**
+ * @see https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+ */
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!_next/static|_next/image|favicon.ico).*)",
+  ],
+};

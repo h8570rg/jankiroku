@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
-
 import { Button } from "~/components/Button";
 import { Input } from "~/components/Input";
 import {
@@ -37,7 +36,6 @@ export default function Login() {
           autoComplete="username"
           required
           label="メールアドレス"
-          radius="sm"
           {...register("email")}
           errorMessage={errors.email?.message}
         />
@@ -47,7 +45,6 @@ export default function Login() {
           type="password"
           autoComplete="current-password"
           required
-          radius="sm"
           {...register("password")}
           errorMessage={errors.password?.message}
         />
@@ -55,7 +52,6 @@ export default function Login() {
           isLoading={isSubmitting}
           className="w-full"
           color="primary"
-          radius="sm"
           type="submit"
         >
           新規登録

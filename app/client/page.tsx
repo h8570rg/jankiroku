@@ -6,7 +6,6 @@ import {
 } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
 import type { Database } from "~/lib/database.types";
 
 type Todo = Database["public"]["Tables"]["matches"]["Row"];

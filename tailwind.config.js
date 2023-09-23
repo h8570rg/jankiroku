@@ -66,11 +66,10 @@ const config = {
       themes: {
         dark: {
           colors: {
-            background: "#222831",
-            foreground: "#fdf6fd",
+            background: "#030711",
             primary: {
-              DEFAULT: "#892CDC",
-              foreground: "#fdf6fd",
+              DEFAULT: "#7C3BED",
+              foreground: "#e7e1e5",
             },
           },
         },

@@ -4,8 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-
 import { Accordion, AccordionItem } from "~/components/Accordion";
 import { Button, ButtonGroup } from "~/components/Button";
 import { Input } from "~/components/Input";
@@ -18,16 +16,14 @@ import {
   ModalHeader,
 } from "~/components/Modal";
 import { Select, SelectItem } from "~/components/Select";
-import { useMatchCreate } from "~/lib/hooks/api/match";
-import { ruleCreateSchema, useRuleCreate } from "~/lib/hooks/api/rule";
+import {
+  MatchCreateSchema,
+  matchCreateSchema,
+  useMatchCreate,
+} from "~/lib/hooks/api/match";
 import { calcMethod } from "~/lib/utils/schemas";
 
-const ruleCreateFormSchema = ruleCreateSchema.omit({
-  matchId: true,
-});
-type RuleCreateFormSchema = z.infer<typeof ruleCreateFormSchema>;
-
-const playersCount4DefaultValues: RuleCreateFormSchema = {
+const playersCount4DefaultValues: Partial<MatchCreateSchema> = {
   playersCount: 4,
   /** @see https://github.com/react-hook-form/react-hook-form/issues/8382 */
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -56,7 +52,7 @@ const playersCount4DefaultValues: RuleCreateFormSchema = {
   },
 };
 
-const playersCount3DefaultValues: RuleCreateFormSchema = {
+const playersCount3DefaultValues: Partial<MatchCreateSchema> = {
   playersCount: 3,
   /** @see https://github.com/react-hook-form/react-hook-form/issues/8382 */
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -87,7 +83,6 @@ const playersCount3DefaultValues: RuleCreateFormSchema = {
 
 export function MatchCreateButton({ className }: { className?: string }) {
   const { trigger: createMatch } = useMatchCreate();
-  const { trigger: createRule } = useRuleCreate();
   const ruleCreateModal = useDisclosure();
 
   const {
@@ -97,32 +92,31 @@ export function MatchCreateButton({ className }: { className?: string }) {
     setValue,
     register,
     clearErrors,
-  } = useForm<RuleCreateFormSchema>({
-    resolver: zodResolver(ruleCreateFormSchema),
+  } = useForm<MatchCreateSchema>({
+    resolver: zodResolver(matchCreateSchema),
     defaultValues: playersCount4DefaultValues,
   });
 
   const playersCount = watch("playersCount");
 
-  const onRuleCreateSubmit: SubmitHandler<RuleCreateFormSchema> = useCallback(
+  const onRuleCreateSubmit: SubmitHandler<MatchCreateSchema> = useCallback(
     async (data) => {
-      const match = await createMatch();
-      await createRule({ ...data, matchId: match.id });
+      await createMatch(data);
       // TODO: navigate to match page
     },
-    [createMatch, createRule],
+    [createMatch],
   );
 
   const handlePlayersCount4Click = useCallback(() => {
     Object.entries(playersCount4DefaultValues).forEach(([key, value]) => {
-      setValue(key as keyof RuleCreateFormSchema, value);
+      setValue(key as keyof MatchCreateSchema, value);
     });
     clearErrors();
   }, [clearErrors, setValue]);
 
   const handlePlayersCount3Click = useCallback(() => {
     Object.entries(playersCount3DefaultValues).forEach(([key, value]) => {
-      setValue(key as keyof RuleCreateFormSchema, value);
+      setValue(key as keyof MatchCreateSchema, value);
     });
     clearErrors();
   }, [clearErrors, setValue]);
@@ -139,7 +133,7 @@ export function MatchCreateButton({ className }: { className?: string }) {
   return (
     <>
       <Button
-        className={classNames(className, "")}
+        className={className}
         size="lg"
         color="primary"
         onClick={ruleCreateModal.onOpen}
