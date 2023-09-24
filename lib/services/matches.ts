@@ -39,11 +39,11 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       const createMatchResult = await supabaseClient
         .from("matches")
         .insert({})
-        .select();
+        .select()
+        .single();
       if (createMatchResult.error) {
         throw createMatchResult.error;
       }
-      const match = createMatchResult.data[0];
       const incline = `${incline1}_${incline2}_${incline3}_${incline4}`;
       const createRulePromise = supabaseClient.from("rules").insert({
         calc_method: calcMethod,
@@ -51,14 +51,14 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
         crack_box_bonus: crackBoxBonus,
         default_calc_points: defaultCalcPoints,
         default_points: defaultPoints,
-        match_id: match.id,
+        match_id: createMatchResult.data.id,
         players_count: playersCount,
         rate,
         incline,
       });
       const createMatchesUsersPromise = supabaseClient
         .from("matches_profiles")
-        .insert({ match_id: match.id });
+        .insert({ match_id: createMatchResult.data.id });
       const [createRuleResult, createMatchesUsersResult] = await Promise.all([
         createRulePromise,
         createMatchesUsersPromise,

@@ -1,10 +1,17 @@
 import { SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "~/lib/database.types";
 
-export type Profile = {
+export type UnregisteredProfile = {
   id: string;
   name: string | null;
   janrecoId: string | null;
+};
+
+export type Profile = {
+  id: string;
+  name: string;
+  janrecoId: string;
+  isFriend: boolean;
 };
 
 export type UpdateProfilePayload = {
@@ -13,42 +20,30 @@ export type UpdateProfilePayload = {
   janrecoId: string;
 };
 
+export type ProfileExists = {
+  exists: boolean;
+};
+
 export function profileService(supabaseClient: SupabaseClient<Database>) {
   return {
-    getUserProfile: async (): Promise<Profile> => {
+    getUserProfile: async (): Promise<Profile | UnregisteredProfile> => {
       const getUserResult = await supabaseClient.auth.getUser();
       if (getUserResult.error) {
         throw getUserResult.error;
       }
       const user = getUserResult.data.user;
-      const getProfileResult = await supabaseClient
-        .from("profiles")
-        .select()
-        .eq("id", user.id);
-      if (getProfileResult.error) {
-        throw getProfileResult.error;
-      }
-      const profile = getProfileResult.data[0];
-      return {
-        id: profile.id,
-        name: profile.name,
-        janrecoId: profile.janreco_id,
-      };
-    },
-
-    getProfile: async ({ id }: { id: string }): Promise<Profile> => {
       const { data, error } = await supabaseClient
         .from("profiles")
         .select()
-        .eq("id", id);
+        .eq("id", user.id)
+        .single();
       if (error) {
         throw error;
       }
-      const profile = data[0];
       return {
-        id: profile.id,
-        name: profile.name,
-        janrecoId: profile.janreco_id,
+        id: data.id,
+        name: data.name,
+        janrecoId: data.janreco_id,
       };
     },
 
@@ -61,16 +56,56 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
         .from("profiles")
         .update({ name, janreco_id: janrecoId })
         .eq("id", id)
-        .select();
+        .select()
+        .single();
       if (error) {
         throw error;
       }
-      const profile = data[0];
+      if (!data.name || !data.janreco_id) {
+        throw new Error("profile validation failed.");
+      }
       return {
+        id: data.id,
+        name: data.name,
+        janrecoId: data.janreco_id,
+        isFriend: false,
+      };
+    },
+
+    /**
+     * @see https://github.com/supabase/postgrest-js/issues/289
+     */
+    searchProfiles: async ({ text }: { text: string }): Promise<Profile[]> => {
+      if (text === "") {
+        return [];
+      }
+      const { data, error } = await supabaseClient.rpc("search_profiles", {
+        search_text: text,
+      });
+      if (error) {
+        throw error;
+      }
+      return data.map((profile) => ({
         id: profile.id,
         name: profile.name,
         janrecoId: profile.janreco_id,
-      };
+        isFriend: profile.is_friend,
+      }));
+    },
+
+    getProfileExists: async ({
+      janrecoId,
+    }: {
+      janrecoId: string;
+    }): Promise<ProfileExists> => {
+      const { data, error } = await supabaseClient
+        .from("profiles")
+        .select()
+        .eq("janreco_id", janrecoId);
+      if (error) {
+        throw error;
+      }
+      return { exists: data.length > 0 };
     },
   };
 }
