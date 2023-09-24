@@ -34,6 +34,34 @@ export interface Database {
   };
   public: {
     Tables: {
+      friends: {
+        Row: {
+          profile_id_1: string;
+          profile_id_2: string;
+        };
+        Insert: {
+          profile_id_1?: string;
+          profile_id_2: string;
+        };
+        Update: {
+          profile_id_1?: string;
+          profile_id_2?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "friends_profile_id_1_fkey";
+            columns: ["profile_id_1"];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "friends_profile_id_2_fkey";
+            columns: ["profile_id_2"];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       games: {
         Row: {
           created_at: string;
@@ -258,7 +286,31 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      delete_friends: {
+        Args: {
+          profile_id: string;
+        };
+        Returns: undefined;
+      };
+      get_friends: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          id: string;
+          name: string;
+          janreco_id: string;
+        }[];
+      };
+      search_profiles: {
+        Args: {
+          search_text: string;
+        };
+        Returns: {
+          id: string;
+          name: string;
+          janreco_id: string;
+          is_friend: boolean;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;
