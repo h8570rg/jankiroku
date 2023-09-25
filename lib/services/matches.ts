@@ -75,8 +75,20 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
     /**
      * @see https://supabase.com/docs/guides/api/joins-and-nesting
      */
-    getMatches: async (): Promise<Matches> => {
-      const { data, error } = await supabaseClient.from("matches").select(`
+    getMatches: async (
+      { page }: { page: number } = { page: 1 },
+    ): Promise<Matches> => {
+      const matchLimit = 99;
+      const rangeFrom = (page - 1) * matchLimit;
+      const rangeTo = page * matchLimit - 1;
+      const userResult = await supabaseClient.auth.getUser();
+      if (userResult.error) {
+        throw userResult.error;
+      }
+      const { data, error } = await supabaseClient
+        .from("matches")
+        .select(
+          `
         *,
         rules (
           *
@@ -84,7 +96,9 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
         profiles!matches_profiles (
           *
         )
-        `);
+        `,
+        )
+        .range(rangeFrom, rangeTo);
       if (error) {
         throw error;
       }
