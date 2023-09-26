@@ -18,14 +18,14 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
           profiles!matches_profiles( * )
         `,
         )
-        .eq("id", matchId);
+        .eq("id", matchId)
+        .single();
       if (error) {
         throw error;
       }
-      const match = data[0];
       return {
-        id: match.id,
-        date: dayjs(match.created_at).format("YYYY / M / D"),
+        id: data.id,
+        date: dayjs(data.created_at).format("YYYY / M / D"),
       };
     },
   };

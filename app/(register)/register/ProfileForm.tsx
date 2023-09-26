@@ -18,6 +18,7 @@ import {
   profileUpdateSchema,
   useProfileUpdate,
 } from "~/lib/hooks/api/profile";
+import { useProfileExists } from "~/lib/hooks/api/profiles";
 
 const janrecoIdSchema = profileUpdateSchema.pick({ janrecoId: true });
 type JanrecoIdSchema = z.infer<typeof janrecoIdSchema>;
@@ -39,6 +40,8 @@ export default function ProfileForm({
     useState<ProfileUpdateSchema["janrecoId"]>();
   const [name, setName] = useState<ProfileUpdateSchema["name"]>();
 
+  const { trigger: getProfileExists } = useProfileExists();
+
   const { trigger: updateProfile, isMutating: isUpdatingProfile } =
     useProfileUpdate({ userId });
 
@@ -48,6 +51,14 @@ export default function ProfileForm({
   });
 
   const onJanrecoIdSubmit: SubmitHandler<JanrecoIdSchema> = async (data) => {
+    const exists = await getProfileExists({ janrecoId: data.janrecoId });
+    if (exists) {
+      janrecoIdForm.setError("janrecoId", {
+        type: "manual",
+        message: "このIDは既に使用されています",
+      });
+      return;
+    }
     setJanrecoId(data.janrecoId);
     setStep((prev) => prev + 1);
   };
@@ -120,6 +131,7 @@ export default function ProfileForm({
                     type="submit"
                     color="primary"
                     isDisabled={!janrecoIdForm.formState.isValid}
+                    isLoading={janrecoIdForm.formState.isSubmitting}
                   >
                     次へ
                   </Button>
@@ -170,7 +182,7 @@ export default function ProfileForm({
             </form>
           )}
           {/* confirm */}
-          {step === 3 && (
+          {step === 3 && !!name && !!janrecoId && (
             <>
               <div className="mb-6">
                 <p className="text-center font-bold">
@@ -184,25 +196,22 @@ export default function ProfileForm({
                 <Card>
                   <CardBody>
                     <div>
-                      <User
-                        name={name}
-                        description={`@${janrecoId}`}
-                        avatarProps={{
-                          name: "",
-                        }}
-                      />
+                      <User name={name} janrecoId={janrecoId} />
                     </div>
                   </CardBody>
                 </Card>
-                <Button
-                  fullWidth
-                  size="lg"
-                  color="primary"
-                  onClick={handleConfirmClick}
-                  isLoading={isUpdatingProfile}
-                >
-                  始める
-                </Button>
+                <div className="flex justify-end">
+                  <Button variant="light" onClick={handlePrevClick}>
+                    戻る
+                  </Button>
+                  <Button
+                    color="primary"
+                    onClick={handleConfirmClick}
+                    isLoading={isUpdatingProfile}
+                  >
+                    始める
+                  </Button>
+                </div>
               </div>
             </>
           )}
