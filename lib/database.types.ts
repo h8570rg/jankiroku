@@ -127,15 +127,15 @@ export interface Database {
       matches_profiles: {
         Row: {
           match_id: string;
-          user_id: string;
+          profile_id: string;
         };
         Insert: {
           match_id: string;
-          user_id?: string;
+          profile_id?: string;
         };
         Update: {
           match_id?: string;
-          user_id?: string;
+          profile_id?: string;
         };
         Relationships: [
           {
@@ -145,8 +145,8 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "matches_profiles_user_id_fkey";
-            columns: ["user_id"];
+            foreignKeyName: "matches_profiles_profile_id_fkey";
+            columns: ["profile_id"];
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -159,7 +159,7 @@ export interface Database {
           name: string | null;
         };
         Insert: {
-          id: string;
+          id?: string;
           janreco_id?: string | null;
           name?: string | null;
         };
@@ -168,14 +168,7 @@ export interface Database {
           janreco_id?: string | null;
           name?: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey";
-            columns: ["id"];
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
       rules: {
         Row: {
@@ -251,20 +244,20 @@ export interface Database {
         Row: {
           game_id: string;
           id: string;
+          profile_id: string;
           score: number;
-          user_id: string;
         };
         Insert: {
           game_id: string;
           id?: string;
+          profile_id?: string;
           score: number;
-          user_id: string;
         };
         Update: {
           game_id?: string;
           id?: string;
+          profile_id?: string;
           score?: number;
-          user_id?: string;
         };
         Relationships: [
           {
@@ -274,8 +267,8 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "scores_user_id_fkey";
-            columns: ["user_id"];
+            foreignKeyName: "scores_profile_id_fkey";
+            columns: ["profile_id"];
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
