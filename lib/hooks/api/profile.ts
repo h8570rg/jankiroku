@@ -4,9 +4,9 @@ import { UpdateProfilePayload } from "~/lib/services/profile";
 import { post } from "~/lib/utils/request";
 import { schemas } from "~/lib/utils/schemas";
 
-export const useProfileUpdate = ({ userId }: { userId: string }) => {
+export const useProfileUpdate = ({ profileId }: { profileId: string }) => {
   return useSWRMutation(
-    `/api/profiles/${userId}`,
+    `/api/profiles/${profileId}`,
     async (url, { arg }: { arg: ProfileUpdateSchema }) => {
       const payload: Omit<UpdateProfilePayload, "id"> = arg;
       await post(url, payload);

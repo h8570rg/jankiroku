@@ -43,7 +43,7 @@ export default function ProfileForm({
   const { trigger: getProfileExists } = useProfileExists();
 
   const { trigger: updateProfile, isMutating: isUpdatingProfile } =
-    useProfileUpdate({ userId });
+    useProfileUpdate({ profileId: userId });
 
   const janrecoIdForm = useForm<JanrecoIdSchema>({
     resolver: zodResolver(janrecoIdSchema),
