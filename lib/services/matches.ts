@@ -69,7 +69,9 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       if (createMatchesUsersResult.error) {
         throw createMatchesUsersResult.error;
       }
-      return;
+      return {
+        id: createMatchResult.data.id, // TODO: modelを使ってMatch型を返す。MatchesもMatchの配列にする。
+      };
     },
 
     /**

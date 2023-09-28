@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
+import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Accordion, AccordionItem } from "~/components/Accordion";
@@ -82,13 +83,14 @@ const playersCount3DefaultValues: Partial<MatchCreateSchema> = {
 };
 
 export function MatchCreateButton({ className }: { className?: string }) {
+  const router = useRouter();
   const { trigger: createMatch } = useMatchCreate();
   const ruleCreateModal = useDisclosure();
 
   const {
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setValue,
     register,
     clearErrors,
@@ -101,10 +103,10 @@ export function MatchCreateButton({ className }: { className?: string }) {
 
   const onRuleCreateSubmit: SubmitHandler<MatchCreateSchema> = useCallback(
     async (data) => {
-      await createMatch(data);
-      // TODO: navigate to match page
+      const match = await createMatch(data);
+      router.push(`/matches/${match.id}`);
     },
-    [createMatch],
+    [createMatch, router],
   );
 
   const handlePlayersCount4Click = useCallback(() => {
@@ -322,7 +324,11 @@ export function MatchCreateButton({ className }: { className?: string }) {
                   <Button variant="light" onPress={onClose}>
                     キャンセル
                   </Button>
-                  <Button color="primary" type="submit">
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
                     開始
                   </Button>
                 </ModalFooter>

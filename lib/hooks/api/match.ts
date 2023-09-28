@@ -23,7 +23,8 @@ export const useMatchCreate = () => {
     "/api/matches",
     async (url, { arg }: { arg: MatchCreateSchema }) => {
       const payload: CreateMatchPayload = arg;
-      await post(url, payload);
+      const match = await post<{ id: string }>(url, payload); // TODO: Match型にする
+      return match;
     },
   );
 };
