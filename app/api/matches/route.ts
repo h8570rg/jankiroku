@@ -14,6 +14,6 @@ export async function POST(request: Request) {
   const supabaseClient = createSupabaseClient();
   const { createMatch } = services(supabaseClient);
   const body = (await request.json()) as CreateMatchPayload;
-  await createMatch(body);
-  return NextResponse.json({});
+  const data = await createMatch(body);
+  return NextResponse.json(data);
 }

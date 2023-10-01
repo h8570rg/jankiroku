@@ -36,7 +36,7 @@ export default function FriendsList({
 
   return (
     <ul className={classNames(className, "space-y-2")}>
-      {friends.map((friend) => (
+      {friends?.map((friend) => (
         <li className="flex items-center justify-between py-2" key={friend.id}>
           <User {...friend} />
           <Dropdown>

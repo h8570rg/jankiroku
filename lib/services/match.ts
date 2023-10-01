@@ -26,6 +26,11 @@ export type Match = {
   };
 };
 
+export type MatchPlayerAddPayload = {
+  matchId: string;
+  profileId: string;
+};
+
 export function matchService(supabaseClient: SupabaseClient<Database>) {
   return {
     getMatch: async ({ matchId }: { matchId: string }): Promise<Match> => {
@@ -72,6 +77,18 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
           },
         },
       };
+    },
+
+    addMatchPlayer: async ({
+      matchId,
+      profileId,
+    }: MatchPlayerAddPayload): Promise<void> => {
+      const { error } = await supabaseClient
+        .from("matches_profiles")
+        .insert([{ match_id: matchId, profile_id: profileId }]);
+      if (error) {
+        throw error;
+      }
     },
   };
 }

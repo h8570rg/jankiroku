@@ -69,7 +69,9 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       if (createMatchesUsersResult.error) {
         throw createMatchesUsersResult.error;
       }
-      return;
+      return {
+        id: createMatchResult.data.id, // TODO: modelを使ってMatch型を返す。MatchesもMatchの配列にする。
+      };
     },
 
     /**
@@ -81,27 +83,32 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       const matchLimit = 99;
       const rangeFrom = (page - 1) * matchLimit;
       const rangeTo = page * matchLimit - 1;
-      const userResult = await supabaseClient.auth.getUser();
+      const userResult = await supabaseClient.auth.getUser(); // TODO: function化して高速化
       if (userResult.error) {
         throw userResult.error;
       }
+      // TODO: 見直す
+
       const { data, error } = await supabaseClient
         .from("matches")
         .select(
           `
-        *,
-        rules (
-          *
-        ),
-        profiles!matches_profiles (
-          *
+      *,
+      rules (
+        *
+      ),
+      matches_profiles!inner (*),
+      profiles!matches_profiles (
+        *
+      )
+      `,
         )
-        `,
-        )
+        .filter("matches_profiles.profile_id", "eq", userResult.data?.user.id)
         .range(rangeFrom, rangeTo);
       if (error) {
         throw error;
       }
+
       return data.map((match) => {
         return {
           id: match.id,

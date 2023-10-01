@@ -23,7 +23,18 @@ export const useMatchCreate = () => {
     "/api/matches",
     async (url, { arg }: { arg: MatchCreateSchema }) => {
       const payload: CreateMatchPayload = arg;
-      await post(url, payload);
+      const match = await post<{ id: string }>(url, payload); // TODO: Match型にする
+      return match;
+    },
+  );
+};
+
+export const useMatchPlayerAdd = (matchId: string) => {
+  return useSWRMutation(
+    `/api/matches/${matchId}`,
+    async (_, { arg }: { arg: { profileId: string } }) => {
+      const match = await post<void>(`/api/matches/${matchId}/players`, arg);
+      return match;
     },
   );
 };
