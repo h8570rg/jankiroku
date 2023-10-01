@@ -16,8 +16,6 @@ export async function middleware(req: NextRequest) {
     return res;
   }
 
-  const start = performance.now();
-
   /**
    * @see https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
    */
@@ -25,11 +23,6 @@ export async function middleware(req: NextRequest) {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
-  const end = performance.now();
-
-  // eslint-disable-next-line no-console
-  console.log(`[middleware] ${end - start}ms`);
 
   if (noAuthPaths.some((path) => pathname.startsWith(path))) {
     return res;
