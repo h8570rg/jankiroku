@@ -29,6 +29,16 @@ export const useMatchCreate = () => {
   );
 };
 
+export const useMatchPlayerAdd = (matchId: string) => {
+  return useSWRMutation(
+    `/api/matches/${matchId}`,
+    async (_, { arg }: { arg: { profileId: string } }) => {
+      const match = await post<void>(`/api/matches/${matchId}/players`, arg);
+      return match;
+    },
+  );
+};
+
 export const matchCreateSchema = z.object({
   calcMethod: schemas.calcMethod,
   chipRate: schemas.chipRate,

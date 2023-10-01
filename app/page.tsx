@@ -7,6 +7,8 @@ export default function Root() {
       <Link href="/login">login</Link>
       <Link href="/server">server</Link>
       <Link href="/client">client</Link>
+      <Link href="/register">register</Link>
+      <Link href="/matches">matches</Link>
       <p>{getURL()}</p>
     </>
   );

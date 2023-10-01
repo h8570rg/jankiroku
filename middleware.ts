@@ -9,6 +9,14 @@ const authPaths = ["/matches", "/match/[id]"];
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
+  const { pathname } = req.nextUrl;
+
+  // 速度計測のため
+  if (pathname === "/") {
+    return res;
+  }
+
+  const start = performance.now();
 
   /**
    * @see https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
@@ -18,12 +26,12 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  const { pathname } = req.nextUrl;
+  const end = performance.now();
 
-  if (
-    noAuthPaths.some((path) => pathname.startsWith(path)) ||
-    pathname === "/"
-  ) {
+  // eslint-disable-next-line no-console
+  console.log(`[middleware] ${end - start}ms`);
+
+  if (noAuthPaths.some((path) => pathname.startsWith(path))) {
     return res;
   }
 
