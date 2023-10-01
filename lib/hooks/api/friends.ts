@@ -7,7 +7,7 @@ import {
 } from "~/lib/services/friends";
 import { del, get, post } from "~/lib/utils/request";
 
-export const useFriends = (initialData: Friend[]) => {
+export const useFriends = (initialData?: Friend[]) => {
   return useSWR("/api/friends", (url) => get<Friend[]>(url), {
     fallbackData: initialData,
   });

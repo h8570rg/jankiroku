@@ -1,12 +1,11 @@
 "use client";
 
 import { Button } from "@nextui-org/react";
-import { Icon } from "~/components/Icon";
 
-export default function MatchAddButton() {
+export default function MatchAddButton({ className }: { className?: string }) {
   return (
-    <Button fullWidth variant="ghost">
-      <Icon className="h-6 w-6 fill-current" name="add" />
+    <Button className={className} fullWidth color="primary">
+      結果を入力する
     </Button>
   );
 }
