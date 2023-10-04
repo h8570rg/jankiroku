@@ -11,7 +11,7 @@ export const calcMethod: Record<(typeof calcMethods)[number], string> = {
 export const schemas = {
   email: z
     .string()
-    .min(1, "メールアドレスを入力してください")
+    .min(1, "メールアドレスを入力してください") // TODO: noempty()使えるかも
     .email("メールアドレスを正しい形式で入力してください"),
   password: z
     .string()

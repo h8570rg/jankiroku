@@ -6,9 +6,9 @@ import { CreateMatchPayload, Matches } from "~/lib/services/matches";
 import { get, post } from "~/lib/utils/request";
 import { schemas } from "~/lib/utils/schemas";
 
-export const useMatch = (matchId: string, initialData: Match) => {
-  return useSWR(`/api/matches/${matchId}`, (url) => get<Match>(url), {
-    fallbackData: initialData,
+export const useMatch = (match: Match) => {
+  return useSWR(`/api/matches/${match.id}`, (url) => get<Match>(url), {
+    fallbackData: match,
   });
 };
 

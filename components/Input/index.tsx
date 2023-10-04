@@ -1,3 +1,1 @@
-import { Input } from "@nextui-org/react";
-
-export { Input };
+export { Input } from "@nextui-org/react";

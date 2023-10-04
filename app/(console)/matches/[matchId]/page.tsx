@@ -5,7 +5,7 @@ import { services } from "~/lib/services";
 import { createSupabaseClient } from "~/lib/utils/supabase/serverComponentClient";
 import MatchTable from "./MatchTable";
 
-export default async function Matche({
+export default async function Match({
   params: { matchId },
 }: {
   params: { matchId: string };
@@ -24,7 +24,7 @@ export default async function Matche({
         </div>
         <div>{match.date}</div>
       </header>
-      <MatchTable defaultValue={match} />
+      <MatchTable match={match} />
     </div>
   );
 }

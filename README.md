@@ -14,7 +14,6 @@ npm install
 
 ## Start supabase
 
-
 Install docker desktop.
 
 https://www.docker.com/products/docker-desktop/
@@ -38,7 +37,6 @@ Started supabase local development setup.
 service_role key: eyJh......
 ```
 
-
 ## Create env
 
 ```shell
@@ -46,6 +44,7 @@ cp .env.example .env.local
 ```
 
 Set envs.
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=<API URL>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key>
@@ -71,10 +70,10 @@ supabase studio url: http://localhost:54323
 
 - [supabase](https://supabase.com/docs)
 
-
 # Sequence
 
 ## Client Component
+
 ```mermaid
 sequenceDiagram
   box  Client
@@ -93,15 +92,16 @@ sequenceDiagram
   end
 
   %% server component
-  SC->>SV: 
-  SV->>RP: 
-  RP->>SB: 
-  SB->>RP: 
-  RP->>SV: 
-  SV->>MD: 
-  MD->>SV: 
-  SV->>SC: 
+  SC->>SV:
+  SV->>RP:
+  RP->>SB:
+  SB->>RP:
+  RP->>SV:
+  SV->>MD:
+  MD->>SV:
+  SV->>SC:
 ```
+
 ## Server Component
 
 ```mermaid
@@ -122,16 +122,16 @@ sequenceDiagram
   end
 
   %% server component
-  CC->>H: 
-  H->>AR: 
-  AR->>SV: 
-  SV->>RP: 
-  RP->>SB: 
-  SB->>RP: 
-  RP->>SV: 
-  SV->>MD: 
-  MD->>SV: 
-  SV->>AR: 
-  AR->>H: 
-  H->>CC: 
+  CC->>H:
+  H->>AR:
+  AR->>SV:
+  SV->>RP:
+  RP->>SB:
+  SB->>RP:
+  RP->>SV:
+  SV->>MD:
+  MD->>SV:
+  SV->>AR:
+  AR->>H:
+  H->>CC:
 ```

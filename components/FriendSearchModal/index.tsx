@@ -34,6 +34,11 @@ export function FriendSearchModal({
     reset();
   }, [reset]);
 
+  const handleAdd = useCallback(() => {
+    reset();
+    close();
+  }, [close, reset]);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -66,7 +71,7 @@ export function FriendSearchModal({
               )}
               {!isMutating &&
                 profiles?.map((profile) => (
-                  <ListItem key={profile.id} {...profile} onAdd={close} />
+                  <ListItem key={profile.id} {...profile} onAdd={handleAdd} />
                 ))}
               {!isMutating && profiles && profiles?.length === 0 && (
                 <p className="text-center text-sm text-foreground-500">
