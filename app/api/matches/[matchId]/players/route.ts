@@ -10,9 +10,9 @@ export async function POST(
   const supabaseClient = createSupabaseClient();
   const { addMatchPlayer } = services(supabaseClient);
   const body = (await request.json()) as { profileId: string };
-  const data = await addMatchPlayer({
+  await addMatchPlayer({
     matchId,
     profileId: body.profileId,
   });
-  return NextResponse.json(data);
+  return NextResponse.json({});
 }

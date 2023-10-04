@@ -20,6 +20,11 @@ export type UpdateProfilePayload = {
   janrecoId: string;
 };
 
+export type AnonymousProfile = {
+  id: string;
+  name: string;
+};
+
 export type ProfileExists = {
   exists: boolean;
 };
@@ -106,6 +111,25 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
         throw error;
       }
       return { exists: data.length > 0 };
+    },
+
+    createProfile: async ({
+      name,
+    }: {
+      name: string;
+    }): Promise<AnonymousProfile> => {
+      const { data, error } = await supabaseClient
+        .from("profiles")
+        .insert({ name })
+        .select()
+        .single();
+      if (error) {
+        throw error;
+      }
+      return {
+        id: data.id,
+        name: data.name ?? "",
+      };
     },
   };
 }
