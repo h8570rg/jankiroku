@@ -21,7 +21,8 @@
     "lint:fix": "next lint --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "type": "tsc",
-    "pre-commit": "lint-staged && npm run type",
+    "test": "vitest run",
+    "pre-commit": "lint-staged && npm run type && npm run test",
     "supabase": "supabase start",
     "supabase:login": "supabase login",
     "supabase:reset": "supabase db reset",
@@ -40,6 +41,7 @@
   },
   "homepage": "https://github.com/h8570rg/janreco#readme",
   "dependencies": {
+    "@dnd-kit/sortable": "^7.0.2",
     "@hookform/resolvers": "^3.3.1",
     "@nextui-org/react": "^2.1.13",
     "@supabase/auth-helpers-nextjs": "^0.8.1",
@@ -80,6 +82,7 @@
     "prettier": "^3.0.3",
     "supabase": "^1.99.5",
     "tailwindcss": "^3.3.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   }
 }
