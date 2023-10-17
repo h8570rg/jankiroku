@@ -1,19 +1,39 @@
 "use client";
 
 import classNames from "classnames";
+import { useMemo } from "react";
 import { Button } from "~/components/Button";
 import { Icon } from "~/components/Icon";
 import { useDisclosure } from "~/components/Modal";
-import { Table, TableBody, TableColumn, TableHeader } from "~/components/Table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  getKeyValue,
+} from "~/components/Table";
+import { useGames } from "~/lib/hooks/api/games";
 import { useMatch } from "~/lib/hooks/api/match";
+import { Game } from "~/lib/services/game";
 import { Match } from "~/lib/services/match";
+import { GameInputModal } from "./GameInputModal";
 import { MatchPlayerInputModal } from "./MatchPlayerInputModal";
 
-export default function MatchTable({ match: defaultMatch }: { match: Match }) {
+export default function MatchTable({
+  match: defaultMatch,
+  games: defaultGames,
+  className,
+}: {
+  match: Match;
+  games: Game[];
+  className?: string;
+}) {
   const { data: match } = useMatch(defaultMatch);
+  const { data: games } = useGames(match.id, defaultGames);
 
   const { rule, players } = match;
-
   const { playersCount } = rule;
 
   const playersShortCount = playersCount - players.length;
@@ -25,7 +45,7 @@ export default function MatchTable({ match: defaultMatch }: { match: Match }) {
     name: string;
     type: "index" | "player" | "empty";
   }[] = [
-    { id: "", janrecoId: "", name: "", type: "index" },
+    { id: "index", janrecoId: "", name: "", type: "index" },
     ...players.map(
       (player) =>
         ({
@@ -44,11 +64,41 @@ export default function MatchTable({ match: defaultMatch }: { match: Match }) {
     ),
   ];
 
+  const gameRows: {
+    [playerId: (typeof players)[number]["id"]]: number;
+  }[] =
+    games?.map((game, index) =>
+      Object.fromEntries([
+        ["key", `game-${index}`],
+        ["index", index + 1],
+        ...game.scores.map((score) => [score.profileId, score.score]),
+      ]),
+    ) ?? [];
+
   const matchPlayerInputModal = useDisclosure();
+  const gameInputModal = useDisclosure();
+
+  const bottomContent = useMemo(() => {
+    return (
+      <div className="px-1 pb-1">
+        <Button fullWidth color="primary" onClick={gameInputModal.onOpen}>
+          結果を入力する
+        </Button>
+      </div>
+    );
+  }, [gameInputModal.onOpen]);
 
   return (
-    <div className="overflow-x-auto">
-      <Table removeWrapper aria-label="成績表">
+    <div className={classNames(className, "overflow-x-auto")}>
+      <Table
+        classNames={{
+          table: "sticky top-0",
+        }}
+        removeWrapper
+        aria-label="成績表"
+        bottomContent={bottomContent}
+        isHeaderSticky
+      >
         <TableHeader columns={playerColumns}>
           {(column) => (
             <TableColumn
@@ -90,15 +140,31 @@ export default function MatchTable({ match: defaultMatch }: { match: Match }) {
           )}
         </TableHeader>
         <TableBody
-          emptyContent={isPlayersShort ? "参加者を追加してください" : "あああ"}
+          emptyContent={
+            isPlayersShort
+              ? "参加者を追加してください"
+              : "まだデータはありません"
+          }
+          items={gameRows}
         >
-          {/* <TableRow key="a">
-            <TableCell className="px-0.5">1</TableCell>
-            <TableCell>aa</TableCell>
-            <TableCell>aa</TableCell>
-            <TableCell>aa</TableCell>
-            <TableCell>aa</TableCell>
-          </TableRow> */}
+          {(item) => (
+            <TableRow key={item.key}>
+              {(columnKey) => {
+                const value = getKeyValue(item, columnKey);
+                return (
+                  <TableCell
+                    key={columnKey}
+                    className={classNames("text-center", {
+                      "text-danger": Number(value) < 0,
+                      "text-default-500": columnKey === "index",
+                    })}
+                  >
+                    {value}
+                  </TableCell>
+                );
+              }}
+            </TableRow>
+          )}
         </TableBody>
       </Table>
       <MatchPlayerInputModal
@@ -106,6 +172,12 @@ export default function MatchTable({ match: defaultMatch }: { match: Match }) {
         isOpen={matchPlayerInputModal.isOpen}
         onOpenChange={matchPlayerInputModal.onOpenChange}
         onClose={matchPlayerInputModal.onClose}
+      />
+      <GameInputModal
+        match={match}
+        isOpen={gameInputModal.isOpen}
+        onOpenChange={gameInputModal.onOpenChange}
+        onClose={gameInputModal.onClose}
       />
     </div>
   );

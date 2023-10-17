@@ -321,7 +321,7 @@ export function MatchCreateButton({ className }: { className?: string }) {
                   </Accordion>
                 </ModalBody>
                 <ModalFooter>
-                  <Button variant="light" onPress={onClose}>
+                  <Button variant="light" onClick={onClose}>
                     キャンセル
                   </Button>
                   <Button
