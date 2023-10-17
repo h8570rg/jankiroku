@@ -22,8 +22,8 @@ import {
   GameAddSchema,
   gameAddSchema,
   useGameAdd,
-  useMatch,
-} from "~/lib/hooks/api/match";
+} from "~/lib/hooks/api/games";
+import { useMatch } from "~/lib/hooks/api/match";
 import { Match } from "~/lib/services/match";
 
 export function GameInputModal({

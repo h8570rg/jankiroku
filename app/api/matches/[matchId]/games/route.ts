@@ -24,3 +24,13 @@ export async function POST(
   });
   return NextResponse.json({});
 }
+
+export async function GET(
+  request: Request,
+  { params: { matchId } }: { params: { matchId: string } },
+) {
+  const supabaseClient = createSupabaseClient();
+  const { getGames } = services(supabaseClient);
+  const match = await getGames({ matchId });
+  return NextResponse.json(match);
+}

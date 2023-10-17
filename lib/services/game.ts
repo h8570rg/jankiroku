@@ -13,6 +13,15 @@ export type GameCreatePayload = {
   crackBoxPlayerId?: string;
 };
 
+export type Game = {
+  id: string;
+  scores: {
+    id: string;
+    profileId: string;
+    score: number;
+  }[];
+};
+
 export function gameService(supabaseClient: SupabaseClient<Database>) {
   return {
     createGame: async ({
@@ -47,6 +56,36 @@ export function gameService(supabaseClient: SupabaseClient<Database>) {
           throw error;
         }
       });
+    },
+
+    getGames: async ({ matchId }: { matchId: string }): Promise<Game[]> => {
+      const { data, error } = await supabaseClient
+        .from("games")
+        .select(
+          `
+          match_id,
+          id,
+          created_at,
+          scores (
+            id,
+            profile_id,
+            score
+          )
+      `,
+        )
+        .eq("match_id", matchId)
+        .order("created_at", { ascending: true });
+      if (error) {
+        throw error;
+      }
+      return data.map((game) => ({
+        id: game.id,
+        scores: game.scores.map((score) => ({
+          id: score.id,
+          profileId: score.profile_id,
+          score: score.score,
+        })),
+      }));
     },
   };
 }

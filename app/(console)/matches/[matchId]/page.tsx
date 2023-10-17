@@ -11,8 +11,11 @@ export default async function Match({
   params: { matchId: string };
 }) {
   const supabaseClient = createSupabaseClient();
-  const { getMatch } = services(supabaseClient);
-  const match = await getMatch({ matchId });
+  const { getMatch, getGames } = services(supabaseClient);
+  const [match, games] = await Promise.all([
+    getMatch({ matchId }),
+    getGames({ matchId }),
+  ]);
 
   return (
     <div>
@@ -24,7 +27,7 @@ export default async function Match({
         </div>
         <div>{match.date}</div>
       </header>
-      <MatchTable match={match} />
+      <MatchTable match={match} games={games} />
     </div>
   );
 }
