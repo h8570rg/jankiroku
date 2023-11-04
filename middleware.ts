@@ -9,13 +9,14 @@ const noAuthPaths = ["/login", "/sign-up"];
 const authPaths = ["/matches", "/match/[id]"];
 
 export async function middleware(req: NextRequest) {
-  console.time("middleware");
+  const start = Date.now();
   const res = NextResponse.next();
   const { pathname } = req.nextUrl;
 
   // 速度計測のため
   if (pathname === "/") {
-    console.timeEnd("middleware");
+    const end = Date.now();
+    console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
     return res;
   }
 
@@ -28,18 +29,21 @@ export async function middleware(req: NextRequest) {
   } = await supabase.auth.getSession();
 
   if (noAuthPaths.some((path) => pathname.startsWith(path))) {
-    console.timeEnd("middleware");
+    const end = Date.now();
+    console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
     return res;
   }
 
   if (authPaths.some((path) => pathname.startsWith(path))) {
     if (!session) {
-      console.timeEnd("middleware");
+      const end = Date.now();
+      console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
       return NextResponse.redirect(new URL("/login", req.url));
     }
   }
 
-  console.timeEnd("middleware");
+  const end = Date.now();
+  console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
   return res;
 }
 
