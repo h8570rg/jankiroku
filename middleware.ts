@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -8,11 +9,13 @@ const noAuthPaths = ["/login", "/sign-up"];
 const authPaths = ["/matches", "/match/[id]"];
 
 export async function middleware(req: NextRequest) {
+  console.time("middleware");
   const res = NextResponse.next();
   const { pathname } = req.nextUrl;
 
   // 速度計測のため
   if (pathname === "/") {
+    console.timeEnd("middleware");
     return res;
   }
 
@@ -25,15 +28,18 @@ export async function middleware(req: NextRequest) {
   } = await supabase.auth.getSession();
 
   if (noAuthPaths.some((path) => pathname.startsWith(path))) {
+    console.timeEnd("middleware");
     return res;
   }
 
   if (authPaths.some((path) => pathname.startsWith(path))) {
     if (!session) {
+      console.timeEnd("middleware");
       return NextResponse.redirect(new URL("/login", req.url));
     }
   }
 
+  console.timeEnd("middleware");
   return res;
 }
 
