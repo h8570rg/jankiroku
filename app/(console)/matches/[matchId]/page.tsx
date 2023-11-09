@@ -5,14 +5,17 @@ import { services } from "~/lib/services";
 import { createSupabaseClient } from "~/lib/utils/supabase/serverComponentClient";
 import MatchTable from "./MatchTable";
 
-export default async function Matche({
+export default async function Match({
   params: { matchId },
 }: {
   params: { matchId: string };
 }) {
   const supabaseClient = createSupabaseClient();
-  const { getMatch } = services(supabaseClient);
-  const match = await getMatch({ matchId });
+  const { getMatch, getGames } = services(supabaseClient);
+  const [match, games] = await Promise.all([
+    getMatch({ matchId }),
+    getGames({ matchId }),
+  ]);
 
   return (
     <div>
@@ -24,7 +27,7 @@ export default async function Matche({
         </div>
         <div>{match.date}</div>
       </header>
-      <MatchTable defaultValue={match} />
+      <MatchTable match={match} games={games} />
     </div>
   );
 }

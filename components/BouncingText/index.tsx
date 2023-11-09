@@ -1,7 +1,7 @@
 const getTextBouncingStyle = (i: number) =>
   ({
     animationDelay: `${i * 0.1}s`,
-  } as React.CSSProperties);
+  }) as React.CSSProperties;
 
 export function BouncingText({
   className,

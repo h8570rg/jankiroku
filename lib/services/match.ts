@@ -1,6 +1,23 @@
 import { SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "~/lib/database.types";
 import { dayjs } from "~/lib/utils/date";
+import { CalcMethod } from "../utils/schemas";
+
+export type Rule = {
+  playersCount: number;
+  defaultPoints: number;
+  defaultCalcPoints: number;
+  rate: number;
+  chipRate: number;
+  crackBoxBonus: number;
+  calcMethod: CalcMethod;
+  incline: {
+    incline1: number;
+    incline2: number;
+    incline3: number;
+    incline4: number;
+  };
+};
 
 export type Match = {
   id: string;
@@ -10,20 +27,7 @@ export type Match = {
     name: string;
     janrecoId: string;
   }[];
-  rule: {
-    playersCount: number;
-    defaultPoints: number;
-    defaultCalcPoints: number;
-    rate: number;
-    chipRate: number;
-    crackBoxBonus: number;
-    incline: {
-      incline1: number;
-      incline2: number;
-      incline3: number;
-      incline4: number;
-    };
-  };
+  rule: Rule;
 };
 
 export type MatchPlayerAddPayload = {
@@ -69,6 +73,7 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
           rate: rule.rate,
           chipRate: rule.chip_rate,
           crackBoxBonus: rule.crack_box_bonus,
+          calcMethod: rule.calc_method as CalcMethod,
           incline: {
             incline1,
             incline2,

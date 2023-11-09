@@ -2,16 +2,17 @@ import { z } from "zod";
 
 const calcMethods = ["round", "roundOff", "roundDown", "roundUp"] as const;
 export const calcMethod: Record<(typeof calcMethods)[number], string> = {
-  [calcMethods[0]]: "五捨六入",
-  [calcMethods[1]]: "四捨五入",
-  [calcMethods[2]]: "切り捨て",
-  [calcMethods[3]]: "切り上げ",
+  round: "五捨六入",
+  roundOff: "四捨五入",
+  roundDown: "切り捨て",
+  roundUp: "切り上げ",
 };
+export type CalcMethod = (typeof calcMethods)[number];
 
 export const schemas = {
   email: z
     .string()
-    .min(1, "メールアドレスを入力してください")
+    .min(1, "メールアドレスを入力してください") // TODO: noempty()使えるかも
     .email("メールアドレスを正しい形式で入力してください"),
   password: z
     .string()
@@ -45,7 +46,11 @@ export const schemas = {
     .min(1, "持ち点を入力してください")
     .transform(Number),
   matchId: z.string(),
+  profileId: z.string(),
   playersCount: z.number(),
+  points: z
+    .string()
+    .transform((v) => (v === "0" || !!v ? Number(v) * 100 : undefined)),
   rate: z.string().min(1, "レートを入力してください").transform(Number),
   incline: z
     .object({
