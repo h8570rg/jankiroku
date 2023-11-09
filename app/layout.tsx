@@ -6,9 +6,6 @@ import { notoSansJp, righteous } from "./fonts";
 import "./globals.css";
 import { NextUIProvider } from "./nextUiProvider";
 
-// do not cache this layout
-export const revalidate = 0;
-
 export const metadata: Metadata = {
   title: {
     template: "%s | Janreco",
