@@ -1,19 +1,21 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import Link from "next/link";
-import type { Database } from "~/lib/database.types";
+import { Suspense } from "react";
+import Data from "./data";
+import User from "./user";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function ServerComponent() {
-  const supabase = createServerComponentClient<Database>({ cookies });
-  const user = await supabase.auth.getUser();
-  const { data } = await supabase.from("matches").select();
   return (
     <>
       <Link href="/">root</Link>
       <Link href="/client">client</Link>
-      <pre>{JSON.stringify(data, null, 2)}</pre>;<p>{user.data.user?.email}</p>
+      <Suspense fallback={<p>Loading User...</p>}>
+        <User />
+      </Suspense>
+      <Suspense fallback={<p>Loading Data...</p>}>
+        <Data />
+      </Suspense>
     </>
   );
 }
