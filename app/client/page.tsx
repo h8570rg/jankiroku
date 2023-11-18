@@ -1,19 +1,17 @@
 "use client";
 
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Database } from "~/lib/database.types";
+import { createSupabaseClientComponentClient } from "~/lib/utils/supabase/clientComponentClient";
 
 type Todo = Database["public"]["Tables"]["matches"]["Row"];
 
 export default function Page() {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const supabase = createClientComponentClient<Database>();
+  const supabase = createSupabaseClientComponentClient();
 
   useEffect(() => {
     const getData = async () => {

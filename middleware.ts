@@ -1,50 +1,66 @@
-/* eslint-disable no-console */
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { CookieOptions, createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import type { Database } from "~/lib/database.types";
 
-// 認証の必要ないページのパス
-const noAuthPaths = ["/login", "/sign-up"];
-const authPaths = ["/matches", "/match/[id]"];
+/**
+ * @see https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=middleware
+ */
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
 
-export async function middleware(req: NextRequest) {
-  const start = Date.now();
-  const res = NextResponse.next();
-  const { pathname } = req.nextUrl;
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value: "",
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value: "",
+            ...options,
+          });
+        },
+      },
+    },
+  );
 
-  // 速度計測のため
-  if (pathname === "/") {
-    const end = Date.now();
-    console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
-    return res;
-  }
+  await supabase.auth.getSession();
 
-  /**
-   * @see https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
-   */
-  const supabase = createMiddlewareClient<Database>({ req, res });
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (noAuthPaths.some((path) => pathname.startsWith(path))) {
-    const end = Date.now();
-    console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
-    return res;
-  }
-
-  if (authPaths.some((path) => pathname.startsWith(path))) {
-    if (!session) {
-      const end = Date.now();
-      console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-  }
-
-  const end = Date.now();
-  console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
-  return res;
+  return response;
 }
 
 /**

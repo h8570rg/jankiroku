@@ -1,10 +1,10 @@
 import { services } from "~/lib/services";
-import { createSupabaseClient } from "~/lib/utils/supabase/serverComponentClient";
+import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
 import FriendsList from "./FriendsList";
 import { FriendsSearch } from "./FriendsSearch";
 
 export default async function Friends() {
-  const supabaseClient = createSupabaseClient();
+  const supabaseClient = createSupabaseServerComponentClient();
   const { getFriends } = services(supabaseClient);
   const friends = await getFriends();
 

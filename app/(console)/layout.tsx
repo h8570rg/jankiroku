@@ -1,13 +1,13 @@
 import { redirect } from "next/navigation";
 import { services } from "~/lib/services";
-import { createSupabaseClient } from "~/lib/utils/supabase/serverComponentClient";
+import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
 
 export default async function ConsoleLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabaseClient = createSupabaseClient();
+  const supabaseClient = createSupabaseServerComponentClient();
   const { getUserProfile } = services(supabaseClient);
   const profile = await getUserProfile();
   if (!profile.janrecoId || !profile.name) {
