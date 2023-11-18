@@ -1,9 +1,7 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import { Database } from "~/lib/database.types";
+import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
 
 export default async function User() {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  const supabase = createSupabaseServerComponentClient();
   const user = await supabase.auth.getUser();
   return <div>{user.data.user?.email}</div>;
 }

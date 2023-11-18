@@ -4,7 +4,7 @@ import { z } from "zod";
 import { toast } from "~/lib/toast";
 import { post } from "~/lib/utils/request";
 import { schemas } from "~/lib/utils/schemas";
-import { createSupabaseClient } from "~/lib/utils/supabase/clientComponentClient";
+import { createSupabaseClientComponentClient } from "~/lib/utils/supabase/clientComponentClient";
 import { getURL } from "~/lib/utils/url";
 
 export const useEmailSignIn = () => {
@@ -28,7 +28,7 @@ export const emailSignInSchema = z.object({
 export type EmailSignInSchema = z.infer<typeof emailSignInSchema>;
 
 export const useGoogleSignIn = () => {
-  const supabase = createSupabaseClient();
+  const supabase = createSupabaseClientComponentClient();
   return useSWRMutation("user", async () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -68,7 +68,7 @@ export const emailSignUpSchema = z.object({
 export type EmailSignUpSchema = z.infer<typeof emailSignInSchema>;
 
 export const useSessionGet = () => {
-  const supabase = createSupabaseClient();
+  const supabase = createSupabaseClientComponentClient();
   return useSWRMutation("session", async () => {
     const {
       data: { session },

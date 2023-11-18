@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Logo from "~/components/Logo";
 import { services } from "~/lib/services";
-import { createSupabaseClient } from "~/lib/utils/supabase/serverComponentClient";
+import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
 import ProfileForm from "./ProfileForm";
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Register() {
-  const supabaseClient = createSupabaseClient();
+  const supabaseClient = createSupabaseServerComponentClient();
   const { getUserProfile } = services(supabaseClient);
   const user = await getUserProfile();
 

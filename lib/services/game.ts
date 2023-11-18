@@ -1,4 +1,4 @@
-import { SupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "~/lib/database.types";
 import { calcPlayerScores } from "../utils/score";
 import { Rule } from "./match";
