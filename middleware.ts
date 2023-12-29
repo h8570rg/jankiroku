@@ -2,6 +2,8 @@ import { CookieOptions, createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+const noAuthRoutes = ["/auth-code-error", "/login", "/sign-up"];
+
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=middleware
  */
@@ -58,7 +60,15 @@ export async function middleware(request: NextRequest) {
     },
   );
 
-  await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const { pathname } = request.nextUrl;
+
+  if (!noAuthRoutes.includes(pathname) && !session) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
   return response;
 }

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { services } from "~/lib/services";
 import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
 
-export default async function ConsoleLayout({
+export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;

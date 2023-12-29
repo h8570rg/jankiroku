@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getURL } from "~/lib/utils/url";
 
-export default function Root() {
+export default function Page() {
   return (
     <>
       <Link href="/login">login</Link>

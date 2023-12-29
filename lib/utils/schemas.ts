@@ -12,7 +12,7 @@ export type CalcMethod = (typeof calcMethods)[number];
 export const schemas = {
   email: z
     .string()
-    .min(1, "メールアドレスを入力してください") // TODO: noempty()使えるかも
+    .min(1, "メールアドレスを入力してください")
     .email("メールアドレスを正しい形式で入力してください"),
   password: z
     .string()

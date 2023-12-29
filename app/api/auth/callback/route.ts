@@ -1,21 +1,23 @@
+import { NextResponse } from "next/server";
+import { createSupabaseRouteHandlerClient } from "~/lib/utils/supabase/routeHandlerClient";
+
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr
  */
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { createSupabaseRouteHandlerClient } from "~/lib/utils/supabase/routeHandlerClient";
-
-export const dynamic = "force-dynamic";
-
-export async function GET(request: NextRequest) {
-  const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get("code");
+export async function GET(request: Request) {
+  const { searchParams, origin } = new URL(request.url);
+  const code = searchParams.get("code");
+  // if "next" is in param, use it as the redirect URL
+  const next = searchParams.get("next") ?? "/";
 
   if (code) {
     const supabase = createSupabaseRouteHandlerClient();
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      return NextResponse.redirect(`${origin}${next}`);
+    }
   }
 
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(requestUrl.origin);
+  // return the user to an error page with instructions
+  return NextResponse.redirect(`${origin}/auth-code-error`);
 }
