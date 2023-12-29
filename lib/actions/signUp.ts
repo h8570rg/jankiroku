@@ -19,10 +19,10 @@ const schema = z.object({
   password: schemas.password,
 });
 
-export const signUp = async (
+export async function signUp(
   prevState: State,
   formData: FormData,
-): Promise<State> => {
+): Promise<State> {
   const validatedFields = schema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -53,4 +53,4 @@ export const signUp = async (
 
   revalidatePath("/");
   redirect("/");
-};
+}
