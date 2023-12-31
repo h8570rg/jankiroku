@@ -2,7 +2,12 @@ import { CookieOptions, createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const noAuthRoutes = ["/auth-code-error", "/login", "/sign-up"];
+const noAuthRoutes = [
+  "/auth-code-error",
+  "/login",
+  "/sign-up",
+  "/api/auth/callback",
+];
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=middleware
