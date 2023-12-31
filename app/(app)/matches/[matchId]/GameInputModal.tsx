@@ -196,18 +196,21 @@ export function GameInputModal({
                                 endContent={
                                   <div className="pointer-events-none flex shrink-0 items-center gap-1">
                                     <span
-                                      className={classNames("mt-0.5 text-xs", {
-                                        "text-default-400":
-                                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                          // @ts-ignore
-                                          watch(
-                                            `playerPoints.${index}.points`,
-                                          ) === "",
-                                      })}
+                                      className={classNames(
+                                        "mt-0.5 text-tiny",
+                                        {
+                                          "text-default-400":
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            watch(
+                                              `playerPoints.${index}.points`,
+                                            ) === "",
+                                        },
+                                      )}
                                     >
                                       00
                                     </span>
-                                    <span className="text-sm text-default-400">
+                                    <span className="text-small text-default-400">
                                       点
                                     </span>
                                   </div>
