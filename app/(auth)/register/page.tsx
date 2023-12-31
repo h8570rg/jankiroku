@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { Button } from "~/components/Button";
+import { signOut } from "~/lib/actions/signOut";
 import { services } from "~/lib/services";
 import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
 import { Form } from "./Form";
@@ -23,6 +25,16 @@ export default async function Register() {
         ユーザー情報登録
       </h1>
       <Form userId={user.id} />
+      <form className="mt-10 flex justify-center underline" action={signOut}>
+        <Button
+          isLoading={false}
+          variant="light"
+          type="submit"
+          className="text-foreground-light"
+        >
+          ログアウト
+        </Button>
+      </form>
     </>
   );
 }
