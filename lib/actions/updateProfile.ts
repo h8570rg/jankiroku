@@ -9,24 +9,22 @@ import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/server
 type State = {
   errors?: {
     base?: string[];
-    id?: string[];
     name?: string[];
     janrecoId?: string[];
   };
 };
 
 const schema = z.object({
-  id: schemas.uid,
   name: schemas.name,
   janrecoId: schemas.janrecoId,
 });
 
 export async function updateProfile(
+  userId: string,
   prevState: State,
   formData: FormData,
 ): Promise<State> {
   const validatedFields = schema.safeParse({
-    id: formData.get("id"),
     name: formData.get("name"),
     janrecoId: formData.get("janrecoId"),
   });
@@ -37,7 +35,7 @@ export async function updateProfile(
     };
   }
 
-  const { id, name, janrecoId } = validatedFields.data;
+  const { name, janrecoId } = validatedFields.data;
 
   const supabase = createSupabaseServerComponentClient();
 
@@ -61,7 +59,7 @@ export async function updateProfile(
   const { error } = await supabase
     .from("profiles")
     .update({ name, janreco_id: janrecoId })
-    .eq("id", id);
+    .eq("id", userId);
 
   if (error) {
     throw error;

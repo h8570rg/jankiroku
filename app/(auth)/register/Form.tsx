@@ -18,7 +18,10 @@ export function Form({
   className?: string;
   userId: string;
 }) {
-  const [state, formAction] = useFormState(updateProfile, {});
+  const [state, formAction] = useFormState(
+    updateProfile.bind(null, userId),
+    {},
+  );
 
   return (
     <form
@@ -32,7 +35,6 @@ export function Form({
         ユーザーIDはユーザー検索に使用されます。名前は成績表に表示されます。
       </p>
       <div className="space-y-2.5">
-        <input id="id" name="id" type="text" hidden value={userId} readOnly />
         <Input
           id="janrecoId"
           type="text"
