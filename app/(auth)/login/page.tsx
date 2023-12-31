@@ -1,12 +1,17 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import { Divider } from "~/components/Divider";
 import { Form } from "./Form";
 import { SocialProviders } from "./SocialProviders";
 
+export const metadata: Metadata = {
+  title: "ログイン",
+};
+
 export default function Login() {
   return (
     <>
-      <h1 className="mx-auto mb-2 w-fit text-lg font-bold">ログイン</h1>
+      <h1 className="mx-auto mb-2 w-fit text-large font-bold">ログイン</h1>
       <SocialProviders />
       <div className="flex items-center gap-4">
         <Divider className="shrink" />
@@ -14,7 +19,7 @@ export default function Login() {
         <Divider className="shrink" />
       </div>
       <Form />
-      <p className="text-center text-sm">
+      <p className="text-center text-small">
         アカウントをお持ちでない方は
         <Link className="link" href="/sign-up">
           新規登録

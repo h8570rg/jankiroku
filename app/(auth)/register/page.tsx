@@ -1,9 +1,8 @@
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import Logo from "~/components/Logo";
 import { services } from "~/lib/services";
 import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
-import ProfileForm from "./ProfileForm";
+import { Form } from "./Form";
 
 export const metadata: Metadata = {
   title: "ユーザー情報登録",
@@ -19,9 +18,11 @@ export default async function Register() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col gap-4 p-5">
-      <Logo className="shrink-0 text-3xl" />
-      <ProfileForm className="grow" userId={user.id} />
-    </div>
+    <>
+      <h1 className="mx-auto mb-2 w-fit text-large font-bold">
+        ユーザー情報登録
+      </h1>
+      <Form userId={user.id} />
+    </>
   );
 }

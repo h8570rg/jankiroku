@@ -228,7 +228,7 @@ export function MatchCreateButton({ className }: { className?: string }) {
                     labelPlacement="outside-left"
                     endContent={
                       <div className="pointer-events-none flex items-center">
-                        <span className="text-sm text-default-400">円</span>
+                        <span className="text-small text-default-400">円</span>
                       </div>
                     }
                     {...register("chipRate")}
@@ -240,7 +240,7 @@ export function MatchCreateButton({ className }: { className?: string }) {
                       hideIndicator
                       classNames={{
                         titleWrapper: "text-right",
-                        title: "text-sm text-primary",
+                        title: "text-small text-primary",
                       }}
                     >
                       <div className="space-y-3 px-1">
@@ -254,7 +254,7 @@ export function MatchCreateButton({ className }: { className?: string }) {
                           labelPlacement="outside-left"
                           endContent={
                             <div className="pointer-events-none flex items-center">
-                              <span className="text-sm text-default-400">
+                              <span className="text-small text-default-400">
                                 点
                               </span>
                             </div>
@@ -272,7 +272,7 @@ export function MatchCreateButton({ className }: { className?: string }) {
                           labelPlacement="outside-left"
                           endContent={
                             <div className="pointer-events-none flex items-center">
-                              <span className="text-sm text-default-400">
+                              <span className="text-small text-default-400">
                                 点
                               </span>
                             </div>
@@ -290,7 +290,7 @@ export function MatchCreateButton({ className }: { className?: string }) {
                           labelPlacement="outside-left"
                           endContent={
                             <div className="pointer-events-none flex shrink-0 items-center">
-                              <span className="text-sm text-default-400">
+                              <span className="text-small text-default-400">
                                 点返し
                               </span>
                             </div>

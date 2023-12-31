@@ -9,7 +9,13 @@ export const calcMethod: Record<(typeof calcMethods)[number], string> = {
 };
 export type CalcMethod = (typeof calcMethods)[number];
 
+export const PASSWORD_MIN_LENGTH = 6;
+export const NAME_MAX_LENGTH = 12;
+export const JANRECO_ID_MIN_LENGTH = 4;
+export const JANRECO_ID_MAX_LENGTH = 12;
+
 export const schemas = {
+  uid: z.string(),
   email: z
     .string()
     .min(1, "メールアドレスを入力してください")
@@ -17,16 +23,25 @@ export const schemas = {
   password: z
     .string()
     .min(1, "パスワードを入力してください")
-    .min(6, "パスワードは6文字以上で入力してください"),
+    .min(
+      PASSWORD_MIN_LENGTH,
+      `パスワードは${PASSWORD_MIN_LENGTH}文字以上で入力してください`,
+    ),
   name: z
     .string()
     .min(1, "名前を入力してください")
-    .max(12, "名前は12文字以内で入力してください"),
+    .max(NAME_MAX_LENGTH, `名前は${NAME_MAX_LENGTH}文字以内で入力してください`),
   janrecoId: z
     .string()
     .min(1, "ユーザーIDを入力してください")
-    .min(4, "ユーザーIDは4文字以上で入力してください")
-    .max(12, "ユーザーIDは12文字以内で入力してください")
+    .min(
+      JANRECO_ID_MIN_LENGTH,
+      `ユーザーIDは${JANRECO_ID_MIN_LENGTH}文字以上で入力してください`,
+    )
+    .max(
+      JANRECO_ID_MAX_LENGTH,
+      `ユーザーIDは${JANRECO_ID_MAX_LENGTH}文字以内で入力してください`,
+    )
     .regex(/^[a-zA-Z0-9]+$/, "ユーザーIDは半角英数字のみで入力してください"),
   calcMethod: z.enum(calcMethods),
   chipRate: z

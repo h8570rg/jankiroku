@@ -10,6 +10,7 @@ const config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontSize: {},
     extend: {
       animation: {
         expansion: "expansion 5s ease-in-out forwards",
@@ -70,6 +71,9 @@ const config = {
             primary: {
               DEFAULT: "#7C3BED",
               foreground: "#e7e1e5",
+            },
+            foreground: {
+              light: "#d4d4d8",
             },
           },
         },

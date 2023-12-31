@@ -6,7 +6,7 @@ export function BottomNavigation() {
     <footer className="fixed bottom-0 w-full border-t border-gray-300 bg-white">
       <nav className="flex justify-around">
         <Link
-          className="flex w-full flex-col items-center justify-center py-2 text-xs uppercase text-gray-400 hover:bg-gray-100 hover:text-gray-900"
+          className="flex w-full flex-col items-center justify-center py-2 text-tiny uppercase text-gray-400 hover:bg-gray-100 hover:text-gray-900"
           href="/matches"
         >
           <svg
@@ -18,7 +18,7 @@ export function BottomNavigation() {
           <span>Games</span>
         </Link>
         <Link
-          className="flex w-full flex-col items-center justify-center py-2 text-xs uppercase text-gray-400 hover:bg-gray-100 hover:text-gray-900"
+          className="flex w-full flex-col items-center justify-center py-2 text-tiny uppercase text-gray-400 hover:bg-gray-100 hover:text-gray-900"
           href="#"
         >
           <svg
@@ -30,7 +30,7 @@ export function BottomNavigation() {
           <span>Search</span>
         </Link>
         <Link
-          className="flex w-full flex-col items-center justify-center py-2 text-xs uppercase text-gray-400 hover:bg-gray-100 hover:text-gray-900"
+          className="flex w-full flex-col items-center justify-center py-2 text-tiny uppercase text-gray-400 hover:bg-gray-100 hover:text-gray-900"
           href="#"
         >
           <svg
@@ -42,7 +42,7 @@ export function BottomNavigation() {
           <span>Notifications</span>
         </Link>
         <Link
-          className="flex w-full flex-col items-center justify-center py-2 text-xs uppercase text-gray-400 hover:bg-gray-100 hover:text-gray-900"
+          className="flex w-full flex-col items-center justify-center py-2 text-tiny uppercase text-gray-400 hover:bg-gray-100 hover:text-gray-900"
           href="#"
         >
           <svg

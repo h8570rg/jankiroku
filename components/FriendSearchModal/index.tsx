@@ -74,7 +74,7 @@ export function FriendSearchModal({
                   <ListItem key={profile.id} {...profile} onAdd={handleAdd} />
                 ))}
               {!isMutating && profiles && profiles?.length === 0 && (
-                <p className="text-center text-sm text-foreground-500">
+                <p className="text-center text-small text-foreground-500">
                   見つかりませんでした
                 </p>
               )}
@@ -110,7 +110,7 @@ function ListItem({
     <li className="flex items-center justify-between py-2">
       <User name={name} janrecoId={janrecoId} />
       {isFriend ? (
-        <div className="w-16 text-center text-xs text-foreground-500">
+        <div className="w-16 text-center text-tiny text-foreground-500">
           追加済み
         </div>
       ) : (

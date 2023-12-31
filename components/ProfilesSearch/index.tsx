@@ -79,7 +79,7 @@ export function ProfilesSearch({
           {!isMutating &&
             selectableProfiles &&
             selectableProfiles?.length === 0 && (
-              <p className="py-3 text-center text-sm text-foreground-500">
+              <p className="py-3 text-center text-small text-foreground-500">
                 見つかりませんでした
               </p>
             )}
@@ -117,7 +117,7 @@ function ListItem({
       {mode === "addFriend" && (
         <>
           {profile.isFriend ? (
-            <div className="w-16 text-center text-xs text-foreground-500">
+            <div className="w-16 text-center text-tiny text-foreground-500">
               追加済み
             </div>
           ) : (
