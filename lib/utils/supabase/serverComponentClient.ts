@@ -6,6 +6,10 @@ import { CookieOptions, createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { Database } from "~/lib/database.types";
 
+/**
+ * @deprecated
+ * TODO: 消す
+ */
 export const createSupabaseServerComponentClient = () => {
   const cookieStore = cookies();
   return createServerClient<Database>(
