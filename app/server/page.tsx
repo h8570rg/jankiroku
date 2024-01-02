@@ -3,8 +3,6 @@ import { Suspense } from "react";
 import Data from "./data";
 import User from "./user";
 
-export const revalidate = 0;
-
 export default async function ServerComponent() {
   return (
     <>

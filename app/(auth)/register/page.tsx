@@ -22,13 +22,18 @@ export default async function Register() {
       <h1 className="mx-auto mb-2 w-fit text-large font-bold">
         ユーザー情報登録
       </h1>
+      <p className="mb-6 mt-4 text-small text-foreground-light">
+        ユーザーIDと名前を決めてください。
+        <br />
+        ユーザーIDはユーザー検索に、名前は成績表に使用されます。
+      </p>
       <Form userId={user.id} />
-      <form className="mt-10 flex justify-center underline" action={signOut}>
+      <form className="mt-10 flex justify-center" action={signOut}>
         <Button
           isLoading={false}
           variant="light"
           type="submit"
-          className="text-foreground-light"
+          className="text-foreground-light underline"
         >
           ログアウト
         </Button>

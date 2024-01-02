@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { serverServices } from "~/lib/services";
 import { schemas } from "~/lib/utils/schemas";
-import { createSupabaseServerClient } from "~/lib/utils/supabase/serverClient";
 
 type State = {
   errors?: {
@@ -37,18 +37,11 @@ export async function updateProfile(
 
   const { name, janrecoId } = validatedFields.data;
 
-  const supabase = createSupabaseServerClient();
+  const { getProfileExists, updateProfile } = serverServices();
 
-  const existingProfilesResult = await supabase
-    .from("profiles")
-    .select()
-    .eq("janreco_id", janrecoId);
+  const { data: profileExists } = await getProfileExists({ janrecoId });
 
-  if (existingProfilesResult.error) {
-    throw existingProfilesResult.error;
-  }
-
-  if (existingProfilesResult.data.length > 0) {
+  if (profileExists) {
     return {
       errors: {
         janrecoId: ["このIDは既に使用されています。"],
@@ -56,14 +49,11 @@ export async function updateProfile(
     };
   }
 
-  const { error } = await supabase
-    .from("profiles")
-    .update({ name, janreco_id: janrecoId })
-    .eq("id", userId);
-
-  if (error) {
-    throw error;
-  }
+  await updateProfile({
+    name,
+    janrecoId,
+    userId,
+  });
 
   revalidatePath("/");
   redirect("/");

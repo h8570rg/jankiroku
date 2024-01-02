@@ -1,18 +1,8 @@
 import useSWRMutation from "swr/mutation";
 import { z } from "zod";
-import { AnonymousProfile, UpdateProfilePayload } from "~/lib/services/profile";
+import { AnonymousProfile } from "~/lib/services/profile";
 import { post } from "~/lib/utils/request";
 import { schemas } from "~/lib/utils/schemas";
-
-export const useProfileUpdate = ({ profileId }: { profileId: string }) => {
-  return useSWRMutation(
-    `/api/profiles/${profileId}`,
-    async (url, { arg }: { arg: ProfileUpdateSchema }) => {
-      const payload: Omit<UpdateProfilePayload, "id"> = arg;
-      await post(url, payload);
-    },
-  );
-};
 
 export const useProfileCreate = () => {
   return useSWRMutation(

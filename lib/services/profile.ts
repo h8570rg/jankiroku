@@ -14,19 +14,9 @@ export type Profile = {
   isFriend: boolean;
 };
 
-export type UpdateProfilePayload = {
-  id: string;
-  name: string;
-  janrecoId: string;
-};
-
 export type AnonymousProfile = {
   id: string;
   name: string;
-};
-
-export type ProfileExists = {
-  exists: boolean;
 };
 
 export function profileService(supabaseClient: SupabaseClient<Database>) {
@@ -53,28 +43,21 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
     },
 
     updateProfile: async ({
-      id,
+      userId,
       name,
       janrecoId,
-    }: UpdateProfilePayload): Promise<Profile> => {
-      const { data, error } = await supabaseClient
+    }: {
+      userId: string;
+      name: string;
+      janrecoId: string;
+    }) => {
+      const { error } = await supabaseClient
         .from("profiles")
         .update({ name, janreco_id: janrecoId })
-        .eq("id", id)
-        .select()
-        .single();
+        .eq("id", userId);
       if (error) {
         throw error;
       }
-      if (!data.name || !data.janreco_id) {
-        throw new Error("profile validation failed.");
-      }
-      return {
-        id: data.id,
-        name: data.name,
-        janrecoId: data.janreco_id,
-        isFriend: false,
-      };
     },
 
     /**
@@ -98,11 +81,7 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
       }));
     },
 
-    getProfileExists: async ({
-      janrecoId,
-    }: {
-      janrecoId: string;
-    }): Promise<ProfileExists> => {
+    getProfileExists: async ({ janrecoId }: { janrecoId: string }) => {
       const { data, error } = await supabaseClient
         .from("profiles")
         .select()
@@ -110,7 +89,7 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
       if (error) {
         throw error;
       }
-      return { exists: data.length > 0 };
+      return { data: data.length > 0 };
     },
 
     createProfile: async ({
