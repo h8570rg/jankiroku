@@ -8,8 +8,8 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     env: 
-      GOOGLE_CLIENT_ID: ""
-      GOOGLE_SECRET: ""
+      GOOGLE_CLIENT_ID: "dummy"
+      GOOGLE_SECRET: "dummy"
     steps:
       - uses: actions/checkout@v3
 
