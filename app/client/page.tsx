@@ -4,14 +4,14 @@ import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Database } from "~/lib/database.types";
-import { createSupabaseClientComponentClient } from "~/lib/utils/supabase/clientComponentClient";
+import { createSupabaseBrowserClient } from "~/lib/utils/supabase/browserClient";
 
 type Todo = Database["public"]["Tables"]["matches"]["Row"];
 
 export default function Page() {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createSupabaseBrowserClient();
 
   useEffect(() => {
     const getData = async () => {

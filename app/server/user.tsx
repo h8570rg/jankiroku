@@ -1,7 +1,7 @@
-import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
+import { createSupabaseServerClient } from "~/lib/utils/supabase/serverClient";
 
 export default async function User() {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = createSupabaseServerClient();
   const user = await supabase.auth.getUser();
   return <div>{user.data.user?.email}</div>;
 }

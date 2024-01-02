@@ -1,7 +1,7 @@
-import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
+import { createSupabaseServerClient } from "~/lib/utils/supabase/serverClient";
 
 export default async function Data() {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = createSupabaseServerClient();
   const { data } = await supabase.from("matches").select();
   return <pre>{JSON.stringify(data, null, 2)}</pre>;
 }

@@ -73,7 +73,7 @@ const config = {
               foreground: "#e7e1e5",
             },
             foreground: {
-              light: "#d4d4d8",
+              light: "#a1a1aa",
             },
           },
         },

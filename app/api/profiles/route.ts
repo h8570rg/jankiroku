@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
-import { services } from "~/lib/services";
-import { createSupabaseRouteHandlerClient } from "~/lib/utils/supabase/routeHandlerClient";
+import { serverServices } from "~/lib/services";
 
 export async function POST(request: Request) {
-  const supabaseClient = createSupabaseRouteHandlerClient();
-  const { createProfile } = services(supabaseClient);
+  const { createProfile } = serverServices();
   const body = (await request.json()) as {
     name: string;
   };

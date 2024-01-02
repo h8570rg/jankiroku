@@ -1,13 +1,11 @@
-import { services } from "~/lib/services";
-import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
+import { serverServices } from "~/lib/services";
 import { MatchCreateButton } from "./MatchCreateButton";
 import { MatchList } from "./MatchList";
 
 export const dynamic = "force-dynamic";
 
 export default async function Matches() {
-  const supabaseClient = createSupabaseServerComponentClient();
-  const { getMatches } = services(supabaseClient);
+  const { getMatches } = serverServices();
   const matches = await getMatches();
   return (
     <div>

@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { Button } from "~/components/Button";
 import { Icon } from "~/components/Icon";
-import { services } from "~/lib/services";
-import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
+import { serverServices } from "~/lib/services";
 import MatchTable from "./MatchTable";
 
 export default async function Match({
@@ -10,8 +9,7 @@ export default async function Match({
 }: {
   params: { matchId: string };
 }) {
-  const supabaseClient = createSupabaseServerComponentClient();
-  const { getMatch, getGames } = services(supabaseClient);
+  const { getMatch, getGames } = serverServices();
   const [match, games] = await Promise.all([
     getMatch({ matchId }),
     getGames({ matchId }),

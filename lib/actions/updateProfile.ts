@@ -3,30 +3,28 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { serverServices } from "~/lib/services";
 import { schemas } from "~/lib/utils/schemas";
-import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
 
 type State = {
   errors?: {
     base?: string[];
-    id?: string[];
     name?: string[];
     janrecoId?: string[];
   };
 };
 
 const schema = z.object({
-  id: schemas.uid,
   name: schemas.name,
   janrecoId: schemas.janrecoId,
 });
 
 export async function updateProfile(
+  userId: string,
   prevState: State,
   formData: FormData,
 ): Promise<State> {
   const validatedFields = schema.safeParse({
-    id: formData.get("id"),
     name: formData.get("name"),
     janrecoId: formData.get("janrecoId"),
   });
@@ -37,20 +35,13 @@ export async function updateProfile(
     };
   }
 
-  const { id, name, janrecoId } = validatedFields.data;
+  const { name, janrecoId } = validatedFields.data;
 
-  const supabase = createSupabaseServerComponentClient();
+  const { getProfileExists, updateProfile } = serverServices();
 
-  const existingProfilesResult = await supabase
-    .from("profiles")
-    .select()
-    .eq("janreco_id", janrecoId);
+  const { data: profileExists } = await getProfileExists({ janrecoId });
 
-  if (existingProfilesResult.error) {
-    throw existingProfilesResult.error;
-  }
-
-  if (existingProfilesResult.data.length > 0) {
+  if (profileExists) {
     return {
       errors: {
         janrecoId: ["このIDは既に使用されています。"],
@@ -58,14 +49,11 @@ export async function updateProfile(
     };
   }
 
-  const { error } = await supabase
-    .from("profiles")
-    .update({ name, janreco_id: janrecoId })
-    .eq("id", id);
-
-  if (error) {
-    throw error;
-  }
+  await updateProfile({
+    name,
+    janrecoId,
+    userId,
+  });
 
   revalidatePath("/");
   redirect("/");
