@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createSupabaseRouteHandlerClient } from "~/lib/utils/supabase/routeHandlerClient";
+import { createSupabaseServerClient } from "~/lib/utils/supabase/serverClient";
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   const next = searchParams.get("next") ?? "/";
 
   if (code) {
-    const supabase = createSupabaseRouteHandlerClient();
+    const supabase = createSupabaseServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);

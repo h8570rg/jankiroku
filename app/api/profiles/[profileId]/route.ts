@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
-import { services } from "~/lib/services";
+import { serverServices } from "~/lib/services";
 import { UpdateProfilePayload } from "~/lib/services/profile";
-import { createSupabaseRouteHandlerClient } from "~/lib/utils/supabase/routeHandlerClient";
 
 export async function POST(
   request: Request,
   { params: { profileId } }: { params: { profileId: string } },
 ) {
-  const supabaseClient = createSupabaseRouteHandlerClient();
-  const { updateProfile } = services(supabaseClient);
+  const { updateProfile } = serverServices();
   const body = (await request.json()) as { name: string; janrecoId: string };
   const payload: UpdateProfilePayload = {
     id: profileId,

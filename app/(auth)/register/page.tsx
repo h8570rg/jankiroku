@@ -2,8 +2,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Button } from "~/components/Button";
 import { signOut } from "~/lib/actions/signOut";
-import { services } from "~/lib/services";
-import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
+import { serverServices } from "~/lib/services";
 import { Form } from "./Form";
 
 export const metadata: Metadata = {
@@ -11,8 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Register() {
-  const supabaseClient = createSupabaseServerComponentClient();
-  const { getUserProfile } = services(supabaseClient);
+  const { getUserProfile } = serverServices();
   const user = await getUserProfile();
 
   if (user.name && user.janrecoId) {

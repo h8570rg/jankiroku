@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { schemas } from "~/lib/utils/schemas";
-import { createSupabaseServerComponentClient } from "~/lib/utils/supabase/serverComponentClient";
+import { createSupabaseServerClient } from "~/lib/utils/supabase/serverClient";
 
 type State = {
   errors?: {
@@ -36,7 +36,7 @@ export async function signUp(
 
   const { email, password } = validatedFields.data;
 
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = createSupabaseServerClient();
 
   const { error } = await supabase.auth.signUp({
     email,
