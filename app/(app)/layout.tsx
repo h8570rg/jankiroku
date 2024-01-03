@@ -12,5 +12,5 @@ export default async function AppLayout({
     redirect("/register");
   }
 
-  return <main className="relative min-h-screen px-4 py-5">{children}</main>;
+  return <div className="relative min-h-screen px-4 py-5">{children}</div>;
 }

@@ -15,14 +15,20 @@ import { Button } from "../Button";
 import { ScrollShadow } from "../ScrollShadow";
 import { Skeleton } from "../Skeleton";
 
+// https://nextjs.org/learn/dashboard-app/adding-search-and-pagination
+
+// https://github.com/reactjs/server-components-demo/blob/95fcac10102d20722af60506af3b785b557c5fd7/src/SearchField.js#L29-L37
+
 export function FriendSearchModal({
   isOpen,
   onOpenChange,
   close,
+  onClose,
 }: {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   close: () => void;
+  onClose?: () => void;
 }) {
   const { data: profiles, trigger, isMutating, reset } = useProfilesSearch();
   const handleChange: ChangeEventHandler<HTMLInputElement> = debounce((e) => {
@@ -32,7 +38,8 @@ export function FriendSearchModal({
 
   const handleClose = useCallback(() => {
     reset();
-  }, [reset]);
+    onClose?.();
+  }, [onClose, reset]);
 
   const handleAdd = useCallback(() => {
     reset();
