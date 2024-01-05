@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { useFormState } from "react-dom";
 import { Button } from "~/components/Button";
 import { Input } from "~/components/Input";
-import { signUp } from "~/lib/actions/signUp";
+import { signUp } from "./actions";
 
 export function Form({ className }: { className?: string }) {
   const [state, formAction] = useFormState(signUp, {});

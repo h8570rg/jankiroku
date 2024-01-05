@@ -1,5 +1,3 @@
-// TODO: move
-
 "use server";
 
 import { revalidatePath } from "next/cache";

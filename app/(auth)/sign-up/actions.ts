@@ -1,5 +1,3 @@
-// TODO: move
-
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -21,7 +19,7 @@ const schema = z.object({
   password: schemas.password,
 });
 
-export async function signInEmail(
+export async function signUp(
   prevState: State,
   formData: FormData,
 ): Promise<State> {
@@ -40,7 +38,7 @@ export async function signInEmail(
 
   const supabase = createSupabaseServerClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signUp({
     email,
     password,
   });
@@ -48,14 +46,11 @@ export async function signInEmail(
   if (error) {
     return {
       errors: {
-        base: ["メールアドレスまたはパスワードが間違っています。"],
+        email: ["このメールアドレスは使用できません。"],
       },
     };
   }
 
-  /**
-   * @see https://nextjs.org/docs/app/api-reference/functions/revalidatePath#revalidating-all-data
-   */
   revalidatePath("/", "layout");
   redirect("/");
 }
