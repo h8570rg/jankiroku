@@ -51,12 +51,14 @@ export interface Database {
           {
             foreignKeyName: "friends_profile_id_1_fkey";
             columns: ["profile_id_1"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "friends_profile_id_2_fkey";
             columns: ["profile_id_2"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -82,6 +84,7 @@ export interface Database {
           {
             foreignKeyName: "games_match_id_fkey";
             columns: ["match_id"];
+            isOneToOne: false;
             referencedRelation: "matches";
             referencedColumns: ["id"];
           },
@@ -113,12 +116,14 @@ export interface Database {
           {
             foreignKeyName: "matches_created_by_fkey";
             columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "matches_updated_by_fkey";
             columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -141,12 +146,14 @@ export interface Database {
           {
             foreignKeyName: "matches_profiles_match_id_fkey";
             columns: ["match_id"];
+            isOneToOne: false;
             referencedRelation: "matches";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "matches_profiles_profile_id_fkey";
             columns: ["profile_id"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -223,18 +230,21 @@ export interface Database {
           {
             foreignKeyName: "rules_created_by_fkey";
             columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "rules_match_id_fkey";
             columns: ["match_id"];
+            isOneToOne: false;
             referencedRelation: "matches";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "rules_updated_by_fkey";
             columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -263,12 +273,14 @@ export interface Database {
           {
             foreignKeyName: "scores_game_id_fkey";
             columns: ["game_id"];
+            isOneToOne: false;
             referencedRelation: "games";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "scores_profile_id_fkey";
             columns: ["profile_id"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -323,6 +335,7 @@ export interface Database {
           id: string;
           name: string;
           owner: string | null;
+          owner_id: string | null;
           public: boolean | null;
           updated_at: string | null;
         };
@@ -334,6 +347,7 @@ export interface Database {
           id: string;
           name: string;
           owner?: string | null;
+          owner_id?: string | null;
           public?: boolean | null;
           updated_at?: string | null;
         };
@@ -345,17 +359,11 @@ export interface Database {
           id?: string;
           name?: string;
           owner?: string | null;
+          owner_id?: string | null;
           public?: boolean | null;
           updated_at?: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: "buckets_owner_fkey";
-            columns: ["owner"];
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
       migrations: {
         Row: {
@@ -387,6 +395,7 @@ export interface Database {
           metadata: Json | null;
           name: string | null;
           owner: string | null;
+          owner_id: string | null;
           path_tokens: string[] | null;
           updated_at: string | null;
           version: string | null;
@@ -399,6 +408,7 @@ export interface Database {
           metadata?: Json | null;
           name?: string | null;
           owner?: string | null;
+          owner_id?: string | null;
           path_tokens?: string[] | null;
           updated_at?: string | null;
           version?: string | null;
@@ -411,6 +421,7 @@ export interface Database {
           metadata?: Json | null;
           name?: string | null;
           owner?: string | null;
+          owner_id?: string | null;
           path_tokens?: string[] | null;
           updated_at?: string | null;
           version?: string | null;
@@ -419,6 +430,7 @@ export interface Database {
           {
             foreignKeyName: "objects_bucketId_fkey";
             columns: ["bucket_id"];
+            isOneToOne: false;
             referencedRelation: "buckets";
             referencedColumns: ["id"];
           },
@@ -492,3 +504,83 @@ export interface Database {
     };
   };
 }
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+        Database["public"]["Views"])
+    ? (Database["public"]["Tables"] &
+        Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R;
+      }
+      ? R
+      : never
+    : never;
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+    ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+        Insert: infer I;
+      }
+      ? I
+      : never
+    : never;
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+    ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+        Update: infer U;
+      }
+      ? U
+      : never
+    : never;
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+    ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+    : never;

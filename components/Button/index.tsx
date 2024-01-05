@@ -5,11 +5,16 @@ import {
   ButtonGroup,
   ButtonProps,
 } from "@nextui-org/react";
+import { forwardRef } from "react";
 import { useFormStatus } from "react-dom";
 
-export function Button({ isLoading, ...rest }: ButtonProps) {
-  const { pending } = useFormStatus();
-  return <NextUiButton isLoading={isLoading ?? pending} {...rest} />;
-}
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  function Button({ isLoading, ...rest }, ref) {
+    const { pending } = useFormStatus();
+    return (
+      <NextUiButton isLoading={isLoading ?? pending} {...rest} ref={ref} />
+    );
+  },
+);
 
 export { ButtonGroup };

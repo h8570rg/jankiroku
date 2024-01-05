@@ -4,12 +4,12 @@ import classNames from "classnames";
 import { useFormState } from "react-dom";
 import { Button } from "~/components/Button";
 import { Input } from "~/components/Input";
-import { updateProfile } from "~/lib/actions/updateProfile";
 import {
   JANRECO_ID_MAX_LENGTH,
   JANRECO_ID_MIN_LENGTH,
   NAME_MAX_LENGTH,
 } from "~/lib/utils/schemas";
+import { updateProfile } from "./actions";
 
 export function Form({
   className,

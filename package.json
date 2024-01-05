@@ -27,9 +27,9 @@
     "supabase:stop": "env-cmd -f .env.local supabase stop",
     "supabase:login": "supabase login",
     "supabase:reset": "supabase db reset",
-    "supabase:diff": "supabase db diff -f local",
+    "supabase:diff": "env-cmd -f .env.local supabase db diff -f local",
     "supabase:squash": "supabase migration squash",
-    "supabase:type": "supabase gen types typescript --local > lib/database.types.ts"
+    "supabase:type": "env-cmd -f .env.local supabase gen types typescript --local > lib/database.types.ts"
   },
   "repository": {
     "type": "git",
@@ -60,6 +60,7 @@
     "server-only": "^0.0.1",
     "sharp": "^0.33.1",
     "swr": "^2.2.4",
+    "use-debounce": "^10.0.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {

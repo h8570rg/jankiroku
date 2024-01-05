@@ -51,9 +51,6 @@ export async function signInEmail(
     };
   }
 
-  /**
-   * @see https://nextjs.org/docs/app/api-reference/functions/revalidatePath#revalidating-all-data
-   */
   revalidatePath("/", "layout");
   redirect("/");
 }

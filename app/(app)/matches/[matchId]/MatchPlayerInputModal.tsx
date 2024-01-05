@@ -3,7 +3,6 @@ import { useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "~/components/Button";
-import { FriendsList } from "~/components/FriendsList";
 import { Input } from "~/components/Input";
 import {
   Modal,
@@ -11,7 +10,6 @@ import {
   ModalContent,
   ModalHeader,
 } from "~/components/Modal";
-import { ProfilesSearch } from "~/components/ProfilesSearch";
 import { ScrollShadow } from "~/components/ScrollShadow";
 import { Tab, Tabs } from "~/components/Tabs";
 import { useMatch, useMatchPlayerAdd } from "~/lib/hooks/api/match";
@@ -39,7 +37,7 @@ export function MatchPlayerInputModal({
   const { trigger: addMatchPlayer } = useMatchPlayerAdd(match.id);
   const { trigger: createProfile } = useProfileCreate();
 
-  const matchPlayerIds = match.players.map((player) => player.id);
+  // const matchPlayerIds = match.players.map((player) => player.id);
 
   const anonymousForm = useForm<AnonymousFormSchema>({
     resolver: zodResolver(anonymousFormSchema),
@@ -70,21 +68,21 @@ export function MatchPlayerInputModal({
             <Tabs fullWidth radius="lg" aria-label="プレイヤー選択の選択肢">
               <Tab key="friends" title="フレンド">
                 <ScrollShadow className="h-[300px]">
-                  <FriendsList
+                  {/* <FriendsList
                     showMenu={false}
                     isSelectable={true}
                     onSelect={handlePlayerSelect}
                     excludeFriendIds={matchPlayerIds}
-                  />
+                  /> */}
                 </ScrollShadow>
               </Tab>
               <Tab key="profiles" title="ユーザー検索">
                 <div className="flex h-[300px] flex-col">
-                  <ProfilesSearch
+                  {/* <ProfilesSearch
                     listClassName="grow"
                     excludeProfileIds={matchPlayerIds}
                     onSelect={handlePlayerSelect}
-                  />
+                  /> */}
                 </div>
               </Tab>
               <Tab key="anonymous" title="一般">
