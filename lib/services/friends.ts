@@ -7,10 +7,6 @@ export type Friend = {
   janrecoId: string;
 };
 
-export type AddFriendsPayload = {
-  profileId: string;
-};
-
 export type DeleteFriendsPayload = {
   profileId: string;
 };
@@ -29,7 +25,7 @@ export function friendsService(supabaseClient: SupabaseClient<Database>) {
       }));
     },
 
-    addFriends: async ({ profileId }: AddFriendsPayload) => {
+    addFriends: async ({ profileId }: { profileId: string }) => {
       const { error } = await supabaseClient.from("friends").insert({
         profile_id_2: profileId,
       });
