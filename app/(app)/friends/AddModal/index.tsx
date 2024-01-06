@@ -4,9 +4,9 @@
 import { Suspense } from "react";
 import { ModalBody, ModalContent, ModalHeader } from "~/components/Modal";
 import { ScrollShadow } from "~/components/ScrollShadow";
-import List from "./List";
+import { List } from "./List";
 import { ModalController } from "./ModalController";
-import Search from "./Search";
+import { Search } from "./Search";
 
 export function AddModal({
   isOpen,

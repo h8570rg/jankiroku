@@ -21,7 +21,7 @@ export type AnonymousProfile = {
 
 export function profileService(supabaseClient: SupabaseClient<Database>) {
   return {
-    getUserProfile: async (): Promise<Profile | UnregisteredProfile> => {
+    getUserProfile: async () => {
       const getUserResult = await supabaseClient.auth.getUser();
       if (getUserResult.error) {
         throw getUserResult.error;

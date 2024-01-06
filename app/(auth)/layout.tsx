@@ -15,10 +15,10 @@ export default function Auth({ children }: { children: React.ReactNode }) {
         <div className="absolute inset-0 bg-background opacity-[0.98]" />
       </div>
       <div className="relative flex min-h-screen items-center justify-center px-6">
-        <div className="w-full">
+        <main className="w-full">
           <Logo className="mx-auto mb-10 w-fit text-[40px]" />
           {children}
-        </div>
+        </main>
       </div>
     </>
   );

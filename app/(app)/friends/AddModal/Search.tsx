@@ -8,7 +8,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { Icon } from "~/components/Icon";
 import { Input } from "~/components/Input";
 
-export default function Search() {
+export function Search() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
