@@ -28,7 +28,7 @@ export default async function RootLayout({
       <body className="font-sans">
         <IconDefs />
         <NextUIProvider>
-          <main className="bg-background text-foreground">{children}</main>
+          <div className="bg-background text-foreground">{children}</div>
           <ToastContainer />
         </NextUIProvider>
       </body>

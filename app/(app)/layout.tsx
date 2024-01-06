@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { serverServices } from "~/lib/services";
+import Navbar from "./Navbar";
 
 export default async function AppLayout({
   children,
@@ -12,5 +14,13 @@ export default async function AppLayout({
     redirect("/register");
   }
 
-  return <div className="relative min-h-screen px-4 py-5">{children}</div>;
+  return (
+    <div className="min-h-screen">
+      {/* @see https://nextjs.org/docs/app/api-reference/functions/use-router#router-events */}
+      <Suspense fallback={null}>
+        <Navbar name={profile.name} janrecoId={profile.janrecoId} />
+      </Suspense>
+      <main className="px-4 py-5">{children}</main>
+    </div>
+  );
 }
