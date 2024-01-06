@@ -1,5 +1,5 @@
+import { AddModal } from "./AddModal";
 import { List } from "./List";
-import { AddModal } from "./add/AddModal";
 
 export default async function Page({
   searchParams,

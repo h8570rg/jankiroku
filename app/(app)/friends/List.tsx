@@ -26,7 +26,7 @@ export async function List({
       {friends?.map((friend) => (
         <li className="flex items-center justify-between py-2" key={friend.id}>
           <User {...friend} />
-          <FriendMenu profileId={friend.id} />
+          {!skeleton && <FriendMenu profileId={friend.id} />}
         </li>
       ))}
     </ul>
