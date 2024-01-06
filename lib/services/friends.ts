@@ -1,19 +1,13 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "../database.types";
 
-export type Friend = {
-  id: string;
-  name: string;
-  janrecoId: string;
-};
-
 export type DeleteFriendsPayload = {
   profileId: string;
 };
 
 export function friendsService(supabaseClient: SupabaseClient<Database>) {
   return {
-    getFriends: async (): Promise<Friend[]> => {
+    getFriends: async () => {
       const { data, error } = await supabaseClient.rpc("get_friends");
       if (error) {
         throw error;

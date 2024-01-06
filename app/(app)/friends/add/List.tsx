@@ -4,7 +4,7 @@ import { User } from "~/components/User";
 import { serverServices } from "~/lib/services";
 import { addFriends } from "./actions";
 
-export default async function List({
+export async function List({
   query,
   skeleton = false,
 }: {

@@ -3,10 +3,23 @@ import { User } from "~/components/User";
 import { serverServices } from "~/lib/services";
 import { FriendMenu } from "./FriendMenu";
 
-export async function List({ className }: { className?: string }) {
+export async function List({
+  className,
+  skeleton,
+}: {
+  className?: string;
+  skeleton?: boolean;
+}) {
   const { getFriends } = serverServices();
 
-  const friends = await getFriends();
+  const friends = !skeleton
+    ? await getFriends()
+    : Array.from({ length: 3 }).map((_, i) => ({
+        id: `friends-${i}`,
+        name: "",
+        janrecoId: "",
+        skeleton: true,
+      }));
 
   return (
     <ul className={classNames(className, "space-y-1")}>

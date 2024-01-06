@@ -20,7 +20,7 @@ export default async function AppLayout({
       <Suspense fallback={null}>
         <Navbar name={profile.name} janrecoId={profile.janrecoId} />
       </Suspense>
-      <main className="px-4 py-5">{children}</main>
+      <main className="px-4 pb-5">{children}</main>
     </div>
   );
 }
