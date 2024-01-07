@@ -8,15 +8,9 @@ import { List } from "./List";
 import { ModalController } from "./ModalController";
 import { Search } from "./Search";
 
-export function AddModal({
-  isOpen,
-  query,
-}: {
-  isOpen: boolean;
-  query: string;
-}) {
+export function AddModal({ query }: { query: string }) {
   return (
-    <ModalController isOpen={isOpen}>
+    <ModalController>
       <ModalContent>
         <ModalHeader>フレンド追加</ModalHeader>
         <ModalBody>

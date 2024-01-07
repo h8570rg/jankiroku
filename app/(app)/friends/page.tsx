@@ -11,7 +11,7 @@ export default async function Page({
   return (
     <>
       <List />
-      <AddModal isOpen={!!searchParams?.add} query={addQuery} />
+      <AddModal query={addQuery} />
     </>
   );
 }
