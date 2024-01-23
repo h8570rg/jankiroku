@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { serverServices } from "~/lib/services";
 import { CreateMatchPayload } from "~/lib/services/matches";
+import { serverServices } from "~/lib/services/server";
 
 export async function GET() {
   const { getMatches } = serverServices();

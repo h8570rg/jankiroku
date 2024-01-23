@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { serverServices } from "~/lib/services";
+import { serverServices } from "~/lib/services/server";
 import { schemas } from "~/lib/utils/schemas";
 import { createSupabaseServerClient } from "~/lib/utils/supabase/serverClient";
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { deleteFriends } from "~/app/(app)/friends/actions";
 import { Button } from "~/components/Button";
 import {
   Dropdown,
@@ -9,6 +8,7 @@ import {
   DropdownTrigger,
 } from "~/components/Dropdown";
 import { Icon } from "~/components/Icon";
+import { deleteFriends } from "./actions";
 
 export function FriendMenu({ profileId }: { profileId: string }) {
   function handleAction(key: unknown) {
@@ -21,7 +21,7 @@ export function FriendMenu({ profileId }: { profileId: string }) {
     <Dropdown>
       <DropdownTrigger>
         <Button size="sm" variant="light" isIconOnly>
-          <Icon className="h-5 w-5 fill-current" name="more" />
+          <Icon className="size-5 fill-current" name="more" />
         </Button>
       </DropdownTrigger>
       <DropdownMenu aria-label="フレンドメニュー" onAction={handleAction}>
