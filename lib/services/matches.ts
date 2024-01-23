@@ -1,4 +1,3 @@
-import "server-only";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "~/lib/database.types";
 import { dayjs } from "~/lib/utils/date";

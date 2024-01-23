@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Button } from "~/components/Button";
-import { serverServices } from "~/lib/services";
+import { serverServices } from "~/lib/services/server";
 import { Form } from "./Form";
 import { signOut } from "./actions";
 

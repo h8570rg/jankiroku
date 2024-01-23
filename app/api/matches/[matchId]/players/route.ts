@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { serverServices } from "~/lib/services";
+import { serverServices } from "~/lib/services/server";
 export const dynamic = "force-dynamic";
 
 export async function POST(

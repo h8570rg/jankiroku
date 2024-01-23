@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { serverServices } from "~/lib/services";
+import { serverServices } from "~/lib/services/server";
 import Navbar from "./Navbar";
 
 export default async function AppLayout({
