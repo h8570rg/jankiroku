@@ -83,12 +83,12 @@ export function CreateMatchButton({ className }: { className?: string }) {
               <ModalHeader>ルール設定</ModalHeader>
               <form action={formAction} noValidate>
                 <ModalBody>
-                  <ButtonGroup className="mb-3" fullWidth>
-                    <Controller
-                      control={control}
-                      name="playersCount"
-                      render={({ field: { onChange, value, name } }) => (
-                        <>
+                  <Controller
+                    control={control}
+                    name="playersCount"
+                    render={({ field: { onChange, value, name } }) => (
+                      <>
+                        <ButtonGroup className="mb-3" fullWidth>
                           <Button
                             color={value === "4" ? "primary" : "default"}
                             onClick={() => {
@@ -107,17 +107,17 @@ export function CreateMatchButton({ className }: { className?: string }) {
                           >
                             三麻
                           </Button>
-                          <input
-                            type="number"
-                            hidden
-                            name={name}
-                            value={value}
-                            readOnly
-                          />
-                        </>
-                      )}
-                    />
-                  </ButtonGroup>
+                        </ButtonGroup>
+                        <input
+                          type="number"
+                          hidden
+                          name={name}
+                          value={value}
+                          readOnly
+                        />
+                      </>
+                    )}
+                  />
                   <div className="flex items-center">
                     <div className="shrink-0 basis-14 pr-2 text-small">
                       ウマ
