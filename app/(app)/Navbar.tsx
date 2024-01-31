@@ -50,6 +50,10 @@ export default function Navbar({
       href: "/",
     },
     {
+      label: "成績表",
+      href: "/matches",
+    },
+    {
       label: "フレンド",
       href: "/friends",
     },

@@ -30,4 +30,8 @@
   .z-header {
     @apply z-10;
   }
+
+  .break-auto {
+    word-break: auto-phrase;
+  }
 }

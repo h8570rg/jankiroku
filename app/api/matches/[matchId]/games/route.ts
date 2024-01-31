@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { Rule } from "~/lib/services/match";
 import { serverServices } from "~/lib/services/server";
-export const dynamic = "force-dynamic";
 
 export async function POST(
   request: Request,
