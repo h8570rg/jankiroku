@@ -48,6 +48,9 @@ const config = {
       maxHeight: {
         screen: ["100vh", "100dvh"],
       },
+      wordBreak: {
+        test: "break-all",
+      },
     },
   },
   /**

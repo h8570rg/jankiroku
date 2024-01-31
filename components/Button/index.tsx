@@ -12,7 +12,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button({ isLoading, ...rest }, ref) {
     const { pending } = useFormStatus();
     return (
-      <NextUiButton isLoading={isLoading ?? pending} {...rest} ref={ref} />
+      <NextUiButton
+        isLoading={isLoading ?? (rest.type === "submit" && pending)}
+        {...rest}
+        ref={ref}
+      />
     );
   },
 );

@@ -61,7 +61,7 @@ export const schemas = {
     .transform(Number),
   matchId: z.string(),
   profileId: z.string(),
-  playersCount: z.number(),
+  playersCount: z.union([z.literal("4"), z.literal("3")]).transform(Number),
   points: z
     .string()
     .transform((v) => (v === "0" || !!v ? Number(v) * 100 : undefined)),
