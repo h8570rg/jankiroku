@@ -11,6 +11,7 @@ type State = {
     base?: string[];
     playersCount?: string[];
     incline?: string[];
+    customIncline?: string[];
     rate?: string[];
     chipRate?: string[];
     crackBoxBonus?: string[];
@@ -23,6 +24,7 @@ type State = {
 const schema = z.object({
   playersCount: schemas.playersCount,
   incline: schemas.incline,
+  customIncline: schemas.customIncline,
   rate: schemas.rate,
   chipRate: schemas.chipRate,
   crackBoxBonus: schemas.crackBoxBonus,
@@ -37,14 +39,24 @@ export async function createMatch(
   prevState: State,
   formData: FormData,
 ): Promise<State> {
+  const inclineFormData = formData.get("incline");
   const validatedFields = schema.safeParse({
     playersCount: formData.get("playersCount"),
-    incline: {
-      incline1: formData.get("incline.incline1"),
-      incline2: formData.get("incline.incline2"),
-      incline3: formData.get("incline.incline3"),
-      incline4: formData.get("incline.incline4"),
-    },
+    incline: inclineFormData,
+    customIncline:
+      inclineFormData === "custom"
+        ? {
+            incline1: formData.get("customIncline.incline1"),
+            incline2: formData.get("customIncline.incline2"),
+            incline3: formData.get("customIncline.incline3"),
+            incline4: formData.get("customIncline.incline4"),
+          }
+        : {
+            incline1: "0", // validationを通すためにダミーの値を入れる。実際には使われない。
+            incline2: "0",
+            incline3: "0",
+            incline4: "0",
+          },
     rate: formData.get("rate"),
     chipRate: formData.get("chipRate"),
     crackBoxBonus: formData.get("crackBoxBonus"),
@@ -59,28 +71,13 @@ export async function createMatch(
     };
   }
 
-  const {
-    playersCount,
-    incline: { incline1, incline2, incline3, incline4 },
-    rate,
-    chipRate,
-    crackBoxBonus,
-    defaultPoints,
-    defaultCalcPoints,
-    calcMethod,
-  } = validatedFields.data;
+  const { incline, customIncline, ...restData } = validatedFields.data;
 
   const { createMatch } = serverServices();
 
   const { id } = await createMatch({
-    playersCount,
-    incline: { incline1, incline2, incline3, incline4 },
-    rate,
-    chipRate,
-    crackBoxBonus,
-    defaultPoints,
-    defaultCalcPoints,
-    calcMethod,
+    incline: incline === "custom" ? customIncline : incline,
+    ...restData,
   });
 
   revalidatePath("/matches");

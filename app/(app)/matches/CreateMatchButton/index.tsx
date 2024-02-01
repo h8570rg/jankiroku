@@ -15,7 +15,11 @@ import {
   ModalHeader,
 } from "~/components/Modal";
 import { Select, SelectItem } from "~/components/Select";
-import { calcMethod } from "~/lib/utils/schemas";
+import {
+  calcMethod,
+  inclineFor3Players,
+  inclineFor4Players,
+} from "~/lib/utils/schemas";
 import { createMatch, InputSchema } from "./actions";
 
 const playersCount4DefaultValues: InputSchema = {
@@ -24,7 +28,8 @@ const playersCount4DefaultValues: InputSchema = {
   defaultPoints: "25000",
   defaultCalcPoints: "30000",
   calcMethod: "round",
-  incline: {
+  incline: "0_0_0_0",
+  customIncline: {
     incline1: "",
     incline2: "",
     incline3: "",
@@ -40,7 +45,8 @@ const playersCount3DefaultValues: InputSchema = {
   defaultPoints: "35000",
   defaultCalcPoints: "40000",
   calcMethod: "round",
-  incline: {
+  incline: "0_0_0_0",
+  customIncline: {
     incline1: "",
     incline2: "",
     incline3: "",
@@ -61,6 +67,9 @@ export function CreateMatchButton({ className }: { className?: string }) {
   });
 
   const playersCount = watch("playersCount");
+  const incline = watch("incline");
+  const inclineOption =
+    playersCount === "4" ? inclineFor4Players : inclineFor3Players;
 
   return (
     <>
@@ -118,60 +127,103 @@ export function CreateMatchButton({ className }: { className?: string }) {
                       </>
                     )}
                   />
-                  <div className="flex items-center">
-                    <div className="shrink-0 basis-14 pr-2 text-small">
-                      ウマ
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1">
-                        <Controller
-                          control={control}
-                          name="incline.incline1"
-                          render={({ field }) => (
-                            <Input type="number" label="1着" {...field} />
-                          )}
-                        />
-                        <span>-</span>
-                        <Controller
-                          control={control}
-                          name="incline.incline2"
-                          render={({ field }) => (
-                            <Input type="number" label="2着" {...field} />
-                          )}
-                        />
-                        <span>-</span>
-                        <Controller
-                          control={control}
-                          name="incline.incline3"
-                          render={({ field }) => (
-                            <Input type="number" label="3着" {...field} />
-                          )}
-                        />
-                        {playersCount === "4" && <span>-</span>}
-                        <Controller
-                          control={control}
-                          name="incline.incline4"
-                          render={({ field }) => (
-                            <Input
-                              className={classNames({
-                                hidden: playersCount === "3",
-                              })}
-                              hidden={playersCount === "3"}
-                              type="number"
-                              label="4着"
-                              {...field}
-                            />
-                          )}
-                        />
-                      </div>
-                      {/* same as Input component error */}
-                      {errors?.incline && (
-                        <div className="px-1 pt-1 text-tiny text-danger">
-                          {errors?.incline[0]}
+                  <Controller
+                    control={control}
+                    name="incline"
+                    render={({ field: { value, ...field } }) => (
+                      <Select
+                        label="ウマ"
+                        classNames={{
+                          base: "items-center",
+                          label: "shrink-0 basis-14",
+                          mainWrapper: "w-full",
+                        }}
+                        labelPlacement="outside-left"
+                        disallowEmptySelection
+                        selectedKeys={[value]}
+                        {...field}
+                        errorMessage={errors?.calcMethod}
+                      >
+                        {Object.entries(inclineOption).map(([key, value]) => (
+                          <SelectItem key={key} value={value}>
+                            {value}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                  {incline === "custom" && (
+                    <div className="flex items-center">
+                      <div className="shrink-0 basis-14"></div>
+                      <div>
+                        <div className="flex items-center gap-1">
+                          <Controller
+                            control={control}
+                            name="customIncline.incline1"
+                            render={({ field }) => (
+                              <Input
+                                type="number"
+                                label="1着"
+                                placeholder="10"
+                                {...field}
+                              />
+                            )}
+                          />
+                          <span>-</span>
+                          <Controller
+                            control={control}
+                            name="customIncline.incline2"
+                            render={({ field }) => (
+                              <Input
+                                type="number"
+                                label="2着"
+                                placeholder={playersCount === "4" ? "5" : "0"}
+                                {...field}
+                              />
+                            )}
+                          />
+                          <span>-</span>
+                          <Controller
+                            control={control}
+                            name="customIncline.incline3"
+                            render={({ field }) => (
+                              <Input
+                                type="number"
+                                label="3着"
+                                placeholder={
+                                  playersCount === "4" ? "-5" : "-10"
+                                }
+                                {...field}
+                              />
+                            )}
+                          />
+                          {playersCount === "4" && <span>-</span>}
+                          <Controller
+                            control={control}
+                            name="customIncline.incline4"
+                            render={({ field }) => (
+                              <Input
+                                className={classNames({
+                                  hidden: playersCount === "3",
+                                })}
+                                hidden={playersCount === "3"}
+                                type="number"
+                                label="4着"
+                                placeholder="-10"
+                                {...field}
+                              />
+                            )}
+                          />
                         </div>
-                      )}
+                        {/* same as Input component error */}
+                        {errors?.customIncline && (
+                          <div className="px-1 pt-1 text-tiny text-danger">
+                            {errors?.customIncline[0]}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <Controller
                     control={control}
                     name="rate"
@@ -308,6 +360,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                               }}
                               label="計算"
                               labelPlacement="outside-left"
+                              disallowEmptySelection
                               selectedKeys={[value]}
                               {...field}
                               errorMessage={errors?.calcMethod}

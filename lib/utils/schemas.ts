@@ -9,6 +9,42 @@ export const calcMethod: Record<(typeof calcMethods)[number], string> = {
 };
 export type CalcMethod = (typeof calcMethods)[number];
 
+const inclinesFor4Players = [
+  "custom",
+  "0_0_0_0",
+  "10_5_-5_-10",
+  "20_10_-10_-20",
+  "30_10_-10_-30",
+] as const;
+const inclinesFor3Players = [
+  "custom",
+  "0_0_0_0",
+  "10_0_-10_0",
+  "20_0_-20_0",
+  "30_0_-30_0",
+] as const;
+const inclines = [...inclinesFor4Players, ...inclinesFor3Players] as const;
+export const inclineFor4Players: Record<
+  (typeof inclinesFor4Players)[number],
+  string
+> = {
+  "0_0_0_0": "なし",
+  "10_5_-5_-10": "+10, +5, -5, -10 (ゴットー)",
+  "20_10_-10_-20": "+20, +10, -10, -20 (ワンツー)",
+  "30_10_-10_-30": "+30, +10, -10, -30 (ワンスリー)",
+  custom: "カスタム",
+};
+export const inclineFor3Players: Record<
+  (typeof inclinesFor3Players)[number],
+  string
+> = {
+  "0_0_0_0": "なし",
+  "10_0_-10_0": "+10, 0, -10 (順位ウマ10)",
+  "20_0_-20_0": "+20, 0, -20 (順位ウマ20)",
+  "30_0_-30_0": "+30, 0, -30 (順位ウマ30)",
+  custom: "カスタム",
+};
+
 export const PASSWORD_MIN_LENGTH = 6;
 export const NAME_MAX_LENGTH = 12;
 export const JANRECO_ID_MIN_LENGTH = 4;
@@ -66,7 +102,8 @@ export const schemas = {
     .string()
     .transform((v) => (v === "0" || !!v ? Number(v) * 100 : undefined)),
   rate: z.string().min(1, "レートを入力してください").transform(Number),
-  incline: z
+  incline: z.enum(inclines),
+  customIncline: z
     .object({
       incline1: z.string().min(1, "ウマを入力してください").transform(Number),
       incline2: z.string().min(1, "ウマを入力してください").transform(Number),
@@ -82,5 +119,8 @@ export const schemas = {
         path: ["root"],
         message: "ウマの合計が0になるように入力してください",
       },
-    ),
+    )
+    .transform(({ incline1, incline2, incline3, incline4 }) => {
+      return `${incline1}_${incline2}_${incline3}_${incline4}`;
+    }),
 };

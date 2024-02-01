@@ -2,22 +2,6 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "~/lib/database.types";
 import { dayjs } from "~/lib/utils/date";
 
-export type CreateMatchPayload = {
-  calcMethod: string;
-  chipRate: number;
-  crackBoxBonus: number;
-  defaultCalcPoints: number;
-  defaultPoints: number;
-  playersCount: number;
-  rate: number;
-  incline: {
-    incline1: number;
-    incline2: number;
-    incline3: number;
-    incline4: number;
-  };
-};
-
 export type Matches = {
   id: string;
   date: string;
@@ -33,8 +17,17 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       defaultPoints,
       playersCount,
       rate,
-      incline: { incline1, incline2, incline3, incline4 },
-    }: CreateMatchPayload) => {
+      incline,
+    }: {
+      calcMethod: string;
+      chipRate: number;
+      crackBoxBonus: number;
+      defaultCalcPoints: number;
+      defaultPoints: number;
+      playersCount: number;
+      rate: number;
+      incline: string;
+    }) => {
       const createMatchResult = await supabaseClient
         .from("matches")
         .insert({})
@@ -43,7 +36,6 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       if (createMatchResult.error) {
         throw createMatchResult.error;
       }
-      const incline = `${incline1}_${incline2}_${incline3}_${incline4}`;
       const createRulePromise = supabaseClient.from("rules").insert({
         calc_method: calcMethod,
         chip_rate: chipRate,
