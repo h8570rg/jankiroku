@@ -18,6 +18,7 @@ import { Select, SelectItem } from "~/components/Select";
 import { Slider } from "~/components/Slider";
 import {
   calcMethod,
+  chipRate,
   inclineFor3Players,
   inclineFor4Players,
   rate,
@@ -58,7 +59,8 @@ const playersCount3DefaultValues: InputSchema = {
   chipRate: "",
 };
 
-const rateSliderMaxValue = 8;
+const rateSliderMaxValue = Object.keys(rate).length - 1;
+const chipRateSliderMaxValue = Object.keys(chipRate).length - 1;
 
 export function CreateMatchButton({ className }: { className?: string }) {
   const ruleCreateModal = useDisclosure();
@@ -138,7 +140,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                       <>
                         <Slider
                           classNames={{
-                            base: "mb-8",
+                            base: "mb-6",
                           }}
                           label="レート"
                           maxValue={rateSliderMaxValue}
@@ -150,6 +152,34 @@ export function CreateMatchButton({ className }: { className?: string }) {
                             label: rate[String(i)].value,
                           }))}
                           getValue={(v) => rate[String(v)].label}
+                          onChange={(v) => {
+                            onChange(String(v));
+                          }}
+                          value={Number(value)}
+                          {...field}
+                        />
+                      </>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="chipRate"
+                    render={({ field: { onChange, value, ...field } }) => (
+                      <>
+                        <Slider
+                          classNames={{
+                            base: "mb-8",
+                          }}
+                          label="チップ"
+                          maxValue={chipRateSliderMaxValue}
+                          showSteps
+                          marks={Array.from({
+                            length: chipRateSliderMaxValue + 1,
+                          }).map((_, i) => ({
+                            value: i,
+                            label: chipRate[String(i)].value,
+                          }))}
+                          getValue={(v) => chipRate[String(v)].label}
                           onChange={(v) => {
                             onChange(String(v));
                           }}
@@ -275,7 +305,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                     )}
                   /> */}
 
-                  <Controller
+                  {/* <Controller
                     control={control}
                     name="chipRate"
                     render={({ field }) => (
@@ -298,7 +328,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                         {...field}
                       />
                     )}
-                  />
+                  /> */}
                   <Accordion isCompact className="px-0" keepContentMounted>
                     <AccordionItem
                       title="詳細設定"

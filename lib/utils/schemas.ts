@@ -39,6 +39,33 @@ export const rate: Record<string, { value: string; label: string }> = {
   },
 };
 
+export const chipRate: Record<string, { value: string; label: string }> = {
+  "0": {
+    value: "0",
+    label: "なし",
+  },
+  "1": {
+    value: "50",
+    label: "50円",
+  },
+  "2": {
+    value: "100",
+    label: "100円",
+  },
+  "3": {
+    value: "200",
+    label: "200円",
+  },
+  "4": {
+    value: "500",
+    label: "500円",
+  },
+  "5": {
+    value: "1000",
+    label: "1000円",
+  },
+};
+
 const calcMethods = ["round", "roundOff", "roundDown", "roundUp"] as const;
 export const calcMethod: Record<(typeof calcMethods)[number], string> = {
   round: "五捨六入",
@@ -118,7 +145,7 @@ export const schemas = {
     )
     .regex(/^[a-zA-Z0-9]+$/, "ユーザーIDは半角英数字のみで入力してください"),
   calcMethod: z.enum(calcMethods),
-  chipRate: z.string().min(1, "チップを入力してください").transform(Number),
+  chipRate: z.string().transform((v) => Number(chipRate[v].value)),
   crackBoxBonus: z
     .string()
     .min(1, "飛び賞を入力してください")
@@ -137,10 +164,7 @@ export const schemas = {
   points: z
     .string()
     .transform((v) => (v === "0" || !!v ? Number(v) * 100 : undefined)),
-  rate: z
-    .string()
-    .min(1, "レートを入力してください")
-    .transform((v) => Number(rate[v].value)),
+  rate: z.string().transform((v) => Number(rate[v].value)),
   incline: z.enum(inclines),
   customIncline: z
     .object({

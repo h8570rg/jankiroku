@@ -25,7 +25,7 @@ export default async function Matches() {
           </li>
         ))}
       </ul>
-      <div className="absolute inset-x-0 bottom-0 p-4">
+      <div className="fixed inset-x-0 bottom-0 z-10 p-4">
         <CreateMatchButton className="w-full" />
       </div>
     </div>
