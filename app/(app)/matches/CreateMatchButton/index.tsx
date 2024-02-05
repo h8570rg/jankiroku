@@ -15,10 +15,12 @@ import {
   ModalHeader,
 } from "~/components/Modal";
 import { Select, SelectItem } from "~/components/Select";
+import { Slider } from "~/components/Slider";
 import {
   calcMethod,
   inclineFor3Players,
   inclineFor4Players,
+  rate,
 } from "~/lib/utils/schemas";
 import { createMatch, InputSchema } from "./actions";
 
@@ -35,7 +37,7 @@ const playersCount4DefaultValues: InputSchema = {
     incline3: "",
     incline4: "",
   },
-  rate: "",
+  rate: "0",
   chipRate: "",
 };
 
@@ -52,9 +54,11 @@ const playersCount3DefaultValues: InputSchema = {
     incline3: "",
     incline4: "0",
   },
-  rate: "",
+  rate: "0",
   chipRate: "",
 };
+
+const rateSliderMaxValue = 8;
 
 export function CreateMatchButton({ className }: { className?: string }) {
   const ruleCreateModal = useDisclosure();
@@ -123,6 +127,34 @@ export function CreateMatchButton({ className }: { className?: string }) {
                           name={name}
                           value={value}
                           readOnly
+                        />
+                      </>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="rate"
+                    render={({ field: { onChange, value, ...field } }) => (
+                      <>
+                        <Slider
+                          classNames={{
+                            base: "mb-8",
+                          }}
+                          label="レート"
+                          maxValue={rateSliderMaxValue}
+                          showSteps
+                          marks={Array.from({
+                            length: rateSliderMaxValue + 1,
+                          }).map((_, i) => ({
+                            value: i,
+                            label: rate[String(i)].value,
+                          }))}
+                          getValue={(v) => rate[String(v)].label}
+                          onChange={(v) => {
+                            onChange(String(v));
+                          }}
+                          value={Number(value)}
+                          {...field}
                         />
                       </>
                     )}
@@ -224,7 +256,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                       </div>
                     </div>
                   )}
-                  <Controller
+                  {/* <Controller
                     control={control}
                     name="rate"
                     render={({ field }) => (
@@ -241,7 +273,8 @@ export function CreateMatchButton({ className }: { className?: string }) {
                         {...field}
                       />
                     )}
-                  />
+                  /> */}
+
                   <Controller
                     control={control}
                     name="chipRate"

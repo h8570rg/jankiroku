@@ -1,5 +1,44 @@
 import { z } from "zod";
 
+export const rate: Record<string, { value: string; label: string }> = {
+  "0": {
+    value: "0",
+    label: "なし",
+  },
+  "1": {
+    value: "1",
+    label: "1 (テンイチ)",
+  },
+  "2": {
+    value: "2",
+    label: "2 (テンニ)",
+  },
+  "3": {
+    value: "3",
+    label: "3 (テンサン)",
+  },
+  "4": {
+    value: "5",
+    label: "5 (テンゴ)",
+  },
+  "5": {
+    value: "10",
+    label: "10 (テンピン)",
+  },
+  "6": {
+    value: "20",
+    label: "20 (テンリャンピン)",
+  },
+  "7": {
+    value: "50",
+    label: "50 (ウーピン)",
+  },
+  "8": {
+    value: "100",
+    label: "100 (デカピン)",
+  },
+};
+
 const calcMethods = ["round", "roundOff", "roundDown", "roundUp"] as const;
 export const calcMethod: Record<(typeof calcMethods)[number], string> = {
   round: "五捨六入",
@@ -79,10 +118,7 @@ export const schemas = {
     )
     .regex(/^[a-zA-Z0-9]+$/, "ユーザーIDは半角英数字のみで入力してください"),
   calcMethod: z.enum(calcMethods),
-  chipRate: z
-    .string()
-    .min(1, "チップレートを入力してください")
-    .transform(Number),
+  chipRate: z.string().min(1, "チップを入力してください").transform(Number),
   crackBoxBonus: z
     .string()
     .min(1, "飛び賞を入力してください")
@@ -101,7 +137,10 @@ export const schemas = {
   points: z
     .string()
     .transform((v) => (v === "0" || !!v ? Number(v) * 100 : undefined)),
-  rate: z.string().min(1, "レートを入力してください").transform(Number),
+  rate: z
+    .string()
+    .min(1, "レートを入力してください")
+    .transform((v) => Number(rate[v].value)),
   incline: z.enum(inclines),
   customIncline: z
     .object({
