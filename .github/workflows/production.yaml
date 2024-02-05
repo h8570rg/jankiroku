@@ -14,6 +14,8 @@ jobs:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_DB_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
       PRODUCTION_PROJECT_ID: owagpoywxhbsckytdtoj
+      GOOGLE_CLIENT_ID: "dummy"
+      GOOGLE_SECRET: "dummy"
 
     steps:
       - uses: actions/checkout@v3

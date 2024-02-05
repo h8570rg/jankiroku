@@ -1,10 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "../database.types";
 
-export type DeleteFriendsPayload = {
-  profileId: string;
-};
-
 export function friendsService(supabaseClient: SupabaseClient<Database>) {
   return {
     getFriends: async () => {
@@ -29,7 +25,7 @@ export function friendsService(supabaseClient: SupabaseClient<Database>) {
       return;
     },
 
-    deleteFriends: async ({ profileId }: DeleteFriendsPayload) => {
+    deleteFriends: async ({ profileId }: { profileId: string }) => {
       const { error } = await supabaseClient.rpc("delete_friends", {
         profile_id: profileId,
       });
