@@ -1,4 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import { unstable_cache } from "next/cache";
 import { Database } from "~/lib/database.types";
 import { dayjs } from "~/lib/utils/date";
 import { CalcMethod } from "../utils/schemas";
@@ -30,70 +31,78 @@ export type Match = {
   rule: Rule;
 };
 
-export type MatchPlayerAddPayload = {
-  matchId: string;
-  profileId: string;
-};
-
 export function matchService(supabaseClient: SupabaseClient<Database>) {
   return {
-    getMatch: async ({ matchId }: { matchId: string }): Promise<Match> => {
-      const { data, error } = await supabaseClient
-        .from("matches")
-        .select(
-          `
+    getMatch: ({ matchId }: { matchId: string }) =>
+      unstable_cache(
+        async (): Promise<Match> => {
+          const { data, error } = await supabaseClient
+            .from("matches")
+            .select(
+              `
           id, created_at,
           profiles!matches_profiles(id, name, janreco_id),
           rules (*)
         `,
-        )
-        .eq("id", matchId)
-        .order("updated_at", { foreignTable: "rules", ascending: true })
-        .single();
-      if (error) {
-        throw error;
-      }
+            )
+            .eq("id", matchId)
+            .order("updated_at", { foreignTable: "rules", ascending: true })
+            .single();
+          if (error) {
+            throw error;
+          }
 
-      const rule = data.rules[0];
-      const incline = rule.incline.split("_").map((incline) => Number(incline));
-      const [incline1, incline2, incline3, incline4] = incline;
+          const rule = data.rules[0];
+          const incline = rule.incline
+            .split("_")
+            .map((incline) => Number(incline));
+          const [incline1, incline2, incline3, incline4] = incline;
 
-      return {
-        id: data.id,
-        date: dayjs(data.created_at).format("YYYY / M / D"),
-        players: data.profiles.map((profile) => ({
-          id: profile.id,
-          name: profile.name as string,
-          janrecoId: profile.janreco_id as string,
-        })),
-        rule: {
-          playersCount: rule.players_count,
-          defaultPoints: rule.default_points,
-          defaultCalcPoints: rule.default_calc_points,
-          rate: rule.rate,
-          chipRate: rule.chip_rate,
-          crackBoxBonus: rule.crack_box_bonus,
-          calcMethod: rule.calc_method as CalcMethod,
-          incline: {
-            incline1,
-            incline2,
-            incline3,
-            incline4,
-          },
+          return {
+            id: data.id,
+            date: dayjs(data.created_at).format("YYYY / M / D"),
+            players: data.profiles.map((profile) => ({
+              id: profile.id,
+              name: profile.name as string,
+              janrecoId: profile.janreco_id as string,
+            })),
+            rule: {
+              playersCount: rule.players_count,
+              defaultPoints: rule.default_points,
+              defaultCalcPoints: rule.default_calc_points,
+              rate: rule.rate,
+              chipRate: rule.chip_rate,
+              crackBoxBonus: rule.crack_box_bonus,
+              calcMethod: rule.calc_method as CalcMethod,
+              incline: {
+                incline1,
+                incline2,
+                incline3,
+                incline4,
+              },
+            },
+          };
         },
-      };
-    },
+        [`match-${matchId}`],
+        {
+          tags: [`match-${matchId}`],
+        },
+      )(),
 
     addMatchPlayer: async ({
       matchId,
       profileId,
-    }: MatchPlayerAddPayload): Promise<void> => {
+    }: {
+      matchId: string;
+      profileId: string;
+    }) => {
       const { error } = await supabaseClient
         .from("matches_profiles")
         .insert([{ match_id: matchId, profile_id: profileId }]);
       if (error) {
         throw error;
       }
+      return;
     },
   };
 }

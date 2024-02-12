@@ -1,15 +1,17 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { Button } from "~/components/Button";
 import { Icon } from "~/components/Icon";
 import { serverServices } from "~/lib/services/server";
-import MatchTable from "./MatchTable";
+import { MatchPlayerInputModal } from "./MatchPlayerInputModal";
+import { MatchTable } from "./MatchTable";
 
 export default async function Match({
   params: { matchId },
 }: {
   params: { matchId: string };
 }) {
-  const { getMatch, getGames } = serverServices();
+  const { getGames, getMatch } = serverServices();
   const [match, games] = await Promise.all([
     getMatch({ matchId }),
     getGames({ matchId }),
@@ -17,15 +19,24 @@ export default async function Match({
 
   return (
     <div>
-      <header className="mb-1 flex items-center justify-between">
+      <div className="mb-1 flex items-center justify-between">
         <div className="flex items-center gap-1">
           <Button isIconOnly variant="light" as={Link} href="/matches">
             <Icon className="size-5 fill-current" name="back" />
           </Button>
         </div>
         <div>{match.date}</div>
-      </header>
+      </div>
       <MatchTable match={match} games={games} />
+      <Suspense fallback={null}>
+        <MatchPlayerInputModal matchId={matchId} />
+      </Suspense>
+      {/* <GameInputModal
+        match={match}
+        isOpen={gameInputModal.isOpen}
+        onOpenChange={gameInputModal.onOpenChange}
+        onClose={gameInputModal.onClose}
+      /> */}
     </div>
   );
 }

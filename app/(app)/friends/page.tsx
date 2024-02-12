@@ -17,7 +17,7 @@ export default async function Page() {
       <ul className="space-y-1">
         {friends?.map((friend) => (
           <li
-            className="flex items-center justify-between py-2"
+            className="flex items-center justify-between py-1"
             key={friend.id}
           >
             <User {...friend} />

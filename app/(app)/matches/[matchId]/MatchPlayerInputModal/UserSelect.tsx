@@ -1,0 +1,129 @@
+"use client";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useRef } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import { useDebouncedCallback } from "use-debounce";
+import { Icon } from "~/components/Icon";
+import { Input } from "~/components/Input";
+import { ScrollShadow } from "~/components/ScrollShadow";
+import { User } from "~/components/User";
+import { addUserPlayer, searchProfiles } from "./actions";
+
+export function UserSelect({
+  matchId,
+  friends,
+  playerIds,
+}: {
+  matchId: string;
+  friends: { id: string; name: string; janrecoId: string }[];
+  playerIds: string[];
+}) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const selectableFriends = friends.filter(
+    (friend) => !playerIds.includes(friend.id),
+  );
+
+  const [{ profiles }, formAction] = useFormState(searchProfiles, {});
+
+  const handleChange = useDebouncedCallback(() => {
+    formRef.current?.requestSubmit();
+  }, 300);
+
+  const selectUser = useCallback(
+    (profileId: string) => {
+      // TODO: await中の表示
+      addUserPlayer({ matchId, profileId });
+      // TODO: server側でredirectしてもいいかも
+      const params = new URLSearchParams(searchParams);
+      params.delete("mode");
+      router.replace(`${pathname}?${params.toString()}`);
+    },
+    [matchId, pathname, router, searchParams],
+  );
+
+  return (
+    <form className="flex h-full flex-col" ref={formRef} action={formAction}>
+      <Input
+        className="mb-3"
+        size="sm"
+        name="text"
+        placeholder="ユーザーIDもしくは名前で検索"
+        startContent={<Icon className="size-5 fill-current" name="search" />}
+        onChange={handleChange}
+      />
+      <ScrollShadow className="min-h-0">
+        {!!profiles && (
+          <ProfileList profiles={selectableFriends} onSelect={selectUser} />
+        )}
+        {!profiles && !!friends.length && (
+          <>
+            <p className="mb-2 text-small text-foreground-light">
+              フレンドから選ぶ
+            </p>
+            <ul className="space-y-1">
+              {selectableFriends.map((friend) => (
+                <li className="py-1" key={friend.id}>
+                  {/* TODO: ripple */}
+                  <button type="button" onClick={() => selectUser(friend.id)}>
+                    <User name={friend.name} janrecoId={friend.janrecoId} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </ScrollShadow>
+    </form>
+  );
+}
+
+function ProfileList({
+  profiles,
+  onSelect,
+}: {
+  profiles: { id: string; name: string; janrecoId: string }[];
+  onSelect: (profileId: string) => void;
+}) {
+  const { pending } = useFormStatus();
+
+  if (pending) {
+    return (
+      <ul className="space-y-1">
+        {Array.from({ length: 1 }).map((_, i) => (
+          <li
+            key={`search-profiles-${i}`}
+            className="flex items-center justify-between py-2"
+          >
+            <User skeleton />
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  if (!profiles.length) {
+    return (
+      <p className="mt-10 text-center text-small text-foreground-light">
+        見つかりませんでした
+      </p>
+    );
+  }
+
+  return (
+    <ul className="space-y-1">
+      {profiles.map((profile) => (
+        <li key={profile.id} className="py-1">
+          {/* TODO: ripple, 共通化, 連打対策 */}
+          <button type="button" onClick={() => onSelect(profile.id)}>
+            <User name={profile.name} janrecoId={profile.janrecoId} />
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}

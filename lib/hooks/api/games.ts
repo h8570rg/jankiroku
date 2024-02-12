@@ -1,23 +1,8 @@
-import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { z } from "zod";
-import { Game } from "~/lib/services/game";
 import { Rule } from "~/lib/services/match";
-import { get, post } from "~/lib/utils/request";
+import { post } from "~/lib/utils/request";
 import { schemas } from "~/lib/utils/schemas";
-
-export const useGames = (matchId: string, initialData?: Game[]) => {
-  return useSWR<Game[]>(
-    `/api/matches/${matchId}/games`,
-    async (url) => {
-      const games = await get<Game[]>(url);
-      return games;
-    },
-    {
-      fallbackData: initialData,
-    },
-  );
-};
 
 export const useGameAdd = (matchId: string, rule: Rule) => {
   return useSWRMutation(

@@ -95,7 +95,8 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       `,
         )
         .filter("matches_profiles.profile_id", "eq", userResult.data?.user.id)
-        .range(rangeFrom, rangeTo);
+        .range(rangeFrom, rangeTo)
+        .order("created_at", { ascending: false });
       if (error) {
         throw error;
       }
