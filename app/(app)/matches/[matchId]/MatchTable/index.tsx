@@ -1,10 +1,6 @@
 "use client";
 
 import classNames from "classnames";
-import { useMemo } from "react";
-import { Button } from "~/components/Button";
-import { Icon } from "~/components/Icon";
-import { useDisclosure } from "~/components/Modal";
 import {
   Table,
   TableBody,
@@ -14,25 +10,12 @@ import {
   TableRow,
   getKeyValue,
 } from "~/components/Table";
-import { useGames } from "~/lib/hooks/api/games";
-import { useMatch } from "~/lib/hooks/api/match";
 import { Game } from "~/lib/services/game";
 import { Match } from "~/lib/services/match";
-import { GameInputModal } from "./GameInputModal";
-import { MatchPlayerInputModal } from "./MatchPlayerInputModal";
+import { AddGameButton } from "./AddGameButton";
+import { AddPlayerButton } from "./AddPlayerButton";
 
-export default function MatchTable({
-  match: defaultMatch,
-  games: defaultGames,
-  className,
-}: {
-  match: Match;
-  games: Game[];
-  className?: string;
-}) {
-  const { data: match } = useMatch(defaultMatch);
-  const { data: games } = useGames(match.id, defaultGames);
-
+export function MatchTable({ match, games }: { match: Match; games: Game[] }) {
   const { rule, players } = match;
   const { playersCount } = rule;
 
@@ -75,28 +58,15 @@ export default function MatchTable({
       ]),
     ) ?? [];
 
-  const matchPlayerInputModal = useDisclosure();
-  const gameInputModal = useDisclosure();
-
-  const bottomContent = useMemo(() => {
-    return (
-      <div className="px-1 pb-1">
-        <Button fullWidth color="primary" onClick={gameInputModal.onOpen}>
-          結果を入力する
-        </Button>
-      </div>
-    );
-  }, [gameInputModal.onOpen]);
-
   return (
-    <div className={classNames(className, "overflow-x-auto")}>
+    <div className="overflow-x-auto">
       <Table
         classNames={{
           table: "sticky top-0",
         }}
         removeWrapper
         aria-label="成績表"
-        bottomContent={bottomContent}
+        bottomContent={<AddGameButton />}
         isHeaderSticky
       >
         <TableHeader columns={playerColumns}>
@@ -115,22 +85,7 @@ export default function MatchTable({
                 })}
               >
                 <div className="absolute inset-0 flex items-center justify-center">
-                  {column.type === "empty" && (
-                    <Button
-                      className="w-full"
-                      size="sm"
-                      radius="md"
-                      variant="solid"
-                      color="primary"
-                      isIconOnly
-                      startContent={
-                        <Icon className="h-4 w-4 fill-current" name="add" />
-                      }
-                      onClick={matchPlayerInputModal.onOpen}
-                    >
-                      追加
-                    </Button>
-                  )}
+                  {column.type === "empty" && <AddPlayerButton />}
                   {column.type === "player" && (
                     <span className="truncate">{column.name}</span>
                   )}
@@ -167,18 +122,6 @@ export default function MatchTable({
           )}
         </TableBody>
       </Table>
-      <MatchPlayerInputModal
-        match={match}
-        isOpen={matchPlayerInputModal.isOpen}
-        onOpenChange={matchPlayerInputModal.onOpenChange}
-        onClose={matchPlayerInputModal.onClose}
-      />
-      <GameInputModal
-        match={match}
-        isOpen={gameInputModal.isOpen}
-        onOpenChange={gameInputModal.onOpenChange}
-        onClose={gameInputModal.onClose}
-      />
     </div>
   );
 }

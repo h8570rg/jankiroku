@@ -1,3 +1,5 @@
+"use client";
+
 import { DndContext } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
 import { useSortable } from "@dnd-kit/sortable";
@@ -123,7 +125,7 @@ export function GameInputModal({
                 <PopoverTrigger>
                   <Button className="gap-1" variant="light" size="sm">
                     <span className="text-secondary underline">同点の場合</span>
-                    <Icon className="h-4 w-4 fill-secondary" name="help" />
+                    <Icon className="size-4 fill-secondary" name="help" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="max-w-[280px] py-2">
@@ -148,7 +150,7 @@ export function GameInputModal({
                                 {...listeners}
                               >
                                 <Icon
-                                  className="h-5 w-5 fill-current"
+                                  className="size-5 fill-current"
                                   name="dragIndicator"
                                 />
                               </div>
