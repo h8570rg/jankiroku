@@ -1,18 +1,16 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useFormState } from "react-dom";
 import { Avatar } from "~/components/Avatar";
 import { Button } from "~/components/Button";
 import { Input } from "~/components/Input";
 import { NAME_MAX_LENGTH } from "~/lib/utils/schemas";
+import { useMatchPlayerInputModal } from "../useMatchPlayerInputModal";
 import { addAnonymousPlayer } from "./actions";
 
 export function AnonymousPlayerSelect({ matchId }: { matchId: string }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
+  const matchPlayerInputModal = useMatchPlayerInputModal();
 
   const [{ errors, success }, formAction] = useFormState(
     addAnonymousPlayer.bind(null, matchId),
@@ -24,11 +22,9 @@ export function AnonymousPlayerSelect({ matchId }: { matchId: string }) {
   // TODO: 見直し。サーバー側でできないか
   useEffect(() => {
     if (success) {
-      const params = new URLSearchParams(searchParams);
-      params.delete("mode");
-      router.replace(`${pathname}?${params.toString()}`);
+      matchPlayerInputModal.onClose();
     }
-  }, [pathname, router, searchParams, success]);
+  }, [matchPlayerInputModal, success]);
 
   return (
     <form className="pt-1" action={formAction} noValidate>

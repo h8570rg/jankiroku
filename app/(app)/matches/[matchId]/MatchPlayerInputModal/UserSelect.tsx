@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { useDebouncedCallback } from "use-debounce";
@@ -8,6 +7,7 @@ import { Icon } from "~/components/Icon";
 import { Input } from "~/components/Input";
 import { ScrollShadow } from "~/components/ScrollShadow";
 import { User } from "~/components/User";
+import { useMatchPlayerInputModal } from "../useMatchPlayerInputModal";
 import { addUserPlayer, searchProfiles } from "./actions";
 
 export function UserSelect({
@@ -19,9 +19,7 @@ export function UserSelect({
   friends: { id: string; name: string; janrecoId: string }[];
   playerIds: string[];
 }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
+  const matchPlayerInputModal = useMatchPlayerInputModal();
   const formRef = useRef<HTMLFormElement>(null);
 
   const selectableFriends = friends.filter(
@@ -39,11 +37,9 @@ export function UserSelect({
       // TODO: await中の表示
       addUserPlayer({ matchId, profileId });
       // TODO: server側でredirectしてもいいかも
-      const params = new URLSearchParams(searchParams);
-      params.delete("mode");
-      router.replace(`${pathname}?${params.toString()}`);
+      matchPlayerInputModal.onClose();
     },
-    [matchId, pathname, router, searchParams],
+    [matchId, matchPlayerInputModal],
   );
 
   return (
