@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { Button } from "~/components/Button";
 import { Icon } from "~/components/Icon";
 import { serverServices } from "~/lib/services/server";
+import { GameInputModal } from "./GameInputModal";
 import { MatchPlayerInputModal } from "./MatchPlayerInputModal";
 import { MatchTable } from "./MatchTable";
 
@@ -31,12 +32,9 @@ export default async function Match({
       <Suspense fallback={null}>
         <MatchPlayerInputModal matchId={matchId} />
       </Suspense>
-      {/* <GameInputModal
-        match={match}
-        isOpen={gameInputModal.isOpen}
-        onOpenChange={gameInputModal.onOpenChange}
-        onClose={gameInputModal.onClose}
-      /> */}
+      <Suspense fallback={null}>
+        <GameInputModal matchId={matchId} />
+      </Suspense>
     </div>
   );
 }

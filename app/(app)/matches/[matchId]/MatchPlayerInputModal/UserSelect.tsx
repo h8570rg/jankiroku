@@ -21,12 +21,15 @@ export function UserSelect({
 }) {
   const matchPlayerInputModal = useMatchPlayerInputModal();
   const formRef = useRef<HTMLFormElement>(null);
+  const [{ profiles }, formAction] = useFormState(searchProfiles, {});
 
   const selectableFriends = friends.filter(
     (friend) => !playerIds.includes(friend.id),
   );
 
-  const [{ profiles }, formAction] = useFormState(searchProfiles, {});
+  const selectableProfiles = profiles?.filter(
+    (profile) => !playerIds.includes(profile.id),
+  );
 
   const handleChange = useDebouncedCallback(() => {
     formRef.current?.requestSubmit();
@@ -53,8 +56,8 @@ export function UserSelect({
         onChange={handleChange}
       />
       <ScrollShadow className="min-h-0">
-        {!!profiles && (
-          <ProfileList profiles={selectableFriends} onSelect={selectUser} />
+        {!!selectableProfiles && (
+          <ProfileList profiles={selectableProfiles} onSelect={selectUser} />
         )}
         {!profiles && !!friends.length && (
           <>
@@ -113,9 +116,13 @@ function ProfileList({
   return (
     <ul className="space-y-1">
       {profiles.map((profile) => (
-        <li key={profile.id} className="py-1">
-          {/* TODO: ripple, 共通化, 連打対策 */}
-          <button type="button" onClick={() => onSelect(profile.id)}>
+        <li key={profile.id}>
+          {/* TODO: ripple, 共通化, 連打対策, 見た目 */}
+          <button
+            className="flex w-full py-1"
+            type="button"
+            onClick={() => onSelect(profile.id)}
+          >
             <User name={profile.name} janrecoId={profile.janrecoId} />
           </button>
         </li>
