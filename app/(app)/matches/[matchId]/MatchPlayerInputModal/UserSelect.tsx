@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { useDebouncedCallback } from "use-debounce";
@@ -8,6 +7,7 @@ import { Icon } from "~/components/Icon";
 import { Input } from "~/components/Input";
 import { ScrollShadow } from "~/components/ScrollShadow";
 import { User } from "~/components/User";
+import { useMatchPlayerInputModal } from "../useMatchPlayerInputModal";
 import { addUserPlayer, searchProfiles } from "./actions";
 
 export function UserSelect({
@@ -19,16 +19,17 @@ export function UserSelect({
   friends: { id: string; name: string; janrecoId: string }[];
   playerIds: string[];
 }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
+  const matchPlayerInputModal = useMatchPlayerInputModal();
   const formRef = useRef<HTMLFormElement>(null);
+  const [{ profiles }, formAction] = useFormState(searchProfiles, {});
 
   const selectableFriends = friends.filter(
     (friend) => !playerIds.includes(friend.id),
   );
 
-  const [{ profiles }, formAction] = useFormState(searchProfiles, {});
+  const selectableProfiles = profiles?.filter(
+    (profile) => !playerIds.includes(profile.id),
+  );
 
   const handleChange = useDebouncedCallback(() => {
     formRef.current?.requestSubmit();
@@ -39,11 +40,9 @@ export function UserSelect({
       // TODO: await中の表示
       addUserPlayer({ matchId, profileId });
       // TODO: server側でredirectしてもいいかも
-      const params = new URLSearchParams(searchParams);
-      params.delete("mode");
-      router.replace(`${pathname}?${params.toString()}`);
+      matchPlayerInputModal.onClose();
     },
-    [matchId, pathname, router, searchParams],
+    [matchId, matchPlayerInputModal],
   );
 
   return (
@@ -57,8 +56,8 @@ export function UserSelect({
         onChange={handleChange}
       />
       <ScrollShadow className="min-h-0">
-        {!!profiles && (
-          <ProfileList profiles={selectableFriends} onSelect={selectUser} />
+        {!!selectableProfiles && (
+          <ProfileList profiles={selectableProfiles} onSelect={selectUser} />
         )}
         {!profiles && !!friends.length && (
           <>
@@ -117,9 +116,13 @@ function ProfileList({
   return (
     <ul className="space-y-1">
       {profiles.map((profile) => (
-        <li key={profile.id} className="py-1">
-          {/* TODO: ripple, 共通化, 連打対策 */}
-          <button type="button" onClick={() => onSelect(profile.id)}>
+        <li key={profile.id}>
+          {/* TODO: ripple, 共通化, 連打対策, 見た目 */}
+          <button
+            className="flex w-full py-1"
+            type="button"
+            onClick={() => onSelect(profile.id)}
+          >
             <User name={profile.name} janrecoId={profile.janrecoId} />
           </button>
         </li>

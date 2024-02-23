@@ -66,7 +66,7 @@ export function MatchTable({ match, games }: { match: Match; games: Game[] }) {
         }}
         removeWrapper
         aria-label="成績表"
-        bottomContent={<AddGameButton />}
+        bottomContent={<AddGameButton isDisabled={isPlayersShort} />}
         isHeaderSticky
       >
         <TableHeader columns={playerColumns}>

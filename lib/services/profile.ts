@@ -67,9 +67,11 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
       if (text === "") {
         return [];
       }
-      const { data, error } = await supabaseClient.rpc("search_profiles", {
-        search_text: text,
-      });
+      const { data, error } = await supabaseClient
+        .rpc("search_profiles", {
+          search_text: text,
+        })
+        .neq("janreco_id", null);
       if (error) {
         throw error;
       }

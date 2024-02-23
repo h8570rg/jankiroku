@@ -21,4 +21,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 
-export { ButtonGroup };
+export { ButtonGroup, type ButtonProps };
