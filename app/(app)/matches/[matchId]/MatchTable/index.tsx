@@ -87,7 +87,7 @@ export function MatchTable({ match, games }: { match: Match; games: Game[] }) {
               >
                 <div
                   className={classNames("relative", {
-                    "min-w-[70px]":
+                    "min-w-[60px]":
                       column.type === "player" || column.type === "empty",
                   })}
                 >
