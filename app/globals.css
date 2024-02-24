@@ -22,7 +22,7 @@
   }
 
   .heading-1 {
-    @apply text-[20px] font-bold;
+    @apply text-medium text-foreground-light font-bold;
   }
 }
 

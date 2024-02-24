@@ -4,9 +4,6 @@ import {
   Navbar as NextUINavbar,
   NavbarBrand,
   NavbarContent,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
 } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,7 +14,6 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "~/components/Dropdown";
-import { Icon } from "~/components/Icon";
 import { Link } from "~/components/Link";
 import Logo from "~/components/Logo";
 import { signOut } from "./actions";
@@ -44,21 +40,6 @@ export default function Navbar({
     }
   }
 
-  const menuItems = [
-    {
-      label: "ダッシュボード",
-      href: "/",
-    },
-    {
-      label: "成績表",
-      href: "/matches",
-    },
-    {
-      label: "フレンド",
-      href: "/friends",
-    },
-  ];
-
   /**
    * @see https://nextjs.org/docs/app/api-reference/functions/use-router#router-events
    */
@@ -73,12 +54,9 @@ export default function Navbar({
       }}
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
+      shouldHideOnScroll
     >
       <NavbarContent>
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "メニューを閉じる" : "メニューを開く"}
-          icon={<Icon name={isMenuOpen ? "close" : "menu"} />}
-        />
         <NavbarBrand>
           <Link color="foreground" href="/">
             <Logo className="text-large" />
@@ -116,20 +94,6 @@ export default function Navbar({
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
-      <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              color="foreground"
-              className="w-full"
-              href={item.href}
-              size="lg"
-            >
-              {item.label}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-      </NavbarMenu>
     </NextUINavbar>
   );
 }

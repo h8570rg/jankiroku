@@ -1,6 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "~/lib/database.types";
-import { dayjs } from "~/lib/utils/date";
 
 export type Matches = {
   id: string;
@@ -104,7 +103,7 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       return data.map((match) => {
         return {
           id: match.id,
-          date: dayjs(match.created_at).format("YYYY / M / D"),
+          date: match.created_at,
         };
       });
     },

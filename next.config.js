@@ -13,6 +13,15 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  redirects: async () => {
+    return [
+      {
+        source: "/",
+        destination: "/matches",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

@@ -1,1 +1,1 @@
-export { Avatar } from "@nextui-org/react";
+export { Avatar, AvatarGroup } from "@nextui-org/react";

@@ -21,7 +21,7 @@ export default async function Matches() {
       <ul className="space-y-4">
         {matches?.map((match) => (
           <li key={match.id}>
-            <MatchCard {...match} />
+            <MatchCard matchId={match.id} date={match.date} />
           </li>
         ))}
       </ul>
