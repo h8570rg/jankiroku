@@ -38,6 +38,7 @@ const config = {
       fontFamily: {
         sans: ["var(--font-noto-sans-jp)"],
         righteous: ["var(--font-righteous)"],
+        mplus: ["var(--font-m-plus-1p)"],
       },
       height: {
         screen: ["100vh", "100dvh"],

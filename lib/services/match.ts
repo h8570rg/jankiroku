@@ -1,7 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
 import { Database } from "~/lib/database.types";
-import { dayjs } from "~/lib/utils/date";
 import { CalcMethod } from "../utils/schemas";
 
 export type Rule = {
@@ -60,7 +59,7 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
 
           return {
             id: data.id,
-            date: dayjs(data.created_at).format("YYYY / M / D"),
+            date: data.created_at,
             players: data.profiles.map((profile) => ({
               id: profile.id,
               name: profile.name as string,

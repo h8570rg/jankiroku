@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { Metadata } from "next";
 import { IconDefs } from "~/components/Icon";
 import { ToastContainer } from "~/lib/toast";
-import { notoSansJp, righteous } from "./fonts";
+import { righteous, mPlus1p } from "./fonts";
 import "./globals.css";
 import { NextUIProvider } from "./nextUiProvider";
 
@@ -22,10 +22,10 @@ export default async function RootLayout({
   return (
     <html
       lang="ja"
-      className={classNames(notoSansJp.variable, righteous.variable)}
+      className={classNames(righteous.variable, mPlus1p.variable)}
       suppressHydrationWarning
     >
-      <body className="font-sans">
+      <body className="font-mplus">
         <IconDefs />
         <NextUIProvider>
           <div className="bg-background text-foreground">{children}</div>

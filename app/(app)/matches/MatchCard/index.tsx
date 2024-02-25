@@ -26,8 +26,8 @@ export async function MatchCard({
   const targetDate = dayjs(date);
   const isSameYear = today.isSame(targetDate, "year");
   const displayDate = isSameYear
-    ? dayjs(date).format("M / D")
-    : dayjs(date).format("YYYY / M / D");
+    ? dayjs(date).format("M/D")
+    : dayjs(date).format("YYYY/M/D");
 
   return (
     <NavigationCard matchId={matchId}>
