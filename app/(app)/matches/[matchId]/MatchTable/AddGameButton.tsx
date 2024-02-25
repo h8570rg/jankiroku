@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "~/components/Button";
+import { Icon } from "~/components/Icon";
 import { useGameInputModal } from "../useGameInputModal";
 
 export function AddGameButton({ isDisabled }: { isDisabled: boolean }) {
@@ -9,9 +10,11 @@ export function AddGameButton({ isDisabled }: { isDisabled: boolean }) {
   return (
     <Button
       fullWidth
-      color="primary"
+      color="default"
       onClick={gameInputModal.onOpen}
       isDisabled={isDisabled}
+      variant="ghost"
+      startContent={<Icon className="size-6" name="add" />}
     >
       結果を入力する
     </Button>

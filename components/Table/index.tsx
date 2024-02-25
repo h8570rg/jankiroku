@@ -70,7 +70,19 @@ export function TableCell({
 }
 
 export function TableFooter({ children }: { children: React.ReactNode }) {
-  return <tfoot>{children}</tfoot>;
+  return (
+    <tfoot>
+      <tr
+        aria-hidden="true"
+        className="block size-px"
+        style={{
+          marginLeft: "0.25rem",
+          marginTop: "0.25rem",
+        }}
+      ></tr>
+      {children}
+    </tfoot>
+  );
 }
 
 export function TableFooterRow({ children }: { children: React.ReactNode }) {
