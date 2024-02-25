@@ -68,76 +68,78 @@ export function MatchTable({ match, games }: { match: Match; games: Game[] }) {
     ]),
   );
 
-  const test = true;
-  if (test) {
-    return (
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableColumn className="w-4">
-              <span />
+  return (
+    <div className="overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableColumn className="">
+            <span />
+          </TableColumn>
+          {columns.map((column) => (
+            <TableColumn key={column?.id} className="px-1">
+              <div className="relative min-w-[60px] ">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {column.type === "empty" && <AddPlayerButton />}
+                  {column.type === "player" && (
+                    <span className="truncate">{column.name}</span>
+                  )}
+                </div>
+              </div>
             </TableColumn>
-            {columns.map((column) => (
-              <TableColumn
-                key={column?.id}
-                className={classNames({
-                  "px-1": column.type === "player" || column.type === "empty",
-                  "w-4": column.type === "index",
-                })}
-              >
-                <div
-                  className={classNames("relative", {
-                    "min-w-[60px]":
-                      column.type === "player" || column.type === "empty",
+          ))}
+        </TableHeader>
+        <TableBody>
+          {gameRows.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell className="text-center text-default-500">
+                {index + 1}
+              </TableCell>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  className={classNames("text-center", {
+                    "text-danger": item[column.id] < 0,
                   })}
                 >
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {column.type === "empty" && <AddPlayerButton />}
-                    {column.type === "player" && (
-                      <span className="truncate">{column.name}</span>
-                    )}
-                  </div>
-                </div>
-              </TableColumn>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {gameRows.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell className="text-center text-default-500">
-                  {index + 1}
+                  {item[column.id]}
                 </TableCell>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    className={classNames("text-center", {
-                      "text-danger": item[column.id] < 0,
-                      "text-default-500": column.type === "index",
-                    })}
-                  >
-                    {item[column.id]}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-            <tr>
-              <td colSpan={columns.length + 1}>
-                <AddGameButton isDisabled={isPlayersShort} />
-              </td>
-            </tr>
-          </TableBody>
-          <TableFooter>
-            <TableFooterRow>
-              <TableFooterCell className="text-center">合計</TableFooterCell>
-              {columns.map((column) => (
-                <TableFooterCell className="text-center" key={column.id}>
-                  {totalPointsRow[column.id]}
-                </TableFooterCell>
               ))}
-            </TableFooterRow>
-          </TableFooter>
-        </Table>
-      </div>
-    );
-  }
+            </TableRow>
+          ))}
+          <tr aria-hidden="true" className="mx-[0.25rem] block size-px"></tr>
+          <tr>
+            <td colSpan={columns.length + 1}>
+              <AddGameButton isDisabled={isPlayersShort} />
+            </td>
+          </tr>
+        </TableBody>
+        <TableFooter>
+          <TableFooterRow>
+            <TableFooterCell className="text-center">合計</TableFooterCell>
+            {columns.map((column) => (
+              <TableFooterCell className="text-center" key={column.id}>
+                {totalPointsRow[column.id]}
+              </TableFooterCell>
+            ))}
+          </TableFooterRow>
+          <TableFooterRow>
+            <TableFooterCell className="text-center">チップ</TableFooterCell>
+            {columns.map((column) => (
+              <TableFooterCell className="text-center" key={column.id}>
+                {totalPointsRow[column.id]}
+              </TableFooterCell>
+            ))}
+          </TableFooterRow>
+          <TableFooterRow>
+            <TableFooterCell className="text-center">収支</TableFooterCell>
+            {columns.map((column) => (
+              <TableFooterCell className="text-center" key={column.id}>
+                {totalPointsRow[column.id]}
+              </TableFooterCell>
+            ))}
+          </TableFooterRow>
+        </TableFooter>
+      </Table>
+    </div>
+  );
 }
