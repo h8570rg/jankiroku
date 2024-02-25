@@ -10,6 +10,17 @@ import {
 } from "recharts";
 import { MatchResult } from "~/lib/utils/matchResult";
 
+// Override console.error
+// This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
+// @link https://github.com/recharts/recharts/issues/3615
+// eslint-disable-next-line no-console
+const error = console.error;
+// eslint-disable-next-line no-console, @typescript-eslint/no-explicit-any
+console.error = (...args: any) => {
+  if (/defaultProps/.test(args[0])) return;
+  error(...args);
+};
+
 const radius = 5;
 
 export function RankCountChart({
