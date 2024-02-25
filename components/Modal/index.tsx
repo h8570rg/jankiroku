@@ -19,13 +19,13 @@ export const useQueryControlledModal = (key: string) => {
   const onOpen = useCallback(() => {
     const params = new URLSearchParams(searchParams);
     params.set(key, "true");
-    router.replace(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   }, [key, pathname, router, searchParams]);
 
   const onClose = useCallback(() => {
     const params = new URLSearchParams(searchParams);
     params.delete(key);
-    router.replace(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   }, [key, pathname, router, searchParams]);
 
   return {
