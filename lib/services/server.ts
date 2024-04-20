@@ -1,7 +1,7 @@
 import { services } from "~/lib/services";
-import { createSupabaseServerClient } from "~/lib/utils/supabase/serverClient";
+import { createClient } from "~/lib/utils/supabase/server";
 
 export const serverServices = () => {
-  const supabase = createSupabaseServerClient();
+  const supabase = createClient();
   return services(supabase);
 };

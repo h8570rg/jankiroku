@@ -2,12 +2,12 @@
 import classNames from "classnames";
 import { Button } from "~/components/Button";
 import { GoogleIcon } from "~/components/SocialProviderIcon";
-import { createSupabaseBrowserClient } from "~/lib/utils/supabase/browserClient";
+import { createClient } from "~/lib/utils/supabase/client";
 import { getURL } from "~/lib/utils/url";
 
 export function SocialProviders({ className }: { className?: string }) {
   const handleGoogleSignInClick = async () => {
-    const supabase = createSupabaseBrowserClient();
+    const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {

@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { serverServices } from "~/lib/services/server";
 import { schemas } from "~/lib/utils/schemas";
-import { createSupabaseServerClient } from "~/lib/utils/supabase/serverClient";
+import { createClient } from "~/lib/utils/supabase/server";
 
 type State = {
   errors?: {
@@ -61,7 +61,7 @@ export async function updateProfile(
 }
 
 export async function signOut() {
-  const supabase = createSupabaseServerClient();
+  const supabase = createClient();
 
   await supabase.auth.signOut();
 
