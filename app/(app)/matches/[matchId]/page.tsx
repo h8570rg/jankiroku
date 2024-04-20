@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { Button } from "~/components/Button";
 import { Icon } from "~/components/Icon";
 import { serverServices } from "~/lib/services/server";
+import { ChipInputModal } from "./ChipInputModal";
 import { GameInputModal } from "./GameInputModal";
 import { MatchPlayerInputModal } from "./MatchPlayerInputModal";
 import { MatchTable } from "./MatchTable";
@@ -13,10 +14,11 @@ export default async function Match({
 }: {
   params: { matchId: string };
 }) {
-  const { getGames, getMatch } = serverServices();
-  const [match, games] = await Promise.all([
+  const { getGames, getMatch, getMatchChips } = serverServices();
+  const [match, games, chips] = await Promise.all([
     getMatch({ matchId }),
     getGames({ matchId }),
+    getMatchChips({ matchId }),
   ]);
 
   const { date } = match;
@@ -37,13 +39,21 @@ export default async function Match({
           </Button>
           <p className="font-bold">{displayDate}</p>
         </div>
+        <div className="flex items-center gap-0.5">
+          <Button isIconOnly variant="light">
+            <Icon className="size-5 fill-current" name="personAdd" />
+          </Button>
+        </div>
       </div>
-      <MatchTable match={match} games={games} />
+      <MatchTable match={match} games={games} chips={chips} />
       <Suspense fallback={null}>
         <MatchPlayerInputModal matchId={matchId} />
       </Suspense>
       <Suspense fallback={null}>
         <GameInputModal matchId={matchId} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <ChipInputModal matchId={matchId} />
       </Suspense>
     </div>
   );

@@ -14,6 +14,7 @@ import {
 } from "~/components/Table";
 import { Game } from "~/lib/services/game";
 import { Match } from "~/lib/services/match";
+import { AddChipButton } from "./AddChipButton";
 import { AddGameButton } from "./AddGameButton";
 import { AddPlayerButton } from "./AddPlayerButton";
 
@@ -28,7 +29,18 @@ type Row = {
   [playerId: Column["id"]]: number;
 };
 
-export function MatchTable({ match, games }: { match: Match; games: Game[] }) {
+export function MatchTable({
+  match,
+  games,
+  chips,
+}: {
+  match: Match;
+  games: Game[];
+  chips: {
+    profileId: string;
+    chip: number;
+  }[];
+}) {
   const { rule, players } = match;
   const { playersCount } = rule;
 
@@ -65,6 +77,13 @@ export function MatchTable({ match, games }: { match: Match; games: Game[] }) {
     players.map((player) => [
       player.id,
       gameRows.reduce((acc, gameRow) => acc + gameRow[player.id], 0),
+    ]),
+  );
+
+  const chipsRow: Row = Object.fromEntries(
+    players.map((player) => [
+      player.id,
+      chips.find((chip) => chip.profileId === player.id)?.chip ?? 0,
     ]),
   );
 
@@ -106,10 +125,13 @@ export function MatchTable({ match, games }: { match: Match; games: Game[] }) {
               ))}
             </TableRow>
           ))}
-          <tr aria-hidden="true" className="mx-[0.25rem] block size-px"></tr>
+          <tr aria-hidden="true" className="mx-1 block size-px"></tr>
           <tr>
             <td colSpan={columns.length + 1}>
-              <AddGameButton isDisabled={isPlayersShort} />
+              <div className="flex flex-col gap-1">
+                <AddGameButton isDisabled={isPlayersShort} />
+                <AddChipButton isDisabled={isPlayersShort} />
+              </div>
             </td>
           </tr>
         </TableBody>
@@ -126,7 +148,7 @@ export function MatchTable({ match, games }: { match: Match; games: Game[] }) {
             <TableFooterCell className="text-center">チップ</TableFooterCell>
             {columns.map((column) => (
               <TableFooterCell className="text-center" key={column.id}>
-                {totalPointsRow[column.id]}
+                {chipsRow[column.id]}
               </TableFooterCell>
             ))}
           </TableFooterRow>

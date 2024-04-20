@@ -10,11 +10,10 @@ export function AddGameButton({ isDisabled }: { isDisabled: boolean }) {
   return (
     <Button
       fullWidth
-      color="default"
       onClick={gameInputModal.onOpen}
       isDisabled={isDisabled}
-      variant="ghost"
       startContent={<Icon className="size-6" name="add" />}
+      variant="ghost"
     >
       結果を入力する
     </Button>

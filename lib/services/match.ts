@@ -103,5 +103,62 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
       }
       return;
     },
+
+    addMatchChip: async ({
+      matchId,
+      playerChips,
+    }: {
+      matchId: string;
+      playerChips: {
+        profileId: string;
+        chipCount: number;
+      }[];
+    }) =>
+      unstable_cache(
+        async () => {
+          const { error } = await supabaseClient.from("chips").upsert(
+            playerChips.map((playerChip) => ({
+              match_id: matchId,
+              profile_id: playerChip.profileId,
+              chip: playerChip.chipCount,
+            })),
+            { onConflict: "match_id, profile_id" }, // 使えない
+          );
+          if (error) {
+            throw error;
+          }
+          return;
+        },
+        [`match-${matchId}-chip`],
+        {
+          tags: [`match-${matchId}-chip`],
+        },
+      )(),
+
+    getMatchChips: async ({ matchId }: { matchId: string }) =>
+      unstable_cache(
+        async () => {
+          const { data, error } = await supabaseClient
+            .from("chips")
+            .select(
+              `
+          profile_id,
+          chip
+        `,
+            )
+            .eq("match_id", matchId);
+          if (error) {
+            throw error;
+          }
+          return data.map((chip) => ({
+            profileId: chip.profile_id,
+            chip: chip.chip,
+          }));
+        },
+        [`match-${matchId}-chip`],
+        {
+          tags: [`match-${matchId}-chip`],
+        },
+      )(),
   };
 }

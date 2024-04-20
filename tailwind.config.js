@@ -64,7 +64,7 @@ const config = {
         radius: {
           small: "2px",
           medium: "4px",
-          large: "8px",
+          large: "4px",
         },
       },
       addCommonColors: true,

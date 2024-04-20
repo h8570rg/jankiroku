@@ -55,7 +55,6 @@ export default function Navbar({
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       shouldHideOnScroll
-      height="56px"
     >
       <NavbarContent>
         <NavbarBrand>
