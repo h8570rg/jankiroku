@@ -19,6 +19,9 @@ const schema = z.object({
   password: schemas.password,
 });
 
+/**
+ * @see https://supabase.com/docs/guides/auth/server-side/nextjs
+ */
 export async function signUp(
   prevState: State,
   formData: FormData,
