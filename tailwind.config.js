@@ -38,6 +38,7 @@ const config = {
       fontFamily: {
         sans: ["var(--font-noto-sans-jp)"],
         righteous: ["var(--font-righteous)"],
+        mplus: ["var(--font-m-plus-1p)"],
       },
       height: {
         screen: ["100vh", "100dvh"],
@@ -63,7 +64,7 @@ const config = {
         radius: {
           small: "2px",
           medium: "4px",
-          large: "8px",
+          large: "4px",
         },
       },
       addCommonColors: true,

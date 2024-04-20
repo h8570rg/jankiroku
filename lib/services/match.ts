@@ -1,7 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
 import { Database } from "~/lib/database.types";
-import { dayjs } from "~/lib/utils/date";
 import { CalcMethod } from "../utils/schemas";
 
 export type Rule = {
@@ -60,7 +59,7 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
 
           return {
             id: data.id,
-            date: dayjs(data.created_at).format("YYYY / M / D"),
+            date: data.created_at,
             players: data.profiles.map((profile) => ({
               id: profile.id,
               name: profile.name as string,
@@ -104,5 +103,62 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
       }
       return;
     },
+
+    addMatchChip: async ({
+      matchId,
+      playerChips,
+    }: {
+      matchId: string;
+      playerChips: {
+        profileId: string;
+        chipCount: number;
+      }[];
+    }) =>
+      unstable_cache(
+        async () => {
+          const { error } = await supabaseClient.from("chips").upsert(
+            playerChips.map((playerChip) => ({
+              match_id: matchId,
+              profile_id: playerChip.profileId,
+              chip: playerChip.chipCount,
+            })),
+            { onConflict: "match_id, profile_id" }, // 使えない
+          );
+          if (error) {
+            throw error;
+          }
+          return;
+        },
+        [`match-${matchId}-chip`],
+        {
+          tags: [`match-${matchId}-chip`],
+        },
+      )(),
+
+    getMatchChips: async ({ matchId }: { matchId: string }) =>
+      unstable_cache(
+        async () => {
+          const { data, error } = await supabaseClient
+            .from("chips")
+            .select(
+              `
+          profile_id,
+          chip
+        `,
+            )
+            .eq("match_id", matchId);
+          if (error) {
+            throw error;
+          }
+          return data.map((chip) => ({
+            profileId: chip.profile_id,
+            chip: chip.chip,
+          }));
+        },
+        [`match-${matchId}-chip`],
+        {
+          tags: [`match-${matchId}-chip`],
+        },
+      )(),
   };
 }
