@@ -11,6 +11,7 @@ const noAuthRoutes = [
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=middleware
+ * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -20,8 +21,8 @@ export async function middleware(request: NextRequest) {
   });
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         get(name: string) {
@@ -65,14 +66,14 @@ export async function middleware(request: NextRequest) {
     },
   );
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const { data, error } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
 
-  if (!noAuthRoutes.includes(pathname) && !session) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (!noAuthRoutes.includes(pathname)) {
+    if (error || !data.user) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
   }
 
   return response;
@@ -80,6 +81,7 @@ export async function middleware(request: NextRequest) {
 
 /**
  * @see https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+ * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export const config = {
   matcher: [
@@ -88,7 +90,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

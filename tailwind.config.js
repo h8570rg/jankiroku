@@ -62,9 +62,9 @@ const config = {
     nextui({
       layout: {
         radius: {
-          small: "2px",
-          medium: "4px",
-          large: "4px",
+          small: "4px",
+          medium: "8px",
+          large: "8px",
         },
       },
       addCommonColors: true,

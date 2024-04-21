@@ -1,20 +1,18 @@
 "use client";
 
-import classNames from "classnames";
 import { useFormState } from "react-dom";
 import { Button } from "~/components/Button";
 import { Input } from "~/components/Input";
 import { signInEmail } from "./actions";
 
+/**
+ * @see https://supabase.com/docs/guides/auth/server-side/nextjs
+ */
 export function Form({ className }: { className?: string }) {
   const [state, formAction] = useFormState(signInEmail, {});
 
   return (
-    <form
-      className={classNames(className, "py-4")}
-      action={formAction}
-      noValidate
-    >
+    <form className={className} action={formAction} noValidate>
       <div className="space-y-2.5">
         <Input
           id="email"

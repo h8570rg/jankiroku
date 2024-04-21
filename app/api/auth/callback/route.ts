@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createSupabaseServerClient } from "~/lib/utils/supabase/serverClient";
+import { serverServices } from "~/lib/services/server";
+import { createClient } from "~/lib/utils/supabase/server";
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr
@@ -11,9 +12,14 @@ export async function GET(request: Request) {
   const next = searchParams.get("next") ?? "/";
 
   if (code) {
-    const supabase = createSupabaseServerClient();
+    const supabase = createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      const { getUserProfile } = serverServices();
+      const profile = await getUserProfile();
+      if (profile.isUnregistered) {
+        return NextResponse.redirect(`${origin}/register`);
+      }
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

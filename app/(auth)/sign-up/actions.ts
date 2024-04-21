@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { schemas } from "~/lib/utils/schemas";
-import { createSupabaseServerClient } from "~/lib/utils/supabase/serverClient";
+import { createClient } from "~/lib/utils/supabase/server";
 
 type State = {
   errors?: {
@@ -19,6 +19,9 @@ const schema = z.object({
   password: schemas.password,
 });
 
+/**
+ * @see https://supabase.com/docs/guides/auth/server-side/nextjs
+ */
 export async function signUp(
   prevState: State,
   formData: FormData,
@@ -36,7 +39,7 @@ export async function signUp(
 
   const { email, password } = validatedFields.data;
 
-  const supabase = createSupabaseServerClient();
+  const supabase = createClient();
 
   const { error } = await supabase.auth.signUp({
     email,
@@ -52,5 +55,5 @@ export async function signUp(
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/register");
 }

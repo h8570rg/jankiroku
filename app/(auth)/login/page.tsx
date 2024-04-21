@@ -11,15 +11,15 @@ export const metadata: Metadata = {
 export default function Login() {
   return (
     <>
-      <h1 className="mx-auto mb-2 w-fit text-large font-bold">ログイン</h1>
+      <h1 className="mx-auto mb-4 w-fit text-large font-bold">ログイン</h1>
       <SocialProviders />
-      <div className="flex items-center gap-4">
+      <div className="my-4 flex items-center gap-4">
         <Divider className="shrink" />
         <span>or</span>
         <Divider className="shrink" />
       </div>
       <Form />
-      <p className="text-center text-small">
+      <p className="mt-4 text-center text-small">
         アカウントをお持ちでない方は
         <Link className="link" href="/sign-up">
           新規登録
