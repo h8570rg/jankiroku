@@ -26,7 +26,12 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
       if (getUserResult.error) {
         throw getUserResult.error;
       }
-      const user = getUserResult.data.user;
+      if (!getUserResult.data.user) {
+        throw new Error("User not found");
+      }
+
+      const { user } = getUserResult.data;
+
       const { data, error } = await supabaseClient
         .from("profiles")
         .select()
@@ -35,10 +40,15 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
       if (error) {
         throw error;
       }
+
+      const isUnregistered = !data.name || !data.janreco_id;
+
       return {
         id: data.id,
         name: data.name,
         janrecoId: data.janreco_id,
+        isUnregistered,
+        isAnonymous: user.is_anonymous,
       };
     },
 

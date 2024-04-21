@@ -55,5 +55,5 @@ export async function signUp(
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/register");
 }
