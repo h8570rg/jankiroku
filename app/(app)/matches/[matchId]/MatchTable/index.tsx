@@ -12,7 +12,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/Table";
-import { Game } from "~/lib/services/game";
 import { Match } from "~/lib/services/match";
 import { AddChipButton } from "./AddChipButton";
 import { AddGameButton } from "./AddGameButton";
@@ -35,10 +34,16 @@ export function MatchTable({
   chips,
 }: {
   match: Match;
-  games: Game[];
+  games: {
+    id: string;
+    scores: {
+      profileId: string;
+      score: number;
+    }[];
+  }[];
   chips: {
     profileId: string;
-    chip: number;
+    chip: number | null;
   }[];
 }) {
   const { rule, players } = match;

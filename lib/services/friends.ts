@@ -4,34 +4,48 @@ import { Database } from "../database.types";
 export function friendsService(supabaseClient: SupabaseClient<Database>) {
   return {
     getFriends: async () => {
-      const { data, error } = await supabaseClient.rpc("get_friends");
-      if (error) {
-        throw error;
-      }
+      // TODO: user 取得はpageでやったほうがいいかも
+      const user = await supabaseClient.auth.getUser();
+      if (user.error) throw user.error;
+      const { data, error } = await supabaseClient
+        .from("friends")
+        .select("*, profiles!public_friends_friend_id_fkey!inner(*)");
+      // .eq("profile_id", user.data.user.id); // TODO: policyあるからいらないかも
+      if (error) throw error;
+
       return data.map((friend) => ({
-        id: friend.id,
-        name: friend.name,
-        janrecoId: friend.janreco_id,
+        id: friend.profiles.id,
+        name: friend.profiles.name!,
+        janrecoId: friend.profiles.janreco_id!,
       }));
     },
 
     addFriends: async ({ profileId }: { profileId: string }) => {
       const { error } = await supabaseClient.from("friends").insert({
-        profile_id_2: profileId,
+        friend_id: profileId,
       });
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
       return;
     },
 
     deleteFriends: async ({ profileId }: { profileId: string }) => {
-      const { error } = await supabaseClient.rpc("delete_friends", {
-        profile_id: profileId,
-      });
-      if (error) {
-        throw error;
-      }
+      const user = await supabaseClient.auth.getUser();
+      if (user.error) throw user.error;
+      const [{ error: error1 }, { error: error2 }] = await Promise.all([
+        supabaseClient
+          .from("friends")
+          .delete()
+          .eq("friend_id", profileId)
+          .eq("profile_id", user.data.user.id),
+        supabaseClient
+          .from("friends")
+          .delete()
+          .eq("friend_id", user.data.user.id)
+          .eq("profile_id", profileId),
+      ]);
+
+      if (error1) throw error1;
+      if (error2) throw error2;
       return;
     },
   };

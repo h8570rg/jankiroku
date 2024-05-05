@@ -1,4 +1,3 @@
-import { Game } from "~/lib/services/game";
 import { Match } from "../services/match";
 
 export type MatchResult = {
@@ -9,7 +8,16 @@ export type MatchResult = {
   };
 };
 
-export function getMatchResult(match: Match, games: Game[]): MatchResult {
+export function getMatchResult(
+  match: Match,
+  games: {
+    id: string;
+    scores: {
+      profileId: string;
+      score: number;
+    }[];
+  }[],
+): MatchResult {
   // 値の入っていない結果を作成
   const matchResult: MatchResult = Object.fromEntries(
     match.players.map((player) => [

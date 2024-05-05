@@ -7,8 +7,8 @@ export function User({
   skeleton,
   ...restProps
 }: {
-  name?: string;
-  janrecoId?: string;
+  name?: string | null;
+  janrecoId?: string | null;
   skeleton?: boolean;
 } & Omit<UserProps, "name">) {
   if (skeleton) {

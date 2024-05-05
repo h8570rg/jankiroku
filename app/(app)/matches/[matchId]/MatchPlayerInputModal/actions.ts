@@ -2,7 +2,6 @@
 
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
-import { Profile } from "~/lib/services/profile";
 import { serverServices } from "~/lib/services/server";
 import { schemas } from "~/lib/utils/schemas";
 
@@ -68,7 +67,9 @@ export async function addUserPlayer({
 }
 
 type SearchProfilesState = {
-  profiles?: Profile[];
+  profiles?: Awaited<
+    ReturnType<ReturnType<typeof serverServices>["searchProfiles"]>
+  >;
   errors?: {
     text?: string[];
   };

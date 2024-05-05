@@ -47,7 +47,7 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
         incline,
       });
       const createMatchesUsersPromise = supabaseClient
-        .from("matches_profiles")
+        .from("match_players")
         .insert({ match_id: createMatchResult.data.id });
       const [createRuleResult, createMatchesUsersResult] = await Promise.all([
         createRulePromise,
@@ -77,25 +77,14 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       if (userResult.error) {
         throw userResult.error;
       }
-      // TODO: 見直す
 
       const { data, error } = await supabaseClient
         .from("matches")
-        .select(
-          `
-      *,
-      rules (
-        *
-      ),
-      matches_profiles!inner (*),
-      profiles!matches_profiles (
-        *
-      )
-      `,
-        )
-        .filter("matches_profiles.profile_id", "eq", userResult.data?.user.id)
+        .select("*, match_players!inner(*)")
+        .eq("match_players.player_id", userResult.data?.user.id)
         .range(rangeFrom, rangeTo)
         .order("created_at", { ascending: false });
+
       if (error) {
         throw error;
       }

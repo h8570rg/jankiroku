@@ -1,24 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "~/lib/database.types";
 
-export type UnregisteredProfile = {
-  id: string;
-  name: string | null;
-  janrecoId: string | null;
-};
-
-export type Profile = {
-  id: string;
-  name: string;
-  janrecoId: string;
-  isFriend: boolean;
-};
-
-export type AnonymousProfile = {
-  id: string;
-  name: string;
-};
-
 export function profileService(supabaseClient: SupabaseClient<Database>) {
   return {
     getUserProfile: async () => {
@@ -71,25 +53,42 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
     },
 
     /**
-     * @see https://github.com/supabase/postgrest-js/issues/289
+     * @see https://github.com/supabase/postgrest-js/issues/
+     * @see https://supabase.com/docs/guides/database/full-text-search?queryGroups=language&language=js#search-multiple-columns
      */
-    searchProfiles: async ({ text }: { text: string }): Promise<Profile[]> => {
+    searchProfiles: async ({ text }: { text: string }) => {
       if (text === "") {
         return [];
       }
-      const { data, error } = await supabaseClient
-        .rpc("search_profiles", {
-          search_text: text,
-        })
-        .neq("janreco_id", null);
-      if (error) {
-        throw error;
+      const user = await supabaseClient.auth.getUser();
+      if (user.error) throw user.error;
+      const [profilesResult, friendsResult] = await Promise.all([
+        supabaseClient
+          .from("profiles")
+          .select("*")
+          .textSearch("name_janreco_id", text)
+          .neq("janreco_id", null)
+          .neq("name", null)
+          .neq("id", user.data.user.id),
+        supabaseClient
+          .from("friends")
+          .select("friend_id")
+          .eq("profile_id", user.data.user.id),
+      ]);
+      if (profilesResult.error) {
+        throw profilesResult.error;
       }
-      return data.map((profile) => ({
+      if (friendsResult.error) {
+        throw friendsResult.error;
+      }
+
+      return profilesResult.data.map((profile) => ({
         id: profile.id,
-        name: profile.name,
-        janrecoId: profile.janreco_id,
-        isFriend: profile.is_friend,
+        name: profile.name!,
+        janrecoId: profile.janreco_id!,
+        isFriend: friendsResult.data.some(
+          (friend) => friend.friend_id === profile.id,
+        ),
       }));
     },
 
@@ -104,11 +103,7 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
       return { data: data.length > 0 };
     },
 
-    createProfile: async ({
-      name,
-    }: {
-      name: string;
-    }): Promise<AnonymousProfile> => {
+    createProfile: async ({ name }: { name: string }) => {
       const { data, error } = await supabaseClient
         .from("profiles")
         .insert({ name })

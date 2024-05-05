@@ -37,20 +37,14 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
         async (): Promise<Match> => {
           const { data, error } = await supabaseClient
             .from("matches")
-            .select(
-              `
-          id, created_at,
-          profiles!matches_profiles(id, name, janreco_id),
-          rules (*)
-        `,
-            )
+            .select("*, profiles!match_players(*), rules(*)")
             .eq("id", matchId)
-            .order("updated_at", { foreignTable: "rules", ascending: true })
+            .order("created_at", { ascending: true })
             .single();
-          if (error) {
-            throw error;
-          }
 
+          if (error) throw error;
+
+          // TODO: ruleは別で取得で良さそう、複数ある場合もあり得るし。incline変換とかも関数化する
           const rule = data.rules[0];
           const incline = rule.incline
             .split("_")
@@ -95,15 +89,16 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
       matchId: string;
       profileId: string;
     }) => {
-      const { error } = await supabaseClient
-        .from("matches_profiles")
-        .insert([{ match_id: matchId, profile_id: profileId }]);
-      if (error) {
-        throw error;
-      }
+      const { error } = await supabaseClient.from("match_players").insert({
+        match_id: matchId,
+        player_id: profileId,
+      });
+      if (error) throw error; // TODO: throwを共通化する？
+
       return;
     },
 
+    // TODO: updateでは。個別updateにしてそれをactionでまとめて呼ぶべき
     addMatchChip: async ({
       matchId,
       playerChips,
@@ -116,17 +111,23 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
     }) =>
       unstable_cache(
         async () => {
-          const { error } = await supabaseClient.from("chips").upsert(
-            playerChips.map((playerChip) => ({
-              match_id: matchId,
-              profile_id: playerChip.profileId,
-              chip: playerChip.chipCount,
-            })),
-            { onConflict: "match_id, profile_id" }, // 使えない
+          await Promise.all(
+            playerChips.map(async (playerChip) => {
+              const { error } = await supabaseClient
+                .from("match_players")
+                .update({
+                  match_id: matchId,
+                  player_id: playerChip.profileId,
+                  chip_count: playerChip.chipCount,
+                })
+                .eq("match_id", matchId)
+                .eq("profile_id", playerChip.profileId);
+              if (error) {
+                throw error;
+              }
+            }),
           );
-          if (error) {
-            throw error;
-          }
+
           return;
         },
         [`match-${matchId}-chip`],
@@ -139,20 +140,14 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
       unstable_cache(
         async () => {
           const { data, error } = await supabaseClient
-            .from("chips")
-            .select(
-              `
-          profile_id,
-          chip
-        `,
-            )
+            .from("match_players")
+            .select("*")
             .eq("match_id", matchId);
-          if (error) {
-            throw error;
-          }
-          return data.map((chip) => ({
-            profileId: chip.profile_id,
-            chip: chip.chip,
+          if (error) throw error;
+
+          return data.map((matchPlayer) => ({
+            profileId: matchPlayer.player_id,
+            chip: matchPlayer.chip_count,
           }));
         },
         [`match-${matchId}-chip`],

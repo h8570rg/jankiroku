@@ -34,38 +34,32 @@ export type Database = {
   };
   public: {
     Tables: {
-      chips: {
+      friends: {
         Row: {
-          chip: number;
           created_at: string;
-          id: string;
-          match_id: string;
+          friend_id: string;
           profile_id: string;
         };
         Insert: {
-          chip: number;
           created_at?: string;
-          id?: string;
-          match_id: string;
-          profile_id: string;
+          friend_id: string;
+          profile_id?: string;
         };
         Update: {
-          chip?: number;
           created_at?: string;
-          id?: string;
-          match_id?: string;
+          friend_id?: string;
           profile_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "chips_match_id_fkey";
-            columns: ["match_id"];
+            foreignKeyName: "public_friends_friend_id_fkey";
+            columns: ["friend_id"];
             isOneToOne: false;
-            referencedRelation: "matches";
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "chips_profile_id_fkey";
+            foreignKeyName: "public_friends_profile_id_fkey";
             columns: ["profile_id"];
             isOneToOne: false;
             referencedRelation: "profiles";
@@ -73,30 +67,33 @@ export type Database = {
           },
         ];
       };
-      friends: {
+      game_players: {
         Row: {
-          profile_id_1: string;
-          profile_id_2: string;
+          game_id: string;
+          player_id: string;
+          score: number;
         };
         Insert: {
-          profile_id_1?: string;
-          profile_id_2: string;
+          game_id: string;
+          player_id?: string;
+          score: number;
         };
         Update: {
-          profile_id_1?: string;
-          profile_id_2?: string;
+          game_id?: string;
+          player_id?: string;
+          score?: number;
         };
         Relationships: [
           {
-            foreignKeyName: "friends_profile_id_1_fkey";
-            columns: ["profile_id_1"];
+            foreignKeyName: "scores_game_id_fkey";
+            columns: ["game_id"];
             isOneToOne: false;
-            referencedRelation: "profiles";
+            referencedRelation: "games";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "friends_profile_id_2_fkey";
-            columns: ["profile_id_2"];
+            foreignKeyName: "scores_profile_id_fkey";
+            columns: ["player_id"];
             isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
@@ -106,22 +103,32 @@ export type Database = {
       games: {
         Row: {
           created_at: string;
+          created_by: string;
           id: string;
           match_id: string;
         };
         Insert: {
           created_at?: string;
+          created_by?: string;
           id?: string;
           match_id: string;
         };
         Update: {
           created_at?: string;
+          created_by?: string;
           id?: string;
           match_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "games_match_id_fkey";
+            foreignKeyName: "public_games_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_games_match_id_fkey";
             columns: ["match_id"];
             isOneToOne: false;
             referencedRelation: "matches";
@@ -129,57 +136,21 @@ export type Database = {
           },
         ];
       };
-      matches: {
+      match_players: {
         Row: {
-          created_at: string;
-          created_by: string;
-          id: string;
-          updated_at: string;
-          updated_by: string;
+          chip_count: number | null;
+          match_id: string;
+          player_id: string;
         };
         Insert: {
-          created_at?: string;
-          created_by?: string;
-          id?: string;
-          updated_at?: string;
-          updated_by?: string;
+          chip_count?: number | null;
+          match_id: string;
+          player_id?: string;
         };
         Update: {
-          created_at?: string;
-          created_by?: string;
-          id?: string;
-          updated_at?: string;
-          updated_by?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "matches_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "matches_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      matches_profiles: {
-        Row: {
-          match_id: string;
-          profile_id: string;
-        };
-        Insert: {
-          match_id: string;
-          profile_id?: string;
-        };
-        Update: {
+          chip_count?: number | null;
           match_id?: string;
-          profile_id?: string;
+          player_id?: string;
         };
         Relationships: [
           {
@@ -191,7 +162,33 @@ export type Database = {
           },
           {
             foreignKeyName: "matches_profiles_profile_id_fkey";
-            columns: ["profile_id"];
+            columns: ["player_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      matches: {
+        Row: {
+          created_at: string;
+          created_by: string;
+          id: string;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string;
+          id?: string;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string;
+          id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "matches_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
@@ -203,6 +200,7 @@ export type Database = {
           id: string;
           janreco_id: string | null;
           name: string | null;
+          name_janreco_id: string | null;
         };
         Insert: {
           id?: string;
@@ -289,60 +287,16 @@ export type Database = {
           },
         ];
       };
-      scores: {
-        Row: {
-          game_id: string;
-          id: string;
-          profile_id: string;
-          score: number;
-        };
-        Insert: {
-          game_id: string;
-          id?: string;
-          profile_id?: string;
-          score: number;
-        };
-        Update: {
-          game_id?: string;
-          id?: string;
-          profile_id?: string;
-          score?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "scores_game_id_fkey";
-            columns: ["game_id"];
-            isOneToOne: false;
-            referencedRelation: "games";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "scores_profile_id_fkey";
-            columns: ["profile_id"];
-            isOneToOne: false;
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
-      delete_friends: {
+      name_janreco_id: {
         Args: {
-          profile_id: string;
+          "": unknown;
         };
-        Returns: undefined;
-      };
-      get_friends: {
-        Args: Record<PropertyKey, never>;
-        Returns: {
-          id: string;
-          name: string;
-          janreco_id: string;
-        }[];
+        Returns: string;
       };
       search_profiles: {
         Args: {
