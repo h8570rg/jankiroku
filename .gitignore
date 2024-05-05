@@ -1,6 +1,5 @@
 node_modules
 .next
 .npmrc
-.env.local
-.vscode
+.env*
 tsconfig.tsbuildinfo
