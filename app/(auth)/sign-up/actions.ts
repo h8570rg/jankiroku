@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { schemas } from "~/lib/utils/schemas";
+import { schema } from "~/lib/utils/schema";
 import { createClient } from "~/lib/utils/supabase/server";
 
 type State = {
@@ -14,9 +14,9 @@ type State = {
   };
 };
 
-const schema = z.object({
-  email: schemas.email,
-  password: schemas.password,
+const signUpSchema = z.object({
+  email: schema.email,
+  password: schema.password,
 });
 
 /**
@@ -26,7 +26,7 @@ export async function signUp(
   prevState: State,
   formData: FormData,
 ): Promise<State> {
-  const validatedFields = schema.safeParse({
+  const validatedFields = signUpSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   });

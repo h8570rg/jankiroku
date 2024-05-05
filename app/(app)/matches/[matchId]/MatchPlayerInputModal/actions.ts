@@ -3,7 +3,7 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { serverServices } from "~/lib/services/server";
-import { schemas } from "~/lib/utils/schemas";
+import { schema } from "~/lib/utils/schema";
 
 // TODO: actionごとにファイル切ったほうがいいかも
 type AddAnonymousPlayerState = {
@@ -15,7 +15,7 @@ type AddAnonymousPlayerState = {
 };
 
 const addAnonymousPlayerSchema = z.object({
-  name: schemas.name,
+  name: schema.name,
 });
 
 export async function addAnonymousPlayer(

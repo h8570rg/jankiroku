@@ -4,7 +4,7 @@ import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { Rule } from "~/lib/services/features/match";
 import { serverServices } from "~/lib/services/server";
-import { schemas } from "~/lib/utils/schemas";
+import { schema } from "~/lib/utils/schema";
 
 type AddGameState = {
   success?: boolean;
@@ -19,13 +19,13 @@ const addGameSchema = z
   .object({
     playerPoints: z.array(
       z.object({
-        profileId: schemas.profileId,
-        points: schemas.points,
+        profileId: schema.profileId,
+        points: schema.points,
       }),
     ),
     playersCount: z.number(),
     defaultPoints: z.number(),
-    crackBoxPlayerId: schemas.profileId.transform((v) =>
+    crackBoxPlayerId: schema.profileId.transform((v) =>
       v === "" ? undefined : v,
     ),
   })

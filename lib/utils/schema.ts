@@ -116,7 +116,7 @@ export const NAME_MAX_LENGTH = 12;
 export const JANRECO_ID_MIN_LENGTH = 4;
 export const JANRECO_ID_MAX_LENGTH = 12;
 
-export const schemas = {
+export const schema = {
   email: z
     .string()
     .min(1, "メールアドレスを入力してください")

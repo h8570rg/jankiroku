@@ -1,11 +1,7 @@
 import classNames from "classnames";
-import { config } from "~/lib/config";
 
 function Logo({ className }: { className?: string }) {
-  const serviceName = config.public.serviceName;
-  if (!serviceName) {
-    throw new Error("Service name env is not defined.");
-  }
+  const serviceName = process.env.NEXT_PUBLIC_SERVICE_NAME;
   return (
     <div className={classNames("font-righteous", className)}>
       {serviceName[0].toUpperCase() + serviceName.slice(1)}

@@ -3,7 +3,7 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { serverServices } from "~/lib/services/server";
-import { schemas } from "~/lib/utils/schemas";
+import { schema } from "~/lib/utils/schema";
 
 type AddChipState = {
   success?: boolean;
@@ -17,7 +17,7 @@ const addChipSchema = z
   .object({
     playerChip: z.array(
       z.object({
-        profileId: schemas.profileId,
+        profileId: schema.profileId,
         chipCount: z.string().transform(Number),
       }),
     ),

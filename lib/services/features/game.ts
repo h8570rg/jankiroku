@@ -1,4 +1,4 @@
-import { CalcMethod } from "../../utils/schemas";
+import { CalcMethod } from "../../utils/schema";
 import { calcPlayerScores } from "../../utils/score";
 import { Supabase } from ".";
 

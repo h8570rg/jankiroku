@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { serverServices } from "~/lib/services/server";
-import { schemas } from "~/lib/utils/schemas";
+import { schema } from "~/lib/utils/schema";
 
 type State = {
   errors?: {
@@ -21,26 +21,26 @@ type State = {
   };
 };
 
-const schema = z.object({
-  playersCount: schemas.playersCount,
-  incline: schemas.incline,
-  customIncline: schemas.customIncline,
-  rate: schemas.rate,
-  chipRate: schemas.chipRate,
-  crackBoxBonus: schemas.crackBoxBonus,
-  defaultPoints: schemas.defaultPoints,
-  defaultCalcPoints: schemas.defaultCalcPoints,
-  calcMethod: schemas.calcMethod,
+const createMatchschema = z.object({
+  playersCount: schema.playersCount,
+  incline: schema.incline,
+  customIncline: schema.customIncline,
+  rate: schema.rate,
+  chipRate: schema.chipRate,
+  crackBoxBonus: schema.crackBoxBonus,
+  defaultPoints: schema.defaultPoints,
+  defaultCalcPoints: schema.defaultCalcPoints,
+  calcMethod: schema.calcMethod,
 });
 
-export type InputSchema = z.input<typeof schema>;
+export type InputSchema = z.input<typeof createMatchschema>;
 
 export async function createMatch(
   prevState: State,
   formData: FormData,
 ): Promise<State> {
   const inclineFormData = formData.get("incline");
-  const validatedFields = schema.safeParse({
+  const validatedFields = createMatchschema.safeParse({
     playersCount: formData.get("playersCount"),
     incline: inclineFormData,
     customIncline:

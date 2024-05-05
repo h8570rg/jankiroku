@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { serverServices } from "~/lib/services/server";
-import { schemas } from "~/lib/utils/schemas";
+import { schema } from "~/lib/utils/schema";
 import { createClient } from "~/lib/utils/supabase/server";
 
 type State = {
@@ -15,9 +15,9 @@ type State = {
   };
 };
 
-const schema = z.object({
-  name: schemas.name,
-  janrecoId: schemas.janrecoId,
+const updateProfileSchema = z.object({
+  name: schema.name,
+  janrecoId: schema.janrecoId,
 });
 
 export async function updateProfile(
@@ -25,7 +25,7 @@ export async function updateProfile(
   prevState: State,
   formData: FormData,
 ): Promise<State> {
-  const validatedFields = schema.safeParse({
+  const validatedFields = updateProfileSchema.safeParse({
     name: formData.get("name"),
     janrecoId: formData.get("janrecoId"),
   });

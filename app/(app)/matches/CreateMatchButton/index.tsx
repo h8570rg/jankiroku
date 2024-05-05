@@ -22,7 +22,7 @@ import {
   inclineFor3Players,
   inclineFor4Players,
   rate,
-} from "~/lib/utils/schemas";
+} from "~/lib/utils/schema";
 import { createMatch, InputSchema } from "./actions";
 
 const playersCount4DefaultValues: InputSchema = {

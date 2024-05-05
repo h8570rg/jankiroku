@@ -1,5 +1,5 @@
 import { unstable_cache } from "next/cache";
-import { CalcMethod } from "../../utils/schemas";
+import { CalcMethod } from "../../utils/schema";
 import { Supabase } from ".";
 
 export type Rule = {
