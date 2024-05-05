@@ -6,7 +6,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Button } from "~/components/Button";
 import { Input } from "~/components/Input";
 import { ModalBody, ModalFooter } from "~/components/Modal";
-import { Match } from "~/lib/services/match";
+import { Match } from "~/lib/services/features/match";
 import { useChipInputModal } from "../useChipInputModal";
 import { addChip } from "./actions";
 

@@ -1,12 +1,11 @@
-import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "~/lib/database.types";
+import { Supabase } from ".";
 
 export type Matches = {
   id: string;
   date: string;
 }[];
 
-export function matchesService(supabaseClient: SupabaseClient<Database>) {
+export function matchesService(supabase: Supabase) {
   return {
     createMatch: async ({
       calcMethod,
@@ -27,7 +26,7 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       rate: number;
       incline: string;
     }) => {
-      const createMatchResult = await supabaseClient
+      const createMatchResult = await supabase
         .from("matches")
         .insert({})
         .select()
@@ -35,7 +34,7 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       if (createMatchResult.error) {
         throw createMatchResult.error;
       }
-      const createRulePromise = supabaseClient.from("rules").insert({
+      const createRulePromise = supabase.from("rules").insert({
         calc_method: calcMethod,
         chip_rate: chipRate,
         crack_box_bonus: crackBoxBonus,
@@ -46,7 +45,7 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
         rate,
         incline,
       });
-      const createMatchesUsersPromise = supabaseClient
+      const createMatchesUsersPromise = supabase
         .from("match_players")
         .insert({ match_id: createMatchResult.data.id });
       const [createRuleResult, createMatchesUsersResult] = await Promise.all([
@@ -73,12 +72,12 @@ export function matchesService(supabaseClient: SupabaseClient<Database>) {
       const matchLimit = 99;
       const rangeFrom = (page - 1) * matchLimit;
       const rangeTo = page * matchLimit - 1;
-      const userResult = await supabaseClient.auth.getUser(); // TODO: function化して高速化
+      const userResult = await supabase.auth.getUser(); // TODO: function化して高速化
       if (userResult.error) {
         throw userResult.error;
       }
 
-      const { data, error } = await supabaseClient
+      const { data, error } = await supabase
         .from("matches")
         .select("*, match_players!inner(*)")
         .eq("match_players.player_id", userResult.data?.user.id)

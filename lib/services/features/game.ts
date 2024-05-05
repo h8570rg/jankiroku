@@ -1,9 +1,8 @@
-import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "~/lib/database.types";
-import { CalcMethod } from "../utils/schemas";
-import { calcPlayerScores } from "../utils/score";
+import { CalcMethod } from "../../utils/schemas";
+import { calcPlayerScores } from "../../utils/score";
+import { Supabase } from ".";
 
-export function gameService(supabaseClient: SupabaseClient<Database>) {
+export function gameService(supabase: Supabase) {
   return {
     createGame: async ({
       playerPoints,
@@ -38,7 +37,7 @@ export function gameService(supabaseClient: SupabaseClient<Database>) {
         rule,
         crackBoxPlayerId,
       });
-      const createGameResult = await supabaseClient
+      const createGameResult = await supabase
         .from("games")
         .insert({
           match_id: matchId,
@@ -51,7 +50,7 @@ export function gameService(supabaseClient: SupabaseClient<Database>) {
       const gameId = createGameResult.data.id;
       await Promise.all(
         playerScores.map(async (playerScore) => {
-          const { error } = await supabaseClient.from("game_players").insert({
+          const { error } = await supabase.from("game_players").insert({
             game_id: gameId,
             player_id: playerScore.profileId,
             score: playerScore.score,

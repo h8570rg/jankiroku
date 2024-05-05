@@ -1,5 +1,8 @@
 import { config } from "~/lib/config";
 
+/**
+ * @see https://supabase.com/docs/guides/auth/concepts/redirect-urls#vercel-preview-urls
+ */
 export const getURL = () => {
   let url =
     config.public.siteUrl ?? // Set this to your site URL in production env.

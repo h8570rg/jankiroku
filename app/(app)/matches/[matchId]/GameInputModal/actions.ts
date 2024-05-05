@@ -2,7 +2,7 @@
 
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
-import { Rule } from "~/lib/services/match";
+import { Rule } from "~/lib/services/features/match";
 import { serverServices } from "~/lib/services/server";
 import { schemas } from "~/lib/utils/schemas";
 

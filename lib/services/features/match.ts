@@ -1,7 +1,6 @@
-import { SupabaseClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
-import { Database } from "~/lib/database.types";
-import { CalcMethod } from "../utils/schemas";
+import { CalcMethod } from "../../utils/schemas";
+import { Supabase } from ".";
 
 export type Rule = {
   playersCount: number;
@@ -30,12 +29,12 @@ export type Match = {
   rule: Rule;
 };
 
-export function matchService(supabaseClient: SupabaseClient<Database>) {
+export function matchService(supabase: Supabase) {
   return {
     getMatch: ({ matchId }: { matchId: string }) =>
       unstable_cache(
         async () => {
-          const { data, error } = await supabaseClient
+          const { data, error } = await supabase
             .from("matches")
             .select(
               "*, profiles!match_players(*), rules(*), games(*, game_players(*))",
@@ -132,7 +131,7 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
       matchId: string;
       profileId: string;
     }) => {
-      const { error } = await supabaseClient.from("match_players").insert({
+      const { error } = await supabase.from("match_players").insert({
         match_id: matchId,
         player_id: profileId,
       });
@@ -156,7 +155,7 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
         async () => {
           await Promise.all(
             playerChips.map(async (playerChip) => {
-              const { error } = await supabaseClient
+              const { error } = await supabase
                 .from("match_players")
                 .update({
                   match_id: matchId,
@@ -182,7 +181,7 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
     getMatchChips: async ({ matchId }: { matchId: string }) =>
       unstable_cache(
         async () => {
-          const { data, error } = await supabaseClient
+          const { data, error } = await supabase
             .from("match_players")
             .select("*")
             .eq("match_id", matchId);

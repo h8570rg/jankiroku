@@ -13,7 +13,7 @@ import { Icon } from "~/components/Icon";
 import { Input } from "~/components/Input";
 import { ModalBody, ModalFooter } from "~/components/Modal";
 import { Select, SelectItem } from "~/components/Select";
-import { Match } from "~/lib/services/match";
+import { Match } from "~/lib/services/features/match";
 import { useGameInputModal } from "../useGameInputModal";
 import { addGame } from "./actions";
 

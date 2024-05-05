@@ -1,10 +1,9 @@
-import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "~/lib/database.types";
+import { Supabase } from ".";
 
-export function profileService(supabaseClient: SupabaseClient<Database>) {
+export function profileService(supabase: Supabase) {
   return {
     getUserProfile: async () => {
-      const getUserResult = await supabaseClient.auth.getUser();
+      const getUserResult = await supabase.auth.getUser();
       if (getUserResult.error) {
         throw getUserResult.error;
       }
@@ -14,7 +13,7 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
 
       const { user } = getUserResult.data;
 
-      const { data, error } = await supabaseClient
+      const { data, error } = await supabase
         .from("profiles")
         .select()
         .eq("id", user.id)
@@ -43,7 +42,7 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
       name: string;
       janrecoId: string;
     }) => {
-      const { error } = await supabaseClient
+      const { error } = await supabase
         .from("profiles")
         .update({ name, janreco_id: janrecoId })
         .eq("id", userId);
@@ -60,17 +59,17 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
       if (text === "") {
         return [];
       }
-      const user = await supabaseClient.auth.getUser();
+      const user = await supabase.auth.getUser();
       if (user.error) throw user.error;
       const [profilesResult, friendsResult] = await Promise.all([
-        supabaseClient
+        supabase
           .from("profiles")
           .select("*")
           .textSearch("name_janreco_id", text)
           .neq("janreco_id", null)
           .neq("name", null)
           .neq("id", user.data.user.id),
-        supabaseClient
+        supabase
           .from("friends")
           .select("friend_id")
           .eq("profile_id", user.data.user.id),
@@ -93,7 +92,7 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
     },
 
     getProfileExists: async ({ janrecoId }: { janrecoId: string }) => {
-      const { data, error } = await supabaseClient
+      const { data, error } = await supabase
         .from("profiles")
         .select()
         .eq("janreco_id", janrecoId);
@@ -104,7 +103,7 @@ export function profileService(supabaseClient: SupabaseClient<Database>) {
     },
 
     createProfile: async ({ name }: { name: string }) => {
-      const { data, error } = await supabaseClient
+      const { data, error } = await supabase
         .from("profiles")
         .insert({ name })
         .select()

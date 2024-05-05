@@ -1,4 +1,4 @@
-import { services } from "~/lib/services";
+import { services } from "~/lib/services/features";
 import { createClient } from "~/lib/utils/supabase/client";
 
 export const browserServices = () => {

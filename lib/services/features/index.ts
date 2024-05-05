@@ -6,12 +6,14 @@ import { matchService } from "./match";
 import { matchesService } from "./matches";
 import { profileService } from "./profile";
 
-export const services = (supabaseClient: SupabaseClient<Database>) => {
+export type Supabase = SupabaseClient<Database>;
+
+export const services = (supabase: Supabase) => {
   return {
-    ...matchesService(supabaseClient),
-    ...matchService(supabaseClient),
-    ...profileService(supabaseClient),
-    ...friendsService(supabaseClient),
-    ...gameService(supabaseClient),
+    ...matchesService(supabase),
+    ...matchService(supabase),
+    ...profileService(supabase),
+    ...friendsService(supabase),
+    ...gameService(supabase),
   };
 };

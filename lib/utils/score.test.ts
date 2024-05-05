@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Rule } from "../services/match";
+import { Rule } from "../services/features/match";
 import {
   round,
   roundOff,

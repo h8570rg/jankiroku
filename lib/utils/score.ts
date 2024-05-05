@@ -1,4 +1,4 @@
-import { Rule } from "../services/match";
+import { Rule } from "../services/features/match";
 import { CalcMethod } from "./schemas";
 
 export function calcPlayerScores({
@@ -35,8 +35,8 @@ export function calcPlayerScores({
     const crackBoxBonusPoints = isCrackedBoxPlayer
       ? -1 * rule.crackBoxBonus
       : isCrackBoxPlayer
-      ? totalCrackBoxBonus
-      : 0;
+        ? totalCrackBoxBonus
+        : 0;
     const score = calcScore({ points, index, rule, crackBoxBonusPoints });
     return {
       profileId,
