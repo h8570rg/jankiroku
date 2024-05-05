@@ -10,7 +10,7 @@ export function BottomNavigation() {
           href="/matches"
         >
           <svg
-            className="mb-1 h-5 w-5 fill-current text-gray-400"
+            className="mb-1 size-5 fill-current text-gray-400"
             viewBox="0 0 24 24"
           >
             <path d="M12 2L3 14h9l-3 8 11-10h-9l3-10z"></path>
@@ -22,7 +22,7 @@ export function BottomNavigation() {
           href="#"
         >
           <svg
-            className="mb-1 h-5 w-5 fill-current text-gray-400"
+            className="mb-1 size-5 fill-current text-gray-400"
             viewBox="0 0 24 24"
           >
             <path d="M12 2L3 14h9l-3 8 11-10h-9l3-10z"></path>
@@ -34,7 +34,7 @@ export function BottomNavigation() {
           href="#"
         >
           <svg
-            className="mb-1 h-5 w-5 fill-current text-gray-400"
+            className="mb-1 size-5 fill-current text-gray-400"
             viewBox="0 0 24 24"
           >
             <path d="M12 2L3 14h9l-3 8 11-10h-9l3-10z"></path>
@@ -46,7 +46,7 @@ export function BottomNavigation() {
           href="#"
         >
           <svg
-            className="mb-1 h-5 w-5 fill-current text-gray-400"
+            className="mb-1 size-5 fill-current text-gray-400"
             viewBox="0 0 24 24"
           >
             <path d="M12 2L3 14h9l-3 8 11-10h-9l3-10z"></path>
