@@ -1,5 +1,3 @@
-"use client";
-
 import classNames from "classnames";
 import {
   Table,
@@ -12,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/Table";
-import { Match } from "~/lib/services/match";
+import { serverServices } from "~/lib/services/server";
 import { AddChipButton } from "./AddChipButton";
 import { AddGameButton } from "./AddGameButton";
 import { AddPlayerButton } from "./AddPlayerButton";
@@ -28,24 +26,12 @@ type Row = {
   [playerId: Column["id"]]: number;
 };
 
-export function MatchTable({
-  match,
-  games,
-  chips,
-}: {
-  match: Match;
-  games: {
-    id: string;
-    scores: {
-      profileId: string;
-      score: number;
-    }[];
-  }[];
-  chips: {
-    profileId: string;
-    chip: number | null;
-  }[];
-}) {
+export async function MatchTable({ matchId }: { matchId: string }) {
+  const { getMatch, getMatchChips } = serverServices();
+  const [match, chips] = await Promise.all([
+    getMatch({ matchId }),
+    getMatchChips({ matchId }),
+  ]);
   const { rule, players } = match;
   const { playersCount } = rule;
 
@@ -72,9 +58,9 @@ export function MatchTable({
   ];
 
   const gameRows: Row[] =
-    games?.map((game) =>
+    match.games?.map((game) =>
       Object.fromEntries(
-        game.scores.map((score) => [score.profileId, score.score]),
+        game.game_players.map((score) => [score.player_id, score.score]),
       ),
     ) ?? [];
 

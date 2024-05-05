@@ -34,10 +34,12 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
   return {
     getMatch: ({ matchId }: { matchId: string }) =>
       unstable_cache(
-        async (): Promise<Match> => {
+        async () => {
           const { data, error } = await supabaseClient
             .from("matches")
-            .select("*, profiles!match_players(*), rules(*)")
+            .select(
+              "*, profiles!match_players(*), rules(*), games(*, game_players(*))",
+            )
             .eq("id", matchId)
             .order("created_at", { ascending: true })
             .single();
@@ -50,6 +52,45 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
             .split("_")
             .map((incline) => Number(incline));
           const [incline1, incline2, incline3, incline4] = incline;
+
+          // 値の入っていない結果を作成
+          const matchResult = Object.fromEntries(
+            data.profiles.map((player) => [
+              player.id,
+              {
+                rankCounts: new Array(rule.players_count).fill(0),
+                averageRank: NaN,
+                totalPoints: 0,
+              },
+            ]),
+          );
+
+          // rankCounts と totalPoints を更新
+          data.games.reduce((acc, game) => {
+            // 1着から順番に並び替え
+            const sortedScores = game.game_players.sort(
+              (a, b) => b.score - a.score,
+            );
+            // それぞれのプレイヤーの rankCounts と totalPoints を更新
+            sortedScores.forEach((score, index) => {
+              acc[score.player_id].rankCounts[index] += 1;
+              acc[score.player_id].totalPoints += score.score;
+            });
+            return acc;
+          }, matchResult);
+
+          // averageRank を更新
+          Object.entries(matchResult).forEach(([profileId, result]) => {
+            const { rankCounts } = result;
+            // 参加したゲーム数
+            const gameCount = rankCounts.reduce((acc, count) => acc + count, 0);
+            // 平均順位
+            const averageRank =
+              rankCounts.reduce((acc, count, rank) => {
+                return acc + (rank + 1) * count;
+              }, 0) / gameCount;
+            matchResult[profileId].averageRank = averageRank;
+          });
 
           return {
             id: data.id,
@@ -74,6 +115,8 @@ export function matchService(supabaseClient: SupabaseClient<Database>) {
                 incline4,
               },
             },
+            games: data.games,
+            matchResult,
           };
         },
         [`match-${matchId}`],

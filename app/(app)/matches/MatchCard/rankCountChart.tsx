@@ -8,7 +8,6 @@ import {
   YAxis,
   Text,
 } from "recharts";
-import { MatchResult } from "~/lib/utils/matchResult";
 
 // Override console.error
 // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
@@ -27,7 +26,13 @@ export function RankCountChart({
   matchResult,
   userProfileId,
 }: {
-  matchResult: MatchResult;
+  matchResult: {
+    [profileId: string]: {
+      rankCounts: number[];
+      averageRank: number;
+      totalPoints: number;
+    };
+  };
   userProfileId: string;
 }) {
   const data = matchResult[userProfileId].rankCounts.map((count, index) => ({

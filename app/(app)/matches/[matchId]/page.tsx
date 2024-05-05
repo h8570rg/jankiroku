@@ -14,12 +14,8 @@ export default async function Match({
 }: {
   params: { matchId: string };
 }) {
-  const { getGames, getMatch, getMatchChips } = serverServices();
-  const [match, games, chips] = await Promise.all([
-    getMatch({ matchId }),
-    getGames({ matchId }),
-    getMatchChips({ matchId }),
-  ]);
+  const { getMatch } = serverServices();
+  const [match] = await Promise.all([getMatch({ matchId })]);
 
   const { date } = match;
 
@@ -45,7 +41,9 @@ export default async function Match({
           </Button>
         </div>
       </div>
-      <MatchTable match={match} games={games} chips={chips} />
+      <Suspense fallback={null}>
+        <MatchTable matchId={matchId} />
+      </Suspense>
       <Suspense fallback={null}>
         <MatchPlayerInputModal matchId={matchId} />
       </Suspense>

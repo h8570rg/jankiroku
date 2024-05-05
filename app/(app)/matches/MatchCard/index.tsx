@@ -3,7 +3,6 @@ import { CardBody, CardHeader } from "~/components/Card";
 import { Divider } from "~/components/Divider";
 import { serverServices } from "~/lib/services/server";
 import { dayjs } from "~/lib/utils/date";
-import { getMatchResult } from "~/lib/utils/matchResult";
 import { NavigationCard } from "./Card";
 import { RankCountChart } from "./rankCountChart";
 
@@ -14,13 +13,11 @@ export async function MatchCard({
   matchId: string;
   date: string;
 }) {
-  const { getGames, getMatch, getUserProfile } = serverServices();
-  const [match, games, userProfile] = await Promise.all([
+  const { getMatch, getUserProfile } = serverServices();
+  const [match, userProfile] = await Promise.all([
     getMatch({ matchId }),
-    getGames({ matchId }),
     getUserProfile(),
   ]);
-  const matchResult = getMatchResult(match, games);
 
   const today = dayjs();
   const targetDate = dayjs(date);
@@ -45,7 +42,7 @@ export async function MatchCard({
       <CardBody>
         <div className="h-[70px]">
           <RankCountChart
-            matchResult={matchResult}
+            matchResult={match.matchResult}
             userProfileId={userProfile.id}
           />
         </div>
