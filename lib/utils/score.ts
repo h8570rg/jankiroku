@@ -1,5 +1,5 @@
+import { CalcMethod } from "../config";
 import { Rule } from "../services/features/match";
-import { CalcMethod } from "./schema";
 
 export function calcPlayerScores({
   playerPoints,

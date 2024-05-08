@@ -17,12 +17,14 @@ import {
 import { Select, SelectItem } from "~/components/Select";
 import { Slider } from "~/components/Slider";
 import {
-  calcMethod,
-  chipRate,
-  inclineFor3Players,
-  inclineFor4Players,
-  rate,
-} from "~/lib/utils/schema";
+  calcMethods,
+  chipRateLabel,
+  chipRates,
+  inclineFor3PlayersLabel,
+  inclineFor4PlayersLabel,
+  rateLabel,
+  rates,
+} from "~/lib/config";
 import { createMatch, InputSchema } from "./actions";
 
 const playersCount4DefaultValues: InputSchema = {
@@ -39,7 +41,7 @@ const playersCount4DefaultValues: InputSchema = {
     incline4: "",
   },
   rate: "0",
-  chipRate: "",
+  chipRate: "0",
 };
 
 const playersCount3DefaultValues: InputSchema = {
@@ -56,11 +58,8 @@ const playersCount3DefaultValues: InputSchema = {
     incline4: "0",
   },
   rate: "0",
-  chipRate: "",
+  chipRate: "0",
 };
-
-const rateSliderMaxValue = Object.keys(rate).length - 1;
-const chipRateSliderMaxValue = Object.keys(chipRate).length - 1;
 
 export function CreateMatchButton({ className }: { className?: string }) {
   const ruleCreateModal = useDisclosure();
@@ -75,7 +74,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
   const playersCount = watch("playersCount");
   const incline = watch("incline");
   const inclineOption =
-    playersCount === "4" ? inclineFor4Players : inclineFor3Players;
+    playersCount === "4" ? inclineFor4PlayersLabel : inclineFor3PlayersLabel;
 
   return (
     <>
@@ -143,15 +142,13 @@ export function CreateMatchButton({ className }: { className?: string }) {
                             base: "mb-6",
                           }}
                           label="レート"
-                          maxValue={rateSliderMaxValue}
+                          maxValue={rates.length - 1}
                           showSteps
-                          marks={Array.from({
-                            length: rateSliderMaxValue + 1,
-                          }).map((_, i) => ({
+                          marks={rates.map((rate, i) => ({
                             value: i,
-                            label: rate[String(i)].value,
+                            label: String(rate),
                           }))}
-                          getValue={(v) => rate[String(v)].label}
+                          getValue={(v) => rateLabel[rates[Number(v)]]}
                           onChange={(v) => {
                             onChange(String(v));
                           }}
@@ -171,15 +168,13 @@ export function CreateMatchButton({ className }: { className?: string }) {
                             base: "mb-8",
                           }}
                           label="チップ"
-                          maxValue={chipRateSliderMaxValue}
+                          maxValue={chipRates.length - 1}
                           showSteps
-                          marks={Array.from({
-                            length: chipRateSliderMaxValue + 1,
-                          }).map((_, i) => ({
+                          marks={chipRates.map((chipRate, i) => ({
                             value: i,
-                            label: chipRate[String(i)].value,
+                            label: String(chipRate),
                           }))}
-                          getValue={(v) => chipRate[String(v)].label}
+                          getValue={(v) => chipRateLabel[chipRates[Number(v)]]}
                           onChange={(v) => {
                             onChange(String(v));
                           }}
@@ -286,49 +281,6 @@ export function CreateMatchButton({ className }: { className?: string }) {
                       </div>
                     </div>
                   )}
-                  {/* <Controller
-                    control={control}
-                    name="rate"
-                    render={({ field }) => (
-                      <Input
-                        classNames={{
-                          label: "shrink-0 basis-14",
-                          mainWrapper: "w-full",
-                        }}
-                        type="number"
-                        label="レート"
-                        labelPlacement="outside-left"
-                        description="5: テンゴ、10: テンピン"
-                        errorMessage={errors?.rate}
-                        {...field}
-                      />
-                    )}
-                  /> */}
-
-                  {/* <Controller
-                    control={control}
-                    name="chipRate"
-                    render={({ field }) => (
-                      <Input
-                        classNames={{
-                          label: "shrink-0 basis-14",
-                          mainWrapper: "w-full",
-                        }}
-                        type="number"
-                        label="チップ"
-                        labelPlacement="outside-left"
-                        endContent={
-                          <div className="pointer-events-none flex items-center">
-                            <span className="text-small text-default-400">
-                              円
-                            </span>
-                          </div>
-                        }
-                        errorMessage={errors?.chipRate}
-                        {...field}
-                      />
-                    )}
-                  /> */}
                   <Accordion isCompact className="px-0" keepContentMounted>
                     <AccordionItem
                       title="詳細設定"
@@ -428,13 +380,11 @@ export function CreateMatchButton({ className }: { className?: string }) {
                               {...field}
                               errorMessage={errors?.calcMethod}
                             >
-                              {Object.entries(calcMethod).map(
-                                ([key, value]) => (
-                                  <SelectItem key={key} value={value}>
-                                    {value}
-                                  </SelectItem>
-                                ),
-                              )}
+                              {calcMethods.map((calcMethod) => (
+                                <SelectItem key={calcMethod} value={calcMethod}>
+                                  {value}
+                                </SelectItem>
+                              ))}
                             </Select>
                           )}
                         />

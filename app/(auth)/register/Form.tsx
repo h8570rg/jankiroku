@@ -8,7 +8,7 @@ import {
   JANRECO_ID_MAX_LENGTH,
   JANRECO_ID_MIN_LENGTH,
   NAME_MAX_LENGTH,
-} from "~/lib/utils/schema";
+} from "~/lib/config";
 import { updateProfile } from "./actions";
 
 export function Form({

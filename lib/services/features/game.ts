@@ -1,5 +1,5 @@
-import { CalcMethod } from "../../utils/schema";
-import { calcPlayerScores } from "../../utils/score";
+import { CalcMethod } from "~/lib/config";
+import { calcPlayerScores } from "~/lib/utils/score";
 import { Supabase } from ".";
 
 export function gameService(supabase: Supabase) {

@@ -5,7 +5,7 @@ import { useFormState } from "react-dom";
 import { Avatar } from "~/components/Avatar";
 import { Button } from "~/components/Button";
 import { Input } from "~/components/Input";
-import { NAME_MAX_LENGTH } from "~/lib/utils/schema";
+import { NAME_MAX_LENGTH } from "~/lib/config";
 import { useMatchPlayerInputModal } from "../useMatchPlayerInputModal";
 import { addAnonymousPlayer } from "./actions";
 
