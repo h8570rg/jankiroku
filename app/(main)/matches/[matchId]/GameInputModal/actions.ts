@@ -1,10 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import { serverServices } from "~/lib/services/server";
-import { Rule } from "~/lib/type";
-import { schema } from "~/lib/utils/schema";
-import { calcPlayerScores } from "~/lib/utils/score";
+import { serverServices } from "@/lib/services/server";
+import { Rule } from "@/lib/type";
+import { schema } from "@/lib/utils/schema";
+import { calcPlayerScores } from "@/lib/utils/score";
 
 type AddGameState = {
   success?: boolean;

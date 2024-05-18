@@ -1,8 +1,8 @@
-import { Avatar, AvatarGroup } from "~/components/Avatar";
-import { CardBody, CardHeader } from "~/components/Card";
-import { Divider } from "~/components/Divider";
-import { serverServices } from "~/lib/services/server";
-import { dayjs } from "~/lib/utils/date";
+import { Avatar, AvatarGroup } from "@/components/Avatar";
+import { CardBody, CardHeader } from "@/components/Card";
+import { Divider } from "@/components/Divider";
+import { serverServices } from "@/lib/services/server";
+import { dayjs } from "@/lib/utils/date";
 import { NavigationCard } from "./Card";
 
 export async function MatchCard({

@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal, ModalContent } from "~/components/Modal";
+import { Modal, ModalContent } from "@/components/Modal";
 import { useChipInputModal } from "../useChipInputModal";
 
 export function ModalController({ children }: { children: React.ReactNode }) {

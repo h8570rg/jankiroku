@@ -6,7 +6,7 @@ import {
   PASSWORD_MIN_LENGTH,
   calcMethods,
   inclines,
-} from "~/lib/config";
+} from "@/lib/config";
 
 export const schema = {
   email: z

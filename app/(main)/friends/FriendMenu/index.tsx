@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "~/components/Button";
+import { Button } from "@/components/Button";
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "~/components/Dropdown";
-import { Icon } from "~/components/Icon";
+} from "@/components/Dropdown";
+import { Icon } from "@/components/Icon";
 import { deleteFriends } from "./actions";
 
 export function FriendMenu({ profileId }: { profileId: string }) {

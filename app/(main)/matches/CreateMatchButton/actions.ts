@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { serverServices } from "~/lib/services/server";
-import { schema } from "~/lib/utils/schema";
+import { serverServices } from "@/lib/services/server";
+import { schema } from "@/lib/utils/schema";
 
 type State = {
   errors?: {

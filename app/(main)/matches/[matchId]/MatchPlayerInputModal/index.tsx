@@ -1,5 +1,5 @@
-import { ModalBody, ModalHeader } from "~/components/Modal";
-import { serverServices } from "~/lib/services/server";
+import { ModalBody, ModalHeader } from "@/components/Modal";
+import { serverServices } from "@/lib/services/server";
 import { AnonymousPlayerSelect } from "./AnonymousPlayerSelect";
 import { ModalController } from "./ModalController";
 import { PlayerTypeTabs } from "./Tabs";

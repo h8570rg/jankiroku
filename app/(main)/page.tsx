@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Button } from "~/components/Button";
-import { getURL } from "~/lib/utils/url";
+import { Button } from "@/components/Button";
+import { getURL } from "@/lib/utils/url";
 import { signOut } from "./actions";
 
 export default function Page() {

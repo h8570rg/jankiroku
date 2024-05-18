@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { schema } from "~/lib/utils/schema";
-import { createClient } from "~/lib/utils/supabase/server";
+import { schema } from "@/lib/utils/schema";
+import { createClient } from "@/lib/utils/supabase/server";
 
 type State = {
   errors?: {

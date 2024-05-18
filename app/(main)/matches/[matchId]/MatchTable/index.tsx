@@ -9,8 +9,8 @@ import {
   TableFooterRow,
   TableHeader,
   TableRow,
-} from "~/components/Table";
-import { serverServices } from "~/lib/services/server";
+} from "@/components/Table";
+import { serverServices } from "@/lib/services/server";
 import { AddChipButton } from "./AddChipButton";
 import { AddGameButton } from "./AddGameButton";
 import { AddPlayerButton } from "./AddPlayerButton";
@@ -69,7 +69,7 @@ export async function MatchTable({ matchId }: { matchId: string }) {
   );
 
   const chipsRow: Row = Object.fromEntries(
-    players.map((player) => [player.id, player.result.chipCount ?? 0]),
+    players.map((player) => [player.id, player.chipCount ?? 0]),
   );
 
   return (

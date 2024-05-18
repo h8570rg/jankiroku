@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import { Avatar } from "~/components/Avatar";
-import { Dropdown, DropdownTrigger } from "~/components/Dropdown";
-import { serverServices } from "~/lib/services/server";
+import { Avatar } from "@/components/Avatar";
+import { Dropdown, DropdownTrigger } from "@/components/Dropdown";
+import { serverServices } from "@/lib/services/server";
 import { NavbarAvatarDropdownMenu } from "./Menu";
 
 export async function NavbarAvatar() {

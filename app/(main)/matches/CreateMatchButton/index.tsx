@@ -3,19 +3,19 @@
 import classNames from "classnames";
 import { useFormState } from "react-dom";
 import { Controller, useForm } from "react-hook-form";
-import { Accordion, AccordionItem } from "~/components/Accordion";
-import { Button, ButtonGroup } from "~/components/Button";
-import { Input } from "~/components/Input";
-import { useDisclosure } from "~/components/Modal";
+import { Accordion, AccordionItem } from "@/components/Accordion";
+import { Button, ButtonGroup } from "@/components/Button";
+import { Input } from "@/components/Input";
+import { useDisclosure } from "@/components/Modal";
 import {
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "~/components/Modal";
-import { Select, SelectItem } from "~/components/Select";
-import { Slider } from "~/components/Slider";
+} from "@/components/Modal";
+import { Select, SelectItem } from "@/components/Select";
+import { Slider } from "@/components/Slider";
 import {
   calcMethods,
   chipRateLabel,
@@ -24,7 +24,7 @@ import {
   inclineFor4PlayersLabel,
   rateLabel,
   rates,
-} from "~/lib/config";
+} from "@/lib/config";
 import { createMatch, InputSchema } from "./actions";
 
 const playersCount4DefaultValues: InputSchema = {

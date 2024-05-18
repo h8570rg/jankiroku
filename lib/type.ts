@@ -17,9 +17,7 @@ export type Match = {
   games: Game[];
 };
 
-export type MatchPlayer = Profile & { result: MatchPlayerResult };
-
-export type MatchPlayerResult = {
+export type MatchPlayer = Profile & {
   rankCounts: number[];
   averageRank: number;
   totalScore: number;

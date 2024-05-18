@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { DropdownMenu, DropdownItem } from "~/components/Dropdown";
+import { DropdownMenu, DropdownItem } from "@/components/Dropdown";
 import { signOut } from "../../actions";
 
 export function NavbarAvatarDropdownMenu({

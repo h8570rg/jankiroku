@@ -2,8 +2,8 @@
 
 import classNames from "classnames";
 import { useFormState } from "react-dom";
-import { Button } from "~/components/Button";
-import { Input } from "~/components/Input";
+import { Button } from "@/components/Button";
+import { Input } from "@/components/Input";
 import { signUp } from "./actions";
 
 /**

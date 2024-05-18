@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "~/components/Button";
-import { Icon } from "~/components/Icon";
+import { Button } from "@/components/Button";
+import { Icon } from "@/components/Icon";
 import { useGameInputModal } from "../useGameInputModal";
 
 export function AddGameButton({ isDisabled }: { isDisabled: boolean }) {

@@ -1,5 +1,5 @@
 import { PostgrestError } from "@supabase/supabase-js";
-import { Profile } from "~/lib/type";
+import { Profile } from "@/lib/type";
 import { Supabase } from ".";
 
 export function profileService(supabase: Supabase) {

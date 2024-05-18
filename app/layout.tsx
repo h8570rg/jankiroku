@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { Metadata } from "next";
-import { IconDefs } from "~/components/Icon";
-import { ToastContainer } from "~/lib/toast";
+import { IconDefs } from "@/components/Icon";
+import { ToastContainer } from "@/lib/toast";
 import { righteous, mPlus1p } from "./fonts";
 import "./globals.css";
 import { NextUIProvider } from "./nextUiProvider";

@@ -1,8 +1,8 @@
-import { Button } from "~/components/Button";
-import { Icon } from "~/components/Icon";
-import { ModalHeader } from "~/components/Modal";
-import { Popover, PopoverContent, PopoverTrigger } from "~/components/Popover";
-import { serverServices } from "~/lib/services/server";
+import { Button } from "@/components/Button";
+import { Icon } from "@/components/Icon";
+import { ModalHeader } from "@/components/Modal";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/Popover";
+import { serverServices } from "@/lib/services/server";
 import { GameForm } from "./GameForm";
 import { ModalController } from "./ModalController";
 

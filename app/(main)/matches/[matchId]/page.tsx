@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { Button } from "~/components/Button";
-import { Icon } from "~/components/Icon";
-import { serverServices } from "~/lib/services/server";
-import { dayjs } from "~/lib/utils/date";
+import { Button } from "@/components/Button";
+import { Icon } from "@/components/Icon";
+import { serverServices } from "@/lib/services/server";
+import { dayjs } from "@/lib/utils/date";
 import { ChipInputModal } from "./ChipInputModal";
 import { GameInputModal } from "./GameInputModal";
 import { MatchPlayerInputModal } from "./MatchPlayerInputModal";

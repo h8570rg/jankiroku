@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { serverServices } from "~/lib/services/server";
+import { serverServices } from "@/lib/services/server";
 
 export async function addFriends(profileId: string) {
   const { addFriends } = serverServices();

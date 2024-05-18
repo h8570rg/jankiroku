@@ -1,5 +1,5 @@
-import { ModalHeader } from "~/components/Modal";
-import { serverServices } from "~/lib/services/server";
+import { ModalHeader } from "@/components/Modal";
+import { serverServices } from "@/lib/services/server";
 import { ChipForm } from "./ChipForm";
 import { ModalController } from "./ModalController";
 

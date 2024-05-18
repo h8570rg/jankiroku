@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "~/components/Button";
+import { Button } from "@/components/Button";
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr

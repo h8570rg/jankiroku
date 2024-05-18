@@ -1,5 +1,9 @@
 import { Input as NextUiInput, InputProps } from "@nextui-org/react";
+import { forwardRef } from "react";
 
-export function Input(props: Omit<InputProps, "isInvalid">) {
-  return <NextUiInput {...props} isInvalid={!!props.errorMessage} />;
-}
+export const Input = forwardRef<
+  HTMLInputElement,
+  Omit<InputProps, "isInvalid">
+>(function Input(props, ref) {
+  return <NextUiInput {...props} ref={ref} isInvalid={!!props.errorMessage} />;
+});

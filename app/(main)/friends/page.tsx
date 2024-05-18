@@ -1,5 +1,5 @@
-import { User } from "~/components/User";
-import { serverServices } from "~/lib/services/server";
+import { User } from "@/components/User";
+import { serverServices } from "@/lib/services/server";
 import { AddButton } from "./AddButton";
 import { FriendMenu } from "./FriendMenu";
 

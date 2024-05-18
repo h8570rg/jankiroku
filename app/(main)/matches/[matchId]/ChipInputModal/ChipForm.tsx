@@ -3,10 +3,10 @@
 import { useEffect } from "react";
 import { useFormState } from "react-dom";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { Button } from "~/components/Button";
-import { Input } from "~/components/Input";
-import { ModalBody, ModalFooter } from "~/components/Modal";
-import { Match } from "~/lib/type";
+import { Button } from "@/components/Button";
+import { Input } from "@/components/Input";
+import { ModalBody, ModalFooter } from "@/components/Modal";
+import { Match } from "@/lib/type";
 import { useChipInputModal } from "../useChipInputModal";
 import { addChip } from "./actions";
 

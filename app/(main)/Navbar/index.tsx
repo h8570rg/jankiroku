@@ -4,9 +4,9 @@ import {
   NavbarContent,
 } from "@nextui-org/react";
 import { Suspense } from "react";
-import { Link } from "~/components/Link";
-import Logo from "~/components/Logo";
-import { Skeleton } from "~/components/Skeleton";
+import { Link } from "@/components/Link";
+import Logo from "@/components/Logo";
+import { Skeleton } from "@/components/Skeleton";
 import { NavbarAvatar } from "./Avatar";
 
 export default function Navbar() {

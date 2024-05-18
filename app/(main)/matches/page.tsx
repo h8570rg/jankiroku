@@ -1,4 +1,4 @@
-import { serverServices } from "~/lib/services/server";
+import { serverServices } from "@/lib/services/server";
 import { CreateMatchButton } from "./CreateMatchButton";
 import { MatchCard } from "./MatchCard";
 

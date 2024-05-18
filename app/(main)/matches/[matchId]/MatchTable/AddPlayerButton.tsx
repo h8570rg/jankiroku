@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "~/components/Button";
-import { Icon } from "~/components/Icon";
+import { Button } from "@/components/Button";
+import { Icon } from "@/components/Icon";
 import { useMatchPlayerInputModal } from "../useMatchPlayerInputModal";
 
 export function AddPlayerButton() {

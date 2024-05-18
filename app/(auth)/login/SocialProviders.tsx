@@ -1,8 +1,8 @@
 "use client";
 
 import classNames from "classnames";
-import { Button } from "~/components/Button";
-import { GoogleIcon } from "~/components/SocialProviderIcon";
+import { Button } from "@/components/Button";
+import { GoogleIcon } from "@/components/SocialProviderIcon";
 import { signInWithGoogle } from "./actions";
 
 export function SocialProviders({ className }: { className?: string }) {

@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "~/components/Button";
-import { Icon } from "~/components/Icon";
+import { Button } from "@/components/Button";
+import { Icon } from "@/components/Icon";
 import { useChipInputModal } from "../useChipInputModal";
 
 export function AddChipButton({ isDisabled }: { isDisabled: boolean }) {

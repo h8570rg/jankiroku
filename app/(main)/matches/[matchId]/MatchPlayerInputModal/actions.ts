@@ -1,8 +1,8 @@
 "use server";
 
 import { z } from "zod";
-import { serverServices } from "~/lib/services/server";
-import { schema } from "~/lib/utils/schema";
+import { serverServices } from "@/lib/services/server";
+import { schema } from "@/lib/utils/schema";
 
 // TODO: actionごとにファイル切ったほうがいいかも
 type AddAnonymousPlayerState = {

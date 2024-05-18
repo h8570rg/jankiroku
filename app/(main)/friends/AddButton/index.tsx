@@ -3,19 +3,19 @@
 import { useState } from "react";
 import useSWR from "swr";
 import { useDebouncedCallback } from "use-debounce";
-import { Button } from "~/components/Button";
-import { Icon } from "~/components/Icon";
-import { Input } from "~/components/Input";
+import { Button } from "@/components/Button";
+import { Icon } from "@/components/Icon";
+import { Input } from "@/components/Input";
 import {
   Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
   useDisclosure,
-} from "~/components/Modal";
-import { ScrollShadow } from "~/components/ScrollShadow";
-import { User } from "~/components/User";
-import { browserServices } from "~/lib/services/browser";
+} from "@/components/Modal";
+import { ScrollShadow } from "@/components/ScrollShadow";
+import { User } from "@/components/User";
+import { browserServices } from "@/lib/services/browser";
 import { addFriends } from "./actions";
 
 export function AddButton() {

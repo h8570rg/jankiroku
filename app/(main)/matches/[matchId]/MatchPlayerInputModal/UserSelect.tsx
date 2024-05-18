@@ -3,11 +3,11 @@
 import { useCallback, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { useDebouncedCallback } from "use-debounce";
-import { Icon } from "~/components/Icon";
-import { Input } from "~/components/Input";
-import { ScrollShadow } from "~/components/ScrollShadow";
-import { User } from "~/components/User";
-import { Profile } from "~/lib/type";
+import { Icon } from "@/components/Icon";
+import { Input } from "@/components/Input";
+import { ScrollShadow } from "@/components/ScrollShadow";
+import { User } from "@/components/User";
+import { Profile } from "@/lib/type";
 import { useMatchPlayerInputModal } from "../useMatchPlayerInputModal";
 import { addUserPlayer, searchProfiles } from "./actions";
 

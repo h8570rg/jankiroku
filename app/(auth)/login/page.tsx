@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Divider } from "~/components/Divider";
+import { Divider } from "@/components/Divider";
 import { Form } from "./Form";
 import { SocialProviders } from "./SocialProviders";
 

@@ -1,5 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "~/lib/database.types";
+import { Database } from "@/lib/database.types";
 import { friendService } from "./friend";
 import { matchService } from "./match";
 import { profileService } from "./profile";

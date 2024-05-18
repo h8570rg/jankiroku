@@ -1,8 +1,8 @@
 "use client";
 
 import { useFormState } from "react-dom";
-import { Button } from "~/components/Button";
-import { Input } from "~/components/Input";
+import { Button } from "@/components/Button";
+import { Input } from "@/components/Input";
 import { signInEmail } from "./actions";
 
 /**

@@ -8,12 +8,12 @@ import classNames from "classnames";
 import { ComponentProps, useCallback, useEffect } from "react";
 import { useFormState } from "react-dom";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { Button } from "~/components/Button";
-import { Icon } from "~/components/Icon";
-import { Input } from "~/components/Input";
-import { ModalBody, ModalFooter } from "~/components/Modal";
-import { Select, SelectItem } from "~/components/Select";
-import { Match } from "~/lib/type";
+import { Button } from "@/components/Button";
+import { Icon } from "@/components/Icon";
+import { Input } from "@/components/Input";
+import { ModalBody, ModalFooter } from "@/components/Modal";
+import { Select, SelectItem } from "@/components/Select";
+import { Match } from "@/lib/type";
 import { useGameInputModal } from "../useGameInputModal";
 import { addGame } from "./actions";
 

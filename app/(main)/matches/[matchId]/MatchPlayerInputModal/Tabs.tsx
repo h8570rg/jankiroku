@@ -1,6 +1,6 @@
 "use client";
 
-import { Tab, Tabs } from "~/components/Tabs";
+import { Tab, Tabs } from "@/components/Tabs";
 
 export function PlayerTypeTabs({
   userTab,

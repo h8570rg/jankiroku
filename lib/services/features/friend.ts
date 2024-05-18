@@ -1,4 +1,4 @@
-import { Profile } from "~/lib/type";
+import { Profile } from "@/lib/type";
 import { Supabase } from ".";
 
 export function friendService(supabase: Supabase) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Card } from "~/components/Card";
+import { Card } from "@/components/Card";
 
 export function NavigationCard({
   matchId,

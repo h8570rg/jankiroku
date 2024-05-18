@@ -1,5 +1,5 @@
 import { User as NextUiUser, UserProps } from "@nextui-org/react";
-import { Skeleton } from "~/components/Skeleton";
+import { Skeleton } from "@/components/Skeleton";
 
 export function User({
   name,

@@ -1,4 +1,4 @@
-import { CalcMethod, GamePlayer, Match } from "~/lib/type";
+import { CalcMethod, GamePlayer, Match, MatchPlayer } from "@/lib/type";
 import { Supabase } from ".";
 
 export function matchService(supabase: Supabase) {
@@ -205,41 +205,31 @@ function formatMatch(match: {
   const incline = rule.incline.split("_").map((incline) => Number(incline));
   const [incline1, incline2, incline3, incline4] = incline;
 
-  const result = match.games.reduce(
-    (acc, game) => {
-      game.game_players.forEach((gamePlayer) => {
-        const id = gamePlayer.player_id;
-        acc[id].rankCounts[gamePlayer.rank] += 1;
-        acc[id].ranks.push(gamePlayer.rank);
-        acc[id].totalScore += gamePlayer.score;
-      });
-      return acc;
-    },
-    {} as {
-      [profileId: string]: {
-        rankCounts: number[];
-        ranks: number[];
-        totalScore: number;
-      };
-    },
+  const players: MatchPlayer[] = match.match_players.map(
+    ({ profiles, chip_count }) => ({
+      id: profiles.id,
+      name: profiles.name,
+      janrecoId: profiles.janreco_id,
+      rankCounts: new Array(match.match_players.length).fill(0),
+      averageRank: 0,
+      totalScore: 0,
+      chipCount: chip_count,
+    }),
   );
+
+  match.games.forEach(({ game_players }) => {
+    game_players.forEach(({ player_id, score, rank }) => {
+      const player = players.find((player) => player.id === player_id);
+      if (!player) return;
+      player.rankCounts[rank - 1]++;
+      player.totalScore += score;
+    });
+  });
 
   return {
     id: match.id,
     createdAt: match.created_at,
-    players: match.match_players.map(({ profiles, chip_count }) => ({
-      id: profiles.id,
-      name: profiles.name,
-      janrecoId: profiles.janreco_id,
-      result: {
-        rankCounts: result[profiles.id].rankCounts,
-        averageRank:
-          result[profiles.id].ranks.reduce((acc, rank) => acc + rank, 0) /
-          result[profiles.id].ranks.length,
-        totalScore: result[profiles.id].totalScore,
-        chipCount: chip_count,
-      },
-    })),
+    players: players,
     rule: {
       playersCount: rule.players_count,
       defaultPoints: rule.default_points,
