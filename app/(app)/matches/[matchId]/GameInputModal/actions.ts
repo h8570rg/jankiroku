@@ -1,25 +1,25 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
 import { z } from "zod";
-import { Rule } from "~/lib/services/features/match";
 import { serverServices } from "~/lib/services/server";
+import { Rule } from "~/lib/type";
 import { schema } from "~/lib/utils/schema";
+import { calcPlayerScores } from "~/lib/utils/score";
 
 type AddGameState = {
   success?: boolean;
   errors?: {
     base?: string[];
-    playerPoints?: string[];
+    players?: string[];
     crackBoxPlayerId?: string[];
   };
 };
 
 const addGameSchema = z
   .object({
-    playerPoints: z.array(
+    players: z.array(
       z.object({
-        profileId: schema.profileId,
+        id: schema.profileId,
         points: schema.points,
       }),
     ),
@@ -30,30 +30,30 @@ const addGameSchema = z
     ),
   })
   .refine(
-    ({ playerPoints, playersCount }) => {
+    ({ players, playersCount }) => {
       return (
-        playerPoints.filter(({ points }) => points !== undefined).length ===
+        players.filter(({ points }) => points !== undefined).length ===
         playersCount
       );
     },
     ({ playersCount }) => ({
-      path: ["playerPoints"],
+      path: ["players"],
       message: `${playersCount}人分の点数を入力してください`,
     }),
   )
   .refine(
-    ({ playerPoints, playersCount, defaultPoints }) => {
-      const total = playerPoints.reduce((acc, { points }) => {
+    ({ players, playersCount, defaultPoints }) => {
+      const total = players.reduce((acc, { points }) => {
         return acc + (points ?? 0);
       }, 0);
       return total === playersCount * defaultPoints;
     },
-    ({ playerPoints, playersCount, defaultPoints }) => {
-      const total = playerPoints.reduce((acc, { points }) => {
+    ({ players, playersCount, defaultPoints }) => {
+      const total = players.reduce((acc, { points }) => {
         return acc + (points ?? 0);
       }, 0);
       return {
-        path: ["playerPoints"],
+        path: ["players"],
         message: `点数の合計が${(
           playersCount * defaultPoints
         ).toLocaleString()}点になるように入力してください\n現在: ${total.toLocaleString()}点`,
@@ -61,8 +61,8 @@ const addGameSchema = z
     },
   )
   .refine(
-    ({ playerPoints, crackBoxPlayerId }) => {
-      const underZeroPointsPlayerExists = playerPoints.some(
+    ({ players, crackBoxPlayerId }) => {
+      const underZeroPointsPlayerExists = players.some(
         ({ points }) => typeof points === "number" && points < 0,
       );
       if (!underZeroPointsPlayerExists && crackBoxPlayerId !== undefined) {
@@ -85,15 +85,15 @@ export async function addGame(
   prevState: AddGameState,
   formData: FormData,
 ): Promise<AddGameState> {
-  const playerPoints = Array.from({ length: totalPlayersCount }).map((_, i) => {
+  const players = Array.from({ length: totalPlayersCount }).map((_, i) => {
     return {
-      profileId: formData.get(`playerPoints.${i}.profileId`),
-      points: formData.get(`playerPoints.${i}.points`),
+      id: formData.get(`players.${i}.id`),
+      points: formData.get(`players.${i}.points`),
     };
   });
 
   const validatedFields = addGameSchema.safeParse({
-    playerPoints,
+    players,
     playersCount: rule.playersCount,
     defaultPoints: rule.defaultPoints,
     crackBoxPlayerId: formData.get("crackBoxPlayerId"),
@@ -107,21 +107,18 @@ export async function addGame(
 
   const { createGame } = serverServices();
 
-  await createGame({
-    matchId,
-    playerPoints: validatedFields.data.playerPoints
-      .filter((playerPoints) => playerPoints.points !== undefined)
-      .map((playerPoint) => {
-        return {
-          profileId: playerPoint.profileId,
-          points: playerPoint.points as number,
-        };
-      }),
+  const playerScores = calcPlayerScores({
+    players: validatedFields.data.players.filter(
+      (players) => players.points !== undefined,
+    ) as { id: string; points: number }[],
     rule,
     crackBoxPlayerId: validatedFields.data.crackBoxPlayerId,
   });
 
-  revalidateTag(`match-${matchId}`);
+  await createGame({
+    matchId,
+    gamePlayers: playerScores,
+  });
 
   return {
     success: true,

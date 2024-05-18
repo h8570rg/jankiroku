@@ -71,16 +71,19 @@ export type Database = {
         Row: {
           game_id: string;
           player_id: string;
+          rank: number;
           score: number;
         };
         Insert: {
           game_id: string;
           player_id?: string;
+          rank: number;
           score: number;
         };
         Update: {
           game_id?: string;
           player_id?: string;
+          rank?: number;
           score?: number;
         };
         Relationships: [
@@ -297,17 +300,6 @@ export type Database = {
           "": unknown;
         };
         Returns: string;
-      };
-      search_profiles: {
-        Args: {
-          search_text: string;
-        };
-        Returns: {
-          id: string;
-          name: string;
-          janreco_id: string;
-          is_friend: boolean;
-        }[];
       };
     };
     Enums: {

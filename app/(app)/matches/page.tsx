@@ -6,7 +6,7 @@ export default async function Matches() {
   const { getMatches } = serverServices();
 
   // TODO: infinite scroll
-  const matches = await getMatches();
+  const matches = await getMatches({});
 
   return (
     <div>
@@ -21,7 +21,7 @@ export default async function Matches() {
       <ul className="space-y-4">
         {matches?.map((match) => (
           <li key={match.id}>
-            <MatchCard matchId={match.id} date={match.date} />
+            <MatchCard matchId={match.id} date={match.createdAt} />
           </li>
         ))}
       </ul>

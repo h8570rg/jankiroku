@@ -13,14 +13,14 @@ import { Icon } from "~/components/Icon";
 import { Input } from "~/components/Input";
 import { ModalBody, ModalFooter } from "~/components/Modal";
 import { Select, SelectItem } from "~/components/Select";
-import { Match } from "~/lib/services/features/match";
+import { Match } from "~/lib/type";
 import { useGameInputModal } from "../useGameInputModal";
 import { addGame } from "./actions";
 
 type Schema = {
-  playerPoints: {
-    profileId: string;
-    name: string;
+  players: {
+    id: string;
+    name: string | null;
     points?: string;
   }[];
   crackBoxPlayerId?: string;
@@ -29,17 +29,17 @@ type Schema = {
 export function GameForm({ match }: { match: Match }) {
   const gameInputModal = useGameInputModal();
 
-  const { players, rule } = match;
+  const { rule } = match;
   const [{ errors, success }, formAction] = useFormState(
-    addGame.bind(null, match.id, rule, players.length),
+    addGame.bind(null, match.id, rule, match.players.length),
     {},
   );
 
   const { control, watch, setValue, setFocus } = useForm<Schema>({
     defaultValues: {
-      playerPoints: players.map((player) => ({
+      players: match.players.map((player) => ({
+        id: player.id,
         name: player.name,
-        profileId: player.id,
         points: "",
       })),
     },
@@ -47,7 +47,7 @@ export function GameForm({ match }: { match: Match }) {
 
   const { fields, move } = useFieldArray<Schema>({
     control,
-    name: "playerPoints",
+    name: "players",
   });
 
   const handleDragEnd = useCallback<
@@ -66,13 +66,13 @@ export function GameForm({ match }: { match: Match }) {
     [move],
   );
 
-  const playerPoints = watch("playerPoints");
+  const players = watch("players");
 
   const isAutoFillAvailable =
-    playerPoints.filter(({ points }) => points !== "").length ===
+    players.filter(({ points }) => points !== "").length ===
     rule.playersCount - 1;
 
-  const totalPoints = playerPoints.reduce(
+  const totalPoints = players.reduce(
     (sum, { points }) => sum + Number(points),
     0,
   );
@@ -92,7 +92,7 @@ export function GameForm({ match }: { match: Match }) {
           <DndContext onDragEnd={handleDragEnd}>
             <SortableContext items={fields}>
               {fields.map((field, index) => {
-                const name = `playerPoints.${index}.points` as const;
+                const name = `players.${index}.points` as const;
                 const points = watch(name);
                 return (
                   <SortableItem key={field.id} id={field.id}>
@@ -100,7 +100,7 @@ export function GameForm({ match }: { match: Match }) {
                       <div className="flex items-center gap-1">
                         <Controller
                           control={control}
-                          name={`playerPoints.${index}.profileId`}
+                          name={`players.${index}.id`}
                           render={({ field }) => (
                             <input type="text" hidden {...field} />
                           )}
@@ -110,7 +110,7 @@ export function GameForm({ match }: { match: Match }) {
                         </div>
                         <Controller
                           control={control}
-                          name={`playerPoints.${index}.points`}
+                          name={`players.${index}.points`}
                           render={({ field }) => (
                             <Input
                               classNames={{
@@ -148,9 +148,7 @@ export function GameForm({ match }: { match: Match }) {
                                   <span
                                     className={classNames("mt-0.5 text-tiny", {
                                       "text-default-400":
-                                        watch(
-                                          `playerPoints.${index}.points`,
-                                        ) === "",
+                                        watch(`players.${index}.points`) === "",
                                     })}
                                   >
                                     00
@@ -182,9 +180,9 @@ export function GameForm({ match }: { match: Match }) {
             </SortableContext>
           </DndContext>
         </ul>
-        {errors?.playerPoints && (
+        {errors?.players && (
           <p className="whitespace-pre-wrap text-tiny text-danger">
-            {errors.playerPoints[0]}
+            {errors.players[0]}
           </p>
         )}
         <Controller

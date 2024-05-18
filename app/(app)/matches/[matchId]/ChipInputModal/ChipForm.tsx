@@ -6,14 +6,13 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Button } from "~/components/Button";
 import { Input } from "~/components/Input";
 import { ModalBody, ModalFooter } from "~/components/Modal";
-import { Match } from "~/lib/services/features/match";
+import { Match } from "~/lib/type";
 import { useChipInputModal } from "../useChipInputModal";
 import { addChip } from "./actions";
 
 type Schema = {
   playerChip: {
     profileId: string;
-    name: string;
     chipCount: string;
   }[];
 };
@@ -29,7 +28,6 @@ export function ChipForm({ match }: { match: Match }) {
   const { control, watch, setValue, setFocus } = useForm<Schema>({
     defaultValues: {
       playerChip: players.map((player) => ({
-        name: player.name,
         profileId: player.id,
         chipCount: "",
       })),
@@ -70,7 +68,7 @@ export function ChipForm({ match }: { match: Match }) {
                 render={({ field }) => <input type="text" hidden {...field} />}
               />
               <div className="shrink-0 grow text-small text-foreground">
-                {field.name}
+                {players[index].name}
               </div>
               <Controller
                 control={control}

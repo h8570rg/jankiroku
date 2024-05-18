@@ -17,8 +17,8 @@ import { AddPlayerButton } from "./AddPlayerButton";
 
 type Column = {
   id: string;
-  janrecoId: string;
-  name: string;
+  janrecoId: string | null;
+  name: string | null;
   type: "index" | "player" | "empty";
 };
 
@@ -27,11 +27,8 @@ type Row = {
 };
 
 export async function MatchTable({ matchId }: { matchId: string }) {
-  const { getMatch, getMatchChips } = serverServices();
-  const [match, chips] = await Promise.all([
-    getMatch({ matchId }),
-    getMatchChips({ matchId }),
-  ]);
+  const { getMatch } = serverServices();
+  const [match] = await Promise.all([getMatch({ matchId })]);
   const { rule, players } = match;
   const { playersCount } = rule;
 
@@ -60,7 +57,7 @@ export async function MatchTable({ matchId }: { matchId: string }) {
   const gameRows: Row[] =
     match.games?.map((game) =>
       Object.fromEntries(
-        game.game_players.map((score) => [score.player_id, score.score]),
+        game.players.map((player) => [player.id, player.score]),
       ),
     ) ?? [];
 
@@ -72,10 +69,7 @@ export async function MatchTable({ matchId }: { matchId: string }) {
   );
 
   const chipsRow: Row = Object.fromEntries(
-    players.map((player) => [
-      player.id,
-      chips.find((chip) => chip.profileId === player.id)?.chip ?? 0,
-    ]),
+    players.map((player) => [player.id, player.result.chipCount ?? 0]),
   );
 
   return (

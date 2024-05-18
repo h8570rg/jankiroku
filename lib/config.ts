@@ -38,7 +38,6 @@ export const calcMethodLabel: Record<(typeof calcMethods)[number], string> = {
   roundDown: "切り捨て",
   roundUp: "切り上げ",
 };
-export type CalcMethod = (typeof calcMethods)[number];
 
 const inclinesFor4Players = [
   "custom",

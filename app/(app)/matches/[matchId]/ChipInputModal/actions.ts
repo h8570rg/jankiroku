@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { serverServices } from "~/lib/services/server";
 import { schema } from "~/lib/utils/schema";
@@ -63,19 +62,15 @@ export async function addChip(
     };
   }
 
-  const { addMatchChip } = serverServices();
+  const { updateMatchPlayer } = serverServices();
 
-  await addMatchChip({
-    matchId,
-    playerChips: validatedFields.data.playerChip.map((playerChip) => {
-      return {
-        profileId: playerChip.profileId,
-        chipCount: playerChip.chipCount,
-      };
-    }),
+  validatedFields.data.playerChip.map(async (playerChip) => {
+    await updateMatchPlayer({
+      matchId,
+      playerId: playerChip.profileId,
+      chipCount: playerChip.chipCount,
+    });
   });
-
-  revalidateTag(`match-${matchId}-chip`);
 
   return {
     success: true,

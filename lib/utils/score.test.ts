@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Rule } from "../services/features/match";
+import { Rule } from "../type";
 import {
   round,
   roundOff,
@@ -258,21 +258,21 @@ describe("calclate score", () => {
     // 普通の
     expect(
       calcPlayerScores({
-        playerPoints: [
+        players: [
           {
-            profileId: "1",
+            id: "1",
             points: 18600,
           },
           {
-            profileId: "2",
+            id: "2",
             points: 4900,
           },
           {
-            profileId: "3",
+            id: "3",
             points: 38500,
           },
           {
-            profileId: "4",
+            id: "4",
             points: 38000,
           },
         ],
@@ -280,40 +280,44 @@ describe("calclate score", () => {
       }),
     ).toEqual([
       {
-        profileId: "3",
+        id: "3",
+        rank: 1,
         score: 38,
       },
       {
-        profileId: "4",
+        id: "4",
+        rank: 2,
         score: 13,
       },
       {
-        profileId: "1",
+        id: "1",
+        rank: 3,
         score: -16,
       },
       {
-        profileId: "2",
+        id: "2",
+        rank: 4,
         score: -35,
       },
     ]);
     // 一人飛び
     expect(
       calcPlayerScores({
-        playerPoints: [
+        players: [
           {
-            profileId: "1",
+            id: "1",
             points: 18600,
           },
           {
-            profileId: "2",
+            id: "2",
             points: -4900,
           },
           {
-            profileId: "3",
+            id: "3",
             points: 38500,
           },
           {
-            profileId: "4",
+            id: "4",
             points: 47800,
           },
         ],
@@ -322,40 +326,44 @@ describe("calclate score", () => {
       }),
     ).toEqual([
       {
-        profileId: "4",
+        id: "4",
+        rank: 1,
         score: 68,
       },
       {
-        profileId: "3",
+        id: "3",
+        rank: 2,
         score: 18,
       },
       {
-        profileId: "1",
+        id: "1",
+        rank: 3,
         score: -21,
       },
       {
-        profileId: "2",
+        id: "2",
+        rank: 4,
         score: -65,
       },
     ]);
     // 一人飛び & 飛び賞なし
     expect(
       calcPlayerScores({
-        playerPoints: [
+        players: [
           {
-            profileId: "1",
+            id: "1",
             points: 18600,
           },
           {
-            profileId: "2",
+            id: "2",
             points: -4900,
           },
           {
-            profileId: "3",
+            id: "3",
             points: 38500,
           },
           {
-            profileId: "4",
+            id: "4",
             points: 47800,
           },
         ],
@@ -363,40 +371,44 @@ describe("calclate score", () => {
       }),
     ).toEqual([
       {
-        profileId: "4",
+        id: "4",
+        rank: 1,
         score: 58,
       },
       {
-        profileId: "3",
+        id: "3",
+        rank: 2,
         score: 18,
       },
       {
-        profileId: "1",
+        id: "1",
+        rank: 3,
         score: -21,
       },
       {
-        profileId: "2",
+        id: "2",
+        rank: 4,
         score: -55,
       },
     ]);
     // 一人飛び & 2着が飛ばし
     expect(
       calcPlayerScores({
-        playerPoints: [
+        players: [
           {
-            profileId: "1",
+            id: "1",
             points: 18600,
           },
           {
-            profileId: "2",
+            id: "2",
             points: -4900,
           },
           {
-            profileId: "3",
+            id: "3",
             points: 38500,
           },
           {
-            profileId: "4",
+            id: "4",
             points: 47800,
           },
         ],
@@ -405,40 +417,44 @@ describe("calclate score", () => {
       }),
     ).toEqual([
       {
-        profileId: "4",
+        id: "4",
+        rank: 1,
         score: 58,
       },
       {
-        profileId: "3",
+        id: "3",
+        rank: 2,
         score: 28,
       },
       {
-        profileId: "1",
+        id: "1",
+        rank: 3,
         score: -21,
       },
       {
-        profileId: "2",
+        id: "2",
+        rank: 4,
         score: -65,
       },
     ]);
     // 二人飛び
     expect(
       calcPlayerScores({
-        playerPoints: [
+        players: [
           {
-            profileId: "1",
+            id: "1",
             points: 18600,
           },
           {
-            profileId: "2",
+            id: "2",
             points: -4900,
           },
           {
-            profileId: "3",
+            id: "3",
             points: 86800,
           },
           {
-            profileId: "4",
+            id: "4",
             points: -500,
           },
         ],
@@ -447,19 +463,23 @@ describe("calclate score", () => {
       }),
     ).toEqual([
       {
-        profileId: "3",
+        id: "3",
+        rank: 1,
         score: 116,
       },
       {
-        profileId: "1",
+        id: "1",
+        rank: 2,
         score: -1,
       },
       {
-        profileId: "4",
+        id: "4",
+        rank: 3,
         score: -50,
       },
       {
-        profileId: "2",
+        id: "2",
+        rank: 4,
         score: -65,
       },
     ]);

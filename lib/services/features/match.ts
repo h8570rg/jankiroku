@@ -1,201 +1,266 @@
-import { unstable_cache } from "next/cache";
-import { CalcMethod } from "~/lib/config";
+import { CalcMethod, GamePlayer, Match } from "~/lib/type";
 import { Supabase } from ".";
-
-export type Rule = {
-  playersCount: number;
-  defaultPoints: number;
-  defaultCalcPoints: number;
-  rate: number;
-  chipRate: number;
-  crackBoxBonus: number;
-  calcMethod: CalcMethod;
-  incline: {
-    incline1: number;
-    incline2: number;
-    incline3: number;
-    incline4: number;
-  };
-};
-
-export type Match = {
-  id: string;
-  date: string;
-  players: {
-    id: string;
-    name: string;
-    janrecoId: string;
-  }[];
-  rule: Rule;
-};
 
 export function matchService(supabase: Supabase) {
   return {
-    getMatch: ({ matchId }: { matchId: string }) =>
-      unstable_cache(
-        async () => {
-          const { data, error } = await supabase
-            .from("matches")
-            .select(
-              "*, profiles!match_players(*), rules(*), games(*, game_players(*))",
-            )
-            .eq("id", matchId)
-            .order("created_at", { ascending: true })
-            .single();
+    async createMatch({
+      calcMethod,
+      chipRate,
+      crackBoxBonus,
+      defaultCalcPoints,
+      defaultPoints,
+      playersCount,
+      rate,
+      incline,
+    }: {
+      calcMethod: string;
+      chipRate: number;
+      crackBoxBonus: number;
+      defaultCalcPoints: number;
+      defaultPoints: number;
+      playersCount: number;
+      rate: number;
+      incline: string;
+    }): Promise<{
+      id: string;
+    }> {
+      const createMatchResponse = await supabase
+        .from("matches")
+        .insert({})
+        .select()
+        .single();
+      if (createMatchResponse.error) throw createMatchResponse.error;
+      const match = createMatchResponse.data;
 
-          if (error) throw error;
+      const [createRuleResponse, createMatchPlayerResponse] = await Promise.all(
+        [
+          supabase.from("rules").insert({
+            calc_method: calcMethod,
+            chip_rate: chipRate,
+            crack_box_bonus: crackBoxBonus,
+            default_calc_points: defaultCalcPoints,
+            default_points: defaultPoints,
+            match_id: match.id,
+            players_count: playersCount,
+            rate,
+            incline,
+          }),
+          supabase.from("match_players").insert({ match_id: match.id }),
+        ],
+      );
+      if (createRuleResponse.error) throw createRuleResponse.error;
+      if (createMatchPlayerResponse.error)
+        throw createMatchPlayerResponse.error;
+      return {
+        id: match.id,
+      };
+    },
 
-          // TODO: ruleは別で取得で良さそう、複数ある場合もあり得るし。incline変換とかも関数化する
-          const rule = data.rules[0];
-          const incline = rule.incline
-            .split("_")
-            .map((incline) => Number(incline));
-          const [incline1, incline2, incline3, incline4] = incline;
+    async getMatch({ matchId }: { matchId: string }): Promise<Match> {
+      const matchResult = await supabase
+        .from("matches")
+        .select(
+          "*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))",
+        )
+        .eq("id", matchId)
+        .single();
+      if (matchResult.error) throw matchResult.error;
+      const match = matchResult.data;
 
-          // 値の入っていない結果を作成
-          const matchResult = Object.fromEntries(
-            data.profiles.map((player) => [
-              player.id,
-              {
-                rankCounts: new Array(rule.players_count).fill(0),
-                averageRank: NaN,
-                totalPoints: 0,
-              },
-            ]),
-          );
+      return formatMatch(match);
+    },
 
-          // rankCounts と totalPoints を更新
-          data.games.reduce((acc, game) => {
-            // 1着から順番に並び替え
-            const sortedScores = game.game_players.sort(
-              (a, b) => b.score - a.score,
-            );
-            // それぞれのプレイヤーの rankCounts と totalPoints を更新
-            sortedScores.forEach((score, index) => {
-              acc[score.player_id].rankCounts[index] += 1;
-              acc[score.player_id].totalPoints += score.score;
-            });
-            return acc;
-          }, matchResult);
+    async getMatches({
+      page = 1,
+      size = 99,
+    }: {
+      page?: number;
+      size?: number;
+    }): Promise<Match[]> {
+      const userResponse = await supabase.auth.getUser();
+      if (userResponse.error) throw userResponse.error;
+      const user = userResponse.data.user;
 
-          // averageRank を更新
-          Object.entries(matchResult).forEach(([profileId, result]) => {
-            const { rankCounts } = result;
-            // 参加したゲーム数
-            const gameCount = rankCounts.reduce((acc, count) => acc + count, 0);
-            // 平均順位
-            const averageRank =
-              rankCounts.reduce((acc, count, rank) => {
-                return acc + (rank + 1) * count;
-              }, 0) / gameCount;
-            matchResult[profileId].averageRank = averageRank;
-          });
+      const matchesResponse = await supabase
+        .from("matches")
+        .select(
+          "*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))",
+        )
+        .eq("match_players.player_id", user.id)
+        .range((page - 1) * size, page * size - 1)
+        .order("created_at", { ascending: false });
 
-          return {
-            id: data.id,
-            date: data.created_at,
-            players: data.profiles.map((profile) => ({
-              id: profile.id,
-              name: profile.name as string,
-              janrecoId: profile.janreco_id as string,
-            })),
-            rule: {
-              playersCount: rule.players_count,
-              defaultPoints: rule.default_points,
-              defaultCalcPoints: rule.default_calc_points,
-              rate: rule.rate,
-              chipRate: rule.chip_rate,
-              crackBoxBonus: rule.crack_box_bonus,
-              calcMethod: rule.calc_method as CalcMethod,
-              incline: {
-                incline1,
-                incline2,
-                incline3,
-                incline4,
-              },
-            },
-            games: data.games,
-            matchResult,
-          };
-        },
-        [`match-${matchId}`],
-        {
-          tags: [`match-${matchId}`],
-        },
-      )(),
+      if (matchesResponse.error) throw matchesResponse.error;
+      const matches = matchesResponse.data;
 
-    addMatchPlayer: async ({
+      return matches.map(formatMatch);
+    },
+
+    async addMatchPlayer({
       matchId,
-      profileId,
+      playerId,
     }: {
       matchId: string;
-      profileId: string;
-    }) => {
-      const { error } = await supabase.from("match_players").insert({
-        match_id: matchId,
-        player_id: profileId,
-      });
-      if (error) throw error; // TODO: throwを共通化する？
+      playerId: string;
+    }): Promise<void> {
+      const addMatchPlayerResponse = await supabase
+        .from("match_players")
+        .insert({
+          match_id: matchId,
+          player_id: playerId,
+        });
+      if (addMatchPlayerResponse.error) throw addMatchPlayerResponse.error;
+      return;
+    },
+
+    async updateMatchPlayer({
+      matchId,
+      playerId,
+      chipCount,
+    }: {
+      matchId: string;
+      playerId: string;
+      chipCount: number;
+    }): Promise<void> {
+      const updateMatchPlayerResponse = await supabase
+        .from("match_players")
+        .update({
+          match_id: matchId,
+          player_id: playerId,
+          chip_count: chipCount,
+        })
+        .eq("match_id", matchId)
+        .eq("profile_id", playerId);
+      if (updateMatchPlayerResponse.error)
+        throw updateMatchPlayerResponse.error;
 
       return;
     },
 
-    // TODO: updateでは。個別updateにしてそれをactionでまとめて呼ぶべき
-    addMatchChip: async ({
+    async createGame({
       matchId,
-      playerChips,
+      gamePlayers,
     }: {
+      gamePlayers: GamePlayer[];
       matchId: string;
-      playerChips: {
-        profileId: string;
-        chipCount: number;
-      }[];
-    }) =>
-      unstable_cache(
-        async () => {
-          await Promise.all(
-            playerChips.map(async (playerChip) => {
-              const { error } = await supabase
-                .from("match_players")
-                .update({
-                  match_id: matchId,
-                  player_id: playerChip.profileId,
-                  chip_count: playerChip.chipCount,
-                })
-                .eq("match_id", matchId)
-                .eq("profile_id", playerChip.profileId);
-              if (error) {
-                throw error;
-              }
-            }),
-          );
+    }): Promise<void> {
+      const createGameResponse = await supabase
+        .from("games")
+        .insert({
+          match_id: matchId,
+        })
+        .select()
+        .single();
+      if (createGameResponse.error) throw createGameResponse.error;
+      const game = createGameResponse.data;
 
-          return;
-        },
-        [`match-${matchId}-chip`],
-        {
-          tags: [`match-${matchId}-chip`],
-        },
-      )(),
+      await Promise.all(
+        gamePlayers.map(async ({ id, score, rank }) => {
+          const addGamePlayersResponse = await supabase
+            .from("game_players")
+            .insert({
+              game_id: game.id,
+              player_id: id,
+              score,
+              rank,
+            });
+          if (addGamePlayersResponse.error) throw addGamePlayersResponse.error;
+        }),
+      );
+      return;
+    },
+  };
+}
 
-    getMatchChips: async ({ matchId }: { matchId: string }) =>
-      unstable_cache(
-        async () => {
-          const { data, error } = await supabase
-            .from("match_players")
-            .select("*")
-            .eq("match_id", matchId);
-          if (error) throw error;
+function formatMatch(match: {
+  id: string;
+  created_at: string;
+  match_players: {
+    profiles: {
+      id: string;
+      name: string | null;
+      janreco_id: string | null;
+    };
+    chip_count: number | null;
+  }[];
+  rules: {
+    players_count: number;
+    default_points: number;
+    default_calc_points: number;
+    rate: number;
+    chip_rate: number;
+    crack_box_bonus: number;
+    calc_method: string;
+    incline: string;
+  }[];
+  games: {
+    game_players: {
+      player_id: string;
+      score: number;
+      rank: number;
+    }[];
+  }[];
+}) {
+  const rule = match.rules[0];
+  const incline = rule.incline.split("_").map((incline) => Number(incline));
+  const [incline1, incline2, incline3, incline4] = incline;
 
-          return data.map((matchPlayer) => ({
-            profileId: matchPlayer.player_id,
-            chip: matchPlayer.chip_count,
-          }));
-        },
-        [`match-${matchId}-chip`],
-        {
-          tags: [`match-${matchId}-chip`],
-        },
-      )(),
+  const result = match.games.reduce(
+    (acc, game) => {
+      game.game_players.forEach((gamePlayer) => {
+        const id = gamePlayer.player_id;
+        acc[id].rankCounts[gamePlayer.rank] += 1;
+        acc[id].ranks.push(gamePlayer.rank);
+        acc[id].totalScore += gamePlayer.score;
+      });
+      return acc;
+    },
+    {} as {
+      [profileId: string]: {
+        rankCounts: number[];
+        ranks: number[];
+        totalScore: number;
+      };
+    },
+  );
+
+  return {
+    id: match.id,
+    createdAt: match.created_at,
+    players: match.match_players.map(({ profiles, chip_count }) => ({
+      id: profiles.id,
+      name: profiles.name,
+      janrecoId: profiles.janreco_id,
+      result: {
+        rankCounts: result[profiles.id].rankCounts,
+        averageRank:
+          result[profiles.id].ranks.reduce((acc, rank) => acc + rank, 0) /
+          result[profiles.id].ranks.length,
+        totalScore: result[profiles.id].totalScore,
+        chipCount: chip_count,
+      },
+    })),
+    rule: {
+      playersCount: rule.players_count,
+      defaultPoints: rule.default_points,
+      defaultCalcPoints: rule.default_calc_points,
+      rate: rule.rate,
+      chipRate: rule.chip_rate,
+      crackBoxBonus: rule.crack_box_bonus,
+      calcMethod: rule.calc_method as CalcMethod,
+      incline: {
+        incline1,
+        incline2,
+        incline3,
+        incline4,
+      },
+    },
+    games: match.games.map((game) => ({
+      players: game.game_players.map((gamePlayer) => ({
+        id: gamePlayer.player_id,
+        score: gamePlayer.score,
+        rank: gamePlayer.rank,
+      })),
+    })),
   };
 }

@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { serverServices } from "~/lib/services/server";
 import { schema } from "~/lib/utils/schema";
@@ -34,16 +33,14 @@ export async function addAnonymousPlayer(
   }
 
   const { createProfile, addMatchPlayer } = serverServices();
-  const profile = await createProfile({
+  const player = await createProfile({
     ...validatedFields.data,
   });
 
   await addMatchPlayer({
     matchId,
-    profileId: profile.id,
+    playerId: player.id,
   });
-
-  revalidateTag(`match-${matchId}`);
 
   return {
     success: true,
@@ -52,18 +49,16 @@ export async function addAnonymousPlayer(
 
 export async function addUserPlayer({
   matchId,
-  profileId,
+  playerId,
 }: {
   matchId: string;
-  profileId: string;
+  playerId: string;
 }) {
   const { addMatchPlayer } = serverServices();
   await addMatchPlayer({
     matchId,
-    profileId,
+    playerId,
   });
-
-  revalidateTag(`match-${matchId}`);
 }
 
 type SearchProfilesState = {

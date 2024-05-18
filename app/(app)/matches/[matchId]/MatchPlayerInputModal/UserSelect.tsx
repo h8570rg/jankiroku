@@ -7,6 +7,7 @@ import { Icon } from "~/components/Icon";
 import { Input } from "~/components/Input";
 import { ScrollShadow } from "~/components/ScrollShadow";
 import { User } from "~/components/User";
+import { Profile } from "~/lib/type";
 import { useMatchPlayerInputModal } from "../useMatchPlayerInputModal";
 import { addUserPlayer, searchProfiles } from "./actions";
 
@@ -16,7 +17,7 @@ export function UserSelect({
   playerIds,
 }: {
   matchId: string;
-  friends: { id: string; name: string; janrecoId: string }[];
+  friends: Profile[];
   playerIds: string[];
 }) {
   const matchPlayerInputModal = useMatchPlayerInputModal();
@@ -36,9 +37,9 @@ export function UserSelect({
   }, 300);
 
   const selectUser = useCallback(
-    (profileId: string) => {
+    (playerId: string) => {
       // TODO: await中の表示
-      addUserPlayer({ matchId, profileId });
+      addUserPlayer({ matchId, playerId });
       // TODO: server側でredirectしてもいいかも
       matchPlayerInputModal.onClose();
     },
@@ -85,7 +86,7 @@ function ProfileList({
   profiles,
   onSelect,
 }: {
-  profiles: { id: string; name: string; janrecoId: string }[];
+  profiles: Profile[];
   onSelect: (profileId: string) => void;
 }) {
   const { pending } = useFormStatus();

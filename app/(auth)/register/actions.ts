@@ -38,23 +38,24 @@ export async function updateProfile(
 
   const { name, janrecoId } = validatedFields.data;
 
-  const { getProfileExists, updateProfile } = serverServices();
+  const { updateUserProfile } = serverServices();
 
-  const { data: profileExists } = await getProfileExists({ janrecoId });
-
-  if (profileExists) {
-    return {
-      errors: {
-        janrecoId: ["このIDは既に使用されています。"],
-      },
-    };
-  }
-
-  await updateProfile({
+  const result = await updateUserProfile({
     name,
     janrecoId,
-    userId,
   });
+
+  if (!result.success) {
+    if (result.error.code === "23505") {
+      return {
+        errors: {
+          janrecoId: ["このIDは既に使用されています。"],
+        },
+      };
+    } else {
+      throw result.error;
+    }
+  }
 
   revalidatePath("/");
   redirect("/");

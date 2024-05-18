@@ -17,14 +17,14 @@ export default async function Match({
   const { getMatch } = serverServices();
   const [match] = await Promise.all([getMatch({ matchId })]);
 
-  const { date } = match;
+  const { createdAt } = match;
 
   const today = dayjs();
-  const targetDate = dayjs(date);
+  const targetDate = dayjs(createdAt);
   const isSameYear = today.isSame(targetDate, "year");
   const displayDate = isSameYear
-    ? dayjs(date).format("M/D")
-    : dayjs(date).format("YYYY/M/D");
+    ? dayjs(createdAt).format("M/D")
+    : dayjs(createdAt).format("YYYY/M/D");
 
   return (
     <div>
