@@ -3,7 +3,7 @@
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 import { createBrowserClient } from "@supabase/ssr";
-import { Database } from "~/lib/database.types";
+import { Database } from "@/lib/database.types";
 
 export function createClient() {
   return createBrowserClient<Database>(

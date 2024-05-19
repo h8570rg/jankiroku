@@ -22,7 +22,7 @@
         ],
         "pathGroups": [
           {
-            "pattern": "~/**",
+            "pattern": "@/**",
             "group": "internal"
           },
           {
@@ -41,6 +41,17 @@
       "error",
       {
         "namedComponents": "function-declaration"
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "dayjs",
+            "message": "Please import from '@/lib/utils/date' instead."
+          }
+        ]
       }
     ]
   }

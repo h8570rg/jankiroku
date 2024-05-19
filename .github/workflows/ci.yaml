@@ -10,6 +10,7 @@ jobs:
     env: 
       GOOGLE_CLIENT_ID: "dummy"
       GOOGLE_SECRET: "dummy"
+      OPENAI_API_KEY: "dummy"
     steps:
       - uses: actions/checkout@v3
 

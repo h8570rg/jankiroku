@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { serverServices } from "~/lib/services/server";
-import { createClient } from "~/lib/utils/supabase/server";
+import { serverServices } from "@/lib/services/server";
+import { createClient } from "@/lib/utils/supabase/server";
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr

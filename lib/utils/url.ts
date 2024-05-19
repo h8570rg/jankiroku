@@ -1,9 +1,10 @@
-import { config } from "~/lib/config";
-
+/**
+ * @see https://supabase.com/docs/guides/auth/concepts/redirect-urls#vercel-preview-urls
+ */
 export const getURL = () => {
   let url =
-    config.public.siteUrl ?? // Set this to your site URL in production env.
-    config.public.vercelUrl ?? // Automatically set by Vercel.
+    process.env.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
+    process.env.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
     "http://localhost:3001/";
   // Make sure to include `https://` when not localhost.
   url = url.includes("http") ? url : `https://${url}`;
