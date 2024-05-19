@@ -2,7 +2,11 @@ import Image from "next/image";
 import MahJong1Image from "@/assets/images/mahjong1.jpeg";
 import Logo from "@/components/Logo";
 
-export default function Auth({ children }: { children: React.ReactNode }) {
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       <div className="fixed inset-0 overflow-hidden">
