@@ -1,822 +1,328 @@
-create sequence "_analytics"."billing_accounts_id_seq";
 
-create sequence "_analytics"."billing_counts_id_seq";
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
 
-create sequence "_analytics"."endpoint_queries_id_seq";
+CREATE EXTENSION IF NOT EXISTS "pg_net" WITH SCHEMA "extensions";
 
-create sequence "_analytics"."oauth_access_grants_id_seq";
+CREATE EXTENSION IF NOT EXISTS "pgsodium" WITH SCHEMA "pgsodium";
 
-create sequence "_analytics"."oauth_access_tokens_id_seq";
+COMMENT ON SCHEMA "public" IS 'standard public schema';
 
-create sequence "_analytics"."oauth_applications_id_seq";
+CREATE EXTENSION IF NOT EXISTS "pg_graphql" WITH SCHEMA "graphql";
 
-create sequence "_analytics"."partner_users_id_seq";
+CREATE EXTENSION IF NOT EXISTS "pg_stat_statements" WITH SCHEMA "extensions";
 
-create sequence "_analytics"."partners_id_seq";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto" WITH SCHEMA "extensions";
 
-create sequence "_analytics"."payment_methods_id_seq";
+CREATE EXTENSION IF NOT EXISTS "pgjwt" WITH SCHEMA "extensions";
 
-create sequence "_analytics"."plans_id_seq";
+CREATE EXTENSION IF NOT EXISTS "supabase_vault" WITH SCHEMA "vault";
 
-create sequence "_analytics"."rules_id_seq";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
-create sequence "_analytics"."saved_search_counters_id_seq";
+CREATE OR REPLACE FUNCTION "public"."handle_new_user"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+begin
+  insert into public.profiles (id)
+  values (new.id);
+  return new;
+end;
+$$;
 
-create sequence "_analytics"."saved_searches_id_seq";
+ALTER FUNCTION "public"."handle_new_user"() OWNER TO "postgres";
 
-create sequence "_analytics"."source_backends_id_seq";
+SET default_tablespace = '';
 
-create sequence "_analytics"."source_schemas_id_seq";
+SET default_table_access_method = "heap";
 
-create sequence "_analytics"."sources_id_seq";
-
-create sequence "_analytics"."system_metrics_id_seq";
-
-create sequence "_analytics"."team_users_id_seq";
-
-create sequence "_analytics"."teams_id_seq";
-
-create sequence "_analytics"."users_id_seq";
-
-create sequence "_analytics"."vercel_auths_id_seq";
-
-create table "_analytics"."billing_accounts" (
-    "id" bigint not null default nextval('_analytics.billing_accounts_id_seq'::regclass),
-    "latest_successful_stripe_session" jsonb,
-    "stripe_customer" character varying(255),
-    "user_id" bigint,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "stripe_subscriptions" jsonb,
-    "stripe_invoices" jsonb,
-    "lifetime_plan?" boolean default false,
-    "lifetime_plan_invoice" character varying(255),
-    "default_payment_method" character varying(255),
-    "custom_invoice_fields" jsonb[] default ARRAY[]::jsonb[],
-    "lifetime_plan" boolean not null default false
+CREATE TABLE IF NOT EXISTS "public"."profiles" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "name" "text",
+    "janreco_id" "text"
 );
 
+ALTER TABLE "public"."profiles" OWNER TO "postgres";
 
-create table "_analytics"."billing_counts" (
-    "id" bigint not null default nextval('_analytics.billing_counts_id_seq'::regclass),
-    "node" character varying(255),
-    "count" integer,
-    "user_id" bigint,
-    "source_id" bigint,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null
+CREATE OR REPLACE FUNCTION "public"."name_janreco_id"("public"."profiles") RETURNS "text"
+    LANGUAGE "sql" IMMUTABLE
+    AS $_$select $1.name || ' ' || $1.janreco_id;$_$;
+
+ALTER FUNCTION "public"."name_janreco_id"("public"."profiles") OWNER TO "postgres";
+
+CREATE TABLE IF NOT EXISTS "public"."friends" (
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "friend_id" "uuid" NOT NULL,
+    "profile_id" "uuid" DEFAULT "auth"."uid"() NOT NULL
 );
 
+ALTER TABLE "public"."friends" OWNER TO "postgres";
 
-create table "_analytics"."endpoint_queries" (
-    "id" bigint not null default nextval('_analytics.endpoint_queries_id_seq'::regclass),
-    "name" character varying(255),
-    "token" uuid,
-    "query" text,
-    "user_id" bigint,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "source_mapping" jsonb not null default '{}'::jsonb,
-    "sandboxable" boolean default false,
-    "cache_duration_seconds" integer default 3600,
-    "proactive_requerying_seconds" integer default 1800,
-    "max_limit" integer default 1000,
-    "enable_auth" boolean default false,
-    "sandbox_query_id" bigint,
-    "language" character varying(255) not null
+CREATE TABLE IF NOT EXISTS "public"."game_players" (
+    "game_id" "uuid" NOT NULL,
+    "score" integer NOT NULL,
+    "player_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "rank" integer NOT NULL
 );
 
+ALTER TABLE "public"."game_players" OWNER TO "postgres";
 
-create table "_analytics"."log_events_00df6363_785c_40ef_ae92_bb1bebedf20b" (
-    "id" character varying(255) not null,
-    "body" jsonb,
-    "event_message" text,
-    "timestamp" timestamp without time zone
+CREATE TABLE IF NOT EXISTS "public"."games" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "match_id" "uuid" NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "created_by" "uuid" DEFAULT "auth"."uid"() NOT NULL
 );
 
+ALTER TABLE "public"."games" OWNER TO "postgres";
 
-create table "_analytics"."log_events_12ca499d_3cfb_429c_b3f1_452bc2ac2cce" (
-    "id" character varying(255) not null,
-    "body" jsonb,
-    "event_message" text,
-    "timestamp" timestamp without time zone
+CREATE TABLE IF NOT EXISTS "public"."match_players" (
+    "match_id" "uuid" NOT NULL,
+    "player_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "chip_count" integer
 );
 
+ALTER TABLE "public"."match_players" OWNER TO "postgres";
 
-create table "_analytics"."log_events_14bcec9a_ccea_46a9_8799_8c90e12341f5" (
-    "id" character varying(255) not null,
-    "body" jsonb,
-    "event_message" text,
-    "timestamp" timestamp without time zone
+CREATE TABLE IF NOT EXISTS "public"."matches" (
+    "id" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "created_by" "uuid" DEFAULT "auth"."uid"() NOT NULL
 );
 
+ALTER TABLE "public"."matches" OWNER TO "postgres";
 
-create table "_analytics"."log_events_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0" (
-    "id" character varying(255) not null,
-    "body" jsonb,
-    "event_message" text,
-    "timestamp" timestamp without time zone
+CREATE TABLE IF NOT EXISTS "public"."rules" (
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "created_by" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_by" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "match_id" "uuid" NOT NULL,
+    "players_count" integer NOT NULL,
+    "rate" integer NOT NULL,
+    "default_points" integer NOT NULL,
+    "default_calc_points" integer NOT NULL,
+    "crack_box_bonus" integer NOT NULL,
+    "chip_rate" integer NOT NULL,
+    "calc_method" "text" NOT NULL,
+    "incline" "text" NOT NULL,
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL
 );
 
+ALTER TABLE "public"."rules" OWNER TO "postgres";
 
-create table "_analytics"."log_events_667376ab_fe77_43c6_ad99_504d69d5b9be" (
-    "id" character varying(255) not null,
-    "body" jsonb,
-    "event_message" text,
-    "timestamp" timestamp without time zone
-);
-
-
-create table "_analytics"."log_events_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa" (
-    "id" character varying(255) not null,
-    "body" jsonb,
-    "event_message" text,
-    "timestamp" timestamp without time zone
-);
-
-
-create table "_analytics"."log_events_74df59f7_6afa_464d_82ad_997d943c3911" (
-    "id" character varying(255) not null,
-    "body" jsonb,
-    "event_message" text,
-    "timestamp" timestamp without time zone
-);
-
-
-create table "_analytics"."log_events_8814e3c7_f704_4555_86cc_ab7592a44611" (
-    "id" character varying(255) not null,
-    "body" jsonb,
-    "event_message" text,
-    "timestamp" timestamp without time zone
-);
-
-
-create table "_analytics"."log_events_cf2ad34f_2043_468a_bbc4_14ec6d403a53" (
-    "id" character varying(255) not null,
-    "body" jsonb,
-    "event_message" text,
-    "timestamp" timestamp without time zone
-);
-
-
-create table "_analytics"."oauth_access_grants" (
-    "id" bigint not null default nextval('_analytics.oauth_access_grants_id_seq'::regclass),
-    "resource_owner_id" integer not null,
-    "application_id" bigint,
-    "token" character varying(255) not null,
-    "expires_in" integer not null,
-    "redirect_uri" text not null,
-    "revoked_at" timestamp(0) without time zone,
-    "scopes" character varying(255),
-    "inserted_at" timestamp(0) without time zone not null
-);
-
-
-create table "_analytics"."oauth_access_tokens" (
-    "id" bigint not null default nextval('_analytics.oauth_access_tokens_id_seq'::regclass),
-    "application_id" bigint,
-    "resource_owner_id" integer,
-    "token" character varying(255) not null,
-    "refresh_token" character varying(255),
-    "expires_in" integer,
-    "revoked_at" timestamp(0) without time zone,
-    "scopes" character varying(255),
-    "previous_refresh_token" character varying(255) not null default ''::character varying,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "description" text
-);
-
-
-create table "_analytics"."oauth_applications" (
-    "id" bigint not null default nextval('_analytics.oauth_applications_id_seq'::regclass),
-    "owner_id" integer not null,
-    "name" character varying(255) not null,
-    "uid" character varying(255) not null,
-    "secret" character varying(255) not null default ''::character varying,
-    "redirect_uri" character varying(255) not null,
-    "scopes" character varying(255) not null default ''::character varying,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null
-);
-
-
-create table "_analytics"."partner_users" (
-    "id" bigint not null default nextval('_analytics.partner_users_id_seq'::regclass),
-    "partner_id" bigint,
-    "user_id" bigint
-);
-
-
-create table "_analytics"."partners" (
-    "id" bigint not null default nextval('_analytics.partners_id_seq'::regclass),
-    "name" bytea,
-    "token" bytea
-);
-
-
-create table "_analytics"."payment_methods" (
-    "id" bigint not null default nextval('_analytics.payment_methods_id_seq'::regclass),
-    "stripe_id" character varying(255),
-    "price_id" character varying(255),
-    "last_four" character varying(255),
-    "brand" character varying(255),
-    "exp_year" integer,
-    "exp_month" integer,
-    "customer_id" character varying(255),
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null
-);
-
-
-create table "_analytics"."plans" (
-    "id" bigint not null default nextval('_analytics.plans_id_seq'::regclass),
-    "name" character varying(255),
-    "stripe_id" character varying(255),
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "period" character varying(255),
-    "price" integer,
-    "limit_sources" integer,
-    "limit_rate_limit" integer,
-    "limit_alert_freq" integer,
-    "limit_source_rate_limit" integer,
-    "limit_saved_search_limit" integer,
-    "limit_team_users_limit" integer,
-    "limit_source_fields_limit" integer,
-    "limit_source_ttl" bigint default 259200000,
-    "type" character varying(255) default 'standard'::character varying
-);
-
-
-create table "_analytics"."rules" (
-    "id" bigint not null default nextval('_analytics.rules_id_seq'::regclass),
-    "regex" character varying(255),
-    "sink" uuid not null,
-    "source_id" bigint not null,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "regex_struct" bytea,
-    "lql_string" text not null default ''::text,
-    "lql_filters" bytea not null default '\x836a'::bytea
-);
-
-
-create table "_analytics"."saved_search_counters" (
-    "id" bigint not null default nextval('_analytics.saved_search_counters_id_seq'::regclass),
-    "timestamp" timestamp without time zone not null,
-    "saved_search_id" bigint not null,
-    "granularity" text not null default 'day'::text,
-    "non_tailing_count" integer,
-    "tailing_count" integer
-);
-
-
-create table "_analytics"."saved_searches" (
-    "id" bigint not null default nextval('_analytics.saved_searches_id_seq'::regclass),
-    "querystring" text,
-    "source_id" bigint,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "saved_by_user" boolean,
-    "lql_filters" jsonb,
-    "lql_charts" jsonb,
-    "tailing?" boolean not null default true,
-    "tailing" boolean not null default true
-);
-
-
-create table "_analytics"."schema_migrations" (
-    "version" bigint not null,
-    "inserted_at" timestamp(0) without time zone
-);
-
-
-create table "_analytics"."schema_migrations_00df6363_785c_40ef_ae92_bb1bebedf20b" (
-    "version" bigint not null,
-    "inserted_at" timestamp(0) without time zone
-);
-
-
-create table "_analytics"."schema_migrations_12ca499d_3cfb_429c_b3f1_452bc2ac2cce" (
-    "version" bigint not null,
-    "inserted_at" timestamp(0) without time zone
-);
-
-
-create table "_analytics"."schema_migrations_14bcec9a_ccea_46a9_8799_8c90e12341f5" (
-    "version" bigint not null,
-    "inserted_at" timestamp(0) without time zone
-);
-
-
-create table "_analytics"."schema_migrations_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0" (
-    "version" bigint not null,
-    "inserted_at" timestamp(0) without time zone
-);
-
-
-create table "_analytics"."schema_migrations_667376ab_fe77_43c6_ad99_504d69d5b9be" (
-    "version" bigint not null,
-    "inserted_at" timestamp(0) without time zone
-);
-
-
-create table "_analytics"."schema_migrations_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa" (
-    "version" bigint not null,
-    "inserted_at" timestamp(0) without time zone
-);
-
-
-create table "_analytics"."schema_migrations_74df59f7_6afa_464d_82ad_997d943c3911" (
-    "version" bigint not null,
-    "inserted_at" timestamp(0) without time zone
-);
-
-
-create table "_analytics"."schema_migrations_8814e3c7_f704_4555_86cc_ab7592a44611" (
-    "version" bigint not null,
-    "inserted_at" timestamp(0) without time zone
-);
-
-
-create table "_analytics"."schema_migrations_cf2ad34f_2043_468a_bbc4_14ec6d403a53" (
-    "version" bigint not null,
-    "inserted_at" timestamp(0) without time zone
-);
-
-
-create table "_analytics"."source_backends" (
-    "id" bigint not null default nextval('_analytics.source_backends_id_seq'::regclass),
-    "source_id" bigint,
-    "type" character varying(255),
-    "config" jsonb,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null
-);
-
-
-create table "_analytics"."source_schemas" (
-    "id" bigint not null default nextval('_analytics.source_schemas_id_seq'::regclass),
-    "bigquery_schema" bytea,
-    "source_id" bigint,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "schema_flat_map" bytea
-);
-
-
-create table "_analytics"."sources" (
-    "id" bigint not null default nextval('_analytics.sources_id_seq'::regclass),
-    "name" character varying(255),
-    "token" uuid not null,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "user_id" integer not null,
-    "public_token" character varying(255),
-    "favorite" boolean not null default false,
-    "bigquery_table_ttl" integer,
-    "api_quota" integer not null default 5,
-    "webhook_notification_url" character varying(255),
-    "slack_hook_url" character varying(255),
-    "notifications" jsonb not null default '{"team_user_ids_for_sms": [], "team_user_ids_for_email": [], "user_text_notifications": false, "user_email_notifications": false, "other_email_notifications": null, "team_user_ids_for_schema_updates": [], "user_schema_update_notifications": true}'::jsonb,
-    "custom_event_message_keys" character varying(255),
-    "log_events_updated_at" timestamp(0) without time zone,
-    "bigquery_schema" bytea,
-    "notifications_every" integer default 14400000,
-    "bq_table_partition_type" text,
-    "lock_schema" boolean default false,
-    "validate_schema" boolean default true,
-    "drop_lql_filters" bytea not null default '\x836a'::bytea,
-    "drop_lql_string" character varying(255),
-    "v2_pipeline" boolean default false,
-    "suggested_keys" character varying(255) default ''::character varying
-);
-
-
-create table "_analytics"."system_metrics" (
-    "id" bigint not null default nextval('_analytics.system_metrics_id_seq'::regclass),
-    "all_logs_logged" bigint,
-    "node" character varying(255),
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null
-);
-
-
-create table "_analytics"."team_users" (
-    "id" bigint not null default nextval('_analytics.team_users_id_seq'::regclass),
-    "email" character varying(255),
-    "token" character varying(255),
-    "provider" character varying(255),
-    "email_preferred" character varying(255),
-    "name" character varying(255),
-    "image" character varying(255),
-    "email_me_product" boolean not null default false,
-    "phone" character varying(255),
-    "valid_google_account" boolean not null default false,
-    "provider_uid" character varying(255),
-    "team_id" bigint,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "preferences" jsonb
-);
-
-
-create table "_analytics"."teams" (
-    "id" bigint not null default nextval('_analytics.teams_id_seq'::regclass),
-    "name" character varying(255),
-    "user_id" bigint,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "token" character varying(255) default gen_random_uuid()
-);
-
-
-create table "_analytics"."users" (
-    "id" bigint not null default nextval('_analytics.users_id_seq'::regclass),
-    "email" character varying(255) not null,
-    "provider" character varying(255) not null,
-    "token" character varying(255) not null,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null,
-    "api_key" character varying(255) not null,
-    "old_api_key" character varying(255),
-    "email_preferred" character varying(255),
-    "name" character varying(255),
-    "image" character varying(255),
-    "email_me_product" boolean not null default true,
-    "admin" boolean not null default false,
-    "phone" character varying(255),
-    "bigquery_project_id" character varying(255),
-    "api_quota" integer not null default 125,
-    "bigquery_dataset_location" character varying(255),
-    "bigquery_dataset_id" character varying(255),
-    "valid_google_account" boolean,
-    "provider_uid" character varying(255),
-    "company" character varying(255),
-    "bigquery_udfs_hash" character varying(255) not null default ''::character varying,
-    "bigquery_processed_bytes_limit" bigint not null default '10000000000'::bigint,
-    "billing_enabled?" boolean not null default false,
-    "preferences" jsonb,
-    "billing_enabled" boolean not null default false,
-    "endpoints_beta" boolean default false
-);
+ALTER TABLE ONLY "public"."friends"
+    ADD CONSTRAINT "friends_pkey" PRIMARY KEY ("profile_id", "friend_id");
 
+ALTER TABLE ONLY "public"."game_players"
+    ADD CONSTRAINT "game_players_pkey" PRIMARY KEY ("game_id", "player_id");
 
-create table "_analytics"."vercel_auths" (
-    "id" bigint not null default nextval('_analytics.vercel_auths_id_seq'::regclass),
-    "access_token" character varying(255),
-    "installation_id" character varying(255),
-    "team_id" character varying(255),
-    "token_type" character varying(255),
-    "vercel_user_id" character varying(255),
-    "user_id" bigint,
-    "inserted_at" timestamp(0) without time zone not null,
-    "updated_at" timestamp(0) without time zone not null
-);
+ALTER TABLE ONLY "public"."games"
+    ADD CONSTRAINT "games_pkey" PRIMARY KEY ("id");
 
+ALTER TABLE ONLY "public"."match_players"
+    ADD CONSTRAINT "match_players_pkey" PRIMARY KEY ("match_id", "player_id");
 
-alter sequence "_analytics"."billing_accounts_id_seq" owned by "_analytics"."billing_accounts"."id";
+ALTER TABLE ONLY "public"."matches"
+    ADD CONSTRAINT "matches_pkey" PRIMARY KEY ("id");
 
-alter sequence "_analytics"."billing_counts_id_seq" owned by "_analytics"."billing_counts"."id";
+ALTER TABLE ONLY "public"."profiles"
+    ADD CONSTRAINT "profiles_janreco_id_key" UNIQUE ("janreco_id");
 
-alter sequence "_analytics"."endpoint_queries_id_seq" owned by "_analytics"."endpoint_queries"."id";
+ALTER TABLE ONLY "public"."profiles"
+    ADD CONSTRAINT "profiles_pkey" PRIMARY KEY ("id");
 
-alter sequence "_analytics"."oauth_access_grants_id_seq" owned by "_analytics"."oauth_access_grants"."id";
+ALTER TABLE ONLY "public"."rules"
+    ADD CONSTRAINT "rules_pkey" PRIMARY KEY ("id");
 
-alter sequence "_analytics"."oauth_access_tokens_id_seq" owned by "_analytics"."oauth_access_tokens"."id";
+ALTER TABLE ONLY "public"."matches"
+    ADD CONSTRAINT "matches_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id");
 
-alter sequence "_analytics"."oauth_applications_id_seq" owned by "_analytics"."oauth_applications"."id";
+ALTER TABLE ONLY "public"."match_players"
+    ADD CONSTRAINT "matches_profiles_match_id_fkey" FOREIGN KEY ("match_id") REFERENCES "public"."matches"("id") ON DELETE CASCADE;
 
-alter sequence "_analytics"."partner_users_id_seq" owned by "_analytics"."partner_users"."id";
+ALTER TABLE ONLY "public"."match_players"
+    ADD CONSTRAINT "matches_profiles_profile_id_fkey" FOREIGN KEY ("player_id") REFERENCES "public"."profiles"("id");
 
-alter sequence "_analytics"."partners_id_seq" owned by "_analytics"."partners"."id";
+ALTER TABLE ONLY "public"."friends"
+    ADD CONSTRAINT "public_friends_friend_id_fkey" FOREIGN KEY ("friend_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
-alter sequence "_analytics"."payment_methods_id_seq" owned by "_analytics"."payment_methods"."id";
+ALTER TABLE ONLY "public"."friends"
+    ADD CONSTRAINT "public_friends_profile_id_fkey" FOREIGN KEY ("profile_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
-alter sequence "_analytics"."plans_id_seq" owned by "_analytics"."plans"."id";
+ALTER TABLE ONLY "public"."games"
+    ADD CONSTRAINT "public_games_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
-alter sequence "_analytics"."rules_id_seq" owned by "_analytics"."rules"."id";
+ALTER TABLE ONLY "public"."games"
+    ADD CONSTRAINT "public_games_match_id_fkey" FOREIGN KEY ("match_id") REFERENCES "public"."matches"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
-alter sequence "_analytics"."saved_search_counters_id_seq" owned by "_analytics"."saved_search_counters"."id";
+ALTER TABLE ONLY "public"."rules"
+    ADD CONSTRAINT "rules_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id");
 
-alter sequence "_analytics"."saved_searches_id_seq" owned by "_analytics"."saved_searches"."id";
+ALTER TABLE ONLY "public"."rules"
+    ADD CONSTRAINT "rules_match_id_fkey" FOREIGN KEY ("match_id") REFERENCES "public"."matches"("id") ON DELETE CASCADE;
 
-alter sequence "_analytics"."source_backends_id_seq" owned by "_analytics"."source_backends"."id";
+ALTER TABLE ONLY "public"."rules"
+    ADD CONSTRAINT "rules_updated_by_fkey" FOREIGN KEY ("updated_by") REFERENCES "public"."profiles"("id");
 
-alter sequence "_analytics"."source_schemas_id_seq" owned by "_analytics"."source_schemas"."id";
+ALTER TABLE ONLY "public"."game_players"
+    ADD CONSTRAINT "scores_game_id_fkey" FOREIGN KEY ("game_id") REFERENCES "public"."games"("id") ON DELETE CASCADE;
 
-alter sequence "_analytics"."sources_id_seq" owned by "_analytics"."sources"."id";
+ALTER TABLE ONLY "public"."game_players"
+    ADD CONSTRAINT "scores_profile_id_fkey" FOREIGN KEY ("player_id") REFERENCES "public"."profiles"("id");
 
-alter sequence "_analytics"."system_metrics_id_seq" owned by "_analytics"."system_metrics"."id";
+CREATE POLICY "Authenticated users can insert their own profile." ON "public"."profiles" FOR INSERT TO "authenticated" WITH CHECK (("id" = "auth"."uid"()));
 
-alter sequence "_analytics"."team_users_id_seq" owned by "_analytics"."team_users"."id";
+CREATE POLICY "Authenticated users can select games" ON "public"."games" FOR SELECT TO "authenticated" USING (true);
 
-alter sequence "_analytics"."teams_id_seq" owned by "_analytics"."teams"."id";
+CREATE POLICY "Authenticated users can select matches" ON "public"."matches" FOR SELECT TO "authenticated" USING (true);
 
-alter sequence "_analytics"."users_id_seq" owned by "_analytics"."users"."id";
+CREATE POLICY "Authenticated users can select scores" ON "public"."game_players" FOR SELECT TO "authenticated" USING (true);
 
-alter sequence "_analytics"."vercel_auths_id_seq" owned by "_analytics"."vercel_auths"."id";
+CREATE POLICY "Authenticeted Users can select." ON "public"."match_players" FOR SELECT TO "authenticated" USING (true);
 
-CREATE UNIQUE INDEX billing_accounts_pkey ON _analytics.billing_accounts USING btree (id);
+CREATE POLICY "Authenticeted users can insert matches" ON "public"."matches" FOR INSERT TO "authenticated" WITH CHECK (true);
 
-CREATE UNIQUE INDEX billing_accounts_stripe_customer_index ON _analytics.billing_accounts USING btree (stripe_customer);
+CREATE POLICY "Authenticeted users can select all rules" ON "public"."rules" FOR SELECT TO "authenticated" USING (true);
 
-CREATE UNIQUE INDEX billing_accounts_user_id_index ON _analytics.billing_accounts USING btree (user_id);
+CREATE POLICY "Enable all access for their own friend." ON "public"."friends" TO "authenticated" USING (("auth"."uid"() = "profile_id"));
 
-CREATE INDEX billing_counts_inserted_at_index ON _analytics.billing_counts USING btree (inserted_at);
+CREATE POLICY "Public profiles are viewable by everyone." ON "public"."profiles" FOR SELECT TO "authenticated" USING (true);
 
-CREATE UNIQUE INDEX billing_counts_pkey ON _analytics.billing_counts USING btree (id);
+CREATE POLICY "Users can delete own thier match's player" ON "public"."match_players" FOR DELETE TO "authenticated" USING (("match_id" IN ( SELECT "match_players_1"."match_id"
+   FROM "public"."match_players" "match_players_1"
+  WHERE ("match_players_1"."player_id" = "auth"."uid"()))));
 
-CREATE INDEX billing_counts_source_id_index ON _analytics.billing_counts USING btree (source_id);
+CREATE POLICY "Users can delete their own match's score" ON "public"."game_players" FOR DELETE TO "authenticated" USING (("auth"."uid"() IN ( SELECT "match_players"."player_id"
+   FROM ("public"."match_players"
+     JOIN "public"."games" ON (("match_players"."match_id" = "games"."match_id")))
+  WHERE ("games"."id" = "game_players"."game_id"))));
 
-CREATE INDEX billing_counts_user_id_index ON _analytics.billing_counts USING btree (user_id);
+CREATE POLICY "Users can delete thier own game." ON "public"."games" FOR DELETE TO "authenticated" USING (("match_id" IN ( SELECT "match_players"."match_id"
+   FROM "public"."match_players"
+  WHERE ("match_players"."player_id" = "auth"."uid"()))));
 
-CREATE UNIQUE INDEX endpoint_queries_pkey ON _analytics.endpoint_queries USING btree (id);
+CREATE POLICY "Users can insert own thier match's player" ON "public"."match_players" FOR INSERT TO "authenticated" WITH CHECK ((("match_id" IN ( SELECT "matches"."id"
+   FROM ("public"."matches"
+     JOIN "public"."match_players" "match_players_1" ON (("matches"."id" = "match_players_1"."match_id")))
+  WHERE ("match_players_1"."player_id" = "auth"."uid"()))) OR ("match_id" IN ( SELECT "matches"."id"
+   FROM "public"."matches"
+  WHERE ("matches"."created_by" = "auth"."uid"())))));
 
-CREATE UNIQUE INDEX endpoint_queries_token_index ON _analytics.endpoint_queries USING btree (token);
+CREATE POLICY "Users can insert their own match's rule" ON "public"."rules" FOR INSERT TO "authenticated" WITH CHECK ((("match_id" IN ( SELECT "match_players"."match_id"
+   FROM "public"."match_players"
+  WHERE ("match_players"."player_id" = "auth"."uid"()))) OR ("match_id" IN ( SELECT "matches"."id"
+   FROM "public"."matches"
+  WHERE ("matches"."created_by" = "auth"."uid"())))));
 
-CREATE INDEX endpoint_queries_user_id_index ON _analytics.endpoint_queries USING btree (user_id);
+CREATE POLICY "Users can insert their own match's score" ON "public"."game_players" FOR INSERT TO "authenticated" WITH CHECK (("auth"."uid"() IN ( SELECT "match_players"."player_id"
+   FROM ("public"."match_players"
+     JOIN "public"."games" ON (("match_players"."match_id" = "games"."match_id")))
+  WHERE ("games"."id" = "game_players"."game_id"))));
 
-CREATE UNIQUE INDEX log_events_00df6363_785c_40ef_ae92_bb1bebedf20b_pkey ON _analytics.log_events_00df6363_785c_40ef_ae92_bb1bebedf20b USING btree (id);
+CREATE POLICY "Users can insert thier own game." ON "public"."games" FOR INSERT TO "authenticated" WITH CHECK (("match_id" IN ( SELECT "match_players"."match_id"
+   FROM "public"."match_players"
+  WHERE ("match_players"."player_id" = "auth"."uid"()))));
 
-CREATE UNIQUE INDEX log_events_12ca499d_3cfb_429c_b3f1_452bc2ac2cce_pkey ON _analytics.log_events_12ca499d_3cfb_429c_b3f1_452bc2ac2cce USING btree (id);
+CREATE POLICY "Users can update own profile." ON "public"."profiles" FOR UPDATE TO "authenticated" USING (("auth"."uid"() = "id"));
 
-CREATE UNIQUE INDEX log_events_14bcec9a_ccea_46a9_8799_8c90e12341f5_pkey ON _analytics.log_events_14bcec9a_ccea_46a9_8799_8c90e12341f5 USING btree (id);
+CREATE POLICY "Users can update own thier match's player" ON "public"."match_players" FOR UPDATE TO "authenticated" USING (("match_id" IN ( SELECT "match_players_1"."match_id"
+   FROM "public"."match_players" "match_players_1"
+  WHERE ("match_players_1"."player_id" = "auth"."uid"()))));
 
-CREATE UNIQUE INDEX log_events_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0_pkey ON _analytics.log_events_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0 USING btree (id);
+CREATE POLICY "Users can update their own match's score" ON "public"."game_players" FOR UPDATE TO "authenticated" USING (("auth"."uid"() IN ( SELECT "match_players"."player_id"
+   FROM ("public"."match_players"
+     JOIN "public"."games" ON (("match_players"."match_id" = "games"."match_id")))
+  WHERE ("games"."id" = "game_players"."game_id"))));
 
-CREATE UNIQUE INDEX log_events_667376ab_fe77_43c6_ad99_504d69d5b9be_pkey ON _analytics.log_events_667376ab_fe77_43c6_ad99_504d69d5b9be USING btree (id);
+CREATE POLICY "Users can update thier own game." ON "public"."games" FOR UPDATE TO "authenticated" USING (("match_id" IN ( SELECT "match_players"."match_id"
+   FROM "public"."match_players"
+  WHERE ("match_players"."player_id" = "auth"."uid"()))));
 
-CREATE UNIQUE INDEX log_events_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa_pkey ON _analytics.log_events_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa USING btree (id);
+ALTER TABLE "public"."friends" ENABLE ROW LEVEL SECURITY;
 
-CREATE UNIQUE INDEX log_events_74df59f7_6afa_464d_82ad_997d943c3911_pkey ON _analytics.log_events_74df59f7_6afa_464d_82ad_997d943c3911 USING btree (id);
+ALTER TABLE "public"."game_players" ENABLE ROW LEVEL SECURITY;
 
-CREATE UNIQUE INDEX log_events_8814e3c7_f704_4555_86cc_ab7592a44611_pkey ON _analytics.log_events_8814e3c7_f704_4555_86cc_ab7592a44611 USING btree (id);
+ALTER TABLE "public"."games" ENABLE ROW LEVEL SECURITY;
 
-CREATE UNIQUE INDEX log_events_cf2ad34f_2043_468a_bbc4_14ec6d403a53_pkey ON _analytics.log_events_cf2ad34f_2043_468a_bbc4_14ec6d403a53 USING btree (id);
+ALTER TABLE "public"."match_players" ENABLE ROW LEVEL SECURITY;
 
-CREATE UNIQUE INDEX oauth_access_grants_pkey ON _analytics.oauth_access_grants USING btree (id);
+ALTER TABLE "public"."matches" ENABLE ROW LEVEL SECURITY;
 
-CREATE UNIQUE INDEX oauth_access_grants_token_index ON _analytics.oauth_access_grants USING btree (token);
+ALTER TABLE "public"."profiles" ENABLE ROW LEVEL SECURITY;
 
-CREATE UNIQUE INDEX oauth_access_tokens_pkey ON _analytics.oauth_access_tokens USING btree (id);
+ALTER TABLE "public"."rules" ENABLE ROW LEVEL SECURITY;
 
-CREATE UNIQUE INDEX oauth_access_tokens_refresh_token_index ON _analytics.oauth_access_tokens USING btree (refresh_token);
+ALTER PUBLICATION "supabase_realtime" OWNER TO "postgres";
 
-CREATE INDEX oauth_access_tokens_resource_owner_id_index ON _analytics.oauth_access_tokens USING btree (resource_owner_id);
+GRANT USAGE ON SCHEMA "public" TO "postgres";
+GRANT USAGE ON SCHEMA "public" TO "anon";
+GRANT USAGE ON SCHEMA "public" TO "authenticated";
+GRANT USAGE ON SCHEMA "public" TO "service_role";
 
-CREATE UNIQUE INDEX oauth_access_tokens_token_index ON _analytics.oauth_access_tokens USING btree (token);
+GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "anon";
+GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "service_role";
 
-CREATE INDEX oauth_applications_owner_id_index ON _analytics.oauth_applications USING btree (owner_id);
+GRANT ALL ON TABLE "public"."profiles" TO "anon";
+GRANT ALL ON TABLE "public"."profiles" TO "authenticated";
+GRANT ALL ON TABLE "public"."profiles" TO "service_role";
 
-CREATE UNIQUE INDEX oauth_applications_pkey ON _analytics.oauth_applications USING btree (id);
+GRANT ALL ON FUNCTION "public"."name_janreco_id"("public"."profiles") TO "anon";
+GRANT ALL ON FUNCTION "public"."name_janreco_id"("public"."profiles") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."name_janreco_id"("public"."profiles") TO "service_role";
 
-CREATE UNIQUE INDEX oauth_applications_uid_index ON _analytics.oauth_applications USING btree (uid);
+GRANT ALL ON TABLE "public"."friends" TO "anon";
+GRANT ALL ON TABLE "public"."friends" TO "authenticated";
+GRANT ALL ON TABLE "public"."friends" TO "service_role";
 
-CREATE UNIQUE INDEX partner_users_partner_id_user_id_index ON _analytics.partner_users USING btree (partner_id, user_id);
+GRANT ALL ON TABLE "public"."game_players" TO "anon";
+GRANT ALL ON TABLE "public"."game_players" TO "authenticated";
+GRANT ALL ON TABLE "public"."game_players" TO "service_role";
 
-CREATE UNIQUE INDEX partner_users_pkey ON _analytics.partner_users USING btree (id);
+GRANT ALL ON TABLE "public"."games" TO "anon";
+GRANT ALL ON TABLE "public"."games" TO "authenticated";
+GRANT ALL ON TABLE "public"."games" TO "service_role";
 
-CREATE UNIQUE INDEX partners_pkey ON _analytics.partners USING btree (id);
+GRANT ALL ON TABLE "public"."match_players" TO "anon";
+GRANT ALL ON TABLE "public"."match_players" TO "authenticated";
+GRANT ALL ON TABLE "public"."match_players" TO "service_role";
 
-CREATE INDEX payment_methods_customer_id_index ON _analytics.payment_methods USING btree (customer_id);
+GRANT ALL ON TABLE "public"."matches" TO "anon";
+GRANT ALL ON TABLE "public"."matches" TO "authenticated";
+GRANT ALL ON TABLE "public"."matches" TO "service_role";
 
-CREATE UNIQUE INDEX payment_methods_pkey ON _analytics.payment_methods USING btree (id);
+GRANT ALL ON TABLE "public"."rules" TO "anon";
+GRANT ALL ON TABLE "public"."rules" TO "authenticated";
+GRANT ALL ON TABLE "public"."rules" TO "service_role";
 
-CREATE UNIQUE INDEX payment_methods_stripe_id_index ON _analytics.payment_methods USING btree (stripe_id);
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "service_role";
 
-CREATE UNIQUE INDEX plans_pkey ON _analytics.plans USING btree (id);
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS  TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS  TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS  TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS  TO "service_role";
 
-CREATE UNIQUE INDEX rules_pkey ON _analytics.rules USING btree (id);
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES  TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES  TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES  TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES  TO "service_role";
 
-CREATE INDEX rules_source_id_index ON _analytics.rules USING btree (source_id);
+RESET ALL;
 
-CREATE UNIQUE INDEX saved_search_counters_pkey ON _analytics.saved_search_counters USING btree (id);
-
-CREATE UNIQUE INDEX saved_search_counters_timestamp_saved_search_id_granularity_ind ON _analytics.saved_search_counters USING btree ("timestamp", saved_search_id, granularity);
-
-CREATE UNIQUE INDEX saved_searches_pkey ON _analytics.saved_searches USING btree (id);
-
-CREATE UNIQUE INDEX saved_searches_querystring_source_id_index ON _analytics.saved_searches USING btree (querystring, source_id);
-
-CREATE UNIQUE INDEX schema_migrations_00df6363_785c_40ef_ae92_bb1bebedf20b_pkey ON _analytics.schema_migrations_00df6363_785c_40ef_ae92_bb1bebedf20b USING btree (version);
-
-CREATE UNIQUE INDEX schema_migrations_12ca499d_3cfb_429c_b3f1_452bc2ac2cce_pkey ON _analytics.schema_migrations_12ca499d_3cfb_429c_b3f1_452bc2ac2cce USING btree (version);
-
-CREATE UNIQUE INDEX schema_migrations_14bcec9a_ccea_46a9_8799_8c90e12341f5_pkey ON _analytics.schema_migrations_14bcec9a_ccea_46a9_8799_8c90e12341f5 USING btree (version);
-
-CREATE UNIQUE INDEX schema_migrations_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0_pkey ON _analytics.schema_migrations_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0 USING btree (version);
-
-CREATE UNIQUE INDEX schema_migrations_667376ab_fe77_43c6_ad99_504d69d5b9be_pkey ON _analytics.schema_migrations_667376ab_fe77_43c6_ad99_504d69d5b9be USING btree (version);
-
-CREATE UNIQUE INDEX schema_migrations_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa_pkey ON _analytics.schema_migrations_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa USING btree (version);
-
-CREATE UNIQUE INDEX schema_migrations_74df59f7_6afa_464d_82ad_997d943c3911_pkey ON _analytics.schema_migrations_74df59f7_6afa_464d_82ad_997d943c3911 USING btree (version);
-
-CREATE UNIQUE INDEX schema_migrations_8814e3c7_f704_4555_86cc_ab7592a44611_pkey ON _analytics.schema_migrations_8814e3c7_f704_4555_86cc_ab7592a44611 USING btree (version);
-
-CREATE UNIQUE INDEX schema_migrations_cf2ad34f_2043_468a_bbc4_14ec6d403a53_pkey ON _analytics.schema_migrations_cf2ad34f_2043_468a_bbc4_14ec6d403a53 USING btree (version);
-
-CREATE UNIQUE INDEX schema_migrations_pkey ON _analytics.schema_migrations USING btree (version);
-
-CREATE UNIQUE INDEX source_backends_pkey ON _analytics.source_backends USING btree (id);
-
-CREATE UNIQUE INDEX source_schemas_pkey ON _analytics.source_schemas USING btree (id);
-
-CREATE UNIQUE INDEX source_schemas_source_id_index ON _analytics.source_schemas USING btree (source_id);
-
-CREATE UNIQUE INDEX sources_name_index ON _analytics.sources USING btree (id, name);
-
-CREATE UNIQUE INDEX sources_pkey ON _analytics.sources USING btree (id);
-
-CREATE UNIQUE INDEX sources_public_token_index ON _analytics.sources USING btree (public_token);
-
-CREATE UNIQUE INDEX sources_token_index ON _analytics.sources USING btree (token);
-
-CREATE INDEX sources_user_id_index ON _analytics.sources USING btree (user_id);
-
-CREATE INDEX system_metrics_node_index ON _analytics.system_metrics USING btree (node);
-
-CREATE UNIQUE INDEX system_metrics_pkey ON _analytics.system_metrics USING btree (id);
-
-CREATE UNIQUE INDEX team_users_pkey ON _analytics.team_users USING btree (id);
-
-CREATE UNIQUE INDEX team_users_provider_uid_team_id_index ON _analytics.team_users USING btree (provider_uid, team_id);
-
-CREATE INDEX team_users_team_id_index ON _analytics.team_users USING btree (team_id);
-
-CREATE UNIQUE INDEX teams_pkey ON _analytics.teams USING btree (id);
-
-CREATE UNIQUE INDEX teams_token_index ON _analytics.teams USING btree (token);
-
-CREATE UNIQUE INDEX teams_user_id_index ON _analytics.teams USING btree (user_id);
-
-CREATE INDEX users_api_key_index ON _analytics.users USING btree (api_key);
-
-CREATE UNIQUE INDEX users_lower_email_index ON _analytics.users USING btree (lower((email)::text));
-
-CREATE UNIQUE INDEX users_pkey ON _analytics.users USING btree (id);
-
-CREATE UNIQUE INDEX vercel_auths_pkey ON _analytics.vercel_auths USING btree (id);
-
-alter table "_analytics"."billing_accounts" add constraint "billing_accounts_pkey" PRIMARY KEY using index "billing_accounts_pkey";
-
-alter table "_analytics"."billing_counts" add constraint "billing_counts_pkey" PRIMARY KEY using index "billing_counts_pkey";
-
-alter table "_analytics"."endpoint_queries" add constraint "endpoint_queries_pkey" PRIMARY KEY using index "endpoint_queries_pkey";
-
-alter table "_analytics"."log_events_00df6363_785c_40ef_ae92_bb1bebedf20b" add constraint "log_events_00df6363_785c_40ef_ae92_bb1bebedf20b_pkey" PRIMARY KEY using index "log_events_00df6363_785c_40ef_ae92_bb1bebedf20b_pkey";
-
-alter table "_analytics"."log_events_12ca499d_3cfb_429c_b3f1_452bc2ac2cce" add constraint "log_events_12ca499d_3cfb_429c_b3f1_452bc2ac2cce_pkey" PRIMARY KEY using index "log_events_12ca499d_3cfb_429c_b3f1_452bc2ac2cce_pkey";
-
-alter table "_analytics"."log_events_14bcec9a_ccea_46a9_8799_8c90e12341f5" add constraint "log_events_14bcec9a_ccea_46a9_8799_8c90e12341f5_pkey" PRIMARY KEY using index "log_events_14bcec9a_ccea_46a9_8799_8c90e12341f5_pkey";
-
-alter table "_analytics"."log_events_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0" add constraint "log_events_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0_pkey" PRIMARY KEY using index "log_events_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0_pkey";
-
-alter table "_analytics"."log_events_667376ab_fe77_43c6_ad99_504d69d5b9be" add constraint "log_events_667376ab_fe77_43c6_ad99_504d69d5b9be_pkey" PRIMARY KEY using index "log_events_667376ab_fe77_43c6_ad99_504d69d5b9be_pkey";
-
-alter table "_analytics"."log_events_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa" add constraint "log_events_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa_pkey" PRIMARY KEY using index "log_events_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa_pkey";
-
-alter table "_analytics"."log_events_74df59f7_6afa_464d_82ad_997d943c3911" add constraint "log_events_74df59f7_6afa_464d_82ad_997d943c3911_pkey" PRIMARY KEY using index "log_events_74df59f7_6afa_464d_82ad_997d943c3911_pkey";
-
-alter table "_analytics"."log_events_8814e3c7_f704_4555_86cc_ab7592a44611" add constraint "log_events_8814e3c7_f704_4555_86cc_ab7592a44611_pkey" PRIMARY KEY using index "log_events_8814e3c7_f704_4555_86cc_ab7592a44611_pkey";
-
-alter table "_analytics"."log_events_cf2ad34f_2043_468a_bbc4_14ec6d403a53" add constraint "log_events_cf2ad34f_2043_468a_bbc4_14ec6d403a53_pkey" PRIMARY KEY using index "log_events_cf2ad34f_2043_468a_bbc4_14ec6d403a53_pkey";
-
-alter table "_analytics"."oauth_access_grants" add constraint "oauth_access_grants_pkey" PRIMARY KEY using index "oauth_access_grants_pkey";
-
-alter table "_analytics"."oauth_access_tokens" add constraint "oauth_access_tokens_pkey" PRIMARY KEY using index "oauth_access_tokens_pkey";
-
-alter table "_analytics"."oauth_applications" add constraint "oauth_applications_pkey" PRIMARY KEY using index "oauth_applications_pkey";
-
-alter table "_analytics"."partner_users" add constraint "partner_users_pkey" PRIMARY KEY using index "partner_users_pkey";
-
-alter table "_analytics"."partners" add constraint "partners_pkey" PRIMARY KEY using index "partners_pkey";
-
-alter table "_analytics"."payment_methods" add constraint "payment_methods_pkey" PRIMARY KEY using index "payment_methods_pkey";
-
-alter table "_analytics"."plans" add constraint "plans_pkey" PRIMARY KEY using index "plans_pkey";
-
-alter table "_analytics"."rules" add constraint "rules_pkey" PRIMARY KEY using index "rules_pkey";
-
-alter table "_analytics"."saved_search_counters" add constraint "saved_search_counters_pkey" PRIMARY KEY using index "saved_search_counters_pkey";
-
-alter table "_analytics"."saved_searches" add constraint "saved_searches_pkey" PRIMARY KEY using index "saved_searches_pkey";
-
-alter table "_analytics"."schema_migrations" add constraint "schema_migrations_pkey" PRIMARY KEY using index "schema_migrations_pkey";
-
-alter table "_analytics"."schema_migrations_00df6363_785c_40ef_ae92_bb1bebedf20b" add constraint "schema_migrations_00df6363_785c_40ef_ae92_bb1bebedf20b_pkey" PRIMARY KEY using index "schema_migrations_00df6363_785c_40ef_ae92_bb1bebedf20b_pkey";
-
-alter table "_analytics"."schema_migrations_12ca499d_3cfb_429c_b3f1_452bc2ac2cce" add constraint "schema_migrations_12ca499d_3cfb_429c_b3f1_452bc2ac2cce_pkey" PRIMARY KEY using index "schema_migrations_12ca499d_3cfb_429c_b3f1_452bc2ac2cce_pkey";
-
-alter table "_analytics"."schema_migrations_14bcec9a_ccea_46a9_8799_8c90e12341f5" add constraint "schema_migrations_14bcec9a_ccea_46a9_8799_8c90e12341f5_pkey" PRIMARY KEY using index "schema_migrations_14bcec9a_ccea_46a9_8799_8c90e12341f5_pkey";
-
-alter table "_analytics"."schema_migrations_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0" add constraint "schema_migrations_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0_pkey" PRIMARY KEY using index "schema_migrations_1fc3ff0b_7bb1_4dee_b828_f163e85f88e0_pkey";
-
-alter table "_analytics"."schema_migrations_667376ab_fe77_43c6_ad99_504d69d5b9be" add constraint "schema_migrations_667376ab_fe77_43c6_ad99_504d69d5b9be_pkey" PRIMARY KEY using index "schema_migrations_667376ab_fe77_43c6_ad99_504d69d5b9be_pkey";
-
-alter table "_analytics"."schema_migrations_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa" add constraint "schema_migrations_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa_pkey" PRIMARY KEY using index "schema_migrations_6b14460e_72a7_4e8c_9d26_ab7b9c1200aa_pkey";
-
-alter table "_analytics"."schema_migrations_74df59f7_6afa_464d_82ad_997d943c3911" add constraint "schema_migrations_74df59f7_6afa_464d_82ad_997d943c3911_pkey" PRIMARY KEY using index "schema_migrations_74df59f7_6afa_464d_82ad_997d943c3911_pkey";
-
-alter table "_analytics"."schema_migrations_8814e3c7_f704_4555_86cc_ab7592a44611" add constraint "schema_migrations_8814e3c7_f704_4555_86cc_ab7592a44611_pkey" PRIMARY KEY using index "schema_migrations_8814e3c7_f704_4555_86cc_ab7592a44611_pkey";
-
-alter table "_analytics"."schema_migrations_cf2ad34f_2043_468a_bbc4_14ec6d403a53" add constraint "schema_migrations_cf2ad34f_2043_468a_bbc4_14ec6d403a53_pkey" PRIMARY KEY using index "schema_migrations_cf2ad34f_2043_468a_bbc4_14ec6d403a53_pkey";
-
-alter table "_analytics"."source_backends" add constraint "source_backends_pkey" PRIMARY KEY using index "source_backends_pkey";
-
-alter table "_analytics"."source_schemas" add constraint "source_schemas_pkey" PRIMARY KEY using index "source_schemas_pkey";
-
-alter table "_analytics"."sources" add constraint "sources_pkey" PRIMARY KEY using index "sources_pkey";
-
-alter table "_analytics"."system_metrics" add constraint "system_metrics_pkey" PRIMARY KEY using index "system_metrics_pkey";
-
-alter table "_analytics"."team_users" add constraint "team_users_pkey" PRIMARY KEY using index "team_users_pkey";
-
-alter table "_analytics"."teams" add constraint "teams_pkey" PRIMARY KEY using index "teams_pkey";
-
-alter table "_analytics"."users" add constraint "users_pkey" PRIMARY KEY using index "users_pkey";
-
-alter table "_analytics"."vercel_auths" add constraint "vercel_auths_pkey" PRIMARY KEY using index "vercel_auths_pkey";
-
-alter table "_analytics"."billing_accounts" add constraint "billing_accounts_user_id_fkey" FOREIGN KEY (user_id) REFERENCES _analytics.users(id) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."billing_accounts" validate constraint "billing_accounts_user_id_fkey";
-
-alter table "_analytics"."billing_counts" add constraint "billing_counts_user_id_fkey" FOREIGN KEY (user_id) REFERENCES _analytics.users(id) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."billing_counts" validate constraint "billing_counts_user_id_fkey";
-
-alter table "_analytics"."endpoint_queries" add constraint "endpoint_queries_sandbox_query_id_fkey" FOREIGN KEY (sandbox_query_id) REFERENCES _analytics.endpoint_queries(id) not valid;
-
-alter table "_analytics"."endpoint_queries" validate constraint "endpoint_queries_sandbox_query_id_fkey";
-
-alter table "_analytics"."endpoint_queries" add constraint "endpoint_queries_user_id_fkey" FOREIGN KEY (user_id) REFERENCES _analytics.users(id) not valid;
-
-alter table "_analytics"."endpoint_queries" validate constraint "endpoint_queries_user_id_fkey";
-
-alter table "_analytics"."oauth_access_grants" add constraint "oauth_access_grants_application_id_fkey" FOREIGN KEY (application_id) REFERENCES _analytics.oauth_applications(id) not valid;
-
-alter table "_analytics"."oauth_access_grants" validate constraint "oauth_access_grants_application_id_fkey";
-
-alter table "_analytics"."oauth_access_tokens" add constraint "oauth_access_tokens_application_id_fkey" FOREIGN KEY (application_id) REFERENCES _analytics.oauth_applications(id) not valid;
-
-alter table "_analytics"."oauth_access_tokens" validate constraint "oauth_access_tokens_application_id_fkey";
-
-alter table "_analytics"."partner_users" add constraint "partner_users_partner_id_fkey" FOREIGN KEY (partner_id) REFERENCES _analytics.partners(id) not valid;
-
-alter table "_analytics"."partner_users" validate constraint "partner_users_partner_id_fkey";
-
-alter table "_analytics"."partner_users" add constraint "partner_users_user_id_fkey" FOREIGN KEY (user_id) REFERENCES _analytics.users(id) not valid;
-
-alter table "_analytics"."partner_users" validate constraint "partner_users_user_id_fkey";
-
-alter table "_analytics"."payment_methods" add constraint "payment_methods_customer_id_fkey" FOREIGN KEY (customer_id) REFERENCES _analytics.billing_accounts(stripe_customer) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."payment_methods" validate constraint "payment_methods_customer_id_fkey";
-
-alter table "_analytics"."rules" add constraint "rules_sink_fkey" FOREIGN KEY (sink) REFERENCES _analytics.sources(token) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."rules" validate constraint "rules_sink_fkey";
-
-alter table "_analytics"."rules" add constraint "rules_source_id_fkey" FOREIGN KEY (source_id) REFERENCES _analytics.sources(id) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."rules" validate constraint "rules_source_id_fkey";
-
-alter table "_analytics"."saved_search_counters" add constraint "saved_search_counters_saved_search_id_fkey" FOREIGN KEY (saved_search_id) REFERENCES _analytics.saved_searches(id) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."saved_search_counters" validate constraint "saved_search_counters_saved_search_id_fkey";
-
-alter table "_analytics"."saved_searches" add constraint "saved_searches_source_id_fkey" FOREIGN KEY (source_id) REFERENCES _analytics.sources(id) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."saved_searches" validate constraint "saved_searches_source_id_fkey";
-
-alter table "_analytics"."source_backends" add constraint "source_backends_source_id_fkey" FOREIGN KEY (source_id) REFERENCES _analytics.sources(id) not valid;
-
-alter table "_analytics"."source_backends" validate constraint "source_backends_source_id_fkey";
-
-alter table "_analytics"."source_schemas" add constraint "source_schemas_source_id_fkey" FOREIGN KEY (source_id) REFERENCES _analytics.sources(id) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."source_schemas" validate constraint "source_schemas_source_id_fkey";
-
-alter table "_analytics"."sources" add constraint "sources_user_id_fkey" FOREIGN KEY (user_id) REFERENCES _analytics.users(id) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."sources" validate constraint "sources_user_id_fkey";
-
-alter table "_analytics"."team_users" add constraint "team_users_team_id_fkey" FOREIGN KEY (team_id) REFERENCES _analytics.teams(id) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."team_users" validate constraint "team_users_team_id_fkey";
-
-alter table "_analytics"."teams" add constraint "teams_user_id_fkey" FOREIGN KEY (user_id) REFERENCES _analytics.users(id) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."teams" validate constraint "teams_user_id_fkey";
-
-alter table "_analytics"."vercel_auths" add constraint "vercel_auths_user_id_fkey" FOREIGN KEY (user_id) REFERENCES _analytics.users(id) ON DELETE CASCADE not valid;
-
-alter table "_analytics"."vercel_auths" validate constraint "vercel_auths_user_id_fkey";
-
-
-alter table "public"."game_players" add column "rank" integer not null;
-
+--
+-- Dumped schema changes for auth and storage
+--
 
