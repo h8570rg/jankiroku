@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export interface Database {
+export type Database = {
   graphql_public: {
     Tables: {
       [_ in never]: never;
@@ -36,27 +36,68 @@ export interface Database {
     Tables: {
       friends: {
         Row: {
-          profile_id_1: string;
-          profile_id_2: string;
+          created_at: string;
+          friend_id: string;
+          profile_id: string;
         };
         Insert: {
-          profile_id_1?: string;
-          profile_id_2: string;
+          created_at?: string;
+          friend_id: string;
+          profile_id?: string;
         };
         Update: {
-          profile_id_1?: string;
-          profile_id_2?: string;
+          created_at?: string;
+          friend_id?: string;
+          profile_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "friends_profile_id_1_fkey";
-            columns: ["profile_id_1"];
+            foreignKeyName: "public_friends_friend_id_fkey";
+            columns: ["friend_id"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "friends_profile_id_2_fkey";
-            columns: ["profile_id_2"];
+            foreignKeyName: "public_friends_profile_id_fkey";
+            columns: ["profile_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      game_players: {
+        Row: {
+          game_id: string;
+          player_id: string;
+          rank: number;
+          score: number;
+        };
+        Insert: {
+          game_id: string;
+          player_id?: string;
+          rank: number;
+          score: number;
+        };
+        Update: {
+          game_id?: string;
+          player_id?: string;
+          rank?: number;
+          score?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "scores_game_id_fkey";
+            columns: ["game_id"];
+            isOneToOne: false;
+            referencedRelation: "games";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "scores_profile_id_fkey";
+            columns: ["player_id"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -65,24 +106,68 @@ export interface Database {
       games: {
         Row: {
           created_at: string;
+          created_by: string;
           id: string;
           match_id: string;
         };
         Insert: {
           created_at?: string;
+          created_by?: string;
           id?: string;
           match_id: string;
         };
         Update: {
           created_at?: string;
+          created_by?: string;
           id?: string;
           match_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "games_match_id_fkey";
+            foreignKeyName: "public_games_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_games_match_id_fkey";
             columns: ["match_id"];
+            isOneToOne: false;
             referencedRelation: "matches";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      match_players: {
+        Row: {
+          chip_count: number | null;
+          match_id: string;
+          player_id: string;
+        };
+        Insert: {
+          chip_count?: number | null;
+          match_id: string;
+          player_id?: string;
+        };
+        Update: {
+          chip_count?: number | null;
+          match_id?: string;
+          player_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "matches_profiles_match_id_fkey";
+            columns: ["match_id"];
+            isOneToOne: false;
+            referencedRelation: "matches";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "matches_profiles_profile_id_fkey";
+            columns: ["player_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];
@@ -92,61 +177,22 @@ export interface Database {
           created_at: string;
           created_by: string;
           id: string;
-          updated_at: string;
-          updated_by: string;
         };
         Insert: {
           created_at?: string;
           created_by?: string;
           id?: string;
-          updated_at?: string;
-          updated_by?: string;
         };
         Update: {
           created_at?: string;
           created_by?: string;
           id?: string;
-          updated_at?: string;
-          updated_by?: string;
         };
         Relationships: [
           {
             foreignKeyName: "matches_created_by_fkey";
             columns: ["created_by"];
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "matches_updated_by_fkey";
-            columns: ["updated_by"];
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      matches_profiles: {
-        Row: {
-          match_id: string;
-          profile_id: string;
-        };
-        Insert: {
-          match_id: string;
-          profile_id?: string;
-        };
-        Update: {
-          match_id?: string;
-          profile_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "matches_profiles_match_id_fkey";
-            columns: ["match_id"];
-            referencedRelation: "matches";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "matches_profiles_profile_id_fkey";
-            columns: ["profile_id"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -157,6 +203,7 @@ export interface Database {
           id: string;
           janreco_id: string | null;
           name: string | null;
+          name_janreco_id: string | null;
         };
         Insert: {
           id?: string;
@@ -223,52 +270,21 @@ export interface Database {
           {
             foreignKeyName: "rules_created_by_fkey";
             columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "rules_match_id_fkey";
             columns: ["match_id"];
+            isOneToOne: false;
             referencedRelation: "matches";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "rules_updated_by_fkey";
             columns: ["updated_by"];
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      scores: {
-        Row: {
-          game_id: string;
-          id: string;
-          profile_id: string;
-          score: number;
-        };
-        Insert: {
-          game_id: string;
-          id?: string;
-          profile_id?: string;
-          score: number;
-        };
-        Update: {
-          game_id?: string;
-          id?: string;
-          profile_id?: string;
-          score?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "scores_game_id_fkey";
-            columns: ["game_id"];
-            referencedRelation: "games";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "scores_profile_id_fkey";
-            columns: ["profile_id"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -279,30 +295,11 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
-      delete_friends: {
+      name_janreco_id: {
         Args: {
-          profile_id: string;
+          "": unknown;
         };
-        Returns: undefined;
-      };
-      get_friends: {
-        Args: Record<PropertyKey, never>;
-        Returns: {
-          id: string;
-          name: string;
-          janreco_id: string;
-        }[];
-      };
-      search_profiles: {
-        Args: {
-          search_text: string;
-        };
-        Returns: {
-          id: string;
-          name: string;
-          janreco_id: string;
-          is_friend: boolean;
-        }[];
+        Returns: string;
       };
     };
     Enums: {
@@ -323,6 +320,7 @@ export interface Database {
           id: string;
           name: string;
           owner: string | null;
+          owner_id: string | null;
           public: boolean | null;
           updated_at: string | null;
         };
@@ -334,6 +332,7 @@ export interface Database {
           id: string;
           name: string;
           owner?: string | null;
+          owner_id?: string | null;
           public?: boolean | null;
           updated_at?: string | null;
         };
@@ -345,17 +344,11 @@ export interface Database {
           id?: string;
           name?: string;
           owner?: string | null;
+          owner_id?: string | null;
           public?: boolean | null;
           updated_at?: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: "buckets_owner_fkey";
-            columns: ["owner"];
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
       migrations: {
         Row: {
@@ -387,6 +380,7 @@ export interface Database {
           metadata: Json | null;
           name: string | null;
           owner: string | null;
+          owner_id: string | null;
           path_tokens: string[] | null;
           updated_at: string | null;
           version: string | null;
@@ -399,6 +393,7 @@ export interface Database {
           metadata?: Json | null;
           name?: string | null;
           owner?: string | null;
+          owner_id?: string | null;
           path_tokens?: string[] | null;
           updated_at?: string | null;
           version?: string | null;
@@ -411,6 +406,7 @@ export interface Database {
           metadata?: Json | null;
           name?: string | null;
           owner?: string | null;
+          owner_id?: string | null;
           path_tokens?: string[] | null;
           updated_at?: string | null;
           version?: string | null;
@@ -419,7 +415,103 @@ export interface Database {
           {
             foreignKeyName: "objects_bucketId_fkey";
             columns: ["bucket_id"];
+            isOneToOne: false;
             referencedRelation: "buckets";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      s3_multipart_uploads: {
+        Row: {
+          bucket_id: string;
+          created_at: string;
+          id: string;
+          in_progress_size: number;
+          key: string;
+          owner_id: string | null;
+          upload_signature: string;
+          version: string;
+        };
+        Insert: {
+          bucket_id: string;
+          created_at?: string;
+          id: string;
+          in_progress_size?: number;
+          key: string;
+          owner_id?: string | null;
+          upload_signature: string;
+          version: string;
+        };
+        Update: {
+          bucket_id?: string;
+          created_at?: string;
+          id?: string;
+          in_progress_size?: number;
+          key?: string;
+          owner_id?: string | null;
+          upload_signature?: string;
+          version?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "s3_multipart_uploads_bucket_id_fkey";
+            columns: ["bucket_id"];
+            isOneToOne: false;
+            referencedRelation: "buckets";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      s3_multipart_uploads_parts: {
+        Row: {
+          bucket_id: string;
+          created_at: string;
+          etag: string;
+          id: string;
+          key: string;
+          owner_id: string | null;
+          part_number: number;
+          size: number;
+          upload_id: string;
+          version: string;
+        };
+        Insert: {
+          bucket_id: string;
+          created_at?: string;
+          etag: string;
+          id?: string;
+          key: string;
+          owner_id?: string | null;
+          part_number: number;
+          size?: number;
+          upload_id: string;
+          version: string;
+        };
+        Update: {
+          bucket_id?: string;
+          created_at?: string;
+          etag?: string;
+          id?: string;
+          key?: string;
+          owner_id?: string | null;
+          part_number?: number;
+          size?: number;
+          upload_id?: string;
+          version?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "s3_multipart_uploads_parts_bucket_id_fkey";
+            columns: ["bucket_id"];
+            isOneToOne: false;
+            referencedRelation: "buckets";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "s3_multipart_uploads_parts_upload_id_fkey";
+            columns: ["upload_id"];
+            isOneToOne: false;
+            referencedRelation: "s3_multipart_uploads";
             referencedColumns: ["id"];
           },
         ];
@@ -454,13 +546,44 @@ export interface Database {
         Args: {
           name: string;
         };
-        Returns: unknown;
+        Returns: string[];
       };
       get_size_by_bucket: {
         Args: Record<PropertyKey, never>;
         Returns: {
           size: number;
           bucket_id: string;
+        }[];
+      };
+      list_multipart_uploads_with_delimiter: {
+        Args: {
+          bucket_id: string;
+          prefix_param: string;
+          delimiter_param: string;
+          max_keys?: number;
+          next_key_token?: string;
+          next_upload_token?: string;
+        };
+        Returns: {
+          key: string;
+          id: string;
+          created_at: string;
+        }[];
+      };
+      list_objects_with_delimiter: {
+        Args: {
+          bucket_id: string;
+          prefix_param: string;
+          delimiter_param: string;
+          max_keys?: number;
+          start_after?: string;
+          next_token?: string;
+        };
+        Returns: {
+          name: string;
+          id: string;
+          metadata: Json;
+          updated_at: string;
         }[];
       };
       search: {
@@ -491,4 +614,86 @@ export interface Database {
       [_ in never]: never;
     };
   };
-}
+};
+
+type PublicSchema = Database[Extract<keyof Database, "public">];
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R;
+      }
+      ? R
+      : never
+    : never;
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof PublicSchema["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Insert: infer I;
+      }
+      ? I
+      : never
+    : never;
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof PublicSchema["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Update: infer U;
+      }
+      ? U
+      : never
+    : never;
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof PublicSchema["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never;

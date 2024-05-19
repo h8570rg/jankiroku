@@ -8,6 +8,20 @@ const nextConfig = {
     });
     return config;
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+  redirects: async () => {
+    return [
+      {
+        source: "/",
+        destination: "/matches",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

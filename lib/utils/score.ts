@@ -1,46 +1,43 @@
-import { Rule } from "../services/match";
-import { CalcMethod } from "./schemas";
+import { CalcMethod, GamePlayer, Rule } from "../type";
 
 export function calcPlayerScores({
-  playerPoints,
+  players,
   rule,
   crackBoxPlayerId,
 }: {
-  playerPoints: {
-    profileId: string;
+  players: {
+    id: string;
     points: number;
   }[];
   rule: Rule;
   crackBoxPlayerId?: string;
-}): {
-  profileId: string;
-  score: number;
-}[] {
-  if (rule.playersCount !== playerPoints.length) {
+}): GamePlayer[] {
+  if (rule.playersCount !== players.length) {
     throw new Error("Invalid players count");
   }
-  const sortedPlayerPoints = playerPoints.sort((a, b) => b.points - a.points);
-  const crackedBoxPlayersCount = sortedPlayerPoints.filter(
+  const sortedPlayers = players.sort((a, b) => b.points - a.points);
+  const crackedBoxPlayersCount = sortedPlayers.filter(
     ({ points }) => points < 0,
   ).length;
   const totalCrackBoxBonus = crackBoxPlayerId
     ? rule.crackBoxBonus * crackedBoxPlayersCount
     : 0;
-  const scores = sortedPlayerPoints.map(({ profileId, points }, index) => {
+  const scores = sortedPlayers.map(({ id, points }, index) => {
     // 飛ばしたプレイヤーかどうか
-    const isCrackBoxPlayer = profileId === crackBoxPlayerId;
+    const isCrackBoxPlayer = id === crackBoxPlayerId;
     // 飛ばされたプレイヤーかどうか
     const isCrackedBoxPlayer = points < 0 && !!crackBoxPlayerId;
     // 飛び賞
     const crackBoxBonusPoints = isCrackedBoxPlayer
       ? -1 * rule.crackBoxBonus
       : isCrackBoxPlayer
-      ? totalCrackBoxBonus
-      : 0;
+        ? totalCrackBoxBonus
+        : 0;
     const score = calcScore({ points, index, rule, crackBoxBonusPoints });
     return {
-      profileId,
+      id,
       score,
+      rank: index + 1,
     };
   });
 

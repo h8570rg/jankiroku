@@ -1,22 +1,29 @@
-/**
- * @see https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-sign-in-with-code-exchange
- */
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { serverServices } from "@/lib/services/server";
+import { createClient } from "@/lib/utils/supabase/server";
 
-export const dynamic = "force-dynamic";
-
-export async function GET(request: NextRequest) {
-  const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get("code");
+/**
+ * @see https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr
+ */
+export async function GET(request: Request) {
+  const { searchParams, origin } = new URL(request.url);
+  const code = searchParams.get("code");
+  // if "next" is in param, use it as the redirect URL
+  const next = searchParams.get("next") ?? "/";
 
   if (code) {
-    const supabase = createRouteHandlerClient({ cookies });
-    await supabase.auth.exchangeCodeForSession(code);
+    const supabase = createClient();
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      const { getUserProfile } = serverServices();
+      const profile = await getUserProfile();
+      if (profile.isUnregistered) {
+        return NextResponse.redirect(`${origin}/register`);
+      }
+      return NextResponse.redirect(`${origin}${next}`);
+    }
   }
 
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(requestUrl.origin);
+  // return the user to an error page with instructions
+  return NextResponse.redirect(`${origin}/auth-code-error`);
 }

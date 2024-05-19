@@ -70,68 +70,15 @@ supabase studio url: http://localhost:54323
 
 - [supabase](https://supabase.com/docs)
 
-# Sequence
 
-## Client Component
+# Rules
 
-```mermaid
-sequenceDiagram
-  box  Client
-  participant CC as Client Component
-  participant H as Hooks
-  end
-  box  Next Server
-  participant AR as Api Routes
-  participant SC as Server Component
-  participant SV as Service
-  participant MD as Model
-  participant RP as Repository
-  end
-  box Supabase
-  participant SB as Supabase
-  end
+## Words
 
-  %% server component
-  SC->>SV:
-  SV->>RP:
-  RP->>SB:
-  SB->>RP:
-  RP->>SV:
-  SV->>MD:
-  MD->>SV:
-  SV->>SC:
-```
-
-## Server Component
-
-```mermaid
-sequenceDiagram
-  box  Client
-  participant CC as Client Component
-  participant H as Hooks
-  end
-  box  Next Server
-  participant AR as Api Routes
-  participant SC as Server Component
-  participant SV as Service
-  participant MD as Model
-  participant RP as Repository
-  end
-  box Supabase
-  participant SB as Supabase
-  end
-
-  %% server component
-  CC->>H:
-  H->>AR:
-  AR->>SV:
-  SV->>RP:
-  RP->>SB:
-  SB->>RP:
-  RP->>SV:
-  SV->>MD:
-  MD->>SV:
-  SV->>AR:
-  AR->>H:
-  H->>CC:
-```
+| code | 意味 |
+| ---- | ---- |
+| user | ログインしているユーザー |
+| match | 成績表 |
+| game | 半荘 |
+| score | ポイント |
+| points | 点数|

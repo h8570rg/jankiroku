@@ -22,12 +22,16 @@
   }
 
   .heading-1 {
-    @apply text-xl font-bold;
+    @apply text-medium text-foreground-light font-bold;
   }
 }
 
 @layer utilities {
   .z-header {
     @apply z-10;
+  }
+
+  .break-auto {
+    word-break: auto-phrase;
   }
 }

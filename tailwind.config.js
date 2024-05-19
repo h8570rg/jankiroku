@@ -10,6 +10,7 @@ const config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontSize: {},
     extend: {
       animation: {
         expansion: "expansion 5s ease-in-out forwards",
@@ -37,6 +38,7 @@ const config = {
       fontFamily: {
         sans: ["var(--font-noto-sans-jp)"],
         righteous: ["var(--font-righteous)"],
+        mplus: ["var(--font-m-plus-1p)"],
       },
       height: {
         screen: ["100vh", "100dvh"],
@@ -46,6 +48,9 @@ const config = {
       },
       maxHeight: {
         screen: ["100vh", "100dvh"],
+      },
+      wordBreak: {
+        test: "break-all",
       },
     },
   },
@@ -57,8 +62,8 @@ const config = {
     nextui({
       layout: {
         radius: {
-          small: "2px",
-          medium: "4px",
+          small: "4px",
+          medium: "8px",
           large: "8px",
         },
       },
@@ -70,6 +75,9 @@ const config = {
             primary: {
               DEFAULT: "#7C3BED",
               foreground: "#e7e1e5",
+            },
+            foreground: {
+              light: "#a1a1aa",
             },
           },
         },

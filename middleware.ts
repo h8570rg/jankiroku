@@ -1,54 +1,87 @@
-/* eslint-disable no-console */
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { CookieOptions, createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import type { Database } from "~/lib/database.types";
 
-// 認証の必要ないページのパス
-const noAuthPaths = ["/login", "/sign-up"];
-const authPaths = ["/matches", "/match/[id]"];
+const noAuthRoutes = [
+  "/auth-code-error",
+  "/login",
+  "/sign-up",
+  "/api/auth/callback",
+];
 
-export async function middleware(req: NextRequest) {
-  const start = Date.now();
-  const res = NextResponse.next();
-  const { pathname } = req.nextUrl;
+/**
+ * @see https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=middleware
+ * @see https://supabase.com/docs/guides/auth/server-side/nextjs
+ */
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
 
-  // 速度計測のため
-  if (pathname === "/") {
-    const end = Date.now();
-    console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
-    return res;
-  }
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value: "",
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value: "",
+            ...options,
+          });
+        },
+      },
+    },
+  );
 
-  /**
-   * @see https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
-   */
-  const supabase = createMiddlewareClient<Database>({ req, res });
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const { data, error } = await supabase.auth.getUser();
 
-  if (noAuthPaths.some((path) => pathname.startsWith(path))) {
-    const end = Date.now();
-    console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
-    return res;
-  }
+  const { pathname } = request.nextUrl;
 
-  if (authPaths.some((path) => pathname.startsWith(path))) {
-    if (!session) {
-      const end = Date.now();
-      console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
-      return NextResponse.redirect(new URL("/login", req.url));
+  if (!noAuthRoutes.includes(pathname)) {
+    if (error || !data.user) {
+      return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
-  const end = Date.now();
-  console.log(`[middleware] ${end - start}ms pathname: ${pathname}`);
-  return res;
+  return response;
 }
 
 /**
  * @see https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+ * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export const config = {
   matcher: [
@@ -57,7 +90,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
