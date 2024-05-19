@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": ">=18.18.2"
+    "node": "20.x"
   },
   "volta": {
-    "node": "18.18.2"
+    "node": "20.13.1"
   },
   "config": {
     "supabase_project_id": "ggkmppnjhrwzdsamzqbp"
