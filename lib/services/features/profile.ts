@@ -12,10 +12,19 @@ export function profileService(supabase: Supabase) {
       const userProfileResponse = await supabase
         .from("profiles")
         .select()
-        .eq("id", user.id)
-        .single();
+        .eq("id", user.id);
       if (userProfileResponse.error) throw userProfileResponse.error;
-      const userProfile = userProfileResponse.data;
+      const userProfile = userProfileResponse.data[0];
+
+      if (!userProfile) {
+        return {
+          id: user.id,
+          name: null,
+          janrecoId: null,
+          isUnregistered: true,
+          isAnonymous: !!user.is_anonymous,
+        };
+      }
 
       return {
         id: userProfile.id,
