@@ -81,12 +81,23 @@ export function matchService(supabase: Supabase) {
       if (userResponse.error) throw userResponse.error;
       const user = userResponse.data.user;
 
+      // matchesResponse取得のとこで、inで取得してもfilterできなかったので
+      const playerMatchesResponse = await supabase
+        .from("match_players")
+        .select("*")
+        .eq("player_id", user.id);
+      if (playerMatchesResponse.error) throw playerMatchesResponse.error;
+      const playerMatches = playerMatchesResponse.data;
+
       const matchesResponse = await supabase
         .from("matches")
         .select(
           "*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))",
         )
-        .eq("match_players.player_id", user.id)
+        .in(
+          "id",
+          playerMatches.map((playerMatch) => playerMatch.match_id),
+        )
         .range((page - 1) * size, page * size - 1)
         .order("created_at", { ascending: false });
 
