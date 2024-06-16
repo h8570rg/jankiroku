@@ -5,6 +5,7 @@ export function User({
   name,
   janrecoId,
   skeleton,
+  avatarProps,
   ...restProps
 }: {
   name?: string | null;
@@ -25,9 +26,13 @@ export function User({
   return (
     <NextUiUser
       name={name}
-      description={`@${janrecoId}`}
+      description={janrecoId && `@${janrecoId}`}
       avatarProps={{
         name: "",
+        ...avatarProps,
+      }}
+      classNames={{
+        base: "align-middle",
       }}
       {...restProps}
     />

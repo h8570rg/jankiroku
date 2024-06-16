@@ -95,12 +95,13 @@ export function profileService(supabase: Supabase) {
         supabase
           .from("profiles")
           .select("*")
-          .textSearch("name_janreco_id", text)
+          .or(`name.ilike.%${text}%,janreco_id.ilike.%${text}%`)
           .neq("janreco_id", null)
           .neq("name", null)
           .neq("id", user.id),
         supabase.from("friends").select("friend_id").eq("profile_id", user.id),
       ]);
+
       if (profilesResponse.error) throw profilesResponse.error;
       if (friendsResponse.error) throw friendsResponse.error;
       const profiles = profilesResponse.data;
