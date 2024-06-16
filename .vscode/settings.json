@@ -1,13 +1,19 @@
 {
   "cSpell.words": [
     "fkey",
+    "inbucket",
     "janreco",
     "nextjs",
     "nextui",
     "Noto",
+    "oidc",
     "OPENAI",
+    "orioledb",
+    "pooler",
     "Postgrest",
+    "signup",
     "svgr",
-    "toastify"
+    "toastify",
+    "workos"
   ]
 }

@@ -2,26 +2,25 @@
 
 import { z } from "zod";
 import { serverServices } from "@/lib/services/server";
+import { Profile } from "@/lib/type";
 import { schema } from "@/lib/utils/schema";
 
-type State = {
-  success?: boolean;
+export type State = {
   errors?: {
-    base?: string[];
     name?: string[];
   };
+  data?: Profile;
 };
 
-const addAnonymousPlayerSchema = z.object({
+const createProfileSchema = z.object({
   name: schema.name,
 });
 
-export async function addAnonymousPlayer(
-  matchId: string,
+export async function createProfile(
   prevState: State,
   formData: FormData,
 ): Promise<State> {
-  const validatedFields = addAnonymousPlayerSchema.safeParse({
+  const validatedFields = createProfileSchema.safeParse({
     name: formData.get("name"),
   });
 
@@ -31,17 +30,14 @@ export async function addAnonymousPlayer(
     };
   }
 
-  const { createProfile, addMatchPlayer } = serverServices();
-  const player = await createProfile({
-    ...validatedFields.data,
-  });
+  const { name } = validatedFields.data;
 
-  await addMatchPlayer({
-    matchId,
-    playerId: player.id,
+  const { createProfile } = serverServices();
+  const profile = await createProfile({
+    name,
   });
 
   return {
-    success: true,
+    data: profile,
   };
 }

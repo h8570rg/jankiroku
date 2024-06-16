@@ -8,7 +8,7 @@ import {
 import { forwardRef } from "react";
 import { useFormStatus } from "react-dom";
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = forwardRef<HTMLButtonElement | null, ButtonProps>(
   function Button({ isLoading, ...rest }, ref) {
     const { pending } = useFormStatus();
     return (

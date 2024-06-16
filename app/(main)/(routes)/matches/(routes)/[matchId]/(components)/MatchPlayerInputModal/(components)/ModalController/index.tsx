@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal, ModalContent } from "@/components/Modal";
+import { Modal } from "@/components/Modal";
 import { useMatchPlayerInputModal } from "../../hooks";
 
 export function ModalController({ children }: { children: React.ReactNode }) {
@@ -8,7 +8,7 @@ export function ModalController({ children }: { children: React.ReactNode }) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} hideCloseButton>
-      <ModalContent>{children}</ModalContent>
+      {children}
     </Modal>
   );
 }

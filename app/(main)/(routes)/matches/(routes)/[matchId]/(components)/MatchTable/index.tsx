@@ -13,7 +13,6 @@ import {
 import { serverServices } from "@/lib/services/server";
 import { AddChipButton } from "./(components)/AddChipButton";
 import { AddGameButton } from "./(components)/AddGameButton";
-import { AddPlayerButton } from "./(components)/AddPlayerButton";
 
 type Column = {
   id: string;
@@ -83,7 +82,6 @@ export async function MatchTable({ matchId }: { matchId: string }) {
             <TableColumn key={column?.id} className="px-1">
               <div className="relative min-w-[60px] ">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  {column.type === "empty" && <AddPlayerButton />}
                   {column.type === "player" && (
                     <span className="truncate">{column.name}</span>
                   )}
