@@ -16,12 +16,7 @@ export async function NavbarAvatar() {
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
-        <Avatar
-          as="button"
-          className="transition-transform"
-          color="secondary"
-          size="sm"
-        />
+        <Avatar as="button" className="transition-transform" size="sm" />
       </DropdownTrigger>
       <NavbarAvatarMenu name={profile.name} janrecoId={profile.janrecoId} />
     </Dropdown>
