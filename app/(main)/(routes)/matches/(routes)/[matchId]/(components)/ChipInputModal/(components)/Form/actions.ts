@@ -1,10 +1,11 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { serverServices } from "@/lib/services/server";
 import { schema } from "@/lib/utils/schema";
 
-type AddChipState = {
+export type AddChipState = {
   success?: boolean;
   errors?: {
     base?: string[];
@@ -71,6 +72,8 @@ export async function addChip(
       chipCount: playerChip.chipCount,
     });
   });
+
+  revalidatePath(`/matches/${matchId}`);
 
   return {
     success: true,

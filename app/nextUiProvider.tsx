@@ -8,7 +8,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
  */
 export function NextUIProvider({ children }: { children: React.ReactNode }) {
   return (
-    <_NextUIProvider>
+    <_NextUIProvider className="h-full">
       <NextThemesProvider attribute="class" defaultTheme="system">
         {children}
       </NextThemesProvider>
