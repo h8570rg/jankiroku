@@ -22,6 +22,7 @@ export type MatchPlayer = Profile & {
   averageRank: number;
   totalScore: number;
   chipCount: number | null;
+  result: number;
 };
 
 export type CalcMethod = (typeof calcMethods)[number];

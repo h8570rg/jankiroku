@@ -2,9 +2,7 @@ import classNames from "classnames";
 
 // nextui tableにfooterがないのでclassだけ踏襲して作成
 export function Table({ children }: { children: React.ReactNode }) {
-  return (
-    <table className="h-auto w-full min-w-full table-auto">{children}</table>
-  );
+  return <table className="size-full min-w-full table-auto">{children}</table>;
 }
 
 export function TableHeader({ children }: { children: React.ReactNode }) {

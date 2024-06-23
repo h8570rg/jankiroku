@@ -252,6 +252,7 @@ function formatMatch(match: {
       averageRank: 0,
       totalScore: 0,
       chipCount: chip_count,
+      result: 0,
     }),
   );
 
@@ -262,6 +263,16 @@ function formatMatch(match: {
       player.rankCounts[rank - 1]++;
       player.totalScore += score;
     });
+  });
+
+  players.forEach((player) => {
+    player.averageRank =
+      player.rankCounts.reduce(
+        (acc, rankCount, rank) => acc + rankCount * (rank + 1),
+        0,
+      ) / match.games.length;
+    player.result =
+      (player.chipCount ?? 0) * rule.chip_rate + player.totalScore * rule.rate;
   });
 
   return {

@@ -81,4 +81,5 @@ supabase studio url: http://localhost:54323
 | match | 成績表 |
 | game | 半荘 |
 | score | ポイント |
-| points | 点数|
+| points | 点数 |
+| result | 収支 |

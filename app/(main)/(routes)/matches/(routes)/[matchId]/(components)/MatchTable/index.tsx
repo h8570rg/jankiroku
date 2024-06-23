@@ -1,31 +1,27 @@
 import classNames from "classnames";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableFooter,
-  TableFooterCell,
-  TableFooterRow,
-  TableHeader,
-  TableRow,
-} from "@/components/Table";
 import { serverServices } from "@/lib/services/server";
-import { AddChipButton } from "./(components)/AddChipButton";
+import { MatchPlayer } from "@/lib/type";
 import { AddGameButton } from "./(components)/AddGameButton";
+import styles from "./styles.module.css";
 
 type Column = {
   id: string;
   janrecoId: string | null;
   name: string | null;
   type: "index" | "player" | "empty";
-};
+} & MatchPlayer;
 
 type Row = {
   [playerId: Column["id"]]: number;
 };
 
-export async function MatchTable({ matchId }: { matchId: string }) {
+export async function MatchTable({
+  matchId,
+  className,
+}: {
+  matchId: string;
+  className?: string;
+}) {
   const { getMatch } = serverServices();
   const [match] = await Promise.all([getMatch({ matchId })]);
   const { rule, players } = match;
@@ -49,6 +45,11 @@ export async function MatchTable({ matchId }: { matchId: string }) {
           janrecoId: "",
           name: "",
           type: "empty",
+          rankCounts: [0] as number[],
+          averageRank: 0,
+          totalScore: 0,
+          chipCount: 0,
+          result: 0,
         }) as const,
     ),
   ];
@@ -60,91 +61,126 @@ export async function MatchTable({ matchId }: { matchId: string }) {
       ),
     ) ?? [];
 
-  const totalPointsRow: Row = Object.fromEntries(
-    players.map((player) => [
-      player.id,
-      gameRows.reduce((acc, gameRow) => acc + gameRow[player.id], 0),
-    ]),
-  );
-
-  const chipsRow: Row = Object.fromEntries(
-    players.map((player) => [player.id, player.chipCount ?? 0]),
-  );
-
   return (
-    <div className="overflow-x-auto">
-      <Table>
-        <TableHeader>
-          <TableColumn className="">
-            <span />
-          </TableColumn>
+    <div className={classNames(className, "flex flex-col")}>
+      <div
+        className={classNames(
+          styles["row"],
+          "flex items-center rounded-lg bg-default-100 text-foreground-500",
+        )}
+      >
+        <div
+          className={classNames(
+            styles["col"],
+            styles["col--header"],
+            styles["col--index"],
+          )}
+        />
+        {columns.map((column) => (
+          <div
+            key={column?.id}
+            className={classNames(styles["col--header"], styles["col"])}
+          >
+            {column.type === "player" && (
+              <span className="truncate">{column.name}</span>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="grow">
+        {gameRows.map((item, index) => (
+          <div
+            className={classNames(styles["row"], "flex items-center py-1")}
+            key={index}
+          >
+            <div
+              className={classNames(
+                styles["col"],
+                styles["col--index"],
+                styles["col--body"],
+              )}
+            >
+              {index + 1}
+            </div>
+            {columns.map((column) => (
+              <div
+                key={column.id}
+                className={classNames(styles["col"], styles["col--body"], {
+                  "text-danger": item[column.id] < 0,
+                })}
+              >
+                {item[column.id]}
+              </div>
+            ))}
+          </div>
+        ))}
+        <div>
+          {/* TODO: disabledやめる */}
+          <AddGameButton isDisabled={isPlayersShort} />
+          {/* <AddChipButton isDisabled={isPlayersShort} /> */}
+        </div>
+      </div>
+      <div className="rounded-lg bg-default-100 text-foreground-500">
+        <div className={classNames(styles["row"])}>
+          <div
+            className={classNames(
+              styles["col"],
+              styles["col--index"],
+              styles["col--footer"],
+            )}
+          >
+            合計
+          </div>
           {columns.map((column) => (
-            <TableColumn key={column?.id} className="px-1">
-              <div className="relative min-w-[60px] ">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {column.type === "player" && (
-                    <span className="truncate">{column.name}</span>
-                  )}
-                </div>
-              </div>
-            </TableColumn>
+            <div
+              className={classNames(styles["col"], styles["col--footer"], {
+                "text-danger": column.totalScore < 0,
+              })}
+              key={column.id}
+            >
+              {column.totalScore}
+            </div>
           ))}
-        </TableHeader>
-        <TableBody>
-          {gameRows.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell className="text-center text-default-500">
-                {index + 1}
-              </TableCell>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  className={classNames("text-center", {
-                    "text-danger": item[column.id] < 0,
-                  })}
-                >
-                  {item[column.id]}
-                </TableCell>
-              ))}
-            </TableRow>
+        </div>
+        <div className={classNames(styles["row"])}>
+          <div
+            className={classNames(
+              styles["col"],
+              styles["col--index"],
+              styles["col--footer"],
+            )}
+          >
+            チップ
+          </div>
+          {columns.map((column) => (
+            <div
+              className={classNames(styles["col"], styles["col--footer"])}
+              key={column.id}
+            >
+              {column.chipCount}
+            </div>
           ))}
-          <tr aria-hidden="true" className="mx-1 block size-px"></tr>
-          <tr>
-            <td colSpan={columns.length + 1}>
-              <div className="flex flex-col gap-1">
-                <AddGameButton isDisabled={isPlayersShort} />
-                <AddChipButton isDisabled={isPlayersShort} />
-              </div>
-            </td>
-          </tr>
-        </TableBody>
-        <TableFooter>
-          <TableFooterRow>
-            <TableFooterCell className="text-center">合計</TableFooterCell>
-            {columns.map((column) => (
-              <TableFooterCell className="text-center" key={column.id}>
-                {totalPointsRow[column.id]}
-              </TableFooterCell>
-            ))}
-          </TableFooterRow>
-          <TableFooterRow>
-            <TableFooterCell className="text-center">チップ</TableFooterCell>
-            {columns.map((column) => (
-              <TableFooterCell className="text-center" key={column.id}>
-                {chipsRow[column.id]}
-              </TableFooterCell>
-            ))}
-          </TableFooterRow>
-          <TableFooterRow>
-            <TableFooterCell className="text-center">収支</TableFooterCell>
-            {columns.map((column) => (
-              <TableFooterCell className="text-center" key={column.id}>
-                {totalPointsRow[column.id]}
-              </TableFooterCell>
-            ))}
-          </TableFooterRow>
-        </TableFooter>
-      </Table>
+        </div>
+        <div className={classNames(styles["row"])}>
+          <div
+            className={classNames(
+              styles["col"],
+              styles["col--index"],
+              styles["col--footer"],
+            )}
+          >
+            収支
+          </div>
+          {columns.map((column) => (
+            <div
+              className={classNames(styles["col"], styles["col--footer"])}
+              key={column.id}
+            >
+              {column.result}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

@@ -28,7 +28,7 @@ export default async function Match({
     : dayjs(createdAt).format("YYYY/M/D");
 
   return (
-    <div>
+    <div className="flex h-full flex-col">
       <div className="mb-1 flex items-center justify-between">
         <div className="flex items-center gap-1">
           <Button isIconOnly variant="light" as={Link} href="/matches">
@@ -43,7 +43,7 @@ export default async function Match({
         </div>
       </div>
       <Suspense fallback={null}>
-        <MatchTable matchId={matchId} />
+        <MatchTable className="grow" matchId={matchId} />
       </Suspense>
       <Suspense fallback={null}>
         <MatchPlayerInputModal matchId={matchId} />
