@@ -4,6 +4,7 @@ import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
 import { serverServices } from "@/lib/services/server";
 import { dayjs } from "@/lib/utils/date";
+import { ChipInputButton } from "./(components)/ChipInputButton";
 import { ChipInputModal } from "./(components)/ChipInputModal";
 import { GameInputModal } from "./(components)/GameInputModal";
 import { MatchPlayerInputButton } from "./(components)/MatchPlayerInputButton";
@@ -37,6 +38,9 @@ export default async function Match({
           <p className="font-bold">{displayDate}</p>
         </div>
         <div className="flex items-center gap-0.5">
+          <ChipInputButton isIconOnly variant="light">
+            <Icon className="size-5 fill-current" name="chip" />
+          </ChipInputButton>
           <MatchPlayerInputButton isIconOnly variant="light">
             <Icon className="size-5 fill-current" name="personAdd" />
           </MatchPlayerInputButton>

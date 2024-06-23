@@ -25,8 +25,10 @@ export const useQueryControlledModal = (key: string) => {
   }, [key, pathname, router, searchParams]);
 
   const onClose = useCallback(() => {
-    router.back();
-  }, [router]);
+    const params = new URLSearchParams(searchParams);
+    params.delete(key);
+    router.push(`${pathname}?${params.toString()}`);
+  }, [key, pathname, router, searchParams]);
 
   return {
     isOpen,

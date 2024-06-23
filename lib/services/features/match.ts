@@ -168,7 +168,7 @@ export function matchService(supabase: Supabase) {
           chip_count: chipCount,
         })
         .eq("match_id", matchId)
-        .eq("profile_id", playerId);
+        .eq("player_id", playerId);
       if (updateMatchPlayerResponse.error)
         throw updateMatchPlayerResponse.error;
 

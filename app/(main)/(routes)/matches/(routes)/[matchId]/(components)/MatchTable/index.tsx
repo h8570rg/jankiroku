@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { serverServices } from "@/lib/services/server";
 import { MatchPlayer } from "@/lib/type";
 import { AddGameButton } from "./(components)/AddGameButton";
+import { ChipInputButton } from "./(components)/ChipInputButton";
 import styles from "./styles.module.css";
 
 type Column = {
@@ -48,7 +49,7 @@ export async function MatchTable({
           rankCounts: [0] as number[],
           averageRank: 0,
           totalScore: 0,
-          chipCount: 0,
+          chipCount: null,
           result: 0,
         }) as const,
     ),
@@ -142,7 +143,7 @@ export async function MatchTable({
             </div>
           ))}
         </div>
-        <div className={classNames(styles["row"])}>
+        <ChipInputButton className={classNames(styles["row"], "w-full")}>
           <div
             className={classNames(
               styles["col"],
@@ -160,7 +161,7 @@ export async function MatchTable({
               {column.chipCount}
             </div>
           ))}
-        </div>
+        </ChipInputButton>
         <div className={classNames(styles["row"])}>
           <div
             className={classNames(
