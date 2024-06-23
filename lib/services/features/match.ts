@@ -107,6 +107,7 @@ export function matchService(supabase: Supabase) {
       return matches.map(formatMatch);
     },
 
+    // TODO: 消す
     async addMatchPlayer({
       matchId,
       playerId,
@@ -124,19 +125,13 @@ export function matchService(supabase: Supabase) {
       return;
     },
 
-    async updateMatchPlayers({
+    async addMatchPlayers({
       matchId,
       playerIds,
     }: {
       matchId: string;
       playerIds: string[];
     }): Promise<void> {
-      const deleteMatchPlayerResponse = await supabase
-        .from("match_players")
-        .delete()
-        .eq("match_id", matchId);
-      if (deleteMatchPlayerResponse.error)
-        throw deleteMatchPlayerResponse.error;
       const addMatchPlayerResponses = await Promise.all(
         playerIds.map((playerId) =>
           supabase.from("match_players").insert({

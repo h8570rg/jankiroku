@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { serverServices } from "@/lib/services/server";
 import { Profile } from "@/lib/type";
 
+// 新しいplayerのみ
 export async function updateMatchPlayers({
   matchId,
   playerIds,
@@ -11,8 +12,8 @@ export async function updateMatchPlayers({
   matchId: string;
   playerIds: string[];
 }) {
-  const { updateMatchPlayers } = serverServices();
-  await updateMatchPlayers({ matchId, playerIds });
+  const { addMatchPlayers } = serverServices();
+  await addMatchPlayers({ matchId, playerIds });
   revalidatePath(`/matches/${matchId}`);
   return;
 }

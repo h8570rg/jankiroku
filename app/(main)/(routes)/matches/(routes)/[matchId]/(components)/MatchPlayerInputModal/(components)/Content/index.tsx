@@ -109,7 +109,11 @@ export function MatchPlayerInputModalContent({
                           key={player.id}
                           color="primary"
                           avatar={<Avatar name="" />}
-                          onClose={() => handlePlayersRemove(player)}
+                          onClose={
+                            !players.some((p) => p.id === player.id)
+                              ? () => handlePlayersRemove(player)
+                              : undefined
+                          }
                         >
                           {player.name}
                         </Chip>
@@ -216,7 +220,9 @@ export function MatchPlayerInputModalContent({
                   setIsPending(true);
                   await updateMatchPlayers({
                     matchId,
-                    playerIds: selectedPlayers.map((p) => p.id),
+                    playerIds: selectedPlayers
+                      .map((p) => p.id)
+                      .filter((p) => !players.some((p2) => p2.id === p)),
                   });
                   setIsPending(false);
                   onClose();
