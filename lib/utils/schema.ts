@@ -5,7 +5,9 @@ import {
   NAME_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   calcMethods,
+  chipRates,
   inclines,
+  rates,
 } from "@/lib/config";
 
 export const schema = {
@@ -37,7 +39,7 @@ export const schema = {
     )
     .regex(/^[a-zA-Z0-9]+$/, "ユーザーIDは半角英数字のみで入力してください"),
   calcMethod: z.enum(calcMethods),
-  chipRate: z.string().transform(Number),
+  chipRate: z.string().transform((v) => chipRates[Number(v)]),
   crackBoxBonus: z
     .string()
     .min(1, "飛び賞を入力してください")
@@ -56,7 +58,7 @@ export const schema = {
   points: z
     .string()
     .transform((v) => (v === "0" || !!v ? Number(v) * 100 : undefined)),
-  rate: z.string().transform(Number),
+  rate: z.string().transform((v) => rates[Number(v)]),
   incline: z.enum(inclines),
   customIncline: z
     .object({

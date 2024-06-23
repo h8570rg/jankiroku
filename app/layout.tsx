@@ -22,13 +22,13 @@ export default async function RootLayout({
   return (
     <html
       lang="ja"
-      className={classNames(righteous.variable, mPlus1p.variable)}
+      className={classNames(righteous.variable, mPlus1p.variable, "h-full")}
       suppressHydrationWarning
     >
-      <body className="font-mplus">
+      <body className="h-full font-mplus">
         <IconDefs />
         <NextUIProvider>
-          <div className="bg-background text-foreground">{children}</div>
+          <div className="h-full bg-background text-foreground">{children}</div>
           <ToastContainer />
         </NextUIProvider>
       </body>

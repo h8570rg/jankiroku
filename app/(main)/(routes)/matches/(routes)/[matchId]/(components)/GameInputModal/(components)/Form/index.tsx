@@ -97,7 +97,7 @@ export function GameInputForm({ match }: { match: Match }) {
                 return (
                   <SortableItem key={field.id} id={field.id}>
                     {({ attributes, listeners }) => (
-                      <div className="flex items-center gap-1">
+                      <div className="flex touch-none items-center gap-1">
                         <Controller
                           control={control}
                           name={`players.${index}.id`}
