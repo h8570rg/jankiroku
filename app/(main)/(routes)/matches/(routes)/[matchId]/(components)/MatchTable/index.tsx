@@ -3,6 +3,7 @@ import { serverServices } from "@/lib/services/server";
 import { MatchPlayer } from "@/lib/type";
 import { AddGameButton } from "./(components)/AddGameButton";
 import { ChipInputButton } from "./(components)/ChipInputButton";
+import { MatchPlayerInputButton } from "./(components)/MatchPlayerInputButton";
 import styles from "./styles.module.css";
 
 type Column = {
@@ -64,7 +65,7 @@ export async function MatchTable({
 
   return (
     <div className={classNames(className, "flex flex-col")}>
-      <div
+      <MatchPlayerInputButton
         className={classNames(
           styles["row"],
           "flex items-center rounded-lg bg-default-100 text-foreground-500",
@@ -87,7 +88,7 @@ export async function MatchTable({
             )}
           </div>
         ))}
-      </div>
+      </MatchPlayerInputButton>
       <div className="grow">
         {gameRows.length === 0 && (
           <p className="my-10 text-center text-small text-foreground-light">
@@ -125,8 +126,7 @@ export async function MatchTable({
           </ol>
         )}
         <div>
-          {/* TODO: disabledやめる */}
-          <AddGameButton isDisabled={isPlayersShort} />
+          <AddGameButton isPlayersShort={isPlayersShort} />
           {/* <AddChipButton isDisabled={isPlayersShort} /> */}
         </div>
       </div>
@@ -168,7 +168,7 @@ export async function MatchTable({
               key={column.id}
             >
               {column.chipCount}
-              <span>枚</span>
+              {column.chipCount !== null && <span>枚</span>}
             </div>
           ))}
         </ChipInputButton>

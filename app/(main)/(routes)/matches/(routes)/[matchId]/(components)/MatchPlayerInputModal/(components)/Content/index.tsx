@@ -93,7 +93,7 @@ export function MatchPlayerInputModalContent({
           <>
             <ModalHeader>プレイヤー選択</ModalHeader>
             <ModalBody>
-              <div className="flex h-[700px] max-h-[80dvh] flex-col">
+              <div className="flex h-[700px] max-h-[60dvh] flex-col">
                 <div className="mb-3 space-y-5">
                   <Input
                     placeholder="ユーザーIDもしくは名前で検索"
