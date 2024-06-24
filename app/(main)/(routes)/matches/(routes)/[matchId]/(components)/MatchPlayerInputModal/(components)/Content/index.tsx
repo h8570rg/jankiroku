@@ -93,7 +93,7 @@ export function MatchPlayerInputModalContent({
           <>
             <ModalHeader>プレイヤー選択</ModalHeader>
             <ModalBody>
-              <div className="flex h-[700px] max-h-[80dvh] flex-col">
+              <div className="flex h-[700px] max-h-[60dvh] flex-col">
                 <div className="mb-3 space-y-5">
                   <Input
                     placeholder="ユーザーIDもしくは名前で検索"
@@ -109,7 +109,11 @@ export function MatchPlayerInputModalContent({
                           key={player.id}
                           color="primary"
                           avatar={<Avatar name="" />}
-                          onClose={() => handlePlayersRemove(player)}
+                          onClose={
+                            !players.some((p) => p.id === player.id)
+                              ? () => handlePlayersRemove(player)
+                              : undefined
+                          }
                         >
                           {player.name}
                         </Chip>
@@ -216,7 +220,9 @@ export function MatchPlayerInputModalContent({
                   setIsPending(true);
                   await updateMatchPlayers({
                     matchId,
-                    playerIds: selectedPlayers.map((p) => p.id),
+                    playerIds: selectedPlayers
+                      .map((p) => p.id)
+                      .filter((p) => !players.some((p2) => p2.id === p)),
                   });
                   setIsPending(false);
                   onClose();

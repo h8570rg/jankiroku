@@ -3,6 +3,7 @@ import { serverServices } from "@/lib/services/server";
 import { MatchPlayer } from "@/lib/type";
 import { AddGameButton } from "./(components)/AddGameButton";
 import { ChipInputButton } from "./(components)/ChipInputButton";
+import { MatchPlayerInputButton } from "./(components)/MatchPlayerInputButton";
 import styles from "./styles.module.css";
 
 type Column = {
@@ -64,7 +65,7 @@ export async function MatchTable({
 
   return (
     <div className={classNames(className, "flex flex-col")}>
-      <div
+      <MatchPlayerInputButton
         className={classNames(
           styles["row"],
           "flex items-center rounded-lg bg-default-100 text-foreground-500",
@@ -87,38 +88,45 @@ export async function MatchTable({
             )}
           </div>
         ))}
-      </div>
+      </MatchPlayerInputButton>
       <div className="grow">
-        {gameRows.map((item, index) => (
-          <div
-            className={classNames(styles["row"], "flex items-center py-1")}
-            key={index}
-          >
-            <div
-              className={classNames(
-                styles["col"],
-                styles["col--index"],
-                styles["col--body"],
-              )}
-            >
-              {index + 1}
-            </div>
-            {columns.map((column) => (
-              <div
-                key={column.id}
-                className={classNames(styles["col"], styles["col--body"], {
-                  "text-danger": item[column.id] < 0,
-                })}
+        {gameRows.length === 0 && (
+          <p className="my-10 text-center text-small text-foreground-light">
+            まだデータはありません
+          </p>
+        )}
+        {gameRows.length > 0 && (
+          <ol className="py-1">
+            {gameRows.map((item, index) => (
+              <li
+                className={classNames(styles["row"], "flex items-center")}
+                key={index}
               >
-                {item[column.id]}
-              </div>
+                <div
+                  className={classNames(
+                    styles["col"],
+                    styles["col--index"],
+                    styles["col--body"],
+                  )}
+                >
+                  {index + 1}
+                </div>
+                {columns.map((column) => (
+                  <div
+                    key={column.id}
+                    className={classNames(styles["col"], styles["col--body"], {
+                      "text-danger": item[column.id] < 0,
+                    })}
+                  >
+                    {item[column.id]}
+                  </div>
+                ))}
+              </li>
             ))}
-          </div>
-        ))}
+          </ol>
+        )}
         <div>
-          {/* TODO: disabledやめる */}
-          <AddGameButton isDisabled={isPlayersShort} />
-          {/* <AddChipButton isDisabled={isPlayersShort} /> */}
+          <AddGameButton isPlayersShort={isPlayersShort} />
         </div>
       </div>
       <div className="rounded-lg bg-default-100 text-foreground-500">
@@ -159,6 +167,7 @@ export async function MatchTable({
               key={column.id}
             >
               {column.chipCount}
+              {column.chipCount !== null && <span>枚</span>}
             </div>
           ))}
         </ChipInputButton>
@@ -178,6 +187,7 @@ export async function MatchTable({
               key={column.id}
             >
               {column.result}
+              <span>円</span>
             </div>
           ))}
         </div>

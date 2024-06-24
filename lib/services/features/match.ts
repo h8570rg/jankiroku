@@ -1,4 +1,11 @@
-import { CalcMethod, GamePlayer, Match, MatchPlayer } from "@/lib/type";
+import {
+  CalcMethod,
+  ChipRate,
+  GamePlayer,
+  Match,
+  MatchPlayer,
+  Rate,
+} from "@/lib/type";
 import { Supabase } from ".";
 
 export function matchService(supabase: Supabase) {
@@ -107,6 +114,7 @@ export function matchService(supabase: Supabase) {
       return matches.map(formatMatch);
     },
 
+    // TODO: 消す
     async addMatchPlayer({
       matchId,
       playerId,
@@ -124,19 +132,13 @@ export function matchService(supabase: Supabase) {
       return;
     },
 
-    async updateMatchPlayers({
+    async addMatchPlayers({
       matchId,
       playerIds,
     }: {
       matchId: string;
       playerIds: string[];
     }): Promise<void> {
-      const deleteMatchPlayerResponse = await supabase
-        .from("match_players")
-        .delete()
-        .eq("match_id", matchId);
-      if (deleteMatchPlayerResponse.error)
-        throw deleteMatchPlayerResponse.error;
       const addMatchPlayerResponses = await Promise.all(
         playerIds.map((playerId) =>
           supabase.from("match_players").insert({
@@ -283,8 +285,8 @@ function formatMatch(match: {
       playersCount: rule.players_count,
       defaultPoints: rule.default_points,
       defaultCalcPoints: rule.default_calc_points,
-      rate: rule.rate,
-      chipRate: rule.chip_rate,
+      rate: rule.rate as Rate,
+      chipRate: rule.chip_rate as ChipRate,
       crackBoxBonus: rule.crack_box_bonus,
       calcMethod: rule.calc_method as CalcMethod,
       incline: {

@@ -8,6 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@/components/Modal";
+import { NAME_MAX_LENGTH } from "@/lib/config";
 import { Profile } from "@/lib/type";
 import { State, createProfile } from "./actions";
 
@@ -24,8 +25,8 @@ export function ProfileCreateModal({
       const player = result.data;
       if (player) {
         onProfileCreate(player);
+        onClose();
       }
-      onClose();
       return result;
     },
     {},
@@ -45,7 +46,12 @@ export function ProfileCreateModal({
         <ModalHeader>プレイヤー名入力</ModalHeader>
         <form action={formAction} noValidate>
           <ModalBody>
-            <Input name="name" errorMessage={state.errors?.name} />
+            <Input
+              name="name"
+              errorMessage={state.errors?.name}
+              description={`${NAME_MAX_LENGTH}文字以内で入力してください`}
+              maxLength={NAME_MAX_LENGTH}
+            />
           </ModalBody>
           <ModalFooter>
             <Button color="primary" type="submit">
