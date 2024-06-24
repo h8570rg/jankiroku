@@ -89,32 +89,41 @@ export async function MatchTable({
         ))}
       </div>
       <div className="grow">
-        {gameRows.map((item, index) => (
-          <div
-            className={classNames(styles["row"], "flex items-center py-1")}
-            key={index}
-          >
-            <div
-              className={classNames(
-                styles["col"],
-                styles["col--index"],
-                styles["col--body"],
-              )}
-            >
-              {index + 1}
-            </div>
-            {columns.map((column) => (
-              <div
-                key={column.id}
-                className={classNames(styles["col"], styles["col--body"], {
-                  "text-danger": item[column.id] < 0,
-                })}
+        {gameRows.length === 0 && (
+          <p className="my-10 text-center text-small text-foreground-light">
+            まだデータはありません
+          </p>
+        )}
+        {gameRows.length > 0 && (
+          <ol className="py-1">
+            {gameRows.map((item, index) => (
+              <li
+                className={classNames(styles["row"], "flex items-center")}
+                key={index}
               >
-                {item[column.id]}
-              </div>
+                <div
+                  className={classNames(
+                    styles["col"],
+                    styles["col--index"],
+                    styles["col--body"],
+                  )}
+                >
+                  {index + 1}
+                </div>
+                {columns.map((column) => (
+                  <div
+                    key={column.id}
+                    className={classNames(styles["col"], styles["col--body"], {
+                      "text-danger": item[column.id] < 0,
+                    })}
+                  >
+                    {item[column.id]}
+                  </div>
+                ))}
+              </li>
             ))}
-          </div>
-        ))}
+          </ol>
+        )}
         <div>
           {/* TODO: disabledやめる */}
           <AddGameButton isDisabled={isPlayersShort} />
@@ -159,6 +168,7 @@ export async function MatchTable({
               key={column.id}
             >
               {column.chipCount}
+              <span>枚</span>
             </div>
           ))}
         </ChipInputButton>
@@ -178,6 +188,7 @@ export async function MatchTable({
               key={column.id}
             >
               {column.result}
+              <span>円</span>
             </div>
           ))}
         </div>
