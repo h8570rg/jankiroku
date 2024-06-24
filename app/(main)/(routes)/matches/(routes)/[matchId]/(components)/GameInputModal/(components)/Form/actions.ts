@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { serverServices } from "@/lib/services/server";
 import { Rule } from "@/lib/type";
@@ -119,6 +120,8 @@ export async function addGame(
     matchId,
     gamePlayers: playerScores,
   });
+
+  revalidatePath(`/matches/${matchId}`);
 
   return {
     success: true,
