@@ -52,6 +52,7 @@ export function MatchPlayerInputModalContent({
     setSearchedProfiles(searchProfilesResult);
   }, 300);
 
+  // TODO: 下と共通化
   function handleFriendSelect(key: string | number) {
     if (key === "new") {
       onOpenProfileCreateModal();
@@ -59,6 +60,10 @@ export function MatchPlayerInputModalContent({
     }
 
     if (selectedPlayers.find((p) => p.id === key)) {
+      if (players.some((p) => p.id === key)) {
+        alert("すでに参加中のプレイヤーは削除できません");
+        return;
+      }
       setSelectedPlayers((prev) => prev.filter((p) => p.id !== key));
       return;
     }
@@ -72,6 +77,10 @@ export function MatchPlayerInputModalContent({
 
   function handleSearchedProfileSelect(key: string | number) {
     if (selectedPlayers?.find((p) => p.id === key)) {
+      if (players.some((p) => p.id === key)) {
+        alert("すでに参加中のプレイヤーは削除できません");
+        return;
+      }
       setSelectedPlayers((prev) => prev.filter((p) => p.id !== key));
       return;
     }
@@ -94,16 +103,12 @@ export function MatchPlayerInputModalContent({
             <ModalHeader>プレイヤー選択</ModalHeader>
             <ModalBody>
               <div className="flex h-[700px] max-h-[60dvh] flex-col">
-                <div className="mb-3 space-y-5">
-                  <Input
-                    placeholder="ユーザーIDもしくは名前で検索"
-                    startContent={
-                      <Icon className="size-5 fill-current" name="search" />
-                    }
-                    onChange={(e) => handleSearch(e.target.value)}
-                  />
-                  {selectedPlayers.length > 0 && (
-                    <div className="flex flex-wrap gap-3">
+                {selectedPlayers.length > 0 && (
+                  <div className="mb-6">
+                    <p className="mb-2 pl-1 text-tiny text-foreground-500">
+                      参加者 ({selectedPlayers.length})
+                    </p>
+                    <div className="flex flex-wrap gap-2">
                       {selectedPlayers.map((player) => (
                         <Chip
                           key={player.id}
@@ -119,8 +124,16 @@ export function MatchPlayerInputModalContent({
                         </Chip>
                       ))}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
+                <Input
+                  className="mb-1"
+                  placeholder="ユーザーIDもしくは名前で検索"
+                  startContent={
+                    <Icon className="size-5 fill-current" name="search" />
+                  }
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
                 <ScrollShadow className="min-h-0">
                   <>
                     {searchedProfiles === null && (
@@ -133,11 +146,14 @@ export function MatchPlayerInputModalContent({
                           <ListboxSection title="新規ユーザー">
                             <ListboxItem key="new" textValue="新規ユーザー">
                               <User
-                                name="新規ユーザーを作成する"
+                                name="プレイヤー名を入力"
                                 avatarProps={{
                                   fallback: (
-                                    <Icon className="size-6" name="add" />
+                                    <Icon className="size-6" name="edit" />
                                   ),
+                                  classNames: {
+                                    base: "bg-secondary text-secondary-foreground",
+                                  },
                                 }}
                               />
                             </ListboxItem>
