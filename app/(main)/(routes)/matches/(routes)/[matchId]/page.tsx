@@ -10,6 +10,7 @@ import { GameInputModal } from "./(components)/GameInputModal";
 import { MatchPlayerInputButton } from "./(components)/MatchPlayerInputButton";
 import { MatchPlayerInputModal } from "./(components)/MatchPlayerInputModal";
 import { MatchTable } from "./(components)/MatchTable";
+import { RuleModal, RuleModalTrigger } from "./(components)/RuleModal";
 
 export default async function Match({
   params: { matchId },
@@ -38,6 +39,9 @@ export default async function Match({
           <p className="font-bold">{displayDate}</p>
         </div>
         <div className="flex items-center gap-0.5">
+          <Button isIconOnly variant="light" as={RuleModalTrigger}>
+            <Icon className="size-5 fill-current" name="description" />
+          </Button>
           <ChipInputButton isIconOnly variant="light">
             <Icon className="size-5 fill-current" name="chip" />
           </ChipInputButton>
@@ -58,6 +62,7 @@ export default async function Match({
       <Suspense fallback={null}>
         <ChipInputModal matchId={matchId} />
       </Suspense>
+      <RuleModal rule={match.rule} />
     </div>
   );
 }

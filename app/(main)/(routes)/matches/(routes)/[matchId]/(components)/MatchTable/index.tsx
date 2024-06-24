@@ -127,7 +127,6 @@ export async function MatchTable({
         )}
         <div>
           <AddGameButton isPlayersShort={isPlayersShort} />
-          {/* <AddChipButton isDisabled={isPlayersShort} /> */}
         </div>
       </div>
       <div className="rounded-lg bg-default-100 text-foreground-500">

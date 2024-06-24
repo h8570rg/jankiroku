@@ -1,4 +1,11 @@
-import { CalcMethod, GamePlayer, Match, MatchPlayer } from "@/lib/type";
+import {
+  CalcMethod,
+  ChipRate,
+  GamePlayer,
+  Match,
+  MatchPlayer,
+  Rate,
+} from "@/lib/type";
 import { Supabase } from ".";
 
 export function matchService(supabase: Supabase) {
@@ -278,8 +285,8 @@ function formatMatch(match: {
       playersCount: rule.players_count,
       defaultPoints: rule.default_points,
       defaultCalcPoints: rule.default_calc_points,
-      rate: rule.rate,
-      chipRate: rule.chip_rate,
+      rate: rule.rate as Rate,
+      chipRate: rule.chip_rate as ChipRate,
       crackBoxBonus: rule.crack_box_bonus,
       calcMethod: rule.calc_method as CalcMethod,
       incline: {
