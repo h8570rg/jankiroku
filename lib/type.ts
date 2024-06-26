@@ -1,4 +1,7 @@
+import { User as SupabaseUser } from "@supabase/supabase-js";
 import { calcMethods, chipRates, rates } from "./config";
+
+export type User = SupabaseUser;
 
 export type Profile = {
   id: string;
@@ -19,7 +22,7 @@ export type Match = {
 
 export type MatchPlayer = Profile & {
   rankCounts: number[];
-  averageRank: number;
+  averageRank: number | null;
   totalScore: number;
   chipCount: number | null;
   result: number;
