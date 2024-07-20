@@ -5,7 +5,7 @@ import { useMatchContext } from "../../../../context";
 export function ChipInputButton(
   props: React.ComponentPropsWithoutRef<"button">,
 ) {
-  const { gameInputModal } = useMatchContext();
+  const { chipInputModal } = useMatchContext();
 
-  return <button onClick={gameInputModal.onOpen} {...props}></button>;
+  return <button onClick={chipInputModal.onOpen} {...props}></button>;
 }
