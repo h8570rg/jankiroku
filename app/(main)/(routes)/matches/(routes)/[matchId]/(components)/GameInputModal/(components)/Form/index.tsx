@@ -119,7 +119,6 @@ export function GameInputForm({ match }: { match: Match }) {
                                   "text-right placeholder:text-default-400",
                               }}
                               type="number"
-                              size="sm"
                               startContent={
                                 isAutoFillAvailable &&
                                 points === "" && (

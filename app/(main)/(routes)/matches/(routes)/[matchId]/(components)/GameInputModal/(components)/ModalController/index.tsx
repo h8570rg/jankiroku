@@ -15,6 +15,7 @@ export function GameInputModalController({
       isOpen={gameInputModal.isOpen}
       onClose={gameInputModal.onClose}
       hideCloseButton
+      placement="center" // TODO: 考える
     >
       <ModalContent>{children}</ModalContent>
     </Modal>
