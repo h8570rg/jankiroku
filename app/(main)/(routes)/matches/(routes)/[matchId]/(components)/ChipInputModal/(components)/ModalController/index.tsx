@@ -1,14 +1,14 @@
 "use client";
 
 import { Modal, ModalContent } from "@/components/Modal";
-import { useChipInputModal } from "../../hooks";
+import { useMatchContext } from "../../../../context";
 
 export function ChipInputModalController({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const chipInputModal = useChipInputModal();
+  const { chipInputModal } = useMatchContext();
 
   return (
     <Modal

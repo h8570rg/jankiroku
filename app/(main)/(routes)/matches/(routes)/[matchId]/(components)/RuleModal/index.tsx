@@ -7,17 +7,13 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  useQueryControlledModal,
 } from "@/components/Modal";
 import { calcMethodLabel, chipRateLabel, rateLabel } from "@/lib/config";
 import { Rule } from "@/lib/type";
-
-export const useRuleModal = () => {
-  return useQueryControlledModal("rule");
-};
+import { useMatchContext } from "../../context";
 
 export function RuleModal({ rule }: { rule: Rule }) {
-  const { isOpen, onClose } = useRuleModal();
+  const { isOpen, onClose } = useMatchContext().ruleModal;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -79,12 +75,13 @@ export const RuleModalTrigger = forwardRef<
   HTMLButtonElement,
   React.ComponentPropsWithoutRef<"button">
 >(function RuleModalTrigger({ onClick, ...props }, ref) {
-  const ruleModal = useRuleModal();
+  const { onOpen } = useMatchContext().ruleModal;
+
   return (
     <button
       ref={ref}
       onClick={(e) => {
-        ruleModal.onOpen();
+        onOpen();
         onClick?.(e);
       }}
       {...props}

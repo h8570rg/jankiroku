@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { serverServices } from "@/lib/services/server";
 import { schema } from "@/lib/utils/schema";
-import { matchPlayerInputModalKey } from "../../(routes)/[matchId]/(components)/MatchPlayerInputModal/hooks";
 
 type State = {
   errors?: {
@@ -82,6 +81,5 @@ export async function createMatch(
   });
 
   revalidatePath("/matches");
-  // TODO: refactor
-  redirect(`/matches/${id}?${matchPlayerInputModalKey}=true`);
+  redirect(`/matches/${id}`);
 }

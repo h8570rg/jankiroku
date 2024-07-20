@@ -7,6 +7,7 @@ import { dayjs } from "@/lib/utils/date";
 import { ChipInputButton } from "./(components)/ChipInputButton";
 import { ChipInputModal } from "./(components)/ChipInputModal";
 import { GameInputModal } from "./(components)/GameInputModal";
+import { MatchContextProvider } from "./(components)/MatchContextProvider";
 import { MatchPlayerInputButton } from "./(components)/MatchPlayerInputButton";
 import { MatchPlayerInputModal } from "./(components)/MatchPlayerInputModal";
 import { MatchTable } from "./(components)/MatchTable";
@@ -18,7 +19,7 @@ export default async function Match({
   params: { matchId: string };
 }) {
   const { getMatch } = serverServices();
-  const [match] = await Promise.all([getMatch({ matchId })]);
+  const match = await getMatch({ matchId });
 
   const { createdAt } = match;
 
@@ -29,40 +30,47 @@ export default async function Match({
     ? dayjs(createdAt).format("M/D")
     : dayjs(createdAt).format("YYYY/M/D");
 
+  // プレイヤー入力モーダルを初期状態で開くかどうか
+  const isMatchPlayerInputModalDefaultOpen = match.players.length <= 1;
+
   return (
-    <div className="flex h-full flex-col">
-      <div className="mb-1 flex items-center justify-between">
-        <div className="flex items-center gap-1">
-          <Button isIconOnly variant="light" as={Link} href="/matches">
-            <Icon className="size-4 fill-current" name="back" />
-          </Button>
-          <p className="font-bold">{displayDate}</p>
+    <MatchContextProvider
+      playerInputModalDefaultOpen={isMatchPlayerInputModalDefaultOpen}
+    >
+      <div className="flex h-full flex-col">
+        <div className="mb-1 flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <Button isIconOnly variant="light" as={Link} href="/matches">
+              <Icon className="size-4 fill-current" name="back" />
+            </Button>
+            <p className="font-bold">{displayDate}</p>
+          </div>
+          <div className="flex items-center gap-0.5">
+            <Button isIconOnly variant="light" as={RuleModalTrigger}>
+              <Icon className="size-5 fill-current" name="description" />
+            </Button>
+            <ChipInputButton isIconOnly variant="light">
+              <Icon className="size-5 fill-current" name="chip" />
+            </ChipInputButton>
+            <MatchPlayerInputButton isIconOnly variant="light">
+              <Icon className="size-5 fill-current" name="personAdd" />
+            </MatchPlayerInputButton>
+          </div>
         </div>
-        <div className="flex items-center gap-0.5">
-          <Button isIconOnly variant="light" as={RuleModalTrigger}>
-            <Icon className="size-5 fill-current" name="description" />
-          </Button>
-          <ChipInputButton isIconOnly variant="light">
-            <Icon className="size-5 fill-current" name="chip" />
-          </ChipInputButton>
-          <MatchPlayerInputButton isIconOnly variant="light">
-            <Icon className="size-5 fill-current" name="personAdd" />
-          </MatchPlayerInputButton>
-        </div>
+        <Suspense fallback={null}>
+          <MatchTable className="grow" matchId={matchId} />
+        </Suspense>
+        <Suspense fallback={null}>
+          <MatchPlayerInputModal matchId={matchId} />
+        </Suspense>
+        <Suspense fallback={null}>
+          <GameInputModal matchId={matchId} />
+        </Suspense>
+        <Suspense fallback={null}>
+          <ChipInputModal matchId={matchId} />
+        </Suspense>
+        <RuleModal rule={match.rule} />
       </div>
-      <Suspense fallback={null}>
-        <MatchTable className="grow" matchId={matchId} />
-      </Suspense>
-      <Suspense fallback={null}>
-        <MatchPlayerInputModal matchId={matchId} />
-      </Suspense>
-      <Suspense fallback={null}>
-        <GameInputModal matchId={matchId} />
-      </Suspense>
-      <Suspense fallback={null}>
-        <ChipInputModal matchId={matchId} />
-      </Suspense>
-      <RuleModal rule={match.rule} />
-    </div>
+    </MatchContextProvider>
   );
 }

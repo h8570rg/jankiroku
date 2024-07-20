@@ -1,10 +1,10 @@
 "use client";
 
 import { Modal } from "@/components/Modal";
-import { useMatchPlayerInputModal } from "../../hooks";
+import { useMatchContext } from "../../../../context";
 
 export function ModalController({ children }: { children: React.ReactNode }) {
-  const { onClose, isOpen } = useMatchPlayerInputModal();
+  const { onClose, isOpen } = useMatchContext().playerInputModal;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} hideCloseButton>

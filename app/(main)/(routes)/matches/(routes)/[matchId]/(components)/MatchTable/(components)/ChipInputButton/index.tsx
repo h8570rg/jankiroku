@@ -1,11 +1,11 @@
 "use client";
 
-import { useChipInputModal } from "../../../ChipInputModal/hooks";
+import { useMatchContext } from "../../../../context";
 
 export function ChipInputButton(
   props: React.ComponentPropsWithoutRef<"button">,
 ) {
-  const gameInputModal = useChipInputModal();
+  const { chipInputModal } = useMatchContext();
 
-  return <button onClick={gameInputModal.onOpen} {...props}></button>;
+  return <button onClick={chipInputModal.onOpen} {...props}></button>;
 }
