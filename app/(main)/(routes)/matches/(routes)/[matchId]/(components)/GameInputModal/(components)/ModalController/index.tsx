@@ -1,14 +1,14 @@
 "use client";
 
 import { Modal, ModalContent } from "@/components/Modal";
-import { useGameInputModal } from "../../hooks";
+import { useMatchContext } from "../../../../context";
 
 export function GameInputModalController({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const gameInputModal = useGameInputModal();
+  const { gameInputModal } = useMatchContext();
 
   return (
     <Modal

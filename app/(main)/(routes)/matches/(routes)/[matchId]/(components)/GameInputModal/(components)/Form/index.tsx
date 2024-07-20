@@ -14,7 +14,7 @@ import { Input } from "@/components/Input";
 import { ModalBody, ModalFooter } from "@/components/Modal";
 import { Select, SelectItem } from "@/components/Select";
 import { Match } from "@/lib/type";
-import { useGameInputModal } from "../../hooks";
+import { useMatchContext } from "../../../../context";
 import { addGame } from "./actions";
 
 type Schema = {
@@ -27,7 +27,7 @@ type Schema = {
 };
 
 export function GameInputForm({ match }: { match: Match }) {
-  const gameInputModal = useGameInputModal();
+  const gameInputModal = useMatchContext().gameInputModal;
 
   const { rule } = match;
   const [{ errors, success }, formAction] = useFormState(

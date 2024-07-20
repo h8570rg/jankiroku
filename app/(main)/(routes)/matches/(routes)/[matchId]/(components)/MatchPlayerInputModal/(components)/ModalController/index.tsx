@@ -1,17 +1,10 @@
 "use client";
 
-import { Modal, useDisclosure } from "@/components/Modal";
+import { Modal } from "@/components/Modal";
+import { useMatchContext } from "../../../../context";
 
-export function ModalController({
-  children,
-  defaultOpen,
-}: {
-  children: React.ReactNode;
-  defaultOpen: boolean;
-}) {
-  const { onClose, isOpen } = useDisclosure({
-    defaultOpen: defaultOpen,
-  });
+export function ModalController({ children }: { children: React.ReactNode }) {
+  const { onClose, isOpen } = useMatchContext().playerInputModal;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} hideCloseButton>
