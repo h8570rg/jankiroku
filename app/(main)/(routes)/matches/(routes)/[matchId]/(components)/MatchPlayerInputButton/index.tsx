@@ -1,9 +1,9 @@
 "use client";
 
 import { Button, ButtonProps } from "@/components/Button";
-import { useMatchPlayerInputModal } from "../MatchPlayerInputModal/hooks";
+import { useDisclosure } from "@/components/Modal";
 
 export function MatchPlayerInputButton(props: Omit<ButtonProps, "onClick">) {
-  const { onOpen } = useMatchPlayerInputModal();
+  const { onOpen } = useDisclosure();
   return <Button {...props} onClick={onOpen} />;
 }

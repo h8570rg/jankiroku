@@ -7,13 +7,13 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  useQueryControlledModal,
+  useDisclosure,
 } from "@/components/Modal";
 import { calcMethodLabel, chipRateLabel, rateLabel } from "@/lib/config";
 import { Rule } from "@/lib/type";
 
 export const useRuleModal = () => {
-  return useQueryControlledModal("rule");
+  return useDisclosure();
 };
 
 export function RuleModal({ rule }: { rule: Rule }) {

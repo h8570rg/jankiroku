@@ -1,5 +1,5 @@
-import { useQueryControlledModal } from "@/components/Modal";
+import { useDisclosure } from "@/components/Modal";
 
 export const useChipInputModal = () => {
-  return useQueryControlledModal("chip-input");
+  return useDisclosure();
 };

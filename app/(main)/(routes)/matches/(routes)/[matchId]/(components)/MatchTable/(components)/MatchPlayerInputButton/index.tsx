@@ -1,11 +1,11 @@
 "use client";
 
-import { useMatchPlayerInputModal } from "../../../MatchPlayerInputModal/hooks";
+import { useDisclosure } from "@/components/Modal";
 
 export function MatchPlayerInputButton(
   props: React.ComponentPropsWithoutRef<"button">,
 ) {
-  const gameInputModal = useMatchPlayerInputModal();
+  const gameInputModal = useDisclosure();
 
   return <button onClick={gameInputModal.onOpen} {...props}></button>;
 }
