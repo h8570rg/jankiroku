@@ -279,7 +279,8 @@ function formatMatch(match: {
       );
     }
     player.result =
-      (player.chipCount ?? 0) * rule.chip_rate + player.totalScore * rule.rate;
+      (player.chipCount ?? 0) * rule.chip_rate +
+      player.totalScore * rule.rate * 10;
   });
 
   return {
