@@ -18,7 +18,7 @@ export default async function Match({
   params: { matchId: string };
 }) {
   const { getMatch } = serverServices();
-  const [match] = await Promise.all([getMatch({ matchId })]);
+  const match = await getMatch({ matchId });
 
   const { createdAt } = match;
 
@@ -28,6 +28,9 @@ export default async function Match({
   const displayDate = isSameYear
     ? dayjs(createdAt).format("M/D")
     : dayjs(createdAt).format("YYYY/M/D");
+
+  // プレイヤー入力モーダルを初期状態で開くかどうか
+  const isMatchPlayerInputModalDefaultOpen = match.players.length <= 1;
 
   return (
     <div className="flex h-full flex-col">
@@ -54,7 +57,10 @@ export default async function Match({
         <MatchTable className="grow" matchId={matchId} />
       </Suspense>
       <Suspense fallback={null}>
-        <MatchPlayerInputModal matchId={matchId} />
+        <MatchPlayerInputModal
+          matchId={matchId}
+          defaultOpen={isMatchPlayerInputModalDefaultOpen}
+        />
       </Suspense>
       <Suspense fallback={null}>
         <GameInputModal matchId={matchId} />
