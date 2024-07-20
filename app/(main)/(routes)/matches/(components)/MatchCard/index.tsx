@@ -1,32 +1,26 @@
 import { Avatar, AvatarGroup } from "@/components/Avatar";
 import { CardBody, CardHeader } from "@/components/Card";
 import { Divider } from "@/components/Divider";
-import { serverServices } from "@/lib/services/server";
+import { Match } from "@/lib/type";
 import { dayjs } from "@/lib/utils/date";
 import { NavigationCard } from "./(components)/Card";
 
-export async function MatchCard({
-  matchId,
-  date,
-}: {
-  matchId: string;
-  date: string;
-}) {
-  const { getMatch } = serverServices();
-  const [match] = await Promise.all([getMatch({ matchId })]);
-
+export function MatchCard({ match, userId }: { match: Match; userId: string }) {
+  const { createdAt } = match;
   const today = dayjs();
-  const targetDate = dayjs(date);
+  const targetDate = dayjs(createdAt);
   const isSameYear = today.isSame(targetDate, "year");
   const displayDate = isSameYear
-    ? dayjs(date).format("M/D")
-    : dayjs(date).format("YYYY/M/D");
+    ? dayjs(createdAt).format("M/D")
+    : dayjs(createdAt).format("YYYY/M/D");
+
+  const data = match.players.find((player) => player.id === userId)!;
 
   return (
-    <NavigationCard matchId={matchId}>
+    <NavigationCard matchId={match.id}>
       <CardHeader>
         <div className="flex w-full items-center justify-between">
-          <p className="font-bold">{displayDate}</p>
+          <p className="">{displayDate}</p>
           <AvatarGroup size="sm" isBordered max={4}>
             {match.players.map((player) => (
               <Avatar key={player.id} />
@@ -36,12 +30,36 @@ export async function MatchCard({
       </CardHeader>
       <Divider />
       <CardBody>
-        {/* <div className="h-[70px]">
-          <RankCountChart
-            matchResult={match}
-            userProfileId={userProfile.id}
-          />
-        </div> */}
+        <div className="flex items-center">
+          <div className="flex grow flex-col items-center px-8">
+            <div className="mb-2 text-tiny text-foreground-light">平均着順</div>
+            <div className="text-large font-bold">
+              {data.averageRank ?? "なし"}
+            </div>
+          </div>
+          <div className="px-8">
+            <table className="[&_td]:text-center [&_th]:w-10 [&_th]:text-center">
+              <thead className="text-tiny text-foreground-light">
+                <tr>
+                  <th>1位</th>
+                  <th>2位</th>
+                  <th>3位</th>
+                  {match.rule.playersCount === 4 && <th>4位</th>}
+                </tr>
+              </thead>
+              <tbody className="text-small font-bold">
+                <tr>
+                  <td>{data.rankCounts[0]}</td>
+                  <td>{data.rankCounts[1]}</td>
+                  <td>{data.rankCounts[2]}</td>
+                  {match.rule.playersCount === 4 && (
+                    <td>{data.rankCounts[3]}</td>
+                  )}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </CardBody>
     </NavigationCard>
   );

@@ -1,9 +1,16 @@
 import { PostgrestError } from "@supabase/supabase-js";
-import { Profile } from "@/lib/type";
+import { Profile, User } from "@/lib/type";
 import { Supabase } from ".";
 
 export function profileService(supabase: Supabase) {
   return {
+    async getUser(): Promise<User> {
+      const userResponse = await supabase.auth.getUser();
+      if (userResponse.error) throw userResponse.error;
+      const user = userResponse.data.user;
+      return user;
+    },
+
     async getUserProfile(): Promise<Profile> {
       const userResponse = await supabase.auth.getUser();
       if (userResponse.error) throw userResponse.error;

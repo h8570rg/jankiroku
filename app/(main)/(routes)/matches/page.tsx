@@ -3,11 +3,10 @@ import { CreateMatchButton } from "./(components)/CreateMatchButton";
 import { MatchCard } from "./(components)/MatchCard";
 
 export default async function Matches() {
-  const { getMatches } = serverServices();
+  const { getMatches, getUser } = serverServices();
 
   // TODO: infinite scroll
-  const matches = await getMatches({});
-
+  const [matches, user] = await Promise.all([getMatches({}), getUser()]);
   return (
     <div>
       <h1 className="heading-1 mb-1">成績表</h1>
@@ -21,7 +20,7 @@ export default async function Matches() {
       <ul className="space-y-4">
         {matches?.map((match) => (
           <li key={match.id}>
-            <MatchCard matchId={match.id} date={match.createdAt} />
+            <MatchCard match={match} userId={user.id} />
           </li>
         ))}
       </ul>

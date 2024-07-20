@@ -250,8 +250,8 @@ function formatMatch(match: {
       id: profiles.id,
       name: profiles.name,
       janrecoId: profiles.janreco_id,
-      rankCounts: new Array(match.match_players.length).fill(0),
-      averageRank: 0,
+      rankCounts: new Array(rule.players_count).fill(0),
+      averageRank: null,
       totalScore: 0,
       chipCount: chip_count,
       result: 0,
@@ -268,11 +268,16 @@ function formatMatch(match: {
   });
 
   players.forEach((player) => {
-    player.averageRank =
-      player.rankCounts.reduce(
-        (acc, rankCount, rank) => acc + rankCount * (rank + 1),
-        0,
-      ) / match.games.length;
+    if (player.rankCounts.reduce((acc, cur) => acc + cur, 0) > 0) {
+      player.averageRank = Number(
+        (
+          player.rankCounts.reduce(
+            (acc, cur, index) => acc + cur * (index + 1),
+            0,
+          ) / player.rankCounts.reduce((acc, cur) => acc + cur, 0)
+        ).toFixed(2),
+      );
+    }
     player.result =
       (player.chipCount ?? 0) * rule.chip_rate + player.totalScore * rule.rate;
   });
