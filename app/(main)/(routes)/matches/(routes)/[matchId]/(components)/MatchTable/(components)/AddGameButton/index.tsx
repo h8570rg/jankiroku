@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
-import { useGameInputModal } from "../../../GameInputModal/hooks";
+import { useMatchContext } from "../../../../context";
 
 export function AddGameButton({ isPlayersShort }: { isPlayersShort: boolean }) {
-  const gameInputModal = useGameInputModal();
+  const { gameInputModal } = useMatchContext();
 
   function handleClick() {
     if (isPlayersShort) {

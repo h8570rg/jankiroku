@@ -7,7 +7,7 @@ import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { ModalBody, ModalFooter } from "@/components/Modal";
 import { Match } from "@/lib/type";
-import { useChipInputModal } from "../../hooks";
+import { useMatchContext } from "../../../../context";
 import { addChip } from "./actions";
 
 type Schema = {
@@ -18,7 +18,7 @@ type Schema = {
 };
 
 export function ChipInputForm({ match }: { match: Match }) {
-  const chipInputModal = useChipInputModal();
+  const { chipInputModal } = useMatchContext();
   const { players, rule } = match;
   const [{ errors, success }, formAction] = useFormState(
     addChip.bind(null, match.id, players.length),
