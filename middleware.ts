@@ -7,6 +7,7 @@ const noAuthRoutes = [
   "/login",
   "/sign-up",
   "/api/auth/callback",
+  "/manifest.json", // TODO: 見直し
 ];
 
 /**
