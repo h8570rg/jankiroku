@@ -25,6 +25,12 @@ export default async function RootLayout({
       className={classNames(righteous.variable, mPlus1p.variable, "h-full")}
       suppressHydrationWarning
     >
+      {/* @see https://github.com/shadowwalker/next-pwa */}
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon.png"></link>
+        <meta name="theme-color" content="#b8e986" />
+      </head>
       <body className="h-full font-mplus">
         <IconDefs />
         <NextUIProvider>

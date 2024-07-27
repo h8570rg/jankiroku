@@ -1,11 +1,4 @@
-import { Noto_Sans_JP, Righteous, M_PLUS_1p } from "next/font/google";
-
-export const notoSansJp = Noto_Sans_JP({
-  variable: "--font-noto-sans-jp",
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-  display: "swap",
-});
+import { Righteous, M_PLUS_1p } from "next/font/google";
 
 export const righteous = Righteous({
   variable: "--font-righteous",
