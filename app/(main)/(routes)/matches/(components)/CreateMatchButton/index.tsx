@@ -17,6 +17,7 @@ import {
 import { Select, SelectItem } from "@/components/Select";
 import { Slider } from "@/components/Slider";
 import {
+  calcMethodLabel,
   calcMethods,
   chipRateLabel,
   chipRates,
@@ -382,7 +383,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                             >
                               {calcMethods.map((calcMethod) => (
                                 <SelectItem key={calcMethod} value={calcMethod}>
-                                  {value}
+                                  {calcMethodLabel[calcMethod]}
                                 </SelectItem>
                               ))}
                             </Select>
