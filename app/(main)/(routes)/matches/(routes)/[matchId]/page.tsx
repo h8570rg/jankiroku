@@ -6,6 +6,7 @@ import { serverServices } from "@/lib/services/server";
 import { dayjs } from "@/lib/utils/date";
 import { ChipInputButton } from "./(components)/ChipInputButton";
 import { ChipInputModal } from "./(components)/ChipInputModal";
+import { DataModal, DataModalTrigger } from "./(components)/DataModal";
 import { GameInputModal } from "./(components)/GameInputModal";
 import { MatchContextProvider } from "./(components)/MatchContextProvider";
 import { MatchPlayerInputButton } from "./(components)/MatchPlayerInputButton";
@@ -46,6 +47,9 @@ export default async function Match({
             <p className="font-bold">{displayDate}</p>
           </div>
           <div className="flex items-center gap-0.5">
+            <Button isIconOnly variant="light" as={DataModalTrigger}>
+              <Icon className="size-5 fill-current" name="bar-chart" />
+            </Button>
             <Button isIconOnly variant="light" as={RuleModalTrigger}>
               <Icon className="size-5 fill-current" name="description" />
             </Button>
@@ -70,6 +74,7 @@ export default async function Match({
           <ChipInputModal matchId={matchId} />
         </Suspense>
         <RuleModal rule={match.rule} />
+        <DataModal />
       </div>
     </MatchContextProvider>
   );

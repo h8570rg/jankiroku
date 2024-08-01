@@ -1,6 +1,6 @@
 "use client";
 
-import { useDisclosure } from "@/components/Modal";
+import { useDisclosure, useQueryControlledModal } from "@/components/Modal";
 import { MatchContext } from "../../context";
 
 export function MatchContextProvider({
@@ -16,10 +16,17 @@ export function MatchContextProvider({
   const gameInputModal = useDisclosure();
   const chipInputModal = useDisclosure();
   const ruleModal = useDisclosure();
+  const dataModal = useQueryControlledModal("data"); // TODO: 使うか検証中
 
   return (
     <MatchContext.Provider
-      value={{ playerInputModal, gameInputModal, chipInputModal, ruleModal }}
+      value={{
+        playerInputModal,
+        gameInputModal,
+        chipInputModal,
+        ruleModal,
+        dataModal,
+      }}
     >
       {children}
     </MatchContext.Provider>

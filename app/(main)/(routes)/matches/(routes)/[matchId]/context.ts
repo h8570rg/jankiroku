@@ -21,6 +21,11 @@ export const MatchContext = createContext<{
     onOpen: () => void;
     onClose: () => void;
   };
+  dataModal: {
+    isOpen: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+  };
 }>({
   playerInputModal: {
     isOpen: false,
@@ -38,6 +43,11 @@ export const MatchContext = createContext<{
     onClose: () => {},
   },
   ruleModal: {
+    isOpen: false,
+    onOpen: () => {},
+    onClose: () => {},
+  },
+  dataModal: {
     isOpen: false,
     onOpen: () => {},
     onClose: () => {},
