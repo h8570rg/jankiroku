@@ -1,34 +1,65 @@
+"use client";
+
+import { uniqueId } from "lodash-es";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useRef } from "react";
+
 export {
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalFooter,
-  useDisclosure,
 } from "@nextui-org/react";
 
-// パフォーマンスが悪いので使わない
-// export const useQueryControlledModal = (key: string) => {
-//   const searchParams = useSearchParams();
-//   const pathname = usePathname();
-//   const router = useRouter();
-//   const isOpen = searchParams.get(key) === "true";
+export type UseModalReturn = {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  bind: {
+    isOpen: boolean;
+    onOpenChange: (isOpen: boolean) => void;
+  };
+};
 
-//   const onOpen = useCallback(() => {
-//     const params = new URLSearchParams(searchParams);
-//     params.set(key, "true");
-//     router.push(`${pathname}?${params.toString()}`);
-//   }, [key, pathname, router, searchParams]);
+export const useModal = (): UseModalReturn => {
+  const key = useRef(uniqueId("modal")).current;
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
 
-//   const onClose = useCallback(() => {
-//     const params = new URLSearchParams(searchParams);
-//     params.delete(key);
-//     router.push(`${pathname}?${params.toString()}`);
-//   }, [key, pathname, router, searchParams]);
+  const isOpen = searchParams.get(key) === "true";
 
-//   return {
-//     isOpen,
-//     onOpen,
-//     onClose,
-//   };
-// };
+  const onOpen = useCallback(() => {
+    const params = new URLSearchParams(searchParams);
+    params.set(key, "true");
+    router.push(`${pathname}?${params.toString()}`);
+  }, [key, pathname, router, searchParams]);
+
+  const onClose = useCallback(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete(key);
+    router.push(`${pathname}?${params.toString()}`);
+  }, [key, pathname, router, searchParams]);
+
+  const onOpenChange = useCallback(
+    (isOpen: boolean) => {
+      if (isOpen) {
+        onOpen();
+      } else {
+        onClose();
+      }
+    },
+    [onClose, onOpen],
+  );
+
+  return {
+    isOpen,
+    onOpen,
+    onClose,
+    bind: {
+      isOpen,
+      onOpenChange,
+    },
+  };
+};

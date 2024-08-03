@@ -11,11 +11,7 @@ export function ChipInputModalController({
   const { chipInputModal } = useMatchContext();
 
   return (
-    <Modal
-      isOpen={chipInputModal.isOpen}
-      onClose={chipInputModal.onClose}
-      hideCloseButton
-    >
+    <Modal {...chipInputModal.bind} hideCloseButton>
       <ModalContent>{children}</ModalContent>
     </Modal>
   );

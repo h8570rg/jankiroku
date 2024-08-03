@@ -20,7 +20,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
     <NavigationCard matchId={match.id}>
       <CardHeader>
         <div className="flex w-full items-center justify-between">
-          <p className="">{displayDate}</p>
+          <p className="font-bold">{displayDate}</p>
           <AvatarGroup size="sm" isBordered max={4}>
             {match.players.map((player) => (
               <Avatar key={player.id} />

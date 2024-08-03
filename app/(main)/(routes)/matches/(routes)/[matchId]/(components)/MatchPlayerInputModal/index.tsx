@@ -9,8 +9,10 @@ export async function MatchPlayerInputModal({ matchId }: { matchId: string }) {
     getMatch({ matchId }),
   ]);
 
+  const isDefaultOpen = match.players.length <= 1;
+
   return (
-    <ModalController>
+    <ModalController isDefaultOpen={isDefaultOpen}>
       <MatchPlayerInputModalContent
         friends={friends}
         matchId={matchId}
