@@ -1,16 +1,6 @@
 import { type NextRequest } from "next/server";
 import { updateSession } from "./lib/utils/supabase/middleware";
 
-// TODO: 見直し
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const noAuthRoutes = [
-  "/auth-code-error",
-  "/login",
-  "/sign-up",
-  "/api/auth/callback",
-  "/manifest.json",
-];
-
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=middleware
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
@@ -33,6 +23,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
