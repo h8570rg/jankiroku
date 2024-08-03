@@ -11,7 +11,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
-  useDisclosure,
+  useModal,
 } from "@/components/Modal";
 import { ScrollShadow } from "@/components/ScrollShadow";
 import { User } from "@/components/User";
@@ -19,7 +19,7 @@ import { browserServices } from "@/lib/services/browser";
 import { addFriends } from "./actions";
 
 export function AddButton() {
-  const addModal = useDisclosure();
+  const addModal = useModal();
   const [query, setQuery] = useState("");
 
   const { searchProfiles } = browserServices();
@@ -47,8 +47,7 @@ export function AddButton() {
         <Icon name="personAdd" className="size-5 fill-current" />
       </Button>
       <Modal
-        isOpen={addModal.isOpen}
-        onOpenChange={addModal.onOpenChange}
+        {...addModal.bind}
         hideCloseButton
         onClose={() => {
           setQuery("");

@@ -11,10 +11,10 @@ import {
 import { useMatchContext } from "../../context";
 
 export function DataModal() {
-  const { isOpen, onClose } = useMatchContext().dataModal;
+  const { dataModal } = useMatchContext();
 
   return (
-    <Modal size="full" isOpen={isOpen} onClose={onClose}>
+    <Modal size="full" {...dataModal.bind}>
       <ModalContent>
         <ModalHeader>データ</ModalHeader>
         <ModalBody>todo</ModalBody>

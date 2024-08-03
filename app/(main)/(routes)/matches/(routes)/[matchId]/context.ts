@@ -1,57 +1,28 @@
 import { createContext, useContext } from "react";
+import { UseModalReturn } from "@/components/Modal";
+
+const useModalreturnDefaultValue = {
+  isOpen: false,
+  onOpen: () => {},
+  onClose: () => {},
+  bind: {
+    isOpen: false,
+    onOpenChange: () => {},
+  },
+};
 
 export const MatchContext = createContext<{
-  playerInputModal: {
-    isOpen: boolean;
-    onOpen: () => void;
-    onClose: () => void;
-  };
-  gameInputModal: {
-    isOpen: boolean;
-    onOpen: () => void;
-    onClose: () => void;
-  };
-  chipInputModal: {
-    isOpen: boolean;
-    onOpen: () => void;
-    onClose: () => void;
-  };
-  ruleModal: {
-    isOpen: boolean;
-    onOpen: () => void;
-    onClose: () => void;
-  };
-  dataModal: {
-    isOpen: boolean;
-    onOpen: () => void;
-    onClose: () => void;
-  };
+  playerInputModal: UseModalReturn;
+  gameInputModal: UseModalReturn;
+  chipInputModal: UseModalReturn;
+  ruleModal: UseModalReturn;
+  dataModal: UseModalReturn;
 }>({
-  playerInputModal: {
-    isOpen: false,
-    onOpen: () => {},
-    onClose: () => {},
-  },
-  gameInputModal: {
-    isOpen: false,
-    onOpen: () => {},
-    onClose: () => {},
-  },
-  chipInputModal: {
-    isOpen: false,
-    onOpen: () => {},
-    onClose: () => {},
-  },
-  ruleModal: {
-    isOpen: false,
-    onOpen: () => {},
-    onClose: () => {},
-  },
-  dataModal: {
-    isOpen: false,
-    onOpen: () => {},
-    onClose: () => {},
-  },
+  playerInputModal: useModalreturnDefaultValue,
+  gameInputModal: useModalreturnDefaultValue,
+  chipInputModal: useModalreturnDefaultValue,
+  ruleModal: useModalreturnDefaultValue,
+  dataModal: useModalreturnDefaultValue,
 });
 
 export const useMatchContext = () => {

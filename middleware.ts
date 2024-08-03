@@ -1,13 +1,14 @@
 import { type NextRequest } from "next/server";
 import { updateSession } from "./lib/utils/supabase/middleware";
 
+// TODO: 見直し
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const noAuthRoutes = [
   "/auth-code-error",
   "/login",
   "/sign-up",
   "/api/auth/callback",
-  "/manifest.json", // TODO: 見直し
+  "/manifest.json",
 ];
 
 /**
@@ -15,15 +16,8 @@ const noAuthRoutes = [
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export async function middleware(request: NextRequest) {
-  return await updateSession(request);
-  // return NextResponse.next({
-  //   request: {
-  //     headers: request.headers,
-  //   },
-  // });
-
-  // パフォーマンス検証のためコメントアウト
   /** @see https://github.com/orgs/supabase/discussions/20905 */
+  return await updateSession(request);
 }
 
 /**

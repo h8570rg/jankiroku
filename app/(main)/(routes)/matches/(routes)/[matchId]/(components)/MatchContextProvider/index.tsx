@@ -1,22 +1,18 @@
 "use client";
 
-import { useDisclosure, useQueryControlledModal } from "@/components/Modal";
+import { useModal } from "@/components/Modal";
 import { MatchContext } from "../../context";
 
 export function MatchContextProvider({
   children,
-  playerInputModalDefaultOpen,
 }: {
   children: React.ReactNode;
-  playerInputModalDefaultOpen: boolean;
 }) {
-  const playerInputModal = useDisclosure({
-    defaultOpen: playerInputModalDefaultOpen,
-  });
-  const gameInputModal = useDisclosure();
-  const chipInputModal = useDisclosure();
-  const ruleModal = useDisclosure();
-  const dataModal = useQueryControlledModal("data"); // TODO: 使うか検証中
+  const playerInputModal = useModal();
+  const gameInputModal = useModal();
+  const chipInputModal = useModal();
+  const ruleModal = useModal();
+  const dataModal = useModal();
 
   return (
     <MatchContext.Provider

@@ -10,37 +10,25 @@ import { MatchContextProvider } from "./(components)/MatchContextProvider";
 import { MatchPlayerInputButton } from "./(components)/MatchPlayerInputButton";
 import { MatchPlayerInputModal } from "./(components)/MatchPlayerInputModal";
 import { MatchTable } from "./(components)/MatchTable";
-import { RuleModalTrigger } from "./(components)/RuleModal";
+import { RuleModal } from "./(components)/RuleModal";
+import { RuleModalTrigger } from "./(components)/RuleModalTrigger";
 
 export default async function Match({
   params: { matchId },
 }: {
   params: { matchId: string };
 }) {
-  // TODO: パフォーマンス検証中
-  // const { getMatch } = serverServices();
-  // const match = await getMatch({ matchId });
-
-  // const { createdAt } = match;
-
-  // const today = dayjs();
-  // const targetDate = dayjs(createdAt);
-  // const isSameYear = today.isSame(targetDate, "year");
-  // const displayDate = isSameYear
-  //   ? dayjs(createdAt).format("M/D")
-  //   : dayjs(createdAt).format("YYYY/M/D");
-
-  // プレイヤー入力モーダルを初期状態で開くかどうか
-  // const isMatchPlayerInputModalDefaultOpen = match.players.length <= 1;
+  // Modalの開閉のたびに実行されるのでここでfetchしないこと
 
   return (
-    <MatchContextProvider playerInputModalDefaultOpen={false}>
+    <MatchContextProvider>
       <div className="flex h-full flex-col">
         <div className="mb-1 flex items-center justify-between">
           <div className="flex items-center gap-1">
             <Button isIconOnly variant="light" as={Link} href="/matches">
               <Icon className="size-4 fill-current" name="back" />
             </Button>
+            {/* TODO: fetch */}
             {/* <p className="font-bold">{displayDate}</p> */}
           </div>
           <div className="flex items-center gap-0.5">
@@ -70,7 +58,9 @@ export default async function Match({
         <Suspense fallback={null}>
           <ChipInputModal matchId={matchId} />
         </Suspense>
-        {/* <RuleModal rule={match.rule} /> */}
+        <Suspense fallback={null}>
+          <RuleModal matchId={matchId} />
+        </Suspense>
         <DataModal />
       </div>
     </MatchContextProvider>

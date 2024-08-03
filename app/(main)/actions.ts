@@ -15,10 +15,3 @@ export async function signOut() {
   revalidatePath("/", "layout");
   redirect("/login");
 }
-
-/** @see https://github.com/orgs/supabase/discussions/20905 */
-// middlewareの代わりにsessionの更新をする
-export async function getUser() {
-  const supabase = createClient();
-  return supabase.auth.getUser();
-}
