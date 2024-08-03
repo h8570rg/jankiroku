@@ -13,7 +13,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  useDisclosure,
+  useModal,
 } from "@/components/Modal";
 import { ScrollShadow } from "@/components/ScrollShadow";
 import { User } from "@/components/User";
@@ -39,7 +39,7 @@ export function MatchPlayerInputModalContent({
     isOpen: isProfileCreateModalOpen,
     onClose: onProfileCreateModalClose,
     onOpen: onOpenProfileCreateModal,
-  } = useDisclosure();
+  } = useModal();
 
   const [isPending, setIsPending] = useState(false);
 

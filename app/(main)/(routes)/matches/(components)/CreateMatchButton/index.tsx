@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Accordion, AccordionItem } from "@/components/Accordion";
 import { Button, ButtonGroup } from "@/components/Button";
 import { Input } from "@/components/Input";
-import { useDisclosure } from "@/components/Modal";
+import { useModal } from "@/components/Modal";
 import {
   Modal,
   ModalBody,
@@ -63,7 +63,7 @@ const playersCount3DefaultValues: InputSchema = {
 };
 
 export function CreateMatchButton({ className }: { className?: string }) {
-  const ruleCreateModal = useDisclosure();
+  const ruleCreateModal = useModal();
 
   const [state, formAction] = useFormState(createMatch, {});
   const { errors } = state;
@@ -87,11 +87,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
       >
         ゲームを始める
       </Button>
-      <Modal
-        isOpen={ruleCreateModal.isOpen}
-        onOpenChange={ruleCreateModal.onOpenChange}
-        hideCloseButton
-      >
+      <Modal {...ruleCreateModal.bind} hideCloseButton>
         <ModalContent>
           {(onClose) => (
             <>
