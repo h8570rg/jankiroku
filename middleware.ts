@@ -1,4 +1,5 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
+import { updateSession } from "./lib/utils/supabase/middleware";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const noAuthRoutes = [
@@ -14,15 +15,15 @@ const noAuthRoutes = [
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export async function middleware(request: NextRequest) {
-  return NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  return await updateSession(request);
+  // return NextResponse.next({
+  //   request: {
+  //     headers: request.headers,
+  //   },
+  // });
 
   // パフォーマンス検証のためコメントアウト
   /** @see https://github.com/orgs/supabase/discussions/20905 */
-  // return await updateSession(request);
 }
 
 /**

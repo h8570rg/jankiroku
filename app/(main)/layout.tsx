@@ -1,12 +1,12 @@
 import Navbar from "./(components)/Navbar";
-import { getUser } from "./actions";
+// import { getUser } from "./actions";
 
 export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  await getUser(); // TODO: パフォーマンス検証中。うまくいったらコンテキスト流したい。
+  // await getUser(); // TODO: パフォーマンス検証中。うまくいったらコンテキスト流したい。
   return (
     <div className="flex h-full flex-col">
       <Navbar />
