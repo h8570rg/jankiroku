@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import { UseModalReturn } from "@/components/Modal";
 
-const useModalreturnDefaultValue = {
+const modalDefaultValue = {
   isOpen: false,
   onOpen: () => {},
   onClose: () => {},
@@ -12,17 +12,17 @@ const useModalreturnDefaultValue = {
 };
 
 export const MatchContext = createContext<{
-  playerInputModal: UseModalReturn;
-  gameInputModal: UseModalReturn;
-  chipInputModal: UseModalReturn;
+  playersModal: UseModalReturn;
+  gameModal: UseModalReturn;
+  chipModal: UseModalReturn;
   ruleModal: UseModalReturn;
   dataModal: UseModalReturn;
 }>({
-  playerInputModal: useModalreturnDefaultValue,
-  gameInputModal: useModalreturnDefaultValue,
-  chipInputModal: useModalreturnDefaultValue,
-  ruleModal: useModalreturnDefaultValue,
-  dataModal: useModalreturnDefaultValue,
+  playersModal: modalDefaultValue,
+  gameModal: modalDefaultValue,
+  chipModal: modalDefaultValue,
+  ruleModal: modalDefaultValue,
+  dataModal: modalDefaultValue,
 });
 
 export const useMatchContext = () => {

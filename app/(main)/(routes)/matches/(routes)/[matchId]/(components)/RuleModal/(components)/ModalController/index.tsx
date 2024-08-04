@@ -3,7 +3,11 @@
 import { Modal } from "@/components/Modal";
 import { useMatchContext } from "../../../../context";
 
-export function ModalController({ children }: { children: React.ReactNode }) {
+export function RuleModalController({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { ruleModal } = useMatchContext();
 
   return (

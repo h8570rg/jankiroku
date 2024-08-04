@@ -1,0 +1,30 @@
+"use client";
+
+import { forwardRef } from "react";
+import { Button, ButtonProps } from "@/components/Button";
+import { useMatchContext } from "../../../../context";
+
+export const GameModalTrigger = forwardRef<
+  HTMLButtonElement,
+  ButtonProps & {
+    isPlayersShort: boolean;
+  }
+>(function GameModalTrigger({ isPlayersShort, onClick, ...props }, ref) {
+  const { onOpen } = useMatchContext().gameModal;
+
+  // buttonにして親でasにするとpropsが渡せない
+  return (
+    <Button
+      ref={ref}
+      onClick={(e) => {
+        if (isPlayersShort) {
+          alert("プレイヤーが足りません");
+          return;
+        }
+        onOpen();
+        onClick?.(e);
+      }}
+      {...props}
+    />
+  );
+});
