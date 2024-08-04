@@ -1,9 +1,10 @@
 import classNames from "classnames";
+import { Icon } from "@/components/Icon";
 import { serverServices } from "@/lib/services/server";
 import { MatchPlayer } from "@/lib/type";
-import { AddGameButton } from "./(components)/AddGameButton";
-import { ChipInputButton } from "./(components)/ChipInputButton";
-import { MatchPlayerInputButton } from "./(components)/MatchPlayerInputButton";
+import { ChipModalTrigger } from "../ChipModal";
+import { GameModalTrigger } from "../GameModal";
+import { PlayersModalTrigger } from "../PlayersModal";
 import styles from "./styles.module.css";
 
 type Column = {
@@ -65,7 +66,7 @@ export async function MatchTable({
 
   return (
     <div className={classNames(className, "flex flex-col")}>
-      <MatchPlayerInputButton
+      <PlayersModalTrigger
         className={classNames(
           styles["row"],
           "flex items-center rounded-lg bg-default-100 text-foreground-500",
@@ -88,7 +89,7 @@ export async function MatchTable({
             )}
           </div>
         ))}
-      </MatchPlayerInputButton>
+      </PlayersModalTrigger>
       <div className="grow">
         {gameRows.length === 0 && (
           <p className="my-10 text-center text-small text-foreground-light">
@@ -125,9 +126,15 @@ export async function MatchTable({
             ))}
           </ol>
         )}
-        <div>
-          <AddGameButton isPlayersShort={isPlayersShort} />
-        </div>
+        <GameModalTrigger
+          fullWidth
+          size="lg"
+          startContent={<Icon className="size-5" name="edit" />}
+          variant="ghost"
+          isPlayersShort={isPlayersShort}
+        >
+          結果を入力する
+        </GameModalTrigger>
       </div>
       <div className="rounded-lg bg-default-100 text-foreground-500">
         <div className={classNames(styles["row"])}>
@@ -151,7 +158,7 @@ export async function MatchTable({
             </div>
           ))}
         </div>
-        <ChipInputButton className={classNames(styles["row"], "w-full")}>
+        <ChipModalTrigger className={classNames(styles["row"], "w-full")}>
           <div
             className={classNames(
               styles["col"],
@@ -170,7 +177,7 @@ export async function MatchTable({
               {column.chipCount !== null && <span>枚</span>}
             </div>
           ))}
-        </ChipInputButton>
+        </ChipModalTrigger>
         <div className={classNames(styles["row"])}>
           <div
             className={classNames(

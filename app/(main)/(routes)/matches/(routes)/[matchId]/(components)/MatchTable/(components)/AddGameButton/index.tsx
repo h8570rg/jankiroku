@@ -5,14 +5,14 @@ import { Icon } from "@/components/Icon";
 import { useMatchContext } from "../../../../context";
 
 export function AddGameButton({ isPlayersShort }: { isPlayersShort: boolean }) {
-  const { gameInputModal } = useMatchContext();
+  const { gameModal } = useMatchContext();
 
   function handleClick() {
     if (isPlayersShort) {
       alert("プレイヤーが足りません");
       return;
     }
-    gameInputModal.onOpen();
+    gameModal.onOpen();
   }
 
   return (
