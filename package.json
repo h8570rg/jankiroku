@@ -55,7 +55,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
     "react-toastify": "^10.0.5",
-    "recharts": "^2.12.7",
+    "recharts": "^2.13.0-alpha.4",
     "server-only": "^0.0.1",
     "sharp": "^0.33.4",
     "swr": "^2.2.5",

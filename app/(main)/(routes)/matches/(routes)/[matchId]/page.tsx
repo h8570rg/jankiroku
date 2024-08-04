@@ -58,7 +58,9 @@ export default async function Match({
         <Suspense fallback={null}>
           <RuleModal matchId={matchId} />
         </Suspense>
-        <DataModal />
+        <Suspense fallback={null}>
+          <DataModal matchId={matchId} />
+        </Suspense>
       </div>
     </MatchContextProvider>
   );
