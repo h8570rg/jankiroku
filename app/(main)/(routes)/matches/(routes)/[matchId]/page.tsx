@@ -2,16 +2,13 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
-import { ChipInputButton } from "./(components)/ChipInputButton";
-import { ChipInputModal } from "./(components)/ChipInputModal";
+import { ChipModal, ChipModalTrigger } from "./(components)/ChipModal";
+import { MatchContextProvider } from "./(components)/ContextProvider";
 import { DataModal, DataModalTrigger } from "./(components)/DataModal";
-import { GameInputModal } from "./(components)/GameInputModal";
-import { MatchContextProvider } from "./(components)/MatchContextProvider";
-import { MatchPlayerInputButton } from "./(components)/MatchPlayerInputButton";
-import { MatchPlayerInputModal } from "./(components)/MatchPlayerInputModal";
+import { GameModal } from "./(components)/GameModal";
 import { MatchTable } from "./(components)/MatchTable";
-import { RuleModal } from "./(components)/RuleModal";
-import { RuleModalTrigger } from "./(components)/RuleModalTrigger";
+import { PlayersModal, PlayersModalTrigger } from "./(components)/PlayersModal";
+import { RuleModal, RuleModalTrigger } from "./(components)/RuleModal";
 
 export default async function Match({
   params: { matchId },
@@ -38,30 +35,32 @@ export default async function Match({
             <Button isIconOnly variant="light" as={RuleModalTrigger}>
               <Icon className="size-5 fill-current" name="description" />
             </Button>
-            <ChipInputButton isIconOnly variant="light">
+            <Button isIconOnly variant="light" as={ChipModalTrigger}>
               <Icon className="size-5 fill-current" name="chip" />
-            </ChipInputButton>
-            <MatchPlayerInputButton isIconOnly variant="light">
+            </Button>
+            <Button isIconOnly variant="light" as={PlayersModalTrigger}>
               <Icon className="size-5 fill-current" name="personAdd" />
-            </MatchPlayerInputButton>
+            </Button>
           </div>
         </div>
         <Suspense fallback={null}>
           <MatchTable className="grow" matchId={matchId} />
         </Suspense>
         <Suspense fallback={null}>
-          <MatchPlayerInputModal matchId={matchId} />
+          <PlayersModal matchId={matchId} />
         </Suspense>
         <Suspense fallback={null}>
-          <GameInputModal matchId={matchId} />
+          <GameModal matchId={matchId} />
         </Suspense>
         <Suspense fallback={null}>
-          <ChipInputModal matchId={matchId} />
+          <ChipModal matchId={matchId} />
         </Suspense>
         <Suspense fallback={null}>
           <RuleModal matchId={matchId} />
         </Suspense>
-        <DataModal />
+        <Suspense fallback={null}>
+          <DataModal matchId={matchId} />
+        </Suspense>
       </div>
     </MatchContextProvider>
   );
