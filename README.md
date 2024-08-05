@@ -1,6 +1,6 @@
 # janreco
 
-Janreco is a Mahjong management application。
+Janreco is a Mahjong game result management application.
 
 # Quick Start
 
