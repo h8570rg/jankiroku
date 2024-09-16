@@ -3,9 +3,21 @@
 import classNames from "classnames";
 import { Button } from "@/components/Button";
 import { GoogleIcon } from "@/components/SocialProviderIcon";
+import { getIsWebview } from "@/lib/utils/userAgent";
 import { signInWithGoogle } from "../LoginForm/actions";
 
 export function SocialProviders({ className }: { className?: string }) {
+  const handleGoogleClick = () => {
+    const isWebview = getIsWebview();
+    if (isWebview) {
+      window.alert(
+        "アプリ内ブラウザではGoogleログインを利用できません。他のブラウザでお試しください。",
+      );
+      return;
+    }
+    signInWithGoogle();
+  };
+
   return (
     <ul className={classNames("space-y-2", className)}>
       <li className="w-full">
@@ -13,7 +25,7 @@ export function SocialProviders({ className }: { className?: string }) {
           fullWidth
           className="flex items-center justify-center gap-3"
           variant="bordered"
-          onClick={() => signInWithGoogle()}
+          onClick={handleGoogleClick}
         >
           <GoogleIcon className="w-5" />
           <span>Google でログイン</span>
@@ -23,7 +35,7 @@ export function SocialProviders({ className }: { className?: string }) {
         <Button
           fullWidth
           variant="bordered"
-          onClick={() => alert("Coming soon!")} // TODO: 実装
+          onClick={() => alert("開発中です、しばらくお待ちください")}
         >
           <span>ログインせずに始める</span>
         </Button>
