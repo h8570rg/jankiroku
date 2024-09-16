@@ -26,7 +26,8 @@
     "supabase:reset": "env-cmd -f .env.local supabase db reset",
     "supabase:diff": "env-cmd -f .env.local supabase db diff -f local",
     "supabase:squash": "supabase migration squash",
-    "supabase:type": "env-cmd -f .env.local supabase gen types typescript --local > lib/database.types.ts"
+    "supabase:type": "env-cmd -f .env.local supabase gen types typescript --local > lib/database.types.ts",
+    "migrate": "tsc --skipLibCheck --esModuleInterop  --outDir lib/migration/dist lib/migration/index.ts && node lib/migration/dist/migration/index.js"
   },
   "repository": {
     "type": "git",
