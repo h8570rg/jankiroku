@@ -4,6 +4,14 @@ import readline from "readline";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../database.types";
 
+// allはすべてのデータを移管する。
+// 対戦相手も紐づけるため、all一度しか実行しない。よってドキュメントも詳しく残していない。
+const mode: "all" | "isolate" = "all";
+
+const adminUserId = "";
+
+const allModeUserIdMap = {};
+
 // readline インターフェースを作成
 const rl = readline.createInterface({
   input: process.stdin,
@@ -93,7 +101,7 @@ async function main() {
             migration({
               oldData,
               userIdBefore,
-              userIdAfter,
+              userIdAfter: mode === "all" ? adminUserId : userIdAfter,
             });
           } else {
             // ユーザーが「n」などで確認しなかった場合の処理
@@ -124,11 +132,15 @@ async function migration({
     createdAt: key,
   }));
 
-  const olsPlayerMatches = oldMatchesArray.filter((item) =>
-    item.players.some((player) => player.id === userIdBefore),
-  );
+  // all mode の場合は全ての match を移管
+  const oldPlayerMatches =
+    mode === "all"
+      ? oldMatchesArray
+      : oldMatchesArray.filter((item) =>
+          item.players.some((player) => player.id === userIdBefore),
+        );
 
-  for (const playerMatch of olsPlayerMatches) {
+  for (const playerMatch of oldPlayerMatches) {
     const {
       players: oldPlayers,
       chips: oldChips,
@@ -138,7 +150,12 @@ async function migration({
     } = playerMatch;
 
     // 移管後の playerId と移管前の playerId の対応を保存
-    const playerIdMap: { [key: string]: string } = {};
+    const playerIdMap: { [key: string]: string } =
+      mode === "all"
+        ? allModeUserIdMap
+        : {
+            [userIdBefore]: userIdAfter,
+          };
 
     // match を作成
     const match = await createMatch({
@@ -170,7 +187,8 @@ async function migration({
           playerChip = Math.round(playerChip);
         }
       }
-      if (player.id !== userIdBefore) {
+      if (!playerIdMap[player.id]) {
+        // 移管後の playerId が存在しない場合は新規作成
         const profile = await createProfile({
           name: player.nickName,
         });
@@ -181,12 +199,12 @@ async function migration({
         });
         playerIdMap[player.id] = profile.id;
       } else {
+        // 移管後の playerId が存在する場合はそのまま使用
         await createMatchPlayer({
           matchId: match.id,
-          playerId: userIdAfter,
+          playerId: playerIdMap[player.id],
           chipCount: playerChip,
         });
-        playerIdMap[userIdBefore] = userIdAfter;
       }
     }
 
