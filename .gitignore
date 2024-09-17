@@ -9,3 +9,6 @@ tsconfig.tsbuildinfo
 **/public/sw.js.map
 **/public/workbox-*.js
 **/public/workbox-*.js.map
+
+lib/migration/dist
+lib/migration/old-data.json

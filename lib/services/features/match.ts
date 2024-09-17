@@ -79,7 +79,7 @@ export function matchService(supabase: Supabase) {
 
     async getMatches({
       page = 1,
-      size = 99,
+      size = 999, // TODO: 全件取得どうするか
     }: {
       page?: number;
       size?: number;
@@ -88,23 +88,13 @@ export function matchService(supabase: Supabase) {
       if (userResponse.error) throw userResponse.error;
       const user = userResponse.data.user;
 
-      // matchesResponse取得のとこで、inで取得してもfilterできなかったので
-      const playerMatchesResponse = await supabase
-        .from("match_players")
-        .select("*")
-        .eq("player_id", user.id);
-      if (playerMatchesResponse.error) throw playerMatchesResponse.error;
-      const playerMatches = playerMatchesResponse.data;
-
       const matchesResponse = await supabase
         .from("matches")
         .select(
-          "*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))",
+          "*, match_players!inner(*, profiles!inner(*)), rules(*), games(*, game_players(*))",
+          { count: "exact" },
         )
-        .in(
-          "id",
-          playerMatches.map((playerMatch) => playerMatch.match_id),
-        )
+        .eq("match_players.player_id", user.id)
         .range((page - 1) * size, page * size - 1)
         .order("created_at", { ascending: false });
 
@@ -112,24 +102,6 @@ export function matchService(supabase: Supabase) {
       const matches = matchesResponse.data;
 
       return matches.map(formatMatch);
-    },
-
-    // TODO: 消す
-    async addMatchPlayer({
-      matchId,
-      playerId,
-    }: {
-      matchId: string;
-      playerId: string;
-    }): Promise<void> {
-      const addMatchPlayerResponse = await supabase
-        .from("match_players")
-        .insert({
-          match_id: matchId,
-          player_id: playerId,
-        });
-      if (addMatchPlayerResponse.error) throw addMatchPlayerResponse.error;
-      return;
     },
 
     async addMatchPlayers({

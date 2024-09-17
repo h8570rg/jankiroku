@@ -8,10 +8,19 @@ import { NextUIProvider } from "./nextUiProvider";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Janreco",
-    default: "Janreco",
+    template:
+      process.env.NEXT_PUBLIC_SERVICE_ENV !== "development"
+        ? "%s | Janreco"
+        : "[開発環境] %s | Janreco",
+    default:
+      process.env.NEXT_PUBLIC_SERVICE_ENV !== "development"
+        ? "Janreco"
+        : "[開発環境] Janreco",
   },
-  description: "麻雀成績管理アプリ",
+  description:
+    process.env.NEXT_PUBLIC_SERVICE_ENV !== "development"
+      ? "麻雀成績管理アプリ"
+      : "[開発環境] 麻雀成績管理アプリ",
 };
 
 export default async function RootLayout({
