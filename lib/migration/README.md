@@ -55,6 +55,7 @@ lib/migration
 
 ```bash
 npm run supabase:start
+npx supabase status
 ```
 
 ##### ユーザーID の取得
@@ -72,7 +73,7 @@ npm run supabase:start
 以下のコマンドを実行し、データを新サービスに移行します：
 
 ```bash
-SUPABASE_URL=<API URL> SERVICE_ROLE_KEY=<service_role key> npm run migration
+SUPABASE_URL=<API URL> SERVICE_ROLE_KEY=<service_role key> npm run migrate
 ```
 
 コマンド実行後、移管前ユーザーIDと移管後ユーザーIDを入力するプロンプトが表示されるので、準備した情報を入力してください。
@@ -80,5 +81,7 @@ SUPABASE_URL=<API URL> SERVICE_ROLE_KEY=<service_role key> npm run migration
 
 ## 注意事項
 
+- 実行する前に必ず開発環境で動作確認を行ってください。
 - service_role key は他者に漏洩しないよう注意してください。
 - 複数回実行するとデータが重複して登録されるため、移行処理は1回のみ実行してください。
+- 対象ユーザーの対戦相手はすべて新規ユーザーとして登録されます。
