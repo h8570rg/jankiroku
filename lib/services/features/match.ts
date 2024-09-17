@@ -84,17 +84,12 @@ export function matchService(supabase: Supabase) {
       page?: number;
       size?: number;
     }): Promise<Match[]> {
-      const userResponse = await supabase.auth.getUser();
-      if (userResponse.error) throw userResponse.error;
-      const user = userResponse.data.user;
-
       const matchesResponse = await supabase
         .from("matches")
         .select(
-          "*, match_players!inner(*, profiles!inner(*)), rules(*), games(*, game_players(*))",
+          "*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))",
           { count: "exact" },
         )
-        .eq("match_players.player_id", user.id)
         .range((page - 1) * size, page * size - 1)
         .order("created_at", { ascending: false });
 
