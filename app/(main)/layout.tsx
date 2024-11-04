@@ -1,16 +1,21 @@
+import dynamic from "next/dynamic";
 import Navbar from "./(components)/Navbar";
-// import { getUser } from "./actions";
+
+const ReleaseNotesModal = dynamic(
+  () => import("./(components)/ReleaseNotesModal"),
+  { ssr: false },
+);
 
 export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // await getUser(); // TODO: パフォーマンス検証中。うまくいったらコンテキスト流したい。
   return (
     <div className="flex h-full flex-col">
       <Navbar />
-      <main className="flex-1 px-4 pb-5">{children}</main>
+      <main className="flex-1 px-4">{children}</main>
+      <ReleaseNotesModal />
     </div>
   );
 }
