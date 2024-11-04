@@ -19,7 +19,7 @@ export default async function Match({
 
   return (
     <MatchContextProvider>
-      <div className="flex h-full flex-col">
+      <div className="flex h-full flex-col pb-5">
         <div className="mb-1 flex items-center justify-between">
           <div className="flex items-center gap-1">
             <Button isIconOnly variant="light" as={Link} href="/matches">

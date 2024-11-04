@@ -136,7 +136,7 @@ export async function MatchTable({
           結果を入力する
         </GameModalTrigger>
       </div>
-      <div className="rounded-lg bg-default-100 text-foreground-500">
+      <div className="mt-3 rounded-lg bg-default-100 text-foreground-500">
         <div className={classNames(styles["row"])}>
           <div
             className={classNames(
