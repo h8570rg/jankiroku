@@ -1,12 +1,7 @@
-import { Metadata } from "next";
 import Link from "next/link";
 import { Divider } from "@/components/Divider";
 import { LoginForm } from "./(components)/LoginForm";
 import { SocialProviders } from "./(components)/SocialProviders";
-
-export const metadata: Metadata = {
-  title: "ログイン",
-};
 
 export default function LoginPage() {
   return (

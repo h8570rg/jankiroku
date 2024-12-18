@@ -68,6 +68,13 @@ const config = {
       },
       addCommonColors: true,
       themes: {
+        light: {
+          colors: {
+            primary: {
+              DEFAULT: "#7C3BED",
+            },
+          },
+        },
         dark: {
           colors: {
             background: "#030711",
