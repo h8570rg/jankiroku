@@ -8,19 +8,15 @@ import { NextUIProvider } from "./nextUiProvider";
 
 export const metadata: Metadata = {
   title: {
-    template:
-      process.env.NEXT_PUBLIC_SERVICE_ENV !== "development"
-        ? "%s | Janreco"
-        : "[開発環境] %s | Janreco",
-    default:
-      process.env.NEXT_PUBLIC_SERVICE_ENV !== "development"
-        ? "Janreco"
-        : "[開発環境] Janreco",
+    template: "%s | Janreco",
+    default: "Janreco",
   },
   description:
-    process.env.NEXT_PUBLIC_SERVICE_ENV !== "development"
-      ? "麻雀成績管理アプリ"
-      : "[開発環境] 麻雀成績管理アプリ",
+    "麻雀成績管理ウェブアプリです。無料で使え、簡単に麻雀の成績を記録することができます。",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function RootLayout({
@@ -31,7 +27,11 @@ export default async function RootLayout({
   return (
     <html
       lang="ja"
-      className={classNames(righteous.variable, mPlus1p.variable, "h-full")}
+      className={classNames(
+        righteous.variable,
+        mPlus1p.variable,
+        "h-full scroll-smooth",
+      )}
       suppressHydrationWarning
     >
       <head>

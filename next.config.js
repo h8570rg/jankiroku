@@ -23,13 +23,7 @@ const nextConfig = {
     },
   },
   redirects: async () => {
-    return [
-      {
-        source: "/",
-        destination: "/matches",
-        permanent: true,
-      },
-    ];
+    return [];
   },
 };
 
