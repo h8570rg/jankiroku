@@ -2,7 +2,7 @@
   "theme_color": "#7C3BED",
   "background_color": "#414141",
   "display": "standalone",
-  "start_url": "/",
+  "start_url": "/matches",
   "name": "Janreco",
   "short_name": "Janreco",
   "description": "\u9ebb\u96c0\u6210\u7e3e\u7ba1\u7406\u30a2\u30d7\u30ea",
