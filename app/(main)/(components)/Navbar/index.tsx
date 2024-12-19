@@ -14,7 +14,7 @@ export default function Navbar() {
     <NextUINavbar shouldHideOnScroll>
       <NavbarContent>
         <NavbarBrand>
-          <Link color="foreground" href="/">
+          <Link color="foreground" href="/matches">
             <Logo className="text-large" />
           </Link>
         </NavbarBrand>

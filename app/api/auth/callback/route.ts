@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       if (profile.isUnregistered) {
         return NextResponse.redirect(`${origin}/register`);
       }
-      return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(`${origin}${next}/matches`);
     }
   }
 

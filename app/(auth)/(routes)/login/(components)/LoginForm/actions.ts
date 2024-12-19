@@ -56,7 +56,7 @@ export async function signInEmail(
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/matches");
 }
 
 /**
@@ -80,5 +80,5 @@ export async function signInAnonymously() {
   const supabase = createClient();
   await supabase.auth.signInAnonymously();
 
-  redirect("/");
+  redirect("/matches");
 }

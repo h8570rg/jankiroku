@@ -14,7 +14,7 @@ export default async function RegisterPage() {
   const user = await getUserProfile();
 
   if (user.name && user.janrecoId) {
-    redirect("/");
+    redirect("/matches");
   }
 
   return (

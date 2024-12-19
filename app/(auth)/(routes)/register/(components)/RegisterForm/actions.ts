@@ -57,8 +57,8 @@ export async function updateProfile(
     }
   }
 
-  revalidatePath("/");
-  redirect("/");
+  revalidatePath("/", "layout");
+  redirect("/matches");
 }
 
 export async function signOut() {
