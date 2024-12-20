@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { Metadata } from "next";
 import { IconDefs } from "@/components/Icon";
 import { ToastContainer } from "@/lib/toast";
-import { righteous, mPlus1p } from "./fonts";
+import { fontClassNames } from "./fonts";
 import "./globals.css";
 import { NextUIProvider } from "./nextUiProvider";
 
@@ -27,17 +27,13 @@ export default async function RootLayout({
   return (
     <html
       lang="ja"
-      className={classNames(
-        righteous.variable,
-        mPlus1p.variable,
-        "h-full scroll-smooth",
-      )}
+      className={classNames(fontClassNames, "h-full scroll-smooth")}
       suppressHydrationWarning
     >
       <head>
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className="h-full font-mplus">
+      <body className="h-full font-rocknroll">
         <IconDefs />
         <NextUIProvider>
           <div className="h-full bg-background text-foreground">{children}</div>

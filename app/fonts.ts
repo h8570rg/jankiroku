@@ -1,15 +1,21 @@
-import { Righteous, M_PLUS_1p } from "next/font/google";
+import classNames from "classnames";
+import { Righteous, RocknRoll_One } from "next/font/google";
 
-export const righteous = Righteous({
+const righteous = Righteous({
   variable: "--font-righteous",
   weight: ["400"],
   subsets: ["latin"],
   display: "swap",
 });
 
-export const mPlus1p = M_PLUS_1p({
-  variable: "--font-m-plus-1p",
-  weight: ["400", "500", "700"],
+const rocknRollOne = RocknRoll_One({
+  variable: "--font-rocknroll-one",
+  weight: ["400"],
   subsets: ["latin"],
   display: "swap",
 });
+
+export const fontClassNames = classNames(
+  righteous.variable,
+  rocknRollOne.variable,
+);
