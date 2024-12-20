@@ -37,7 +37,7 @@ const config = {
       },
       fontFamily: {
         righteous: ["var(--font-righteous)"],
-        mplus: ["var(--font-m-plus-1p)"],
+        rocknroll: ["var(--font-rocknroll-one)"],
       },
       height: {
         screen: ["100vh", "100dvh"],
