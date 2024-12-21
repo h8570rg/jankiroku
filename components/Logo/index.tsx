@@ -6,7 +6,7 @@ function Logo({ className }: { className?: string }) {
       {process.env.NEXT_PUBLIC_SERVICE_ENV === "development" && (
         <span className="text-warning">{`[開発環境] `}</span>
       )}
-      雀鬼禄
+      雀鬼録
     </div>
   );
 }
