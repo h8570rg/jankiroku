@@ -1,5 +1,5 @@
 {
-  "name": "janreco",
+  "name": "jankiroku",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
@@ -31,14 +31,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/h8570rg/janreco.git"
+    "url": "git+https://github.com/h8570rg/jankiroku.git"
   },
   "author": "https://github.com/h8570rg",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/h8570rg/janreco/issues"
+    "url": "https://github.com/h8570rg/jankiroku/issues"
   },
-  "homepage": "https://github.com/h8570rg/janreco#readme",
+  "homepage": "https://github.com/h8570rg/jankiroku#readme",
   "dependencies": {
     "@dnd-kit/sortable": "^8.0.0",
     "@hookform/resolvers": "^3.9.0",
