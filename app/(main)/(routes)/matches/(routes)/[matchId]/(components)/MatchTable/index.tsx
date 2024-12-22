@@ -9,7 +9,7 @@ import styles from "./styles.module.css";
 
 type Column = {
   id: string;
-  janrecoId: string | null;
+  displayId: string | null;
   name: string | null;
   type: "index" | "player" | "empty";
 } & MatchPlayer;
@@ -45,7 +45,7 @@ export async function MatchTable({
       (_, i) =>
         ({
           id: `player-${i}`,
-          janrecoId: "",
+          displayId: "",
           name: "",
           type: "empty",
           rankCounts: [0] as number[],

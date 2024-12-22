@@ -11,13 +11,13 @@ type State = {
   errors?: {
     base?: string[];
     name?: string[];
-    janrecoId?: string[];
+    displayId?: string[];
   };
 };
 
 const updateProfileSchema = z.object({
   name: schema.name,
-  janrecoId: schema.janrecoId,
+  displayId: schema.displayId,
 });
 
 export async function updateProfile(
@@ -27,7 +27,7 @@ export async function updateProfile(
 ): Promise<State> {
   const validatedFields = updateProfileSchema.safeParse({
     name: formData.get("name"),
-    janrecoId: formData.get("janrecoId"),
+    displayId: formData.get("displayId"),
   });
 
   if (!validatedFields.success) {
@@ -36,20 +36,20 @@ export async function updateProfile(
     };
   }
 
-  const { name, janrecoId } = validatedFields.data;
+  const { name, displayId } = validatedFields.data;
 
   const { updateUserProfile } = serverServices();
 
   const result = await updateUserProfile({
     name,
-    janrecoId,
+    displayId,
   });
 
   if (!result.success) {
     if (result.error.code === "23505") {
       return {
         errors: {
-          janrecoId: ["このIDは既に使用されています。"],
+          displayId: ["このIDは既に使用されています。"],
         },
       };
     } else {

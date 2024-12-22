@@ -1,7 +1,9 @@
+import { SERVICE_NAME } from "@/lib/config";
+
 export default function ReleaseNotes_0_1_0() {
   return (
     <>
-      <p>Janrecoへようこそ！</p>
+      <p>{SERVICE_NAME}へようこそ！</p>
       <p>
         現在はベータ版ですが、機能の追加や改善を行っていく予定です。今後のアップデートにご期待ください！
       </p>

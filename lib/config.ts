@@ -1,7 +1,8 @@
+export const SERVICE_NAME = "雀鬼録";
 export const PASSWORD_MIN_LENGTH = 6;
 export const NAME_MAX_LENGTH = 12;
-export const JANRECO_ID_MIN_LENGTH = 4;
-export const JANRECO_ID_MAX_LENGTH = 12;
+export const DISPLAY_ID_MIN_LENGTH = 4;
+export const DISPLAY_ID_MAX_LENGTH = 12;
 
 export const rates = [0, 1, 2, 3, 5, 10, 20, 50, 100] as const;
 export const rateLabel: Record<(typeof rates)[number], string> = {
