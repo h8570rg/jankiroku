@@ -10,6 +10,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (process.env.MAINTENANCE_MODE !== "true") {
+    if (request.nextUrl.pathname === "/maintenance") {
+      return NextResponse.rewrite(new URL("/404", request.url));
+    }
+  } else {
+    return NextResponse.rewrite(new URL("/maintenance", request.url));
+  }
+
   /** @see https://github.com/orgs/supabase/discussions/20905 */
   return await updateSession(request);
 }

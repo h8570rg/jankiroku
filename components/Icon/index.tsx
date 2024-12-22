@@ -20,7 +20,8 @@ export type IconName =
   | "check-filled"
   | "edit"
   | "description"
-  | "bar-chart";
+  | "bar-chart"
+  | "refresh";
 
 export function Icon({
   name,
@@ -91,6 +92,9 @@ export function IconDefs() {
         </symbol>
         <symbol id="bar-chart" viewBox="0 -960 960 960">
           <path d="M640-160v-280h160v280H640Zm-240 0v-640h160v640H400Zm-240 0v-440h160v440H160Z" />
+        </symbol>
+        <symbol id="refresh" viewBox="0 -960 960 960">
+          <path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z" />
         </symbol>
       </defs>
     </svg>
