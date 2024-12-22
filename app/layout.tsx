@@ -31,6 +31,9 @@ export default async function RootLayout({
       className={classNames(fontClassNames, "h-full scroll-smooth")}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body className="h-full font-rocknroll">
         <IconDefs />
         <NextUIProvider>
