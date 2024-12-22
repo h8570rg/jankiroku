@@ -170,13 +170,6 @@ end;
 $function$
 ;
 
-CREATE OR REPLACE FUNCTION public.name_janreco_id(profiles)
- RETURNS text
- LANGUAGE sql
- IMMUTABLE
-AS $function$select $1.name || ' ' || $1.janreco_id;$function$
-;
-
 grant delete on table "public"."friends" to "anon";
 
 grant insert on table "public"."friends" to "anon";
