@@ -202,20 +202,17 @@ export type Database = {
         Row: {
           display_id: string | null;
           id: string;
-          janreco_id: string | null;
           name: string | null;
           name_janreco_id: string | null;
         };
         Insert: {
           display_id?: string | null;
           id?: string;
-          janreco_id?: string | null;
           name?: string | null;
         };
         Update: {
           display_id?: string | null;
           id?: string;
-          janreco_id?: string | null;
           name?: string | null;
         };
         Relationships: [];
