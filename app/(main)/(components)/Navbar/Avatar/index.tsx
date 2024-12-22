@@ -9,7 +9,7 @@ export async function NavbarAvatar() {
   const [profile] = await Promise.all([getUserProfile()]);
 
   // TODO: isUnregisteredで扱う。ts制御
-  if (!profile.janrecoId || !profile.name) {
+  if (!profile.displayId || !profile.name) {
     redirect("/register");
   }
 
@@ -18,7 +18,7 @@ export async function NavbarAvatar() {
       <DropdownTrigger>
         <Avatar as="button" className="transition-transform" size="sm" />
       </DropdownTrigger>
-      <NavbarAvatarMenu name={profile.name} janrecoId={profile.janrecoId} />
+      <NavbarAvatarMenu name={profile.name} displayId={profile.displayId} />
     </Dropdown>
   );
 }

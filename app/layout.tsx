@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { Metadata } from "next";
 import { IconDefs } from "@/components/Icon";
+import { SERVICE_NAME } from "@/lib/config";
 import { ToastContainer } from "@/lib/toast";
 import { fontClassNames } from "./fonts";
 import "./globals.css";
@@ -8,8 +9,8 @@ import { NextUIProvider } from "./nextUiProvider";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | 雀鬼録",
-    default: "雀鬼録",
+    template: `%s | ${SERVICE_NAME}`,
+    default: SERVICE_NAME,
   },
   description:
     "麻雀成績管理ウェブアプリです。無料で使え、簡単に麻雀の成績を記録することができます。",
@@ -30,9 +31,6 @@ export default async function RootLayout({
       className={classNames(fontClassNames, "h-full scroll-smooth")}
       suppressHydrationWarning
     >
-      <head>
-        <link rel="manifest" href="/manifest.json" />
-      </head>
       <body className="h-full font-rocknroll">
         <IconDefs />
         <NextUIProvider>

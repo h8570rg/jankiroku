@@ -170,7 +170,7 @@ export function PlayersModalContent({
                               >
                                 <User
                                   name={friend.name}
-                                  janrecoId={friend.janrecoId}
+                                  displayId={friend.displayId}
                                 />
                                 {/* Listboxで静的itemと動的itemを同時に扱えないので、selectionModeは使わず、selectedIconも自作する */}
                                 {selectedPlayers.some(
@@ -208,7 +208,7 @@ export function PlayersModalContent({
                               <ListboxItem key={item.id} textValue={item.name!}>
                                 <User
                                   name={item.name}
-                                  janrecoId={item.janrecoId}
+                                  displayId={item.displayId}
                                 />
                                 {selectedPlayers.some(
                                   (p) => p.id === item.id,

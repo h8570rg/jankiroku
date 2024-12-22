@@ -27,7 +27,7 @@ export function profileService(supabase: Supabase) {
         return {
           id: user.id,
           name: null,
-          janrecoId: null,
+          displayId: null,
           isUnregistered: true,
           isAnonymous: !!user.is_anonymous,
         };
@@ -36,7 +36,7 @@ export function profileService(supabase: Supabase) {
       return {
         id: userProfile.id,
         name: userProfile.name,
-        janrecoId: userProfile.display_id,
+        displayId: userProfile.display_id,
         isUnregistered:
           userProfile.name === null || userProfile.display_id === null,
         isAnonymous: !!user.is_anonymous,
@@ -45,10 +45,10 @@ export function profileService(supabase: Supabase) {
 
     async updateUserProfile({
       name,
-      janrecoId,
+      displayId,
     }: {
       name: string;
-      janrecoId: string;
+      displayId: string;
     }): Promise<
       | {
           success: true;
@@ -65,7 +65,7 @@ export function profileService(supabase: Supabase) {
 
       const updatedUserProfileResponse = await supabase
         .from("profiles")
-        .update({ name, display_id: janrecoId })
+        .update({ name, display_id: displayId })
         .eq("id", user.id)
         .select()
         .single();
@@ -78,7 +78,7 @@ export function profileService(supabase: Supabase) {
         data: {
           id: updatedUserProfile.id,
           name: updatedUserProfile.name,
-          janrecoId: updatedUserProfile.display_id,
+          displayId: updatedUserProfile.display_id,
           isUnregistered:
             updatedUserProfile.name === null ||
             updatedUserProfile.display_id === null,
@@ -117,7 +117,7 @@ export function profileService(supabase: Supabase) {
       return profiles.map((profile) => ({
         id: profile.id,
         name: profile.name!,
-        janrecoId: profile.display_id!,
+        displayId: profile.display_id!,
         isFriend: friends.some((friend) => friend.friend_id === profile.id),
       }));
     },
@@ -134,7 +134,7 @@ export function profileService(supabase: Supabase) {
       return {
         id: profile.id,
         name: profile.name ?? name,
-        janrecoId: profile.display_id,
+        displayId: profile.display_id,
       };
     },
   };

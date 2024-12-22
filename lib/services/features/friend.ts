@@ -18,7 +18,7 @@ export function friendService(supabase: Supabase) {
       return friends.map((friend) => ({
         id: friend.profiles.id,
         name: friend.profiles.name,
-        janrecoId: friend.profiles.display_id,
+        displayId: friend.profiles.display_id,
       }));
     },
 

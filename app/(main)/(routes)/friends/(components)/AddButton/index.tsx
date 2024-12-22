@@ -85,12 +85,12 @@ export function AddButton() {
               {!isValidating &&
                 profiles &&
                 profiles.length > 0 &&
-                profiles?.map(({ id, name, janrecoId, isFriend }) => (
+                profiles?.map(({ id, name, displayId, isFriend }) => (
                   <li
                     key={id}
                     className="flex items-center justify-between py-2"
                   >
-                    <User name={name} janrecoId={janrecoId} />
+                    <User name={name} displayId={displayId} />
                     {isFriend ? (
                       <div className="w-16 text-center text-tiny text-foreground-500">
                         追加済み

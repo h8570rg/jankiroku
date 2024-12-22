@@ -1,7 +1,7 @@
 import { z } from "zod";
 import {
-  JANRECO_ID_MAX_LENGTH,
-  JANRECO_ID_MIN_LENGTH,
+  DISPLAY_ID_MAX_LENGTH,
+  DISPLAY_ID_MIN_LENGTH,
   NAME_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   calcMethods,
@@ -26,16 +26,16 @@ export const schema = {
     .string()
     .min(1, "名前を入力してください")
     .max(NAME_MAX_LENGTH, `名前は${NAME_MAX_LENGTH}文字以内で入力してください`),
-  janrecoId: z
+  displayId: z
     .string()
     .min(1, "ユーザーIDを入力してください")
     .min(
-      JANRECO_ID_MIN_LENGTH,
-      `ユーザーIDは${JANRECO_ID_MIN_LENGTH}文字以上で入力してください`,
+      DISPLAY_ID_MIN_LENGTH,
+      `ユーザーIDは${DISPLAY_ID_MIN_LENGTH}文字以上で入力してください`,
     )
     .max(
-      JANRECO_ID_MAX_LENGTH,
-      `ユーザーIDは${JANRECO_ID_MAX_LENGTH}文字以内で入力してください`,
+      DISPLAY_ID_MAX_LENGTH,
+      `ユーザーIDは${DISPLAY_ID_MAX_LENGTH}文字以内で入力してください`,
     )
     .regex(/^[a-zA-Z0-9]+$/, "ユーザーIDは半角英数字のみで入力してください"),
   calcMethod: z.enum(calcMethods),

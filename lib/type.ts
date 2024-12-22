@@ -6,7 +6,7 @@ export type User = SupabaseUser;
 export type Profile = {
   id: string;
   name: string | null;
-  janrecoId: string | null;
+  displayId: string | null;
   isUnregistered?: boolean;
   isAnonymous?: boolean;
   isFriend?: boolean;

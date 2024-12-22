@@ -3,13 +3,13 @@ import { Skeleton } from "@/components/Skeleton";
 
 export function User({
   name,
-  janrecoId,
+  displayId,
   skeleton,
   avatarProps,
   ...restProps
 }: {
   name?: string | null;
-  janrecoId?: string | null;
+  displayId?: string | null;
   skeleton?: boolean;
 } & Omit<UserProps, "name">) {
   if (skeleton) {
@@ -26,7 +26,7 @@ export function User({
   return (
     <NextUiUser
       name={name}
-      description={janrecoId && `@${janrecoId}`}
+      description={displayId && `@${displayId}`}
       avatarProps={{
         name: "",
         ...avatarProps,
