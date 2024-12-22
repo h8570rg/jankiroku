@@ -186,7 +186,7 @@ function formatMatch(match: {
     profiles: {
       id: string;
       name: string | null;
-      janreco_id: string | null;
+      display_id: string | null;
     };
     chip_count: number | null;
   }[];
@@ -216,7 +216,7 @@ function formatMatch(match: {
     ({ profiles, chip_count }) => ({
       id: profiles.id,
       name: profiles.name,
-      janrecoId: profiles.janreco_id,
+      janrecoId: profiles.display_id,
       rankCounts: new Array(rule.players_count).fill(0),
       averageRank: null,
       totalScore: 0,

@@ -200,17 +200,20 @@ export type Database = {
       };
       profiles: {
         Row: {
+          display_id: string | null;
           id: string;
           janreco_id: string | null;
           name: string | null;
           name_janreco_id: string | null;
         };
         Insert: {
+          display_id?: string | null;
           id?: string;
           janreco_id?: string | null;
           name?: string | null;
         };
         Update: {
+          display_id?: string | null;
           id?: string;
           janreco_id?: string | null;
           name?: string | null;
@@ -383,6 +386,7 @@ export type Database = {
           owner_id: string | null;
           path_tokens: string[] | null;
           updated_at: string | null;
+          user_metadata: Json | null;
           version: string | null;
         };
         Insert: {
@@ -396,6 +400,7 @@ export type Database = {
           owner_id?: string | null;
           path_tokens?: string[] | null;
           updated_at?: string | null;
+          user_metadata?: Json | null;
           version?: string | null;
         };
         Update: {
@@ -409,6 +414,7 @@ export type Database = {
           owner_id?: string | null;
           path_tokens?: string[] | null;
           updated_at?: string | null;
+          user_metadata?: Json | null;
           version?: string | null;
         };
         Relationships: [
@@ -430,6 +436,7 @@ export type Database = {
           key: string;
           owner_id: string | null;
           upload_signature: string;
+          user_metadata: Json | null;
           version: string;
         };
         Insert: {
@@ -440,6 +447,7 @@ export type Database = {
           key: string;
           owner_id?: string | null;
           upload_signature: string;
+          user_metadata?: Json | null;
           version: string;
         };
         Update: {
@@ -450,6 +458,7 @@ export type Database = {
           key?: string;
           owner_id?: string | null;
           upload_signature?: string;
+          user_metadata?: Json | null;
           version?: string;
         };
         Relationships: [
