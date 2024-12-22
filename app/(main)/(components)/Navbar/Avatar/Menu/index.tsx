@@ -6,10 +6,10 @@ import { signOut } from "./actions";
 
 export function NavbarAvatarMenu({
   name,
-  janrecoId,
+  displayId,
 }: {
   name: string;
-  janrecoId: string;
+  displayId: string;
 }) {
   const router = useRouter();
 
@@ -35,10 +35,10 @@ export function NavbarAvatarMenu({
       <DropdownItem
         key="profile"
         className="h-14 gap-2"
-        textValue={`${name}@${janrecoId}`}
+        textValue={`${name}@${displayId}`}
       >
         <p className="text-wrap break-all font-semibold">{name}</p>
-        <p className="text-wrap break-all font-semibold">@{janrecoId}</p>
+        <p className="text-wrap break-all font-semibold">@{displayId}</p>
       </DropdownItem>
       <DropdownItem key="friends">フレンド</DropdownItem>
       <DropdownItem key="signOut" color="danger">

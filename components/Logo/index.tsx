@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { SERVICE_NAME } from "@/lib/config";
 
 function Logo({ className }: { className?: string }) {
   return (
@@ -6,7 +7,7 @@ function Logo({ className }: { className?: string }) {
       {process.env.NEXT_PUBLIC_SERVICE_ENV === "development" && (
         <span className="text-warning">{`[開発環境] `}</span>
       )}
-      雀鬼録
+      {SERVICE_NAME}
     </div>
   );
 }

@@ -5,8 +5,8 @@ import { useFormState } from "react-dom";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import {
-  JANRECO_ID_MAX_LENGTH,
-  JANRECO_ID_MIN_LENGTH,
+  DISPLAY_ID_MAX_LENGTH,
+  DISPLAY_ID_MIN_LENGTH,
   NAME_MAX_LENGTH,
 } from "@/lib/config";
 import { updateProfile } from "./actions";
@@ -30,13 +30,13 @@ export function RegisterForm({
       noValidate
     >
       <Input
-        id="janrecoId"
+        id="displayId"
         type="text"
-        name="janrecoId"
+        name="displayId"
         required
         label="ユーザーID"
-        errorMessage={state.errors?.janrecoId?.[0]}
-        description={`半角英数字${JANRECO_ID_MIN_LENGTH}~${JANRECO_ID_MAX_LENGTH}文字で入力してください`}
+        errorMessage={state.errors?.displayId?.[0]}
+        description={`半角英数字${DISPLAY_ID_MIN_LENGTH}~${DISPLAY_ID_MAX_LENGTH}文字で入力してください`}
       />
       <Input
         id="name"

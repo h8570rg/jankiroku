@@ -9,6 +9,7 @@ import Link from "next/link";
 import { Button } from "@/components/Button";
 import { Card, CardBody } from "@/components/Card";
 import Logo from "@/components/Logo";
+import { SERVICE_NAME } from "@/lib/config";
 import match from "./(assets)/match.png";
 import { FAQ } from "./(components)/FAQ";
 
@@ -62,7 +63,7 @@ const steps = [
 
 const faqs = [
   {
-    question: "Janrecoは無料で使えますか？",
+    question: `${SERVICE_NAME}は無料で使えますか？`,
     answer: "無料でご利用いただけます。",
   },
   {
@@ -114,7 +115,7 @@ export default function LandingPage() {
           <div className="mx-auto mt-12 h-[480px] w-4/5 max-w-[500px]">
             <Image
               src={match}
-              alt="Janrecoアプリのインターフェース"
+              alt="アプリのインターフェース"
               sizes="80vw"
               className="size-full object-cover object-top"
             />
@@ -177,7 +178,7 @@ export default function LandingPage() {
 
       {/* フッター */}
       <footer className="bg-primary py-8 text-center text-primary-foreground">
-        <p>&copy; 2024 Janreco. All rights reserved.</p>
+        <p>&copy; 2024 Jankiroku. All rights reserved.</p>
       </footer>
     </div>
   );
