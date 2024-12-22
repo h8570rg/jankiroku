@@ -203,7 +203,6 @@ export type Database = {
           display_id: string | null;
           id: string;
           name: string | null;
-          name_janreco_id: string | null;
         };
         Insert: {
           display_id?: string | null;
@@ -295,12 +294,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      name_janreco_id: {
-        Args: {
-          "": unknown;
-        };
-        Returns: string;
-      };
+      [_ in never]: never;
     };
     Enums: {
       [_ in never]: never;
