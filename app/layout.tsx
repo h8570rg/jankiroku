@@ -8,8 +8,8 @@ import { NextUIProvider } from "./nextUiProvider";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Janreco",
-    default: "Janreco",
+    template: "%s | 雀鬼録",
+    default: "雀鬼録",
   },
   description:
     "麻雀成績管理ウェブアプリです。無料で使え、簡単に麻雀の成績を記録することができます。",

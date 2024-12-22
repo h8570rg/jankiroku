@@ -36,9 +36,9 @@ export function profileService(supabase: Supabase) {
       return {
         id: userProfile.id,
         name: userProfile.name,
-        janrecoId: userProfile.janreco_id,
+        janrecoId: userProfile.display_id,
         isUnregistered:
-          userProfile.name === null || userProfile.janreco_id === null,
+          userProfile.name === null || userProfile.display_id === null,
         isAnonymous: !!user.is_anonymous,
       };
     },
@@ -65,7 +65,7 @@ export function profileService(supabase: Supabase) {
 
       const updatedUserProfileResponse = await supabase
         .from("profiles")
-        .update({ name, janreco_id: janrecoId })
+        .update({ name, display_id: janrecoId })
         .eq("id", user.id)
         .select()
         .single();
@@ -78,10 +78,10 @@ export function profileService(supabase: Supabase) {
         data: {
           id: updatedUserProfile.id,
           name: updatedUserProfile.name,
-          janrecoId: updatedUserProfile.janreco_id,
+          janrecoId: updatedUserProfile.display_id,
           isUnregistered:
             updatedUserProfile.name === null ||
-            updatedUserProfile.janreco_id === null,
+            updatedUserProfile.display_id === null,
           isAnonymous: !!user.is_anonymous,
         },
       };
@@ -102,8 +102,8 @@ export function profileService(supabase: Supabase) {
         supabase
           .from("profiles")
           .select("*")
-          .or(`name.ilike.%${text}%,janreco_id.ilike.%${text}%`)
-          .neq("janreco_id", null)
+          .or(`name.ilike.%${text}%,display_id.ilike.%${text}%`)
+          .neq("display_id", null)
           .neq("name", null)
           .neq("id", user.id),
         supabase.from("friends").select("friend_id").eq("profile_id", user.id),
@@ -117,7 +117,7 @@ export function profileService(supabase: Supabase) {
       return profiles.map((profile) => ({
         id: profile.id,
         name: profile.name!,
-        janrecoId: profile.janreco_id!,
+        janrecoId: profile.display_id!,
         isFriend: friends.some((friend) => friend.friend_id === profile.id),
       }));
     },
@@ -134,7 +134,7 @@ export function profileService(supabase: Supabase) {
       return {
         id: profile.id,
         name: profile.name ?? name,
-        janrecoId: profile.janreco_id,
+        janrecoId: profile.display_id,
       };
     },
   };
