@@ -63,15 +63,17 @@ export async function addChip(
     };
   }
 
-  const { updateMatchPlayer } = serverServices();
+  const { updateMatchPlayer } = await serverServices();
 
-  validatedFields.data.playerChip.map(async (playerChip) => {
-    await updateMatchPlayer({
-      matchId,
-      playerId: playerChip.profileId,
-      chipCount: playerChip.chipCount,
-    });
-  });
+  await Promise.all(
+    validatedFields.data.playerChip.map((playerChip) =>
+      updateMatchPlayer({
+        matchId,
+        playerId: playerChip.profileId,
+        chipCount: playerChip.chipCount,
+      }),
+    ),
+  );
 
   revalidatePath(`/matches/${matchId}`);
 

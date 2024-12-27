@@ -43,7 +43,7 @@ export function AddButton() {
 
   return (
     <>
-      <Button variant="light" isIconOnly onClick={addModal.onOpen}>
+      <Button variant="light" isIconOnly onPress={addModal.onOpen}>
         <Icon name="personAdd" className="size-5 fill-current" />
       </Button>
       <Modal
@@ -101,7 +101,7 @@ export function AddButton() {
                           color="primary"
                           size="sm"
                           type="submit"
-                          onClick={handleAdd}
+                          onPress={handleAdd}
                         >
                           追加
                         </Button>

@@ -1,19 +1,15 @@
 import dynamic from "next/dynamic";
-import Navbar from "./(components)/Navbar";
+import Appbar from "./(components)/Appbar";
 
+// TODO: Implement ReleaseNotesModal
 const ReleaseNotesModal = dynamic(
   () => import("./(components)/ReleaseNotesModal"),
-  { ssr: false },
 );
 
-export default async function AppLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-full flex-col">
-      <Navbar />
+      <Appbar />
       <main className="flex-1 px-4">{children}</main>
       <ReleaseNotesModal />
     </div>

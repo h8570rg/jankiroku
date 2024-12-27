@@ -7,7 +7,7 @@ import { GameForm } from "../Form";
 import { GameModalController } from "../ModalController";
 
 export async function GameModalRoot({ matchId }: { matchId: string }) {
-  const { getMatch } = serverServices();
+  const { getMatch } = await serverServices();
   const [match] = await Promise.all([getMatch({ matchId })]);
 
   return (

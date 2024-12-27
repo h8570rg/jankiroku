@@ -4,7 +4,7 @@ import { DataChart } from "../Chart";
 import { DataModalController } from "../ModalController";
 
 export async function DataModalRoot({ matchId }: { matchId: string }) {
-  const { getMatch } = serverServices();
+  const { getMatch } = await serverServices();
   const [match] = await Promise.all([getMatch({ matchId })]);
 
   return (

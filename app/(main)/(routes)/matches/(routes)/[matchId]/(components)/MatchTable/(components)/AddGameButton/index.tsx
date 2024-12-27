@@ -19,7 +19,7 @@ export function AddGameButton({ isPlayersShort }: { isPlayersShort: boolean }) {
     <Button
       fullWidth
       size="lg"
-      onClick={handleClick}
+      onPress={handleClick}
       startContent={<Icon className="size-5" name="edit" />}
       variant="ghost"
     >

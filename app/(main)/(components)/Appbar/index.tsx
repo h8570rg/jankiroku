@@ -1,17 +1,13 @@
-import {
-  Navbar as NextUINavbar,
-  NavbarBrand,
-  NavbarContent,
-} from "@nextui-org/react";
 import { Suspense } from "react";
 import { Link } from "@/components/Link";
 import Logo from "@/components/Logo";
+import { Navbar, NavbarBrand, NavbarContent } from "@/components/Navbar";
 import { Skeleton } from "@/components/Skeleton";
-import { NavbarAvatar } from "./Avatar";
+import { AppbarAvatar } from "./Avatar";
 
-export default function Navbar() {
+export default function Appbar() {
   return (
-    <NextUINavbar shouldHideOnScroll>
+    <Navbar shouldHideOnScroll>
       <NavbarContent>
         <NavbarBrand>
           <Link color="foreground" href="/matches">
@@ -21,9 +17,9 @@ export default function Navbar() {
       </NavbarContent>
       <NavbarContent as="div" justify="end">
         <Suspense fallback={<Skeleton className="size-8 rounded-full" />}>
-          <NavbarAvatar />
+          <AppbarAvatar />
         </Suspense>
       </NavbarContent>
-    </NextUINavbar>
+    </Navbar>
   );
 }

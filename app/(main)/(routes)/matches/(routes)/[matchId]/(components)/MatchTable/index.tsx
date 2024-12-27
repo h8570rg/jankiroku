@@ -25,7 +25,7 @@ export async function MatchTable({
   matchId: string;
   className?: string;
 }) {
-  const { getMatch } = serverServices();
+  const { getMatch } = await serverServices();
   const [match] = await Promise.all([getMatch({ matchId })]);
   const { rule, players } = match;
   const { playersCount } = rule;

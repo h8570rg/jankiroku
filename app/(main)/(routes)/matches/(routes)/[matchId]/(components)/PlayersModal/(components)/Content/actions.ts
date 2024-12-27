@@ -12,7 +12,7 @@ export async function updateMatchPlayers({
   matchId: string;
   playerIds: string[];
 }) {
-  const { addMatchPlayers } = serverServices();
+  const { addMatchPlayers } = await serverServices();
   await addMatchPlayers({ matchId, playerIds });
   revalidatePath(`/matches/${matchId}`);
   return;
@@ -23,7 +23,7 @@ export async function searchProfiles(text: string): Promise<Profile[]> {
     return [];
   }
 
-  const { searchProfiles } = serverServices();
+  const { searchProfiles } = await serverServices();
   const profiles = await searchProfiles({ text });
   return profiles;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import {
@@ -18,7 +18,7 @@ export function RegisterForm({
   className?: string;
   userId: string;
 }) {
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     updateProfile.bind(null, userId),
     {},
   );

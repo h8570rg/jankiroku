@@ -37,7 +37,7 @@ const supabase = createClient<Database>(supabase_url, service_role_key, {
 
 // 移管前のデータを読み込む
 const oldRawData = fs.readFileSync("lib/migration/old-data.json", "utf8");
-const oldData = JSON.parse(oldRawData);
+const oldData = JSON.parse(oldRawData) as OldData;
 type OldData = {
   __collections__: {
     scores: {
@@ -74,7 +74,7 @@ type OldData = {
 };
 
 // メイン関数
-async function main() {
+function main() {
   // 移管前の userId の入力を促す
   rl.question("Enter the userId before transfer: ", (userIdBefore) => {
     // 移管後の userId の入力を促す
@@ -102,6 +102,8 @@ async function main() {
               oldData,
               userIdBefore,
               userIdAfter: mode === "all" ? adminUserId : userIdAfter,
+            }).catch((e) => {
+              throw e;
             });
           } else {
             // ユーザーが「n」などで確認しなかった場合の処理

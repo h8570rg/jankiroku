@@ -4,7 +4,7 @@ import { AddButton } from "./(components)/AddButton";
 import { FriendMenu } from "./(components)/FriendMenu";
 
 export default async function FriendsPage() {
-  const { getFriends } = serverServices();
+  const { getFriends } = await serverServices();
 
   const friends = await getFriends();
 

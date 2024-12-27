@@ -2,10 +2,10 @@ import { redirect } from "next/navigation";
 import { Avatar } from "@/components/Avatar";
 import { Dropdown, DropdownTrigger } from "@/components/Dropdown";
 import { serverServices } from "@/lib/services/server";
-import { NavbarAvatarMenu } from "./Menu";
+import { AppbarAvatarMenu } from "./Menu";
 
-export async function NavbarAvatar() {
-  const { getUserProfile } = serverServices();
+export async function AppbarAvatar() {
+  const { getUserProfile } = await serverServices();
   const [profile] = await Promise.all([getUserProfile()]);
 
   // TODO: isUnregisteredで扱う。ts制御
@@ -18,7 +18,7 @@ export async function NavbarAvatar() {
       <DropdownTrigger>
         <Avatar as="button" className="transition-transform" size="sm" />
       </DropdownTrigger>
-      <NavbarAvatarMenu name={profile.name} displayId={profile.displayId} />
+      <AppbarAvatarMenu name={profile.name} displayId={profile.displayId} />
     </Dropdown>
   );
 }

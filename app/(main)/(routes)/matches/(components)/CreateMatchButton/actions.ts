@@ -73,7 +73,7 @@ export async function createMatch(
 
   const { incline, customIncline, ...restData } = validatedFields.data;
 
-  const { createMatch } = serverServices();
+  const { createMatch } = await serverServices();
 
   const { id } = await createMatch({
     incline: incline === "custom" ? customIncline : incline,

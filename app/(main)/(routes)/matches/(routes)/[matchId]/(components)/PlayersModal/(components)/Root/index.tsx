@@ -3,7 +3,7 @@ import { PlayersModalContent } from "../Content";
 import { PlayersModalController } from "../ModalController";
 
 export async function PlayersModalRoot({ matchId }: { matchId: string }) {
-  const { getFriends, getMatch } = serverServices();
+  const { getFriends, getMatch } = await serverServices();
   const [friends, match] = await Promise.all([
     getFriends(),
     getMatch({ matchId }),

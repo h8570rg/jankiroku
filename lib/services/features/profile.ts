@@ -2,16 +2,16 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { Profile, User } from "@/lib/type";
 import { Supabase } from ".";
 
-export function profileService(supabase: Supabase) {
+export const profileService = (supabase: Supabase) => {
   return {
-    async getUser(): Promise<User> {
+    getUser: async (): Promise<User> => {
       const userResponse = await supabase.auth.getUser();
       if (userResponse.error) throw userResponse.error;
       const user = userResponse.data.user;
       return user;
     },
 
-    async getUserProfile(): Promise<Profile> {
+    getUserProfile: async (): Promise<Profile> => {
       const userResponse = await supabase.auth.getUser();
       if (userResponse.error) throw userResponse.error;
       const user = userResponse.data.user;
@@ -43,7 +43,7 @@ export function profileService(supabase: Supabase) {
       };
     },
 
-    async updateUserProfile({
+    updateUserProfile: async ({
       name,
       displayId,
     }: {
@@ -58,7 +58,7 @@ export function profileService(supabase: Supabase) {
           success: false;
           error: PostgrestError; // TODO: エラーハンドリングの体系化
         }
-    > {
+    > => {
       const userResponse = await supabase.auth.getUser();
       if (userResponse.error) throw userResponse.error;
       const user = userResponse.data.user;
@@ -87,7 +87,7 @@ export function profileService(supabase: Supabase) {
       };
     },
 
-    async searchProfiles({ text }: { text: string }): Promise<Profile[]> {
+    searchProfiles: async ({ text }: { text: string }): Promise<Profile[]> => {
       if (text === "") {
         return [];
       }
@@ -122,7 +122,7 @@ export function profileService(supabase: Supabase) {
       }));
     },
 
-    async createProfile({ name }: { name: string }): Promise<Profile> {
+    createProfile: async ({ name }: { name: string }): Promise<Profile> => {
       const profilesResponse = await supabase
         .from("profiles")
         .insert({ name })
@@ -138,4 +138,4 @@ export function profileService(supabase: Supabase) {
       };
     },
   };
-}
+};

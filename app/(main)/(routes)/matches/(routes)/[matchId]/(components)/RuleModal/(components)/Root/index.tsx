@@ -3,7 +3,7 @@ import { RuleModalContent } from "../Content";
 import { RuleModalController } from "../ModalController";
 
 export async function RuleModalRoot({ matchId }: { matchId: string }) {
-  const { getMatch } = serverServices();
+  const { getMatch } = await serverServices();
   const match = await getMatch({ matchId });
 
   return (

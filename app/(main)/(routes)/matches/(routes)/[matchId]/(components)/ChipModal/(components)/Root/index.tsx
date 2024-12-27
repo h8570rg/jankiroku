@@ -4,7 +4,7 @@ import { ChipForm } from "../Form";
 import { ChipModalController } from "../ModalController";
 
 export async function ChipModalRoot({ matchId }: { matchId: string }) {
-  const { getMatch } = serverServices();
+  const { getMatch } = await serverServices();
   const [match] = await Promise.all([getMatch({ matchId })]);
 
   return (

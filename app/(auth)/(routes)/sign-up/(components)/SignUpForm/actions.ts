@@ -39,7 +39,7 @@ export async function signUp(
 
   const { email, password } = validatedFields.data;
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { error } = await supabase.auth.signUp({
     email,

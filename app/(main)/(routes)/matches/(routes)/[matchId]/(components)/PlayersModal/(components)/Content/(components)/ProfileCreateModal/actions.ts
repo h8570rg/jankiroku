@@ -32,7 +32,7 @@ export async function createProfile(
 
   const { name } = validatedFields.data;
 
-  const { createProfile } = serverServices();
+  const { createProfile } = await serverServices();
   const profile = await createProfile({
     name,
   });

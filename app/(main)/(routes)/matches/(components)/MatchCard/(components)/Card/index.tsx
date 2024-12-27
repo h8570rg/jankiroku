@@ -10,10 +10,14 @@ export function NavigationCard({
   matchId: string;
   children: React.ReactNode;
 }) {
-  const { push } = useRouter();
+  const router = useRouter();
 
   return (
-    <Card fullWidth isPressable onPress={() => push(`/matches/${matchId}`)}>
+    <Card
+      fullWidth
+      isPressable
+      onPress={() => router.push(`/matches/${matchId}`)}
+    >
       {children}
     </Card>
   );

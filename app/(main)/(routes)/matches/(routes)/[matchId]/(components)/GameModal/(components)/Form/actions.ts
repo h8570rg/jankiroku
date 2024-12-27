@@ -106,7 +106,7 @@ export async function addGame(
     };
   }
 
-  const { createGame } = serverServices();
+  const { createGame } = await serverServices();
 
   const playerScores = calcPlayerScores({
     players: validatedFields.data.players.filter(

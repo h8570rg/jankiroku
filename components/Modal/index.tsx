@@ -4,6 +4,7 @@ import { uniqueId } from "lodash-es";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useRef } from "react";
 
+export type { ModalProps } from "@nextui-org/react";
 export {
   Modal,
   ModalContent,
