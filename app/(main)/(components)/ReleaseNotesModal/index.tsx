@@ -31,11 +31,16 @@ function isVersionGreater(v1: string, v2: string) {
 }
 
 function setLastVersion() {
-  localStorage.setItem("lastVersion", packageJson.version);
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem("lastVersion", packageJson.version);
+  }
 }
 
 function ReleaseNotesModal() {
-  const lastVersion = localStorage.getItem("lastVersion");
+  const lastVersion =
+    typeof window !== "undefined"
+      ? window.localStorage.getItem("lastVersion")
+      : undefined;
 
   const newVersions = Object.entries(versionComponents).filter(([v]) =>
     lastVersion ? isVersionGreater(v, lastVersion) : v === "0.1.0",

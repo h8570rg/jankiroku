@@ -38,8 +38,13 @@ export default tseslint.config(
   eslintConfigPrettier,
   compat.extends("next/core-web-vitals"),
   {
+    files: ["**/*.ts", "**/*.tsx"],
     rules: {
       "@typescript-eslint/no-deprecated": "error",
+    },
+  },
+  {
+    rules: {
       "import/order": [
         "error",
         {
@@ -93,7 +98,6 @@ export default tseslint.config(
           ],
         },
       ],
-      // "typescript-eslint/no-deprecated": "error",
     },
   },
 );
