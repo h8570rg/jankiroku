@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { signInEmail } from "./actions";
@@ -9,7 +9,7 @@ import { signInEmail } from "./actions";
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export function LoginForm({ className }: { className?: string }) {
-  const [state, formAction] = useFormState(signInEmail, {});
+  const [state, formAction] = useActionState(signInEmail, {});
 
   return (
     <form className={className} action={formAction} noValidate>

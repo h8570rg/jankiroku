@@ -40,7 +40,7 @@ export async function signInEmail(
 
   const { email, password } = validatedFields.data;
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -63,7 +63,7 @@ export async function signInEmail(
  * @see https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr?queryGroups=environment&environment=server
  */
 export async function signInWithGoogle() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
@@ -77,7 +77,7 @@ export async function signInWithGoogle() {
 }
 
 export async function signInAnonymously() {
-  const supabase = createClient();
+  const supabase = await createClient();
   await supabase.auth.signInAnonymously();
 
   redirect("/matches");

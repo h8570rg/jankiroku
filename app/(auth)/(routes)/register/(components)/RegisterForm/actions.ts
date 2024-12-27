@@ -38,7 +38,7 @@ export async function updateProfile(
 
   const { name, displayId } = validatedFields.data;
 
-  const { updateUserProfile } = serverServices();
+  const { updateUserProfile } = await serverServices();
 
   const result = await updateUserProfile({
     name,
@@ -62,7 +62,7 @@ export async function updateProfile(
 }
 
 export async function signOut() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   await supabase.auth.signOut();
 

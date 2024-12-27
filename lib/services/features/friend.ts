@@ -1,9 +1,9 @@
 import { Profile } from "@/lib/type";
 import { Supabase } from ".";
 
-export function friendService(supabase: Supabase) {
+export const friendService = (supabase: Supabase) => {
   return {
-    async getFriends(): Promise<Profile[]> {
+    getFriends: async (): Promise<Profile[]> => {
       const userResponse = await supabase.auth.getUser();
       if (userResponse.error) throw userResponse.error;
       const user = userResponse.data.user;
@@ -22,7 +22,7 @@ export function friendService(supabase: Supabase) {
       }));
     },
 
-    async addFriends({ profileId }: { profileId: string }) {
+    addFriends: async ({ profileId }: { profileId: string }) => {
       const userResponse = await supabase.auth.getUser();
       if (userResponse.error) throw userResponse.error;
       const user = userResponse.data.user;
@@ -45,26 +45,26 @@ export function friendService(supabase: Supabase) {
       if (friendExist2Response.error) throw friendExist2Response.error;
       const friendExist2 = !!friendExist2Response.data;
 
-      async function createFriend1() {
+      const createFriend1 = async () => {
         return await supabase.from("friends").insert({
           profile_id: user.id,
           friend_id: profileId,
         });
-      }
-      async function deleteFriend1() {
+      };
+      const deleteFriend1 = async () => {
         return await supabase
           .from("friends")
           .delete()
           .eq("profile_id", user.id)
           .eq("friend_id", profileId);
-      }
+      };
 
-      async function createFriend2() {
+      const createFriend2 = async () => {
         return supabase.from("friends").insert({
           profile_id: profileId,
           friend_id: user.id,
         });
-      }
+      };
 
       if (friendExist1 && friendExist2) {
         return;
@@ -90,7 +90,11 @@ export function friendService(supabase: Supabase) {
       }
     },
 
-    async deleteFriends({ profileId }: { profileId: string }): Promise<void> {
+    deleteFriends: async ({
+      profileId,
+    }: {
+      profileId: string;
+    }): Promise<void> => {
       const userResponse = await supabase.auth.getUser();
       if (userResponse.error) throw userResponse.error;
       const user = userResponse.data.user;
@@ -113,4 +117,4 @@ export function friendService(supabase: Supabase) {
       return;
     },
   };
-}
+};

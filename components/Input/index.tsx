@@ -1,3 +1,5 @@
+"use client";
+
 import { Input as NextUiInput, InputProps } from "@nextui-org/react";
 import { forwardRef } from "react";
 

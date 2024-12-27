@@ -43,13 +43,18 @@ export function PlayersModalContent({
 
   const [isPending, setIsPending] = useState(false);
 
-  const handleSearch = useDebouncedCallback(async (text: string) => {
+  const handleSearch = useDebouncedCallback((text: string) => {
     if (!text) {
       setSearchedProfiles(null);
       return;
     }
-    const searchProfilesResult = await searchProfiles(text);
-    setSearchedProfiles(searchProfilesResult);
+    searchProfiles(text)
+      .then((searchProfilesResult) => {
+        setSearchedProfiles(searchProfilesResult);
+      })
+      .catch((e) => {
+        throw e;
+      });
   }, 300);
 
   // TODO: 下と共通化
@@ -232,16 +237,21 @@ export function PlayersModalContent({
               <Button
                 color="primary"
                 isLoading={isPending}
-                onClick={async () => {
+                onPress={() => {
                   setIsPending(true);
-                  await updateMatchPlayers({
+                  updateMatchPlayers({
                     matchId,
                     playerIds: selectedPlayers
                       .map((p) => p.id)
                       .filter((p) => !players.some((p2) => p2.id === p)),
-                  });
-                  setIsPending(false);
-                  onClose();
+                  })
+                    .then(() => {
+                      setIsPending(false);
+                      onClose();
+                    })
+                    .catch((e) => {
+                      throw e;
+                    });
                 }}
               >
                 決定
