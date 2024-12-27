@@ -10,7 +10,7 @@
     "node": "20.13.1"
   },
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start -p 3002",
@@ -43,8 +43,8 @@
     "@dnd-kit/sortable": "^8.0.0",
     "@hookform/resolvers": "^3.9.0",
     "@nextui-org/react": "^2.6.10",
-    "@supabase/ssr": "^0.5.1",
-    "@supabase/supabase-js": "^2.45.4",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.47.10",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.13",
     "framer-motion": "11.15.0",
@@ -81,7 +81,7 @@
     "lint-staged": "^15.2.10",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
-    "supabase": "^1.204.3",
+    "supabase": "^2.1.1",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.2",
