@@ -14,7 +14,7 @@ export function GameModalController({
     <Modal
       {...gameModal.bind}
       hideCloseButton
-      placement="center" // TODO: 考える
+      placement="bottom" // TODO: 考える
     >
       <ModalContent>{children}</ModalContent>
     </Modal>
