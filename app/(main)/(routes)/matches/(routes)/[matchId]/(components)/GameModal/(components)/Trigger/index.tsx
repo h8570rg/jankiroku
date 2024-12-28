@@ -9,20 +9,20 @@ export const GameModalTrigger = forwardRef<
   ButtonProps & {
     isPlayersShort: boolean;
   }
->(function GameModalTrigger({ isPlayersShort, onClick, ...props }, ref) {
+>(function GameModalTrigger({ isPlayersShort, onPress, ...props }, ref) {
   const { onOpen } = useMatchContext().gameModal;
 
   // buttonにして親でasにするとpropsが渡せない
   return (
     <Button
       ref={ref}
-      onClick={(e) => {
+      onPress={(e) => {
         if (isPlayersShort) {
           alert("プレイヤーが足りません");
           return;
         }
         onOpen();
-        onClick?.(e);
+        onPress?.(e);
       }}
       {...props}
     />

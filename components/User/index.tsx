@@ -1,3 +1,5 @@
+"use client";
+
 import { User as NextUiUser, UserProps } from "@nextui-org/react";
 import { Skeleton } from "@/components/Skeleton";
 

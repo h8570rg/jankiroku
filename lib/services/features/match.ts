@@ -8,9 +8,9 @@ import {
 } from "@/lib/type";
 import { Supabase } from ".";
 
-export function matchService(supabase: Supabase) {
+export const matchService = (supabase: Supabase) => {
   return {
-    async createMatch({
+    createMatch: async ({
       calcMethod,
       chipRate,
       crackBoxBonus,
@@ -30,7 +30,7 @@ export function matchService(supabase: Supabase) {
       incline: string;
     }): Promise<{
       id: string;
-    }> {
+    }> => {
       const createMatchResponse = await supabase
         .from("matches")
         .insert({})
@@ -63,7 +63,7 @@ export function matchService(supabase: Supabase) {
       };
     },
 
-    async getMatch({ matchId }: { matchId: string }): Promise<Match> {
+    getMatch: async ({ matchId }: { matchId: string }): Promise<Match> => {
       const matchResult = await supabase
         .from("matches")
         .select(
@@ -77,13 +77,13 @@ export function matchService(supabase: Supabase) {
       return formatMatch(match);
     },
 
-    async getMatches({
+    getMatches: async ({
       page = 1,
       size = 999, // TODO: 全件取得どうするか
     }: {
       page?: number;
       size?: number;
-    }): Promise<Match[]> {
+    }): Promise<Match[]> => {
       const matchesResponse = await supabase
         .from("matches")
         .select(
@@ -99,13 +99,13 @@ export function matchService(supabase: Supabase) {
       return matches.map(formatMatch);
     },
 
-    async addMatchPlayers({
+    addMatchPlayers: async ({
       matchId,
       playerIds,
     }: {
       matchId: string;
       playerIds: string[];
-    }): Promise<void> {
+    }): Promise<void> => {
       const addMatchPlayerResponses = await Promise.all(
         playerIds.map((playerId) =>
           supabase.from("match_players").insert({
@@ -120,7 +120,7 @@ export function matchService(supabase: Supabase) {
       return;
     },
 
-    async updateMatchPlayer({
+    updateMatchPlayer: async ({
       matchId,
       playerId,
       chipCount,
@@ -128,7 +128,7 @@ export function matchService(supabase: Supabase) {
       matchId: string;
       playerId: string;
       chipCount: number;
-    }): Promise<void> {
+    }): Promise<void> => {
       const updateMatchPlayerResponse = await supabase
         .from("match_players")
         .update({
@@ -144,13 +144,13 @@ export function matchService(supabase: Supabase) {
       return;
     },
 
-    async createGame({
+    createGame: async ({
       matchId,
       gamePlayers,
     }: {
       gamePlayers: GamePlayer[];
       matchId: string;
-    }): Promise<void> {
+    }): Promise<void> => {
       const createGameResponse = await supabase
         .from("games")
         .insert({
@@ -177,9 +177,9 @@ export function matchService(supabase: Supabase) {
       return;
     },
   };
-}
+};
 
-function formatMatch(match: {
+const formatMatch = (match: {
   id: string;
   created_at: string;
   match_players: {
@@ -207,7 +207,7 @@ function formatMatch(match: {
       rank: number;
     }[];
   }[];
-}) {
+}) => {
   const rule = match.rules[0];
   const incline = rule.incline.split("_").map((incline) => Number(incline));
   const [incline1, incline2, incline3, incline4] = incline;
@@ -274,4 +274,4 @@ function formatMatch(match: {
       })),
     })),
   };
-}
+};

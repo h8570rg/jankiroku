@@ -1,0 +1,20 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:js-app"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch"],
+      "labels": ["patch"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["minor"],
+      "labels": ["minor"]
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "labels": ["major"]
+    }
+  ],
+  "labels": ["renovate"]
+}

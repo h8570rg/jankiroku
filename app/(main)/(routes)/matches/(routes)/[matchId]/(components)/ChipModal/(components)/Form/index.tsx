@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { useFormState } from "react-dom";
+import { useEffect, useActionState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
@@ -20,7 +19,7 @@ type Schema = {
 export function ChipForm({ match }: { match: Match }) {
   const { chipModal } = useMatchContext();
   const { players, rule } = match;
-  const [{ errors, success }, formAction] = useFormState(
+  const [{ errors, success }, formAction] = useActionState(
     addChip.bind(null, match.id, players.length),
     {},
   );
@@ -92,7 +91,7 @@ export function ChipForm({ match }: { match: Match }) {
                             radius="md"
                             color="secondary"
                             className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
-                            onClick={() => {
+                            onPress={() => {
                               setValue(field.name, String(-1 * totalChipCount));
                               setFocus(field.name);
                             }}
@@ -121,7 +120,7 @@ export function ChipForm({ match }: { match: Match }) {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button variant="light" onClick={chipModal.onClose}>
+        <Button variant="light" onPress={chipModal.onClose}>
           キャンセル
         </Button>
         <Button type="submit" color="primary">

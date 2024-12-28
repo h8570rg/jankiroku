@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Link as NextUILink,
   LinkProps as NextUILinkProps,

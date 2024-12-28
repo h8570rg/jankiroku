@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { signUp } from "./actions";
@@ -10,7 +10,7 @@ import { signUp } from "./actions";
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export function SignUpForm({ className }: { className?: string }) {
-  const [state, formAction] = useFormState(signUp, {});
+  const [state, formAction] = useActionState(signUp, {});
 
   return (
     <form

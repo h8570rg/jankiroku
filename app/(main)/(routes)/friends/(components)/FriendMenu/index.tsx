@@ -13,7 +13,9 @@ import { deleteFriends } from "./actions";
 export function FriendMenu({ profileId }: { profileId: string }) {
   function handleAction(key: unknown) {
     if (key === "delete") {
-      deleteFriends(profileId);
+      deleteFriends(profileId).catch((e) => {
+        throw e;
+      });
     }
   }
 

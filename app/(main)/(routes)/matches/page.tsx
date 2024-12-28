@@ -3,7 +3,7 @@ import { CreateMatchButton } from "./(components)/CreateMatchButton";
 import { MatchCard } from "./(components)/MatchCard";
 
 export default async function Matches() {
-  const { getMatches, getUser } = serverServices();
+  const { getMatches, getUser } = await serverServices();
 
   // TODO: infinite scroll
   const [matches, user] = await Promise.all([getMatches({}), getUser()]);

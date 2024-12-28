@@ -1,4 +1,4 @@
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import {
@@ -7,6 +7,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  ModalProps,
 } from "@/components/Modal";
 import { NAME_MAX_LENGTH } from "@/lib/config";
 import { Profile } from "@/lib/type";
@@ -16,16 +17,16 @@ export function ProfileCreateModal({
   isOpen,
   onClose,
   onProfileCreate,
-}: Pick<React.ComponentPropsWithoutRef<typeof Modal>, "isOpen" | "onClose"> & {
+}: Pick<ModalProps, "isOpen" | "onClose"> & {
   onProfileCreate: (profile: Profile) => void;
 }) {
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     async (prevState: State, formData: FormData) => {
       const result = await createProfile(prevState, formData);
       const player = result.data;
       if (player) {
         onProfileCreate(player);
-        onClose();
+        onClose?.();
       }
       return result;
     },

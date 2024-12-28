@@ -1,12 +1,10 @@
 "use client";
 
-import { DndContext } from "@dnd-kit/core";
-import { SortableContext } from "@dnd-kit/sortable";
-import { useSortable } from "@dnd-kit/sortable";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import classNames from "classnames";
-import { ComponentProps, useCallback, useEffect } from "react";
-import { useFormState } from "react-dom";
+import { useCallback, useEffect, useActionState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
@@ -30,7 +28,7 @@ export function GameForm({ match }: { match: Match }) {
   const gameModal = useMatchContext().gameModal;
 
   const { rule } = match;
-  const [{ errors, success }, formAction] = useFormState(
+  const [{ errors, success }, formAction] = useActionState(
     addGame.bind(null, match.id, rule, match.players.length),
     {},
   );
@@ -50,20 +48,16 @@ export function GameForm({ match }: { match: Match }) {
     name: "players",
   });
 
-  const handleDragEnd = useCallback<
-    NonNullable<ComponentProps<typeof DndContext>["onDragEnd"]>
-  >(
-    (event) => {
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
       const { active, over } = event;
-      if (over && active.id !== over?.id) {
-        const activeIndex = active.data.current?.sortable?.index;
-        const overIndex = over.data.current?.sortable?.index;
-        if (activeIndex !== undefined && overIndex !== undefined) {
-          move(activeIndex, overIndex);
-        }
+      if (over && active.id !== over.id) {
+        const oldIndex = fields.findIndex((field) => field.id === active.id);
+        const newIndex = fields.findIndex((field) => field.id === over.id);
+        move(oldIndex, newIndex);
       }
     },
-    [move],
+    [fields, move],
   );
 
   const players = watch("players");
@@ -122,24 +116,22 @@ export function GameForm({ match }: { match: Match }) {
                               startContent={
                                 isAutoFillAvailable &&
                                 points === "" && (
-                                  <>
-                                    <Button
-                                      variant="flat"
-                                      size="sm"
-                                      radius="md"
-                                      color="secondary"
-                                      className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
-                                      onClick={() => {
-                                        setValue(
-                                          name,
-                                          String(totalPointsToBe - totalPoints),
-                                        );
-                                        setFocus(name);
-                                      }}
-                                    >
-                                      残り入力
-                                    </Button>
-                                  </>
+                                  <Button
+                                    variant="flat"
+                                    size="sm"
+                                    radius="md"
+                                    color="secondary"
+                                    className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
+                                    onPress={() => {
+                                      setValue(
+                                        name,
+                                        String(totalPointsToBe - totalPoints),
+                                      );
+                                      setFocus(name);
+                                    }}
+                                  >
+                                    残り入力
+                                  </Button>
                                 )
                               }
                               endContent={
@@ -207,7 +199,7 @@ export function GameForm({ match }: { match: Match }) {
         />
       </ModalBody>
       <ModalFooter>
-        <Button variant="light" onClick={gameModal.onClose}>
+        <Button variant="light" onPress={gameModal.onClose}>
           キャンセル
         </Button>
         <Button type="submit" color="primary">

@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Accordion, AccordionItem } from "@/components/Accordion";
 import { Button, ButtonGroup } from "@/components/Button";
@@ -65,7 +65,7 @@ const playersCount3DefaultValues: InputSchema = {
 export function CreateMatchButton({ className }: { className?: string }) {
   const ruleCreateModal = useModal();
 
-  const [state, formAction] = useFormState(createMatch, {});
+  const [state, formAction] = useActionState(createMatch, {});
   const { errors } = state;
 
   const { reset, control, watch } = useForm<InputSchema>({
@@ -83,7 +83,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
         className={className}
         size="lg"
         color="primary"
-        onClick={ruleCreateModal.onOpen}
+        onPress={ruleCreateModal.onOpen}
       >
         ゲームを始める
       </Button>
@@ -102,7 +102,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                         <ButtonGroup className="mb-3" fullWidth>
                           <Button
                             color={value === "4" ? "primary" : "default"}
-                            onClick={() => {
+                            onPress={() => {
                               onChange("4");
                               reset(playersCount4DefaultValues);
                             }}
@@ -111,7 +111,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                           </Button>
                           <Button
                             color={value === "3" ? "primary" : "default"}
-                            onClick={() => {
+                            onPress={() => {
                               onChange("3");
                               reset(playersCount3DefaultValues);
                             }}
@@ -390,7 +390,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                   </Accordion>
                 </ModalBody>
                 <ModalFooter>
-                  <Button variant="light" onClick={onClose}>
+                  <Button variant="light" onPress={onClose}>
                     キャンセル
                   </Button>
                   <Button color="primary" type="submit">

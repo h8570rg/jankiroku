@@ -11,10 +11,12 @@ import { PlayersModal, PlayersModalTrigger } from "./(components)/PlayersModal";
 import { RuleModal, RuleModalTrigger } from "./(components)/RuleModal";
 
 export default async function Match({
-  params: { matchId },
+  params,
 }: {
-  params: { matchId: string };
+  params: Promise<{ matchId: string }>;
 }) {
+  const { matchId } = await params;
+
   // Modalの開閉のたびに実行されるのでここでfetchしないこと
 
   return (

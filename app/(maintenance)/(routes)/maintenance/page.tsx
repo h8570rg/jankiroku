@@ -36,6 +36,7 @@ export default function MaintenancePage() {
             endContent={
               <div className="flex items-center justify-center self-stretch"></div>
             }
+            description
           />
           <Button
             color="default"

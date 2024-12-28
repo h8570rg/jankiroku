@@ -15,7 +15,9 @@ export function SocialProviders({ className }: { className?: string }) {
       );
       return;
     }
-    signInWithGoogle();
+    signInWithGoogle().catch((e) => {
+      throw e;
+    });
   };
 
   return (
@@ -25,7 +27,7 @@ export function SocialProviders({ className }: { className?: string }) {
           fullWidth
           className="flex items-center justify-center gap-3"
           variant="bordered"
-          onClick={handleGoogleClick}
+          onPress={handleGoogleClick}
         >
           <GoogleIcon className="w-5" />
           <span>Google でログイン</span>
@@ -35,7 +37,7 @@ export function SocialProviders({ className }: { className?: string }) {
         <Button
           fullWidth
           variant="bordered"
-          onClick={() => alert("開発中です、しばらくお待ちください")}
+          onPress={() => alert("開発中です、しばらくお待ちください")}
         >
           <span>ログインせずに始める</span>
         </Button>

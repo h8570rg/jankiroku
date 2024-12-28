@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RegisterPage() {
-  const { getUserProfile } = serverServices();
+  const { getUserProfile } = await serverServices();
   const user = await getUserProfile();
 
   if (user.name && user.displayId) {

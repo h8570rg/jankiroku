@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { DropdownMenu, DropdownItem } from "@/components/Dropdown";
 import { signOut } from "./actions";
 
-export function NavbarAvatarMenu({
+export function AppbarAvatarMenu({
   name,
   displayId,
 }: {
@@ -20,7 +20,9 @@ export function NavbarAvatarMenu({
         router.push("/friends");
         break;
       case "signOut":
-        signOut();
+        signOut().catch((e) => {
+          throw e;
+        });
         break;
     }
   }

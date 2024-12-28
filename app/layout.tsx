@@ -2,7 +2,6 @@ import classNames from "classnames";
 import { Metadata } from "next";
 import { IconDefs } from "@/components/Icon";
 import { SERVICE_NAME } from "@/lib/config";
-import { ToastContainer } from "@/lib/toast";
 import { fontClassNames } from "./fonts";
 import "./globals.css";
 import { NextUIProvider } from "./nextUiProvider";
@@ -20,7 +19,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -38,7 +37,6 @@ export default async function RootLayout({
         <IconDefs />
         <NextUIProvider>
           <div className="h-full bg-background text-foreground">{children}</div>
-          <ToastContainer />
         </NextUIProvider>
       </body>
     </html>
