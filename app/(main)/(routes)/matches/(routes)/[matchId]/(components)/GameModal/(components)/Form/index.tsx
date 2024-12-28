@@ -113,6 +113,7 @@ export function GameForm({ match }: { match: Match }) {
                                   "text-right placeholder:text-default-400",
                               }}
                               type="number"
+                              autoComplete="off" // モバイルでがたつくのを防ぐため
                               startContent={
                                 isAutoFillAvailable &&
                                 points === "" && (
