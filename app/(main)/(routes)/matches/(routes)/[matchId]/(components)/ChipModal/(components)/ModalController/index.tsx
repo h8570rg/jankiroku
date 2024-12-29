@@ -11,7 +11,13 @@ export function ChipModalController({
   const { chipModal } = useMatchContext();
 
   return (
-    <Modal {...chipModal.bind} hideCloseButton>
+    <Modal
+      {...chipModal.bind}
+      hideCloseButton
+      placement="bottom"
+      scrollBehavior="inside"
+      className="max-h-[calc(100%_-_2rem)]"
+    >
       <ModalContent>{children}</ModalContent>
     </Modal>
   );
