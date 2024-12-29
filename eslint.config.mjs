@@ -100,4 +100,11 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    settings: {
+      tailwindcss: {
+        callees: ["classNames"],
+      },
+    },
+  },
 );

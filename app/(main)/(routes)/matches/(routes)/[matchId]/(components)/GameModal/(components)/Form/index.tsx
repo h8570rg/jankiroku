@@ -110,9 +110,11 @@ export function GameForm({ match }: { match: Match }) {
                               classNames={{
                                 base: "basis-[160px] shrink-0",
                                 input:
-                                  "text-right placeholder:text-default-400",
+                                  "text-right placeholder:text-default-400 text-medium",
                               }}
+                              size="md"
                               type="number"
+                              autoFocus={index === 0}
                               startContent={
                                 isAutoFillAvailable &&
                                 points === "" && (
