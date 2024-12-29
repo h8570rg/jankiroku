@@ -56,7 +56,7 @@ export function ChipForm({ match }: { match: Match }) {
   }, [chipModal, success]);
 
   return (
-    <form action={formAction}>
+    <form className="contents" action={formAction}>
       <ModalBody>
         <ul className="space-y-1">
           {fields.map((field, index) => (

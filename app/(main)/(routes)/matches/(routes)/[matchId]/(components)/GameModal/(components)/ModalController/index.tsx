@@ -11,7 +11,13 @@ export function GameModalController({
   const { gameModal } = useMatchContext();
 
   return (
-    <Modal {...gameModal.bind} hideCloseButton placement="bottom">
+    <Modal
+      {...gameModal.bind}
+      hideCloseButton
+      placement="bottom"
+      scrollBehavior="inside"
+      className="max-h-[calc(100%_-_2rem)]"
+    >
       <ModalContent>{children}</ModalContent>
     </Modal>
   );

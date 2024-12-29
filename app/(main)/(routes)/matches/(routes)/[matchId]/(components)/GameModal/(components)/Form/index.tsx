@@ -80,7 +80,7 @@ export function GameForm({ match }: { match: Match }) {
   }, [gameModal, success]);
 
   return (
-    <form action={formAction}>
+    <form className="contents" action={formAction}>
       <ModalBody>
         <ul className="space-y-1">
           <DndContext onDragEnd={handleDragEnd}>
@@ -91,7 +91,7 @@ export function GameForm({ match }: { match: Match }) {
                 return (
                   <SortableItem key={field.id} id={field.id}>
                     {({ attributes, listeners }) => (
-                      <div className="flex touch-none items-center gap-1">
+                      <div className="flex items-center gap-1">
                         <Controller
                           control={control}
                           name={`players.${index}.id`}
@@ -110,7 +110,7 @@ export function GameForm({ match }: { match: Match }) {
                               classNames={{
                                 base: "basis-[160px] shrink-0",
                                 input:
-                                  "text-right placeholder:text-default-400 text-medium",
+                                  "text-right placeholder:text-default-400",
                               }}
                               size="md"
                               type="number"
@@ -156,7 +156,7 @@ export function GameForm({ match }: { match: Match }) {
                           )}
                         />
                         <div
-                          className="flex w-6 shrink-0 items-center"
+                          className="flex w-6 shrink-0 touch-none items-center"
                           {...attributes}
                           {...listeners}
                         >
