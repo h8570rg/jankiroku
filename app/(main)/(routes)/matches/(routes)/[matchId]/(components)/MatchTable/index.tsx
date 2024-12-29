@@ -5,6 +5,7 @@ import { MatchPlayer } from "@/lib/type";
 import { ChipModalTrigger } from "../ChipModal";
 import { GameModalTrigger } from "../GameModal";
 import { PlayersModalTrigger } from "../PlayersModal";
+import { GameRow } from "./(components)/GameRow";
 import styles from "./styles.module.css";
 
 type Column = {
@@ -15,7 +16,8 @@ type Column = {
 } & MatchPlayer;
 
 type Row = {
-  [playerId: Column["id"]]: number;
+  gameId: string;
+  players: { [playerId: Column["id"]]: number };
 };
 
 export async function MatchTable({
@@ -58,11 +60,12 @@ export async function MatchTable({
   ];
 
   const gameRows: Row[] =
-    match.games?.map((game) =>
-      Object.fromEntries(
+    match.games?.map((game) => ({
+      gameId: game.id,
+      players: Object.fromEntries(
         game.players.map((player) => [player.id, player.score]),
       ),
-    ) ?? [];
+    })) ?? [];
 
   return (
     <div className={classNames(className, "flex flex-col")}>
@@ -99,29 +102,40 @@ export async function MatchTable({
         {gameRows.length > 0 && (
           <ol className="py-1">
             {gameRows.map((item, index) => (
-              <li
-                className={classNames(styles["row"], "flex items-center")}
-                key={index}
-              >
-                <div
+              <li key={item.gameId}>
+                <GameRow
+                  index={index}
+                  matchId={matchId}
+                  gameId={item.gameId}
                   className={classNames(
-                    styles["col"],
-                    styles["col--index"],
-                    styles["col--body"],
+                    styles["row"],
+                    "flex w-full flex-row items-center bg-transparent",
                   )}
                 >
-                  {index + 1}
-                </div>
-                {columns.map((column) => (
                   <div
-                    key={column.id}
-                    className={classNames(styles["col"], styles["col--body"], {
-                      "text-danger": item[column.id] < 0,
-                    })}
+                    className={classNames(
+                      styles["col"],
+                      styles["col--index"],
+                      styles["col--body"],
+                    )}
                   >
-                    {item[column.id]}
+                    {index + 1}
                   </div>
-                ))}
+                  {columns.map((column) => (
+                    <div
+                      key={column.id}
+                      className={classNames(
+                        styles["col"],
+                        styles["col--body"],
+                        {
+                          "text-danger": item.players[column.id] < 0,
+                        },
+                      )}
+                    >
+                      {item.players[column.id]}
+                    </div>
+                  ))}
+                </GameRow>
               </li>
             ))}
           </ol>
