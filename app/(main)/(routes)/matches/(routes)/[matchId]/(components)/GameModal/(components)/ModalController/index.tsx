@@ -11,11 +11,7 @@ export function GameModalController({
   const { gameModal } = useMatchContext();
 
   return (
-    <Modal
-      {...gameModal.bind}
-      hideCloseButton
-      placement="center" // TODO: 考える
-    >
+    <Modal {...gameModal.bind} hideCloseButton placement="bottom">
       <ModalContent>{children}</ModalContent>
     </Modal>
   );
