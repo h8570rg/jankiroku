@@ -19,7 +19,12 @@ export function GameRow({
   const gameUpdateModal = useGameUpdateModal();
   return (
     <>
-      <Card isPressable className={className} onPress={gameUpdateModal.onOpen}>
+      <Card
+        isPressable
+        isHoverable
+        className={className}
+        onPress={gameUpdateModal.onOpen}
+      >
         {children}
       </Card>
       <GameUpdateModal
