@@ -201,6 +201,7 @@ const formatMatch = (match: {
     incline: string;
   }[];
   games: {
+    id: string;
     game_players: {
       player_id: string;
       score: number;
@@ -267,6 +268,7 @@ const formatMatch = (match: {
       },
     },
     games: match.games.map((game) => ({
+      id: game.id,
       players: game.game_players.map((gamePlayer) => ({
         id: gamePlayer.player_id,
         score: gamePlayer.score,
