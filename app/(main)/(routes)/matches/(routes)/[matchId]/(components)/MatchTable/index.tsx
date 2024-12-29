@@ -109,7 +109,7 @@ export async function MatchTable({
                   gameId={item.gameId}
                   className={classNames(
                     styles["row"],
-                    "flex w-full flex-row items-center bg-transparent",
+                    "flex w-full flex-row items-center bg-transparent shadow-none",
                   )}
                 >
                   <div
