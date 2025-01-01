@@ -37,7 +37,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
               {data.averageRank?.toFixed(2) ?? "なし"}
             </div>
           </div>
-          <div className="px-8">
+          <div className="flex w-[224px] justify-center">
             <table className="[&_td]:text-center [&_th]:w-10 [&_th]:text-center">
               <thead className="text-tiny text-foreground-light">
                 <tr>
