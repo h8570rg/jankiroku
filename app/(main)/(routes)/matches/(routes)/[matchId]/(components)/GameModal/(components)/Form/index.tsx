@@ -28,12 +28,12 @@ export function GameForm({ match }: { match: Match }) {
   const gameModal = useMatchContext().gameModal;
 
   const { rule } = match;
-  const [{ errors, success }, formAction] = useActionState(
+  const [{ errors, success }, formAction, isPending] = useActionState(
     addGame.bind(null, match.id, rule, match.players.length),
     {},
   );
 
-  const { control, watch, setValue, setFocus } = useForm<Schema>({
+  const { control, watch, setValue } = useForm<Schema>({
     defaultValues: {
       players: match.players.map((player) => ({
         id: player.id,
@@ -129,7 +129,6 @@ export function GameForm({ match }: { match: Match }) {
                                         name,
                                         String(totalPointsToBe - totalPoints),
                                       );
-                                      setFocus(name);
                                     }}
                                   >
                                     残り入力
@@ -204,7 +203,7 @@ export function GameForm({ match }: { match: Match }) {
         <Button variant="light" onPress={gameModal.onClose}>
           キャンセル
         </Button>
-        <Button type="submit" color="primary">
+        <Button type="submit" color="primary" isLoading={isPending}>
           保存
         </Button>
       </ModalFooter>

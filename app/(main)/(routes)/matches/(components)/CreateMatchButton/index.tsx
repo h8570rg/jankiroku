@@ -65,7 +65,7 @@ const playersCount3DefaultValues: InputSchema = {
 export function CreateMatchButton({ className }: { className?: string }) {
   const ruleCreateModal = useModal();
 
-  const [state, formAction] = useActionState(createMatch, {});
+  const [state, formAction, isPending] = useActionState(createMatch, {});
   const { errors } = state;
 
   const { reset, control, watch } = useForm<InputSchema>({
@@ -133,52 +133,48 @@ export function CreateMatchButton({ className }: { className?: string }) {
                     control={control}
                     name="rate"
                     render={({ field: { onChange, value, ...field } }) => (
-                      <>
-                        <Slider
-                          classNames={{
-                            base: "mb-6",
-                          }}
-                          label="レート"
-                          maxValue={rates.length - 1}
-                          showSteps
-                          marks={rates.map((rate, i) => ({
-                            value: i,
-                            label: String(rate),
-                          }))}
-                          getValue={(v) => rateLabel[rates[Number(v)]]}
-                          onChange={(v) => {
-                            onChange(String(v));
-                          }}
-                          value={Number(value)}
-                          {...field}
-                        />
-                      </>
+                      <Slider
+                        classNames={{
+                          base: "mb-6",
+                        }}
+                        label="レート"
+                        maxValue={rates.length - 1}
+                        showSteps
+                        marks={rates.map((rate, i) => ({
+                          value: i,
+                          label: String(rate),
+                        }))}
+                        getValue={(v) => rateLabel[rates[Number(v)]]}
+                        onChange={(v) => {
+                          onChange(String(v));
+                        }}
+                        value={Number(value)}
+                        {...field}
+                      />
                     )}
                   />
                   <Controller
                     control={control}
                     name="chipRate"
                     render={({ field: { onChange, value, ...field } }) => (
-                      <>
-                        <Slider
-                          classNames={{
-                            base: "mb-8",
-                          }}
-                          label="チップ"
-                          maxValue={chipRates.length - 1}
-                          showSteps
-                          marks={chipRates.map((chipRate, i) => ({
-                            value: i,
-                            label: String(chipRate),
-                          }))}
-                          getValue={(v) => chipRateLabel[chipRates[Number(v)]]}
-                          onChange={(v) => {
-                            onChange(String(v));
-                          }}
-                          value={Number(value)}
-                          {...field}
-                        />
-                      </>
+                      <Slider
+                        classNames={{
+                          base: "mb-8",
+                        }}
+                        label="チップ"
+                        maxValue={chipRates.length - 1}
+                        showSteps
+                        marks={chipRates.map((chipRate, i) => ({
+                          value: i,
+                          label: String(chipRate),
+                        }))}
+                        getValue={(v) => chipRateLabel[chipRates[Number(v)]]}
+                        onChange={(v) => {
+                          onChange(String(v));
+                        }}
+                        value={Number(value)}
+                        {...field}
+                      />
                     )}
                   />
                   <Controller
@@ -393,7 +389,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                   <Button variant="light" onPress={onClose}>
                     キャンセル
                   </Button>
-                  <Button color="primary" type="submit">
+                  <Button color="primary" type="submit" isLoading={isPending}>
                     開始
                   </Button>
                 </ModalFooter>

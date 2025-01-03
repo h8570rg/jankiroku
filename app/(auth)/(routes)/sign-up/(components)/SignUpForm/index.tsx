@@ -10,7 +10,7 @@ import { signUp } from "./actions";
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export function SignUpForm({ className }: { className?: string }) {
-  const [state, formAction] = useActionState(signUp, {});
+  const [state, formAction, isPending] = useActionState(signUp, {});
 
   return (
     <form
@@ -36,7 +36,12 @@ export function SignUpForm({ className }: { className?: string }) {
         required
         errorMessage={state.errors?.password?.[0]}
       />
-      <Button className="w-full" color="primary" type="submit">
+      <Button
+        className="w-full"
+        color="primary"
+        type="submit"
+        isLoading={isPending}
+      >
         新規登録
       </Button>
     </form>
