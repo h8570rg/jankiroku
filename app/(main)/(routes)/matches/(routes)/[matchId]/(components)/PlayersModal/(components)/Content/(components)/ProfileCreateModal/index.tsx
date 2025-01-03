@@ -20,7 +20,7 @@ export function ProfileCreateModal({
 }: Pick<ModalProps, "isOpen" | "onClose"> & {
   onProfileCreate: (profile: Profile) => void;
 }) {
-  const [state, formAction] = useActionState(
+  const [state, formAction, isPending] = useActionState(
     async (prevState: State, formData: FormData) => {
       const result = await createProfile(prevState, formData);
       const player = result.data;
@@ -55,7 +55,7 @@ export function ProfileCreateModal({
             />
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" type="submit">
+            <Button color="primary" type="submit" isLoading={isPending}>
               決定
             </Button>
           </ModalFooter>

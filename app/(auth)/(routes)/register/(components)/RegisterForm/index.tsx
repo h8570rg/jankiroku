@@ -18,7 +18,7 @@ export function RegisterForm({
   className?: string;
   userId: string;
 }) {
-  const [state, formAction] = useActionState(
+  const [state, formAction, isPending] = useActionState(
     updateProfile.bind(null, userId),
     {},
   );
@@ -49,7 +49,12 @@ export function RegisterForm({
         description={`${NAME_MAX_LENGTH}文字以内で入力してください`}
       />
       <div className="flex justify-end">
-        <Button className="ml-auto" color="primary" type="submit">
+        <Button
+          className="ml-auto"
+          color="primary"
+          type="submit"
+          isLoading={isPending}
+        >
           決定
         </Button>
       </div>
