@@ -19,9 +19,7 @@ export default async function RegisterPage() {
 
   return (
     <>
-      <h1 className="mx-auto mb-2 w-fit text-large font-bold">
-        ユーザー情報登録
-      </h1>
+      <h1 className="mx-auto mb-2 w-fit text-large">ユーザー情報登録</h1>
       <p className="mb-6 mt-4 text-small text-foreground-light">
         ユーザーIDと名前を決めてください。
         <br />

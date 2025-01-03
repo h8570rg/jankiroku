@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { CSSProperties } from "react";
 import { Icon } from "@/components/Icon";
 import { serverServices } from "@/lib/services/server";
 import { MatchPlayer } from "@/lib/type";
@@ -6,7 +7,6 @@ import { ChipModalTrigger } from "../ChipModal";
 import { GameModalTrigger } from "../GameModal";
 import { PlayersModalTrigger } from "../PlayersModal";
 import { GameRow } from "./(components)/GameRow";
-import styles from "./styles.module.css";
 
 type Column = {
   id: string;
@@ -67,150 +67,121 @@ export async function MatchTable({
       ),
     })) ?? [];
 
+  const rowStyle: CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: `46px repeat(${columns.length}, minmax(80px, 1fr))`,
+    width: "100%",
+  };
+
   return (
-    <div className={classNames(className, "flex flex-col")}>
-      <PlayersModalTrigger
-        className={classNames(
-          styles["row"],
-          "flex items-center rounded-lg bg-default-100 text-foreground-500",
-        )}
-      >
-        <div
-          className={classNames(
-            styles["col"],
-            styles["col--header"],
-            styles["col--index"],
+    <div className={classNames(className, "overflow-x-auto pb-4")}>
+      <div className="flex h-full min-w-fit flex-col">
+        {/* ヘッダー */}
+        <PlayersModalTrigger
+          style={rowStyle}
+          className="rounded-lg bg-default-100 text-foreground-500"
+        >
+          <div />
+          {columns.map((column) => (
+            <div key={column?.id} className="truncate px-1 py-3 text-tiny">
+              {column.name}
+            </div>
+          ))}
+        </PlayersModalTrigger>
+        {/* ボディ */}
+        <div className="grow">
+          {gameRows.length === 0 && (
+            <p className="my-10 text-center text-small text-foreground-light">
+              まだデータはありません
+            </p>
           )}
-        />
-        {columns.map((column) => (
-          <div
-            key={column?.id}
-            className={classNames(styles["col--header"], styles["col"])}
-          >
-            {column.type === "player" && (
-              <span className="truncate">{column.name}</span>
-            )}
-          </div>
-        ))}
-      </PlayersModalTrigger>
-      <div className="grow">
-        {gameRows.length === 0 && (
-          <p className="my-10 text-center text-small text-foreground-light">
-            まだデータはありません
-          </p>
-        )}
-        {gameRows.length > 0 && (
-          <ol className="py-1">
-            {gameRows.map((item, index) => (
-              <li key={item.gameId}>
-                <GameRow
-                  index={index}
-                  matchId={matchId}
-                  gameId={item.gameId}
-                  className={classNames(
-                    styles["row"],
-                    "flex w-full flex-row items-center bg-transparent shadow-none",
-                  )}
-                >
+          {gameRows.length > 0 &&
+            gameRows.map((item, index) => (
+              <GameRow
+                key={item.gameId}
+                index={index}
+                matchId={matchId}
+                gameId={item.gameId}
+                style={rowStyle}
+              >
+                <div className="flex h-full items-center justify-center truncate px-1 py-2 text-tiny text-default-500">
+                  {index + 1}
+                </div>
+                {columns.map((column) => (
                   <div
+                    key={column.id}
                     className={classNames(
-                      styles["col"],
-                      styles["col--index"],
-                      styles["col--body"],
+                      "truncate px-1 py-2 text-center text-small",
+                      {
+                        "text-danger": item.players[column.id] < 0,
+                      },
                     )}
                   >
-                    {index + 1}
+                    {item.players[column.id]}
                   </div>
-                  {columns.map((column) => (
-                    <div
-                      key={column.id}
-                      className={classNames(
-                        styles["col"],
-                        styles["col--body"],
-                        {
-                          "text-danger": item.players[column.id] < 0,
-                        },
-                      )}
-                    >
-                      {item.players[column.id]}
-                    </div>
-                  ))}
-                </GameRow>
-              </li>
+                ))}
+              </GameRow>
             ))}
-          </ol>
-        )}
-        <GameModalTrigger
-          fullWidth
-          size="lg"
-          startContent={<Icon className="size-5" name="edit" />}
-          variant="ghost"
-          isPlayersShort={isPlayersShort}
-        >
-          結果を入力する
-        </GameModalTrigger>
-      </div>
-      <div className="mt-3 rounded-lg bg-default-100 text-foreground-500">
-        <div className={classNames(styles["row"])}>
-          <div
-            className={classNames(
-              styles["col"],
-              styles["col--index"],
-              styles["col--footer"],
-            )}
+          <GameModalTrigger
+            fullWidth
+            size="lg"
+            startContent={<Icon className="size-5" name="edit" />}
+            variant="ghost"
+            isPlayersShort={isPlayersShort}
           >
-            合計
-          </div>
-          {columns.map((column) => (
-            <div
-              className={classNames(styles["col"], styles["col--footer"], {
-                "text-danger": column.totalScore < 0,
-              })}
-              key={column.id}
-            >
-              {column.totalScore}
-            </div>
-          ))}
+            結果を入力する
+          </GameModalTrigger>
         </div>
-        <ChipModalTrigger className={classNames(styles["row"], "w-full")}>
-          <div
-            className={classNames(
-              styles["col"],
-              styles["col--index"],
-              styles["col--footer"],
-            )}
-          >
-            チップ
-          </div>
-          {columns.map((column) => (
-            <div
-              className={classNames(styles["col"], styles["col--footer"])}
-              key={column.id}
-            >
-              {column.chipCount}
-              {column.chipCount !== null && <span>枚</span>}
+        {/* フッター */}
+        <div className="mt-3 rounded-lg bg-default-100 text-foreground-500">
+          <div className="min-h-10" style={rowStyle}>
+            <div className="flex h-full items-center justify-center truncate break-all px-1 py-3 text-tiny">
+              合計
             </div>
-          ))}
-        </ChipModalTrigger>
-        <div className={classNames(styles["row"])}>
-          <div
-            className={classNames(
-              styles["col"],
-              styles["col--index"],
-              styles["col--footer"],
-            )}
-          >
-            収支
+            {columns.map((column) => (
+              <div
+                className={classNames(
+                  "flex h-full items-center justify-center px-1 text-center text-tiny",
+                  {
+                    "text-danger": column.totalScore < 0,
+                  },
+                )}
+                key={column.id}
+              >
+                {column.totalScore}
+              </div>
+            ))}
           </div>
-          {columns.map((column) => (
-            <div
-              className={classNames(styles["col"], styles["col--footer"])}
-              key={column.id}
-            >
-              {column.result}
-              <span>円</span>
+          <ChipModalTrigger className="min-h-10" style={rowStyle}>
+            <div className="flex h-full items-center justify-center truncate px-1 text-tiny">
+              チップ
             </div>
-          ))}
+            {columns.map((column) => (
+              <div
+                className="flex h-full items-center justify-center break-all px-1 py-3 text-center text-tiny"
+                key={column.id}
+              >
+                {column.chipCount}
+                {column.chipCount !== null && (
+                  <span className="text-[10px]">枚</span>
+                )}
+              </div>
+            ))}
+          </ChipModalTrigger>
+          <div className="min-h-10" style={rowStyle}>
+            <div className="flex h-full items-center justify-center truncate px-1 text-tiny">
+              収支
+            </div>
+            {columns.map((column) => (
+              <div
+                className="flex h-full items-center justify-center break-all px-1 py-3 text-center text-tiny"
+                key={column.id}
+              >
+                {column.result}
+                <span className="text-[10px]">円</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

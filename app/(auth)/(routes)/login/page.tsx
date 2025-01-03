@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <>
-      <h1 className="mx-auto mb-4 w-fit text-large font-bold">ログイン</h1>
+      <h1 className="mx-auto mb-4 w-fit text-large">ログイン</h1>
       <SocialProviders />
       <div className="my-4 flex items-center gap-4">
         <Divider className="shrink" />
