@@ -33,7 +33,7 @@ export function GameForm({ match }: { match: Match }) {
     {},
   );
 
-  const { control, watch, setValue, setFocus } = useForm<Schema>({
+  const { control, watch, setValue } = useForm<Schema>({
     defaultValues: {
       players: match.players.map((player) => ({
         id: player.id,
@@ -129,7 +129,6 @@ export function GameForm({ match }: { match: Match }) {
                                         name,
                                         String(totalPointsToBe - totalPoints),
                                       );
-                                      setFocus(name);
                                     }}
                                   >
                                     残り入力

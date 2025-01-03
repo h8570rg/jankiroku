@@ -24,7 +24,7 @@ export function ChipForm({ match }: { match: Match }) {
     {},
   );
 
-  const { control, watch, setValue, setFocus } = useForm<Schema>({
+  const { control, watch, setValue } = useForm<Schema>({
     defaultValues: {
       playerChip: players.map((player) => ({
         profileId: player.id,
@@ -92,7 +92,6 @@ export function ChipForm({ match }: { match: Match }) {
                           className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
                           onPress={() => {
                             setValue(field.name, String(-1 * totalChipCount));
-                            setFocus(field.name);
                           }}
                         >
                           残り入力
