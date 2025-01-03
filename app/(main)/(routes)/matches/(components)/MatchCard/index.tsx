@@ -20,7 +20,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
     <NavigationCard matchId={match.id}>
       <CardHeader>
         <div className="flex w-full items-center justify-between">
-          <p className="font-bold">{displayDate}</p>
+          <p>{displayDate}</p>
           <AvatarGroup size="sm" isBordered max={4}>
             {match.players.map((player) => (
               <Avatar key={player.id} />
@@ -33,7 +33,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
         <div className="flex items-center">
           <div className="flex grow flex-col items-center px-8">
             <div className="mb-2 text-tiny text-foreground-light">平均着順</div>
-            <div className="text-large font-bold">
+            <div className="text-large">
               {data.averageRank?.toFixed(2) ?? "なし"}
             </div>
           </div>
@@ -47,7 +47,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
                   {match.rule.playersCount === 4 && <th>4位</th>}
                 </tr>
               </thead>
-              <tbody className="text-small font-bold">
+              <tbody className="text-small">
                 <tr>
                   <td>{data.rankCounts[0]}</td>
                   <td>{data.rankCounts[1]}</td>

@@ -126,16 +126,12 @@ export default function LandingPage() {
       <div className="container mx-auto space-y-24 px-5 py-16">
         {/* 機能紹介 */}
         <section id="features" className="">
-          <h2 className="mb-12 text-center text-large font-semibold">
-            主な機能
-          </h2>
+          <h2 className="mb-12 text-center text-large">主な機能</h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {features.map((feature, index) => (
               <Card key={index} className="px-3">
                 <CardBody className="py-8">
-                  <h3 className="mb-2 text-center font-semibold">
-                    {feature.title}
-                  </h3>
+                  <h3 className="mb-2 text-center">{feature.title}</h3>
                   <p>{feature.description}</p>
                 </CardBody>
               </Card>
@@ -146,18 +142,14 @@ export default function LandingPage() {
         {/* 使用方法 */}
         <section className="">
           <div className="container mx-auto">
-            <h2 className="mb-12 text-center text-large font-semibold">
-              使い方
-            </h2>
+            <h2 className="mb-12 text-center text-large">使い方</h2>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
               {steps.map((step) => (
                 <div key={step.number} className="text-center">
-                  <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-secondary text-large font-bold text-secondary-foreground">
+                  <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-secondary text-large text-secondary-foreground">
                     {step.number}
                   </div>
-                  <h3 className="mb-2 text-medium font-semibold">
-                    {step.title}
-                  </h3>
+                  <h3 className="mb-2 text-medium">{step.title}</h3>
                   <p>{step.description}</p>
                 </div>
               ))}
@@ -168,9 +160,7 @@ export default function LandingPage() {
         {/* FAQ */}
         <section className="">
           <div className="container mx-auto">
-            <h2 className="mb-12 text-center text-large font-semibold">
-              よくある質問
-            </h2>
+            <h2 className="mb-12 text-center text-large">よくある質問</h2>
             <FAQ faqs={faqs} />
           </div>
         </section>

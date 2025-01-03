@@ -5,16 +5,16 @@ import { GameUpdateModal, useGameUpdateModal } from "../GameUpdateModal";
 
 export function GameRow({
   index,
-  className,
   children,
   matchId,
   gameId,
+  style,
 }: {
   index: number;
-  className?: string;
   children: React.ReactNode;
   matchId: string;
   gameId: string;
+  style?: React.CSSProperties;
 }) {
   const gameUpdateModal = useGameUpdateModal();
   return (
@@ -22,8 +22,9 @@ export function GameRow({
       <Card
         isPressable
         isHoverable
-        className={className}
+        className="bg-transparent shadow-none"
         onPress={gameUpdateModal.onOpen}
+        style={style}
       >
         {children}
       </Card>

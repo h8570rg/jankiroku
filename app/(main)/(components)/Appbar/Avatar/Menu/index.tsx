@@ -39,8 +39,8 @@ export function AppbarAvatarMenu({
         className="h-14 gap-2"
         textValue={`${name}@${displayId}`}
       >
-        <p className="text-wrap break-all font-semibold">{name}</p>
-        <p className="text-wrap break-all font-semibold">@{displayId}</p>
+        <p className="text-wrap break-all">{name}</p>
+        <p className="text-wrap break-all">@{displayId}</p>
       </DropdownItem>
       <DropdownItem key="friends">フレンド</DropdownItem>
       <DropdownItem key="signOut" color="danger">
