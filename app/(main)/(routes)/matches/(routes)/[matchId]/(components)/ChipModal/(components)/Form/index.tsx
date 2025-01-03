@@ -19,7 +19,7 @@ type Schema = {
 export function ChipForm({ match }: { match: Match }) {
   const { chipModal } = useMatchContext();
   const { players, rule } = match;
-  const [{ errors, success }, formAction] = useActionState(
+  const [{ errors, success }, formAction, isPending] = useActionState(
     addChip.bind(null, match.id, players.length),
     {},
   );
@@ -84,21 +84,19 @@ export function ChipForm({ match }: { match: Match }) {
                     startContent={
                       isAutoFillAvailable &&
                       field.value === "" && (
-                        <>
-                          <Button
-                            variant="flat"
-                            size="sm"
-                            radius="md"
-                            color="secondary"
-                            className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
-                            onPress={() => {
-                              setValue(field.name, String(-1 * totalChipCount));
-                              setFocus(field.name);
-                            }}
-                          >
-                            残り入力
-                          </Button>
-                        </>
+                        <Button
+                          variant="flat"
+                          size="sm"
+                          radius="md"
+                          color="secondary"
+                          className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
+                          onPress={() => {
+                            setValue(field.name, String(-1 * totalChipCount));
+                            setFocus(field.name);
+                          }}
+                        >
+                          残り入力
+                        </Button>
                       )
                     }
                     endContent={
@@ -123,7 +121,7 @@ export function ChipForm({ match }: { match: Match }) {
         <Button variant="light" onPress={chipModal.onClose}>
           キャンセル
         </Button>
-        <Button type="submit" color="primary">
+        <Button type="submit" color="primary" isLoading={isPending}>
           保存
         </Button>
       </ModalFooter>

@@ -9,7 +9,7 @@ import { signInEmail } from "./actions";
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export function LoginForm({ className }: { className?: string }) {
-  const [state, formAction] = useActionState(signInEmail, {});
+  const [state, formAction, isPending] = useActionState(signInEmail, {});
 
   return (
     <form className={className} action={formAction} noValidate>
@@ -36,7 +36,13 @@ export function LoginForm({ className }: { className?: string }) {
       {state.errors?.base && (
         <p className="mt-1 p-1 text-tiny text-danger">{state.errors.base}</p>
       )}
-      <Button className="mt-2.5" fullWidth color="primary" type="submit">
+      <Button
+        className="mt-2.5"
+        fullWidth
+        color="primary"
+        type="submit"
+        isLoading={isPending}
+      >
         ログイン
       </Button>
     </form>
