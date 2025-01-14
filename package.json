@@ -46,7 +46,7 @@
     "@hookform/resolvers": "3.9.1",
     "@nextui-org/react": "2.6.11",
     "@supabase/ssr": "0.5.2",
-    "@supabase/supabase-js": "2.47.12",
+    "@supabase/supabase-js": "2.47.13",
     "classnames": "2.5.1",
     "dayjs": "1.11.13",
     "framer-motion": "11.15.0",
