@@ -1,3 +1,3 @@
 "use client";
 
-export { Skeleton } from "@nextui-org/react";
+export { Skeleton } from "@heroui/react";

@@ -41,6 +41,7 @@ lib/migration
 #### 4.1 変数の準備
 
 以下の情報を準備します：
+
 - Supabase URL
 - Service Role Key
 - 移管前ユーザーID
@@ -60,7 +61,7 @@ npx supabase status
 
 ##### ユーザーID の取得
 
-- 移管前ユーザーID: 
+- 移管前ユーザーID:
   https://console.firebase.google.com/u/0/project/mj-app-pwa/firestore/databases/-default-/data/~2Fusers~2F1JfzwtMcu5SImqkNE8dKcq8sWxD2?hl=ja
 
 - 移管後ユーザーID:
@@ -77,7 +78,6 @@ SUPABASE_URL=<API URL> SERVICE_ROLE_KEY=<service_role key> npm run migrate
 ```
 
 コマンド実行後、移管前ユーザーIDと移管後ユーザーIDを入力するプロンプトが表示されるので、準備した情報を入力してください。
-
 
 ## 注意事項
 

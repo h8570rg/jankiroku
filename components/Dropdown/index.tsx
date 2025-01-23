@@ -6,4 +6,4 @@ export {
   DropdownMenu,
   DropdownSection,
   DropdownItem,
-} from "@nextui-org/react";
+} from "@heroui/react";

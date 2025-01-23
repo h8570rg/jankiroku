@@ -1,3 +1,3 @@
 "use client";
 
-export { Tab, Tabs } from "@nextui-org/react";
+export { Tab, Tabs } from "@heroui/react";

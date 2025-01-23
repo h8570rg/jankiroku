@@ -1,3 +1,3 @@
 "use client";
 
-export { Select, SelectItem } from "@nextui-org/react";
+export { Select, SelectItem } from "@heroui/react";

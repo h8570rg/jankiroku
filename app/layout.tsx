@@ -4,7 +4,7 @@ import { IconDefs } from "@/components/Icon";
 import { SERVICE_NAME } from "@/lib/config";
 import { fontClassNames } from "./fonts";
 import "./globals.css";
-import { NextUIProvider } from "./nextUiProvider";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: {
@@ -35,9 +35,9 @@ export default function RootLayout({
       </head>
       <body className="h-full font-rocknroll">
         <IconDefs />
-        <NextUIProvider>
+        <Providers>
           <div className="h-full bg-background text-foreground">{children}</div>
-        </NextUIProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -1,3 +1,3 @@
 "use client";
 
-export { Progress } from "@nextui-org/react";
+export { Progress } from "@heroui/react";

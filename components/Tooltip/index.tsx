@@ -1,3 +1,3 @@
 "use client";
 
-export { Tooltip } from "@nextui-org/react";
+export { Tooltip } from "@heroui/react";

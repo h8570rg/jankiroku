@@ -3,9 +3,8 @@
   "extends": ["config:best-practices"],
   "packageRules": [
     {
-      "matchUpdateTypes": ["patch"],
-      "labels": ["patch", "renovate"],
-      "automerge": true
+      "matchUpdateTypes": ["major"],
+      "labels": ["major", "renovate"]
     },
     {
       "matchUpdateTypes": ["minor"],
@@ -13,8 +12,14 @@
       "automerge": true
     },
     {
-      "matchUpdateTypes": ["major"],
-      "labels": ["major", "renovate"]
+      "matchUpdateTypes": ["patch"],
+      "labels": ["patch", "renovate"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["pin"],
+      "labels": ["pin", "renovate"],
+      "automerge": true
     }
   ]
 }
