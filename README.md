@@ -74,11 +74,11 @@ Supabase Studio URL: http://localhost:54323
 
 ## 用語一覧
 
-| コード | 意味 |
-| ---- | ---- |
-| user | ログインしているユーザー |
-| match | 成績表 |
-| game | 半荘 |
-| score | ポイント |
-| points | 点数 |
-| result | 収支 |
+| コード | 意味                     |
+| ------ | ------------------------ |
+| user   | ログインしているユーザー |
+| match  | 成績表                   |
+| game   | 半荘                     |
+| score  | ポイント                 |
+| points | 点数                     |
+| result | 収支                     |

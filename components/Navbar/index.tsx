@@ -1,3 +1,3 @@
 "use client";
 
-export { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/react";
+export { Navbar, NavbarBrand, NavbarContent } from "@heroui/react";

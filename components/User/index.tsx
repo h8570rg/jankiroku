@@ -1,6 +1,6 @@
 "use client";
 
-import { User as NextUiUser, UserProps } from "@nextui-org/react";
+import { User as HeroUiUser, UserProps } from "@heroui/react";
 import { Skeleton } from "@/components/Skeleton";
 
 export function User({
@@ -26,7 +26,7 @@ export function User({
     );
   }
   return (
-    <NextUiUser
+    <HeroUiUser
       name={name}
       description={displayId && `@${displayId}`}
       avatarProps={{

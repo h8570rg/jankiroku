@@ -1,3 +1,3 @@
 "use client";
 
-export { Divider } from "@nextui-org/react";
+export { Divider } from "@heroui/react";

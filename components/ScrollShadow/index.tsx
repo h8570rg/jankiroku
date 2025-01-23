@@ -1,3 +1,3 @@
 "use client";
 
-export { ScrollShadow } from "@nextui-org/react";
+export { ScrollShadow } from "@heroui/react";

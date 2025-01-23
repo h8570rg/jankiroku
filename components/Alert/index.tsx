@@ -1,3 +1,3 @@
 "use client";
 
-export { Alert } from "@nextui-org/react";
+export { Alert } from "@heroui/react";

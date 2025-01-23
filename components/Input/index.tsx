@@ -1,6 +1,6 @@
 "use client";
 
-import { Input as NextUiInput, InputProps } from "@nextui-org/react";
+import { Input as HeroUiInput, InputProps } from "@heroui/react";
 import classNames from "classnames";
 import { forwardRef } from "react";
 
@@ -9,7 +9,7 @@ export const Input = forwardRef<
   Omit<InputProps, "isInvalid">
 >(function Input({ classNames: propsClassNames, ...props }, ref) {
   return (
-    <NextUiInput
+    <HeroUiInput
       classNames={{
         ...propsClassNames,
         input: classNames("text-medium", propsClassNames?.input), // ios safariで拡大されるのを防ぐ
