@@ -1,15 +1,15 @@
 "use client";
 
 import {
-  Link as NextUILink,
-  LinkProps as NextUILinkProps,
-} from "@nextui-org/react";
+  Link as HeroUiLink,
+  LinkProps as HeroUiLinkProps,
+} from "@heroui/react";
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
 import { forwardRef } from "react";
 
 export const Link = forwardRef<
   HTMLAnchorElement,
-  NextLinkProps & NextUILinkProps
+  NextLinkProps & HeroUiLinkProps
 >(function Link(props, ref) {
-  return <NextUILink as={NextLink} ref={ref} {...props} />;
+  return <HeroUiLink as={NextLink} ref={ref} {...props} />;
 });

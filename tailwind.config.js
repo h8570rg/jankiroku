@@ -1,4 +1,4 @@
-import { nextui } from "@nextui-org/react";
+import { heroui } from "@heroui/react";
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -7,7 +7,7 @@ const config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     fontSize: {},
@@ -54,11 +54,11 @@ const config = {
     },
   },
   /**
-   * @see https://nextui.org/docs/frameworks/nextjs#tailwind-css-setup
+   * @see https://heroui.org/docs/frameworks/nextjs#tailwind-css-setup
    */
   darkMode: "class",
   plugins: [
-    nextui({
+    heroui({
       layout: {
         radius: {
           small: "4px",

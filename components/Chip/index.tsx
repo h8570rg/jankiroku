@@ -1,3 +1,3 @@
 "use client";
 
-export { Chip } from "@nextui-org/react";
+export { Chip } from "@heroui/react";

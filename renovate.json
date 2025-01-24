@@ -1,20 +1,25 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:js-app"],
+  "extends": ["config:best-practices"],
   "packageRules": [
     {
-      "matchUpdateTypes": ["patch"],
-      "labels": ["patch"],
-      "automerge": true
+      "matchUpdateTypes": ["major"],
+      "labels": ["major", "renovate"]
     },
     {
       "matchUpdateTypes": ["minor"],
-      "labels": ["minor"]
+      "labels": ["minor", "renovate"],
+      "automerge": true
     },
     {
-      "matchUpdateTypes": ["major"],
-      "labels": ["major"]
+      "matchUpdateTypes": ["patch"],
+      "labels": ["patch", "renovate"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["pin"],
+      "labels": ["pin", "renovate"],
+      "automerge": true
     }
-  ],
-  "labels": ["renovate"]
+  ]
 }

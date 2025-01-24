@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Navbar as NextUINavbar,
-  NavbarBrand,
-  NavbarContent,
-} from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent } from "@heroui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,7 +14,7 @@ export default function MaintenancePage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   return (
     <main className="relative flex min-h-screen flex-col">
-      <NextUINavbar position="static" className="absolute inset-x-0 top-0">
+      <Navbar position="static" className="absolute inset-x-0 top-0">
         <NavbarContent>
           <NavbarBrand>
             <Link color="foreground" href="/">
@@ -26,7 +22,7 @@ export default function MaintenancePage() {
             </Link>
           </NavbarBrand>
         </NavbarContent>
-      </NextUINavbar>
+      </Navbar>
       <div className="flex grow items-center justify-center px-4">
         <div className="flex flex-col items-center gap-4">
           <h1 className="text-center text-large">メンテナンス中</h1>

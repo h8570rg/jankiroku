@@ -1,15 +1,15 @@
 "use client";
 
-import { useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@heroui/react";
 
-export type { ModalProps } from "@nextui-org/react";
+export type { ModalProps } from "@heroui/react";
 export {
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 export type UseModalReturn = {
   isOpen: boolean;

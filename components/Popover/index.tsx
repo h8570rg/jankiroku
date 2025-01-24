@@ -1,3 +1,3 @@
 "use client";
 
-export { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+export { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";

@@ -1,3 +1,3 @@
 "use client";
 
-export { Listbox, ListboxItem, ListboxSection } from "@nextui-org/react";
+export { Listbox, ListboxItem, ListboxSection } from "@heroui/react";
