@@ -83,10 +83,5 @@
     "typescript": "5.7.3",
     "typescript-eslint": "8.21.0",
     "vitest": "3.0.4"
-  },
-  "overrides": {
-    "@types/react": "19.0.8",
-    "@types/react-dom": "19.0.3",
-    "@tanstack/react-virtual": "3.11.2"
   }
 }
