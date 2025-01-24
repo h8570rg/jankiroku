@@ -111,7 +111,7 @@ export async function MatchTable({
                   <div
                     key={column.id}
                     className={classNames(
-                      "flex h-full items-center justify-center break-all px-1 py-2 text-center align-middle text-small",
+                      "flex h-full items-center justify-center break-all px-1 py-2 text-center text-small",
                       {
                         "text-danger": item.players[column.id] < 0,
                       },
