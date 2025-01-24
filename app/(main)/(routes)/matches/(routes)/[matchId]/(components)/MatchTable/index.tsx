@@ -69,7 +69,7 @@ export async function MatchTable({
 
   const rowStyle: CSSProperties = {
     display: "grid",
-    gridTemplateColumns: `46px repeat(${columns.length}, minmax(80px, 1fr))`,
+    gridTemplateColumns: `46px repeat(${columns.length}, minmax(56px, 1fr))`,
     width: "100%",
   };
 
@@ -79,7 +79,7 @@ export async function MatchTable({
         {/* ヘッダー */}
         <PlayersModalTrigger
           style={rowStyle}
-          className="rounded-lg bg-default-100 text-foreground-500"
+          className="mb-1 rounded-lg bg-default-100 text-foreground-500"
         >
           <div />
           {columns.map((column) => (
@@ -104,14 +104,14 @@ export async function MatchTable({
                 gameId={item.gameId}
                 style={rowStyle}
               >
-                <div className="flex h-full items-center justify-center truncate px-1 py-2 text-tiny text-default-500">
+                <div className="flex h-full items-center justify-center break-all px-1 py-2 text-tiny text-default-500">
                   {index + 1}
                 </div>
                 {columns.map((column) => (
                   <div
                     key={column.id}
                     className={classNames(
-                      "truncate px-1 py-2 text-center text-small",
+                      "flex h-full items-center justify-center break-all px-1 py-2 text-center align-middle text-small",
                       {
                         "text-danger": item.players[column.id] < 0,
                       },
@@ -123,6 +123,7 @@ export async function MatchTable({
               </GameRow>
             ))}
           <GameModalTrigger
+            className="mt-1"
             fullWidth
             size="lg"
             startContent={<Icon className="size-5" name="edit" />}
@@ -178,7 +179,7 @@ export async function MatchTable({
                 key={column.id}
               >
                 {column.result}
-                <span className="text-[10px]">円</span>
+                <span className="contents text-[10px]">円</span>
               </div>
             ))}
           </div>
