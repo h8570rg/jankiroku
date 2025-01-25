@@ -40,7 +40,6 @@ export default tseslint.config(
             order: "asc",
             caseInsensitive: false,
           },
-
           groups: [
             "builtin",
             "external",
@@ -50,20 +49,12 @@ export default tseslint.config(
             "index",
             "object",
           ],
-
           pathGroups: [
             {
               pattern: "@/**",
               group: "internal",
             },
-            {
-              pattern: "server-only",
-              group: "builtin",
-              position: "before",
-            },
           ],
-
-          pathGroupsExcludedImportTypes: ["server-only"],
           "newlines-between": "never",
           warnOnUnassignedImports: true,
         },
