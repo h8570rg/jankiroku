@@ -2,8 +2,6 @@
 
 https://web.dev/learn/pwa/web-app-manifest?hl=ja に従ってmanifest.jsonを作成してください。
 
-next-pwaを使っているので、Next.jsのmanifest.tsで設定せず、publicディレクトリにmanifest.jsonを配置してください。
-
 ## アイコン生成手順
 
 https://maskable.app/ でプレビューを確認してから、以下の手順でアイコンを生成してください。
