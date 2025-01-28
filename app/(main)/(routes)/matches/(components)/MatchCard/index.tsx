@@ -31,7 +31,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
       <Divider />
       <CardBody>
         <div className="flex items-center">
-          <div className="flex grow flex-col items-center px-8 shrink-0">
+          <div className="flex shrink-0 grow flex-col items-center px-8">
             <div className="mb-2 text-tiny text-foreground-light">平均着順</div>
             <div className="text-large">
               {data.averageRank?.toFixed(2) ?? "なし"}
