@@ -1,5 +1,6 @@
 "use client";
 
+import classNames from "classnames";
 import {
   LineChart,
   Line,
@@ -13,7 +14,13 @@ import { Match } from "@/lib/type";
 
 const colors = ["#F871A0", "#66AAF9", "#74DFA2", "#AE7EDE", "#F9C97C"]; // TODO: light dark 切替
 
-export function DataChart({ match }: { match: Match }) {
+export function DataChart({
+  match,
+  className,
+}: {
+  match: Match;
+  className?: string;
+}) {
   const data = match.games.reduce(
     (acc, game, index) => {
       return [
@@ -44,7 +51,12 @@ export function DataChart({ match }: { match: Match }) {
   );
 
   return (
-    <div className="h-[350px] w-full rounded-large bg-default-50 p-2 dark:bg-default-100">
+    <div
+      className={classNames(
+        "h-[300px] w-full rounded-large bg-content1 p-2 shadow-small",
+        className,
+      )}
+    >
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <XAxis
@@ -55,12 +67,7 @@ export function DataChart({ match }: { match: Match }) {
             tickLine={false}
             tick={{ fontSize: 12 }}
           />
-          <YAxis
-            type="number"
-            width={25}
-            tickLine={false}
-            tick={{ fontSize: 12 }}
-          />
+          <YAxis type="number" tickLine={false} tick={{ fontSize: 12 }} />
           <ReferenceLine y={0} strokeDasharray="4 4" />
           <Legend
             formatter={(v) => (
