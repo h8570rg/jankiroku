@@ -11,7 +11,13 @@ export function DataModalController({
   const { dataModal } = useMatchContext();
 
   return (
-    <Modal {...dataModal.bind} size="full">
+    <Modal
+      {...dataModal.bind}
+      scrollBehavior="inside"
+      classNames={{
+        body: "pb-6",
+      }}
+    >
       <ModalContent>{children}</ModalContent>
     </Modal>
   );
