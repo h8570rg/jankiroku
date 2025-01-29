@@ -31,13 +31,13 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
       <Divider />
       <CardBody>
         <div className="flex items-center">
-          <div className="flex grow flex-col items-center px-8">
+          <div className="flex shrink-0 grow flex-col items-center px-8">
             <div className="mb-2 text-tiny text-foreground-light">平均着順</div>
             <div className="text-large">
               {data.averageRank?.toFixed(2) ?? "なし"}
             </div>
           </div>
-          <div className="flex w-[224px] justify-center">
+          <div className="flex basis-[224px] justify-center">
             <table className="[&_td]:text-center [&_th]:w-10 [&_th]:text-center">
               <thead className="text-tiny text-foreground-light">
                 <tr>
