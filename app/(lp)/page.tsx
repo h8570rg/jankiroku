@@ -5,7 +5,7 @@ import { Button } from "@/components/Button";
 import { Card, CardBody } from "@/components/Card";
 import Logo from "@/components/Logo";
 import { SERVICE_NAME } from "@/lib/config";
-import match from "./(assets)/match.png";
+import match from "./_assets/match.png";
 import { Faq } from "./_components/Faq";
 
 const features = [
