@@ -6,7 +6,7 @@ import { Card, CardBody } from "@/components/Card";
 import Logo from "@/components/Logo";
 import { SERVICE_NAME } from "@/lib/config";
 import match from "./(assets)/match.png";
-import { FAQ } from "./(components)/FAQ";
+import { Faq } from "./_components/Faq";
 
 const features = [
   {
@@ -156,7 +156,7 @@ export default function LandingPage() {
         <section className="">
           <div className="container mx-auto">
             <h2 className="mb-12 text-center text-large">よくある質問</h2>
-            <FAQ faqs={faqs} />
+            <Faq faqs={faqs} />
           </div>
         </section>
       </div>
