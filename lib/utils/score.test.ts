@@ -71,7 +71,7 @@ const rule4: Rule = {
   },
 };
 
-describe("calclate score", () => {
+describe("calculate score", () => {
   it("round", () => {
     expect(round(0)).toBe(0);
     expect(round(100)).toBe(0);
