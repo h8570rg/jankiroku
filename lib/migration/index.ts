@@ -59,6 +59,7 @@ type OldData = {
           bonus: number;
           uma: number[];
           title: string;
+          /* cspell:disable-next-line */
           kaeshi: number;
           defaultScore: number;
         };
@@ -271,6 +272,7 @@ async function createRule({
     rate,
     bonus,
     uma,
+    /* cspell:disable-next-line */
     kaeshi,
     defaultScore,
   },
@@ -285,6 +287,7 @@ async function createRule({
     rate: number;
     bonus: number;
     uma: number[];
+    /* cspell:disable-next-line */
     kaeshi: number;
     defaultScore: number;
   };
@@ -303,6 +306,7 @@ async function createRule({
       calc_method: calcMethodMap[round],
       chip_rate: chip * rate * 10,
       crack_box_bonus: bonus * 1000,
+      /* cspell:disable-next-line */
       default_calc_points: kaeshi,
       default_points: defaultScore,
       match_id: matchId,

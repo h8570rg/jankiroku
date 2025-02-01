@@ -21,7 +21,7 @@ type State = {
   };
 };
 
-const createMatchschema = z.object({
+const createMatchSchema = z.object({
   playersCount: schema.playersCount,
   incline: schema.incline,
   customIncline: schema.customIncline,
@@ -33,14 +33,14 @@ const createMatchschema = z.object({
   calcMethod: schema.calcMethod,
 });
 
-export type InputSchema = z.input<typeof createMatchschema>;
+export type InputSchema = z.input<typeof createMatchSchema>;
 
 export async function createMatch(
   prevState: State,
   formData: FormData,
 ): Promise<State> {
   const inclineFormData = formData.get("incline");
-  const validatedFields = createMatchschema.safeParse({
+  const validatedFields = createMatchSchema.safeParse({
     playersCount: formData.get("playersCount"),
     incline: inclineFormData,
     customIncline:

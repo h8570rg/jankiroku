@@ -84,6 +84,7 @@ export default [
   {
     settings: {
       tailwindcss: {
+        /* cspell:disable-next-line */
         callees: ["classNames"],
       },
     },
