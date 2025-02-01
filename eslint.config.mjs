@@ -8,12 +8,13 @@ const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
 });
 
-export default tseslint.config(
+export default [
   {
     ignores: ["lib/database.types.ts"],
   },
   js.configs.recommended,
-  tseslint.configs.recommendedTypeChecked,
+  eslintConfigPrettier,
+  ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
       parserOptions: {
@@ -22,9 +23,10 @@ export default tseslint.config(
       },
     },
   },
-  tailwind.configs["flat/recommended"],
-  eslintConfigPrettier,
-  compat.extends("next/core-web-vitals"),
+  ...tailwind.configs["flat/recommended"],
+  ...compat.config({
+    extends: ["next/core-web-vitals"],
+  }),
   {
     files: ["**/*.ts", "**/*.tsx"],
     rules: {
@@ -86,4 +88,4 @@ export default tseslint.config(
       },
     },
   },
-);
+];
