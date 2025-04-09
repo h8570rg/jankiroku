@@ -64,7 +64,7 @@
     "@commitlint/cli": "19.8.0",
     "@commitlint/config-conventional": "19.8.0",
     "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.1",
+    "@types/react-dom": "19.1.2",
     "autoprefixer": "10.4.21",
     "cspell": "8.18.1",
     "env-cmd": "10.1.0",
