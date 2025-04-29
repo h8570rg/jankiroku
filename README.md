@@ -37,6 +37,16 @@ Started supabase local development setup.
 service_role key: eyJh......
 ```
 
+Studio URLにアクセスし、SQL Editorを開きます。
+
+SQL Editorで以下のSQLを実行します。
+
+```sql
+create trigger on_auth_user_created
+after insert on auth.users
+for each row execute procedure public.handle_new_user();
+```
+
 ## 環境変数の作成
 
 ```shell
@@ -45,9 +55,15 @@ cp .env.example .env.local
 
 環境変数を設定します。
 
+GOOGLE_CLIENT_IDとGOOGLE_CLIENT_SECRETはGoogle Cloud Consoleで取得してください。
+
+https://console.cloud.google.com/auth/clients/177371198086-8hr337l0pappun65em2tseevqabfevb0.apps.googleusercontent.com?hl=ja&project=janreco-4a738
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=<API URL>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key>
+GOOGLE_CLIENT_ID=<GOOGLE_CLIENT_ID>
+GOOGLE_CLIENT_SECRET=<GOOGLE_CLIENT_SECRET>
 ```
 
 ## データベーススキーマの適用
