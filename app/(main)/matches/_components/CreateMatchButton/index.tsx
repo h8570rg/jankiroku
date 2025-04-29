@@ -195,9 +195,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                         errorMessage={errors?.calcMethod}
                       >
                         {Object.entries(inclineOption).map(([key, value]) => (
-                          <SelectItem key={key} value={value}>
-                            {value}
-                          </SelectItem>
+                          <SelectItem key={key}>{value}</SelectItem>
                         ))}
                       </Select>
                     )}
@@ -374,7 +372,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                               errorMessage={errors?.calcMethod}
                             >
                               {calcMethods.map((calcMethod) => (
-                                <SelectItem key={calcMethod} value={calcMethod}>
+                                <SelectItem key={calcMethod}>
                                   {calcMethodLabel[calcMethod]}
                                 </SelectItem>
                               ))}
