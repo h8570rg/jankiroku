@@ -45,7 +45,7 @@
     "@heroui/react": "2.7.9",
     "@hookform/resolvers": "5.0.1",
     "@supabase/ssr": "0.6.1",
-    "@supabase/supabase-js": "2.49.10",
+    "@supabase/supabase-js": "2.50.0",
     "classnames": "2.5.1",
     "dayjs": "1.11.13",
     "framer-motion": "12.16.0",
