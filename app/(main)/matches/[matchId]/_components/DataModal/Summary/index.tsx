@@ -15,6 +15,7 @@ export function Summary({ match }: { match: Match }) {
   const columns = [
     { name: "名前", uid: "name" },
     { name: "着順", uid: "rankCount" },
+    { name: "平均着順", uid: "averageRank" },
     {
       name: "合計",
       uid: "totalScore",
@@ -42,6 +43,8 @@ export function Summary({ match }: { match: Match }) {
                       return item.name;
                     case "rankCount":
                       return item.rankCounts.join("-");
+                    case "averageRank":
+                      return item.averageRank;
                     case "totalScore":
                       return item.totalScore;
                   }

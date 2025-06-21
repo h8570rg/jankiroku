@@ -26,12 +26,23 @@ export type IconName =
 export function Icon({
   name,
   className,
+  size,
+  width,
+  height,
 }: {
   name: IconName;
   className?: string;
+  size?: number;
+  width?: number;
+  height?: number;
 }) {
   return (
-    <svg className={classNames("fill-current", className)} viewBox="0 0 44 44">
+    <svg
+      className={classNames("fill-current", className)}
+      viewBox="0 0 44 44"
+      height={size || height || 24}
+      width={size || width || 24}
+    >
       <use xlinkHref={`#${name}`} />
     </svg>
   );
