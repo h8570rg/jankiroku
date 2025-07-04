@@ -58,7 +58,7 @@
     "sharp": "0.34.2",
     "swr": "2.3.4",
     "use-debounce": "10.0.5",
-    "zod": "3.25.71"
+    "zod": "3.25.72"
   },
   "devDependencies": {
     "@commitlint/cli": "19.8.1",
