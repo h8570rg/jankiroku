@@ -2,6 +2,7 @@ pre-commit:
   jobs:
     - name: "check"
       run: "npm run check -- --write {staged_files}"
+      glob: "*.{js,ts,jsx,tsx,json,jsonc,css}"
       stage_fixed: true
 pre-push:
   parallel: true
