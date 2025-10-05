@@ -5,10 +5,10 @@ import { redirect } from "next/navigation";
 import { serverServices } from "@/lib/services/server";
 
 export async function addFriends(profileId: string) {
-  const { addFriends } = await serverServices();
+	const { addFriends } = await serverServices();
 
-  await addFriends({ profileId });
+	await addFriends({ profileId });
 
-  revalidatePath("/friends");
-  redirect("/friends");
+	revalidatePath("/friends");
+	redirect("/friends");
 }

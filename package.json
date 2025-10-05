@@ -1,85 +1,77 @@
 {
-  "name": "jankiroku",
-  "version": "0.2.0",
-  "description": "",
-  "main": "index.js",
-  "engines": {
-    "node": "22.x"
-  },
-  "volta": {
-    "node": "22.20.0"
-  },
-  "scripts": {
-    "prepare": "husky",
-    "dev": "next dev -p 3001",
-    "build": "next build",
-    "start": "next start -p 3002",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "type": "tsc",
-    "test": "vitest run",
-    "spell": "cspell . --gitignore",
-    "pre-commit": "npm run lint && npm run type && npm run test && npm run spell && lint-staged",
-    "supabase:start": "env-cmd -f .env.local supabase start",
-    "supabase:stop": "env-cmd -f .env.local supabase stop",
-    "supabase:login": "supabase login",
-    "supabase:reset": "env-cmd -f .env.local supabase db reset",
-    "supabase:diff": "env-cmd -f .env.local supabase db diff -f local",
-    "supabase:squash": "supabase migration squash",
-    "supabase:type": "env-cmd -f .env.local supabase gen types typescript --local > lib/database.types.ts",
-    "migrate": "tsc --skipLibCheck --esModuleInterop  --outDir lib/migration/dist lib/migration/index.ts && node lib/migration/dist/migration/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/h8570rg/jankiroku.git"
-  },
-  "author": "https://github.com/h8570rg",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/h8570rg/jankiroku/issues"
-  },
-  "homepage": "https://github.com/h8570rg/jankiroku#readme",
-  "dependencies": {
-    "@dnd-kit/sortable": "10.0.0",
-    "@heroui/react": "2.8.5",
-    "@hookform/resolvers": "5.2.2",
-    "@supabase/ssr": "0.7.0",
-    "@supabase/supabase-js": "2.58.0",
-    "classnames": "2.5.1",
-    "dayjs": "1.11.18",
-    "framer-motion": "12.23.22",
-    "next": "15.5.4",
-    "next-themes": "0.4.6",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "react-hook-form": "7.64.0",
-    "recharts": "3.2.1",
-    "sharp": "0.34.4",
-    "swr": "2.3.6",
-    "use-debounce": "10.0.6",
-    "zod": "3.25.76"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
-    "@types/react": "19.2.0",
-    "@types/react-dom": "19.2.0",
-    "autoprefixer": "10.4.21",
-    "cspell": "9.2.1",
-    "env-cmd": "10.1.0",
-    "eslint": "9.37.0",
-    "eslint-config-next": "15.5.4",
-    "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-tailwindcss": "3.18.2",
-    "husky": "9.1.7",
-    "lint-staged": "16.2.3",
-    "postcss": "8.5.6",
-    "prettier": "3.6.2",
-    "supabase": "2.48.3",
-    "tailwindcss": "3.4.18",
-    "typescript": "5.9.3",
-    "typescript-eslint": "8.45.0",
-    "vitest": "3.2.4"
-  }
+	"name": "jankiroku",
+	"version": "0.2.0",
+	"description": "",
+	"main": "index.js",
+	"engines": {
+		"node": "22.x"
+	},
+	"volta": {
+		"node": "22.20.0",
+		"npm": "11.6.0"
+	},
+	"scripts": {
+		"dev": "next dev -p 3001",
+		"build": "next build",
+		"start": "next start -p 3002",
+		"lint": "biome lint",
+		"format": "biome format",
+		"check": "biome check",
+		"type": "tsc --noEmit",
+		"test": "vitest run",
+		"spell": "cspell . --gitignore",
+		"supabase:start": "env-cmd -f .env.local supabase start",
+		"supabase:stop": "env-cmd -f .env.local supabase stop",
+		"supabase:login": "supabase login",
+		"supabase:reset": "env-cmd -f .env.local supabase db reset",
+		"supabase:diff": "env-cmd -f .env.local supabase db diff -f local",
+		"supabase:squash": "supabase migration squash",
+		"supabase:type": "env-cmd -f .env.local supabase gen types typescript --local > lib/database.types.ts",
+		"migrate": "tsc --skipLibCheck --esModuleInterop  --outDir lib/migration/dist lib/migration/index.ts && node lib/migration/dist/migration/index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/h8570rg/jankiroku.git"
+	},
+	"author": "https://github.com/h8570rg",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/h8570rg/jankiroku/issues"
+	},
+	"homepage": "https://github.com/h8570rg/jankiroku#readme",
+	"dependencies": {
+		"@dnd-kit/sortable": "10.0.0",
+		"@heroui/react": "2.8.5",
+		"@hookform/resolvers": "5.2.2",
+		"@supabase/ssr": "0.7.0",
+		"@supabase/supabase-js": "2.58.0",
+		"classnames": "2.5.1",
+		"dayjs": "1.11.18",
+		"framer-motion": "12.23.22",
+		"next": "15.5.4",
+		"next-themes": "0.4.6",
+		"react": "19.2.0",
+		"react-dom": "19.2.0",
+		"react-hook-form": "7.64.0",
+		"recharts": "3.2.1",
+		"sharp": "0.34.4",
+		"swr": "2.3.6",
+		"use-debounce": "10.0.6",
+		"zod": "3.25.76"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.2.5",
+		"@tailwindcss/postcss": "4.1.14",
+		"@types/react": "19.2.0",
+		"@types/react-dom": "19.2.0",
+		"cspell": "9.2.1",
+		"env-cmd": "10.1.0",
+		"lefthook": "1.13.6",
+		"postcss": "8.5.6",
+		"supabase": "2.48.3",
+		"tailwindcss": "4.1.14",
+		"typescript": "5.9.3",
+		"typescript-eslint": "8.45.0",
+		"vitest": "3.2.4"
+	}
 }

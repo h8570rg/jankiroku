@@ -5,25 +5,23 @@ import { Modal } from "@/components/Modal";
 import { useMatchContext } from "../../../context";
 
 export function PlayersModalController({
-  children,
-  isDefaultOpen,
+	children,
+	isDefaultOpen,
 }: {
-  children: React.ReactNode;
-  isDefaultOpen?: boolean;
+	children: React.ReactNode;
+	isDefaultOpen?: boolean;
 }) {
-  const { playersModal } = useMatchContext();
+	const { playersModal } = useMatchContext();
 
-  useEffect(() => {
-    if (isDefaultOpen) {
-      playersModal.onOpen();
-    }
-    // FIXME
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+	useEffect(() => {
+		if (isDefaultOpen) {
+			playersModal.onOpen();
+		}
+	}, [isDefaultOpen, playersModal.onOpen]);
 
-  return (
-    <Modal {...playersModal.bind} hideCloseButton>
-      {children}
-    </Modal>
-  );
+	return (
+		<Modal {...playersModal.bind} hideCloseButton>
+			{children}
+		</Modal>
+	);
 }
