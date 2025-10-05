@@ -3,9 +3,9 @@
 import dynamic from "next/dynamic";
 
 const ReleaseNotesModal = dynamic(() => import("./ReleaseNotesModal"), {
-  ssr: false,
+	ssr: false,
 });
 
 export function ReleaseNotes() {
-  return <ReleaseNotesModal />;
+	return <ReleaseNotesModal />;
 }

@@ -17,21 +17,21 @@
 @tailwind utilities;
 
 @layer components {
-  .link {
-    @apply text-primary underline;
-  }
+	.link {
+		@apply text-primary underline;
+	}
 
-  .heading-1 {
-    @apply text-medium text-foreground-light;
-  }
+	.heading-1 {
+		@apply text-medium text-foreground-light;
+	}
 }
 
 @layer utilities {
-  .z-header {
-    @apply z-10;
-  }
+	.z-header {
+		@apply z-10;
+	}
 
-  .break-auto {
-    word-break: auto-phrase;
-  }
+	.break-auto {
+		word-break: auto-phrase;
+	}
 }

@@ -6,78 +6,78 @@ import { serverServices } from "@/lib/services/server";
 import { schema } from "@/lib/utils/schema";
 
 export type AddChipState = {
-  success?: boolean;
-  errors?: {
-    base?: string[];
-    playerChip?: string[];
-  };
+	success?: boolean;
+	errors?: {
+		base?: string[];
+		playerChip?: string[];
+	};
 };
 
 const addChipSchema = z
-  .object({
-    playerChip: z.array(
-      z.object({
-        profileId: schema.profileId,
-        chipCount: z.string().transform(Number),
-      }),
-    ),
-  })
-  .refine(
-    ({ playerChip }) => {
-      const total = playerChip.reduce((acc, { chipCount }) => {
-        return acc + (chipCount ?? 0);
-      }, 0);
-      return total === 0;
-    },
-    ({ playerChip }) => {
-      const total = playerChip.reduce((acc, { chipCount }) => {
-        return acc + (chipCount ?? 0);
-      }, 0);
-      return {
-        path: ["playerChip"],
-        message: `チップの合計が0枚なるように入力してください\n現在: ${total.toLocaleString()}枚`,
-      };
-    },
-  );
+	.object({
+		playerChip: z.array(
+			z.object({
+				profileId: schema.profileId,
+				chipCount: z.string().transform(Number),
+			}),
+		),
+	})
+	.refine(
+		({ playerChip }) => {
+			const total = playerChip.reduce((acc, { chipCount }) => {
+				return acc + (chipCount ?? 0);
+			}, 0);
+			return total === 0;
+		},
+		({ playerChip }) => {
+			const total = playerChip.reduce((acc, { chipCount }) => {
+				return acc + (chipCount ?? 0);
+			}, 0);
+			return {
+				path: ["playerChip"],
+				message: `チップの合計が0枚なるように入力してください\n現在: ${total.toLocaleString()}枚`,
+			};
+		},
+	);
 
 export async function addChip(
-  matchId: string,
-  totalPlayersCount: number,
-  prevState: AddChipState,
-  formData: FormData,
+	matchId: string,
+	totalPlayersCount: number,
+	_prevState: AddChipState,
+	formData: FormData,
 ): Promise<AddChipState> {
-  const playerChip = Array.from({ length: totalPlayersCount }).map((_, i) => {
-    return {
-      profileId: formData.get(`playerChip.${i}.profileId`),
-      chipCount: formData.get(`playerChip.${i}.chipCount`),
-    };
-  });
+	const playerChip = Array.from({ length: totalPlayersCount }).map((_, i) => {
+		return {
+			profileId: formData.get(`playerChip.${i}.profileId`),
+			chipCount: formData.get(`playerChip.${i}.chipCount`),
+		};
+	});
 
-  const validatedFields = addChipSchema.safeParse({
-    playerChip,
-  });
+	const validatedFields = addChipSchema.safeParse({
+		playerChip,
+	});
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
-  }
+	if (!validatedFields.success) {
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+		};
+	}
 
-  const { updateMatchPlayer } = await serverServices();
+	const { updateMatchPlayer } = await serverServices();
 
-  await Promise.all(
-    validatedFields.data.playerChip.map((playerChip) =>
-      updateMatchPlayer({
-        matchId,
-        playerId: playerChip.profileId,
-        chipCount: playerChip.chipCount,
-      }),
-    ),
-  );
+	await Promise.all(
+		validatedFields.data.playerChip.map((playerChip) =>
+			updateMatchPlayer({
+				matchId,
+				playerId: playerChip.profileId,
+				chipCount: playerChip.chipCount,
+			}),
+		),
+	);
 
-  revalidatePath(`/matches/${matchId}`);
+	revalidatePath(`/matches/${matchId}`);
 
-  return {
-    success: true,
-  };
+	return {
+		success: true,
+	};
 }

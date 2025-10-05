@@ -1,3 +1,3 @@
 "use client";
 
-export { Card, CardHeader, CardBody, CardFooter } from "@heroui/react";
+export { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";

@@ -1,0 +1,16 @@
+pre-commit:
+  jobs:
+    - name: "check"
+      run: "npm run check -- --write {staged_files}"
+      stage_fixed: true
+pre-push:
+  parallel: true
+  jobs:
+    - name: "typecheck"
+      run: "npm run typecheck"
+    - name: "test"
+      run: "npm run test"
+      stage_fixed: true
+    - name: "spell"
+      run: "npm run spell"
+      stage_fixed: true
