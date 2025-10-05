@@ -94,7 +94,7 @@ export default function LandingPage() {
 			</Navbar>
 
 			{/* ヒーローセクション */}
-			<section className="bg-gradient-to-b from-background to-primary/10">
+			<section className="bg-linear-to-b from-background to-primary/10">
 				<div className="container z-20 mx-auto px-4 pt-20">
 					<p className="mb-8 text-center text-large">
 						麻雀の成績を簡単に記録・分析

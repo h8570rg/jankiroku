@@ -1,1 +1,1 @@
-export { Button, ButtonGroup, type ButtonProps } from "@heroui/react";
+export { Button, ButtonGroup, type ButtonProps } from "@heroui/button";

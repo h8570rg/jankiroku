@@ -91,7 +91,7 @@ export async function MatchTable({
 				{/* ボディ */}
 				<div className="grow">
 					{gameRows.length === 0 && (
-						<p className="my-10 text-center text-small text-foreground-light">
+						<p className="my-10 text-center text-small text-default-500">
 							まだデータはありません
 						</p>
 					)}
