@@ -12,9 +12,8 @@ import {
 
 export const schema = {
 	email: z
-		.string()
-		.min(1, "メールアドレスを入力してください")
-		.email("メールアドレスを正しい形式で入力してください"),
+		.email("メールアドレスを正しい形式で入力してください")
+		.min(1, "メールアドレスを入力してください"),
 	password: z
 		.string()
 		.min(1, "パスワードを入力してください")
