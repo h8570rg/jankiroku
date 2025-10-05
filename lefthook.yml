@@ -7,7 +7,7 @@ pre-push:
   parallel: true
   jobs:
     - name: "typecheck"
-      run: "npm run typecheck"
+      run: "npm run type"
     - name: "test"
       run: "npm run test"
       stage_fixed: true
