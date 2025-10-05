@@ -4,27 +4,27 @@ import { AddButton } from "./_components/AddButton";
 import { FriendMenu } from "./_components/FriendMenu";
 
 export default async function FriendsPage() {
-  const { getFriends } = await serverServices();
+	const { getFriends } = await serverServices();
 
-  const friends = await getFriends();
+	const friends = await getFriends();
 
-  return (
-    <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="heading-1">フレンド</h1>
-        <AddButton />
-      </div>
-      <ul className="space-y-1">
-        {friends?.map((friend) => (
-          <li
-            className="flex items-center justify-between py-1"
-            key={friend.id}
-          >
-            <User {...friend} />
-            <FriendMenu profileId={friend.id} />
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+	return (
+		<div>
+			<div className="mb-4 flex items-center justify-between">
+				<h1 className="heading-1">フレンド</h1>
+				<AddButton />
+			</div>
+			<ul className="space-y-1">
+				{friends?.map((friend) => (
+					<li
+						className="flex items-center justify-between py-1"
+						key={friend.id}
+					>
+						<User {...friend} />
+						<FriendMenu profileId={friend.id} />
+					</li>
+				))}
+			</ul>
+		</div>
+	);
 }

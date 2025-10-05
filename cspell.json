@@ -1,23 +1,23 @@
 {
-  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
-  "version": "0.2",
-  "ignorePaths": [
-    "supabase/config.toml",
-    "supabase/migrations",
-    "lib/database.types.ts"
-  ],
-  "words": [
-    "jankiroku",
-    "supabase",
-    "heroui",
-    "rocknroll",
-    "appbar",
-    "pressable",
-    "hoverable",
-    "firestore",
-    "fkey",
-    "Postgrest",
-    "ilike",
-    "Inbucket"
-  ]
+	"$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+	"version": "0.2",
+	"ignorePaths": [
+		"supabase/config.toml",
+		"supabase/migrations",
+		"lib/database.types.ts"
+	],
+	"words": [
+		"jankiroku",
+		"supabase",
+		"heroui",
+		"rocknroll",
+		"appbar",
+		"pressable",
+		"hoverable",
+		"firestore",
+		"fkey",
+		"Postgrest",
+		"ilike",
+		"Inbucket"
+	]
 }
