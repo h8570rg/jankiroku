@@ -29,14 +29,20 @@ const addChipSchema = z
 			}, 0);
 			return total === 0;
 		},
-		({ playerChip }) => {
-			const total = playerChip.reduce((acc, { chipCount }) => {
-				return acc + (chipCount ?? 0);
-			}, 0);
-			return {
-				path: ["playerChip"],
-				message: `チップの合計が0枚なるように入力してください\n現在: ${total.toLocaleString()}枚`,
-			};
+		{
+			error: (issue) => {
+				const data = issue.input as {
+					playerChip: Array<{ profileId: string; chipCount: number }>;
+				};
+				const total = data.playerChip.reduce(
+					(acc, { chipCount }) => acc + (chipCount ?? 0),
+					0,
+				);
+				return {
+					message: `チップの合計が0枚なるように入力してください\n現在: ${total.toLocaleString()}枚`,
+					path: ["playerChip"],
+				};
+			},
 		},
 	);
 

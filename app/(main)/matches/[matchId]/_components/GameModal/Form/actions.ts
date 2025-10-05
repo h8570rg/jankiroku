@@ -37,10 +37,15 @@ const addGameSchema = z
 				playersCount
 			);
 		},
-		({ playersCount }) => ({
-			path: ["players"],
-			message: `${playersCount}人分の点数を入力してください`,
-		}),
+		{
+			error: (issue) => {
+				const data = issue.input as { playersCount: number };
+				return {
+					message: `${data.playersCount}人分の点数を入力してください`,
+					path: ["players"],
+				};
+			},
+		},
 	)
 	.refine(
 		({ players, playersCount, defaultPoints }) => {
@@ -49,16 +54,24 @@ const addGameSchema = z
 			}, 0);
 			return total === playersCount * defaultPoints;
 		},
-		({ players, playersCount, defaultPoints }) => {
-			const total = players.reduce((acc, { points }) => {
-				return acc + (points ?? 0);
-			}, 0);
-			return {
-				path: ["players"],
-				message: `点数の合計が${(
-					playersCount * defaultPoints
-				).toLocaleString()}点になるように入力してください\n現在: ${total.toLocaleString()}点`,
-			};
+		{
+			error: (issue) => {
+				const data = issue.input as {
+					players: Array<{ id: string; points?: number }>;
+					playersCount: number;
+					defaultPoints: number;
+				};
+				const total = data.players.reduce(
+					(acc, { points }) => acc + (points ?? 0),
+					0,
+				);
+				return {
+					message: `点数の合計が${(
+						data.playersCount * data.defaultPoints
+					).toLocaleString()}点になるように入力してください\n現在: ${total.toLocaleString()}点`,
+					path: ["players"],
+				};
+			},
 		},
 	)
 	.refine(
