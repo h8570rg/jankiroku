@@ -15,7 +15,7 @@ export default function AuthLayout({
 					className="size-full object-cover"
 					alt="mahjong"
 				/>
-				<div className="absolute inset-0 backdrop-blur-sm" />
+				<div className="absolute inset-0 backdrop-blur-xs" />
 				<div className="absolute inset-0 bg-background opacity-[0.98]" />
 			</div>
 			<div className="relative flex min-h-screen items-center justify-center px-6">

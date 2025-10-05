@@ -1,37 +1,22 @@
-/**
- * This injects Tailwind's base styles and any base styles registered by
- * plugins.
- */
-@tailwind base;
+@import "tailwindcss";
+@plugin './hero.ts';
+/* Note: You may need to change the path to fit your project structure */
+@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
+@config '../tailwind.config.js';
 
-/**
- * This injects Tailwind's component classes and any component classes
- * registered by plugins.
- */
-@tailwind components;
-
-/**
- * This injects Tailwind's utility classes and any utility classes registered
- * by plugins.
- */
-@tailwind utilities;
-
-@layer components {
-	.link {
-		@apply text-primary underline;
-	}
-
-	.heading-1 {
-		@apply text-medium text-foreground-light;
-	}
+@utility link {
+	@apply text-primary underline;
 }
 
-@layer utilities {
-	.z-header {
-		@apply z-10;
-	}
+@utility heading-1 {
+	@apply text-medium text-default-500;
+}
 
-	.break-auto {
-		word-break: auto-phrase;
-	}
+@utility z-header {
+	@apply z-10;
+}
+
+@utility break-auto {
+	word-break: auto-phrase;
 }

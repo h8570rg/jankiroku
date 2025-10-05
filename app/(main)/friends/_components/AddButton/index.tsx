@@ -74,7 +74,7 @@ export function AddButton() {
 								</li>
 							)}
 							{!isValidating && !!query && profiles?.length === 0 && (
-								<p className="mt-10 text-center text-small text-foreground-light">
+								<p className="mt-10 text-center text-small text-default-500">
 									見つかりませんでした
 								</p>
 							)}

@@ -16,7 +16,7 @@ export function GameModalController({
 			hideCloseButton
 			placement="bottom"
 			scrollBehavior="inside"
-			className="max-h-[calc(100%_-_2rem)]"
+			className="max-h-[calc(100%-2rem)]"
 		>
 			<ModalContent>{children}</ModalContent>
 		</Modal>

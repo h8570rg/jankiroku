@@ -20,7 +20,7 @@ export default async function RegisterPage() {
 	return (
 		<>
 			<h1 className="mx-auto mb-2 w-fit text-large">ユーザー情報登録</h1>
-			<p className="mb-6 mt-4 text-small text-foreground-light">
+			<p className="mb-6 mt-4 text-small text-default-500">
 				ユーザーIDと名前を決めてください。
 				<br />
 				ユーザーIDはユーザー検索に、名前は成績表に使用されます。
@@ -31,7 +31,7 @@ export default async function RegisterPage() {
 					isLoading={false}
 					variant="light"
 					type="submit"
-					className="text-foreground-light underline"
+					className="text-default-500 underline"
 				>
 					ログアウト
 				</Button>
