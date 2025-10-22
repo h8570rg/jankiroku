@@ -64,7 +64,7 @@
 		"@tailwindcss/postcss": "4.1.15",
 		"@types/react": "19.2.2",
 		"@types/react-dom": "19.2.2",
-		"cspell": "9.2.1",
+		"cspell": "9.2.2",
 		"env-cmd": "11.0.0",
 		"lefthook": "1.13.6",
 		"postcss": "8.5.6",
