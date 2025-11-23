@@ -8,7 +8,7 @@
 	},
 	"volta": {
 		"node": "22.21.1",
-		"npm": "11.6.2"
+		"npm": "11.6.3"
 	},
 	"scripts": {
 		"dev": "next dev -p 3001",
