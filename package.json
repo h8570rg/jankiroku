@@ -43,7 +43,7 @@
 		"@dnd-kit/sortable": "10.0.0",
 		"@heroui/react": "2.8.5",
 		"@hookform/resolvers": "5.2.2",
-		"@supabase/ssr": "0.7.0",
+		"@supabase/ssr": "0.8.0",
 		"@supabase/supabase-js": "2.84.0",
 		"classnames": "2.5.1",
 		"dayjs": "1.11.19",
