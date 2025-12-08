@@ -4,10 +4,10 @@
 	"description": "",
 	"main": "index.js",
 	"engines": {
-		"node": "22.x"
+		"node": "24.x"
 	},
 	"volta": {
-		"node": "22.21.1",
+		"node": "24.11.1",
 		"npm": "11.6.4"
 	},
 	"scripts": {
