@@ -1,0 +1,22 @@
+name: Supabase維持
+
+# 3日ごとに実行、または手動実行可能
+on:
+  schedule:
+    # 3日ごとに実行
+    - cron: '0 0 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Supabaseにpingを送信
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+            curl -X GET "$SUPABASE_URL/rest/v1/profiles?select=*&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY"
