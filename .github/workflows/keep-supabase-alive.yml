@@ -1,0 +1,38 @@
+name: Supabase維持
+
+# 3日ごとに実行、または手動実行可能
+on:
+  schedule:
+    # 3日ごとに実行
+    - cron: '0 0 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Supabaseにpingを送信
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          # profilesテーブルに軽量なクエリを送信(1件のみ取得)
+          response=$(curl -s -w "\n%{http_code}" -X GET \
+            "$SUPABASE_URL/rest/v1/profiles?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n-1)
+
+          echo "HTTPステータスコード: $http_code"
+          echo "レスポンス: $body"
+
+          # 200番台のステータスコードならば成功
+          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+            echo "✅ Supabaseへのping送信成功"
+          else
+            echo "❌ Supabaseへのping送信失敗"
+            exit 1
+          fi
