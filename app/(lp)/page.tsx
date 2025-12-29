@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Button } from "@/components/Button";
 import { Card, CardBody } from "@/components/Card";
 import { LinkButton } from "@/components/LinkButton";
 import Logo from "@/components/Logo";
@@ -109,9 +110,9 @@ export default function LandingPage() {
 						<LinkButton color="primary" size="lg" href="/login">
 							今すぐ始める
 						</LinkButton>
-						<LinkButton size="lg" variant="ghost" href="#features">
+						<Button size="lg" variant="ghost" as="a" href="#features">
 							詳しく見る
-						</LinkButton>
+						</Button>
 					</div>
 					<div className="mx-auto mt-12 h-[480px] w-4/5 max-w-[500px]">
 						<Image
@@ -126,7 +127,6 @@ export default function LandingPage() {
 
 			<div className="container mx-auto space-y-24 px-5 py-16">
 				{/* 機能紹介 */}
-				{/** biome-ignore lint/correctness/useUniqueElementIds: ページ内リングとして使用するため */}
 				<section id="features" className="">
 					<h2 className="mb-12 text-center text-large">主な機能</h2>
 					<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
