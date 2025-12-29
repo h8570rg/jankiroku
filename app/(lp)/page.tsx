@@ -1,9 +1,14 @@
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
 import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@/components/Button";
 import { Card, CardBody } from "@/components/Card";
+import { LinkButton } from "@/components/LinkButton";
 import Logo from "@/components/Logo";
+import {
+	Navbar,
+	NavbarBrand,
+	NavbarContent,
+	NavbarItem,
+} from "@/components/Navbar";
 import { SERVICE_NAME } from "@/lib/config";
 import match from "./_assets/match.png";
 import { Faq } from "./_components/Faq";
@@ -86,9 +91,9 @@ export default function LandingPage() {
 				</NavbarBrand>
 				<NavbarContent as="div" justify="end">
 					<NavbarItem>
-						<Button variant="flat" size="sm" as={Link} href="/login">
+						<LinkButton variant="flat" size="sm" href="/login">
 							ログイン
-						</Button>
+						</LinkButton>
 					</NavbarItem>
 				</NavbarContent>
 			</Navbar>
@@ -102,10 +107,10 @@ export default function LandingPage() {
 						あなたの麻雀ライフを快適に
 					</p>
 					<div className="flex justify-center gap-4">
-						<Button color="primary" size="lg" as={Link} href="/login">
+						<LinkButton color="primary" size="lg" href="/login">
 							今すぐ始める
-						</Button>
-						<Button size="lg" variant="ghost" as={"a"} href="#features">
+						</LinkButton>
+						<Button size="lg" variant="ghost" as="a" href="#features">
 							詳しく見る
 						</Button>
 					</div>
@@ -122,7 +127,6 @@ export default function LandingPage() {
 
 			<div className="container mx-auto space-y-24 px-5 py-16">
 				{/* 機能紹介 */}
-				{/** biome-ignore lint/correctness/useUniqueElementIds: ページ内リングとして使用するため */}
 				<section id="features" className="">
 					<h2 className="mb-12 text-center text-large">主な機能</h2>
 					<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">

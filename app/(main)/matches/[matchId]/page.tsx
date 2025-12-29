@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Suspense } from "react";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
+import { LinkButton } from "@/components/LinkButton";
 import { ChipModal, ChipModalTrigger } from "./_components/ChipModal";
 import { MatchContextProvider } from "./_components/ContextProvider";
 import { DataModal, DataModalTrigger } from "./_components/DataModal";
@@ -24,9 +24,9 @@ export default async function Match({
 			<div className="flex h-full flex-col">
 				<div className="mb-1 flex items-center justify-between">
 					<div className="flex items-center gap-1">
-						<Button isIconOnly variant="light" as={Link} href="/matches">
+						<LinkButton isIconOnly variant="light" href="/matches">
 							<Icon className="size-4 fill-current" name="back" />
-						</Button>
+						</LinkButton>
 						{/* TODO: fetch */}
 						{/* <p>{displayDate}</p> */}
 					</div>

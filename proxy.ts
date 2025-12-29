@@ -5,7 +5,7 @@ import { updateSession } from "./lib/utils/supabase/middleware";
  * @see https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=middleware
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
 	if (request.nextUrl.pathname === "/") {
 		return NextResponse.next();
 	}
