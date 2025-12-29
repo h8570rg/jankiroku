@@ -1,9 +1,13 @@
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/Button";
 import { Card, CardBody } from "@/components/Card";
+import { LinkButton } from "@/components/LinkButton";
 import Logo from "@/components/Logo";
+import {
+	Navbar,
+	NavbarBrand,
+	NavbarContent,
+	NavbarItem,
+} from "@/components/Navbar";
 import { SERVICE_NAME } from "@/lib/config";
 import match from "./_assets/match.png";
 import { Faq } from "./_components/Faq";
@@ -86,9 +90,9 @@ export default function LandingPage() {
 				</NavbarBrand>
 				<NavbarContent as="div" justify="end">
 					<NavbarItem>
-						<Button variant="flat" size="sm" as={Link} href="/login">
+						<LinkButton variant="flat" size="sm" href="/login">
 							ログイン
-						</Button>
+						</LinkButton>
 					</NavbarItem>
 				</NavbarContent>
 			</Navbar>
@@ -102,12 +106,12 @@ export default function LandingPage() {
 						あなたの麻雀ライフを快適に
 					</p>
 					<div className="flex justify-center gap-4">
-						<Button color="primary" size="lg" as={Link} href="/login">
+						<LinkButton color="primary" size="lg" href="/login">
 							今すぐ始める
-						</Button>
-						<Button size="lg" variant="ghost" as={"a"} href="#features">
+						</LinkButton>
+						<LinkButton size="lg" variant="ghost" href="#features">
 							詳しく見る
-						</Button>
+						</LinkButton>
 					</div>
 					<div className="mx-auto mt-12 h-[480px] w-4/5 max-w-[500px]">
 						<Image
