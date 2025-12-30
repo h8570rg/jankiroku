@@ -29,17 +29,22 @@
 ```bash
 # セットアップ（初回のみ）
 npm install
-cp .env.example .env.local
-# .env.local にSupabase認証情報を設定
 
-# ローカルSupabaseの起動（Docker Desktopが必要）
-npm run supabase:start
+# Supabase接続
+npm run supabase:login     # Supabase CLIにログイン
+npm run supabase:link      # 開発環境プロジェクトにリンク
 
-# データベースマイグレーションの適用
-npm run supabase:reset
+# 環境変数の取得（Vercel CLIを使用）
+npx vercel login
+npx vercel env pull .env.local
+
+# データベーススキーマ管理
+# ※DB変更後は手動で以下を実行してください
+# npm run supabase:diff -- description  # マイグレーションファイル生成
+# npm run supabase:type                 # 型定義を更新
 
 # 開発
-npm run dev                 # 開発サーバーを起動（ポート3001）
+npm run dev                # 開発サーバーを起動（ポート3001）
 
 # コード品質
 npm run check              # Biome lint + format（コミット前に実行）
@@ -50,12 +55,62 @@ npm run spell              # CSpellチェック
 # Supabase
 npm run supabase:type      # DBスキーマからTypeScript型を生成
 npm run supabase:diff      # スキーマ変更からマイグレーションSQLを生成
-npm run supabase:stop      # ローカルSupabaseを停止
 ```
 
 ### Git Hooks (Lefthook)
 - **pre-commit**: `npm run check -- --write {staged_files}` を実行し、修正を自動ステージング
-- **pre-push**: typecheck、tests、spell checkを並列実行
+- **pre-push**: typecheck、tests、spell checkを実行
+
+## データベーススキーマ変更ワークフロー
+
+### 推奨フロー: Supabase Studio → 手動マイグレーション生成 → CI/CD
+
+```bash
+# 1. Supabase Studioで開発環境のスキーマを変更
+# https://supabase.com/dashboard/project/<dev-project-id>
+# - テーブルの作成・変更
+# - RLSポリシーの設定
+# - 関数やトリガーの追加
+
+# 2. マイグレーションファイルと型定義を手動で生成
+npm run supabase:diff -- description_of_change
+npm run supabase:type
+
+# 3. ローカルで開発・テスト
+npm run dev
+
+# 4. コミット & プッシュ
+git add .
+git commit -m "feat: add new feature"
+git push origin feature/xxx
+
+# 5. PRマージ後、GitHub Actionsが自動実行
+# ✅ mainブランチ → 本番環境にマイグレーション適用
+```
+
+### 代替フロー: ローカルでマイグレーションファイル作成
+
+SQLに慣れている場合は、マイグレーションファイルを直接編集できます：
+
+```bash
+# 空のマイグレーションファイルを作成
+npm run supabase:diff -- new_feature
+
+# 生成されたSQLファイルを編集
+# supabase/migrations/YYYYMMDDHHMMSS_new_feature.sql
+
+# 型定義を更新
+npm run supabase:type
+
+# コミット & プッシュ
+```
+
+### 重要な原則
+
+- ❌ **手動でのマイグレーション適用は禁止**（`supabase db push`は削除済み）
+- ✅ **すべてのマイグレーションはCI/CD経由で適用**
+- ✅ **DB変更後は手動で `supabase:diff` と `supabase:type` を実行**
+- ✅ **マイグレーションファイルと型定義をコミットに含める**
 
 ## アーキテクチャ
 
@@ -233,12 +288,23 @@ const form = useForm({ resolver: zodResolver(schema) })
 
 ## 環境変数
 
-**`.env.local` で必須:**
+**取得方法:**
+```bash
+# Vercel CLIで環境変数を取得（推奨）
+npx vercel login
+npx vercel env pull .env.local
 ```
-NEXT_PUBLIC_SUPABASE_URL=<supabase:startから取得>
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<supabase:startから取得>
+
+これにより、リモートSupabase開発環境の接続情報を含むすべての環境変数が自動的に設定されます。
+
+**`.env.local` に含まれる主な環境変数:**
+```
+NEXT_PUBLIC_SERVICE_ENV=local
+NEXT_PUBLIC_SUPABASE_URL=<リモート開発環境のURL>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<リモート開発環境のanon key>
 GOOGLE_CLIENT_ID=<Google Cloud Consoleから取得>
-GOOGLE_CLIENT_SECRET=<Google Cloud Consoleから取得>
+GOOGLE_SECRET=<Google Cloud Consoleから取得>
+OPENAI_API_KEY=<OpenAI APIキー>
 MAINTENANCE_MODE=false
 ```
 
@@ -248,15 +314,19 @@ MAINTENANCE_MODE=false
 
 2. **サービス層**: 一貫性と型安全性のため、直接Supabaseクエリではなく常にサービス関数を使用
 
-3. **型生成**: スキーマ変更後は `npm run supabase:type` を実行して `database.types.ts` を再生成
+3. **リモート開発環境**: ローカルDockerではなく、リモートのSupabase開発プロジェクトを使用。Docker不要で軽量、チーム全体で同じデータベースを共有
 
-4. **モーダル状態管理**: 1ページ内の複数モーダル管理にはContext APIを使用（matches/[matchId]を参照）
+4. **型生成**: スキーマ変更後は手動で `npm run supabase:type` を実行して `database.types.ts` を再生成（リモート環境から取得）
 
-5. **フォームバリデーション**: フォームには常にReact Hook Form + Zod resolverを使用
+5. **マイグレーション管理**: `supabase/migrations/` のSQLファイルでスキーマを管理。スキーマ変更後は手動で `npm run supabase:diff` を実行してマイグレーションファイルを生成。CI/CDでリモートに自動適用（手動push禁止）
 
-6. **丸めロジック**: すべてのスコア計算には `lib/utils/score.ts` の一元化された `calcRound()` 関数を使用
+6. **モーダル状態管理**: 1ページ内の複数モーダル管理にはContext APIを使用（matches/[matchId]を参照）
 
-7. **認証**: `auth.users` に直接アクセスしない。常に `profiles` テーブルを使用
+7. **フォームバリデーション**: フォームには常にReact Hook Form + Zod resolverを使用
+
+8. **丸めロジック**: すべてのスコア計算には `lib/utils/score.ts` の一元化された `calcRound()` 関数を使用
+
+9. **認証**: `auth.users` に直接アクセスしない。常に `profiles` テーブルを使用
 
 ## よくある落とし穴
 

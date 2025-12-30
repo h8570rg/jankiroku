@@ -4,6 +4,11 @@
 
 # クイックスタート
 
+## 前提条件
+
+- Node.js（バージョンは[package.json](package.json)を参照）
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)（Supabase CLIが内部的に使用）
+
 ## リポジトリのクローン
 
 ```shell
@@ -12,65 +17,68 @@ cd jankiroku
 npm install
 ```
 
-## Supabaseの起動
+## Supabaseプロジェクトへの接続
 
-Docker Desktopをインストールしてください。
-
-https://www.docker.com/products/docker-desktop/
-
-Supabaseを起動します。
+Supabase CLIにログインします。
 
 ```shell
-npm run supabase:start
+npm run supabase:login
 ```
 
-すべてのSupabaseサービスが起動すると、ローカルSupabaseの認証情報が表示されます。以下のように、ローカルプロジェクトで使用するURLとキーが表示されます：
+開発用のSupabaseプロジェクトにリンクします。
 
-```
-Started supabase local development setup.
-
-         API URL: http://localhost:54321
-          DB URL: postgresql://postgres:postgres@localhost:54322/postgres
-      Studio URL: http://localhost:54323
-    Inbucket URL: http://localhost:54324
-        anon key: eyJh......
-service_role key: eyJh......
-```
-
-Studio URLにアクセスし、SQL Editorを開きます。
-
-SQL Editorで以下のSQLを実行します。
-
-```sql
-create trigger on_auth_user_created
-after insert on auth.users
-for each row execute procedure public.handle_new_user();
+```shell
+npm run supabase:link
 ```
 
 ## 環境変数の作成
 
-```shell
-cp .env.example .env.local
-```
-
-環境変数を設定します。
-
-GOOGLE_CLIENT_IDとGOOGLE_CLIENT_SECRETはGoogle Cloud Consoleで取得してください。
-
-https://console.cloud.google.com/auth/clients/177371198086-8hr337l0pappun65em2tseevqabfevb0.apps.googleusercontent.com?hl=ja&project=janreco-4a738
-
-```
-NEXT_PUBLIC_SUPABASE_URL=<API URL>
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable key>
-GOOGLE_CLIENT_ID=<GOOGLE_CLIENT_ID>
-GOOGLE_CLIENT_SECRET=<GOOGLE_CLIENT_SECRET>
-```
-
-## データベーススキーマの適用
+Vercel CLIを使用して環境変数を取得します。
 
 ```shell
-npm run supabase:reset
+npx vercel login
+npx vercel env pull .env.local
 ```
+
+これにより、Supabaseの接続情報を含むすべての環境変数が自動的に`.env.local`に設定されます。
+
+## データベーススキーマの変更
+
+### 方法1: Supabase Studioで直接変更（推奨）
+
+開発環境のSupabase Studioで直接スキーマを変更します。
+
+1. [Supabase Studio](https://supabase.com/dashboard/project/ggkmppnjhrwzdsamzqbp)にアクセス
+2. Table EditorやSQL Editorでスキーマを変更
+3. 変更後、以下のコマンドを手動で実行：
+
+```shell
+# マイグレーションファイルを生成
+npm run supabase:diff
+
+# 型定義を更新
+npm run supabase:type
+```
+
+### 方法2: ローカルでマイグレーションファイルを作成
+
+```shell
+# 空のマイグレーションファイルを作成
+npm run supabase:diff -- new_feature
+
+# 生成されたファイルを編集
+# supabase/migrations/YYYYMMDDHHMMSS_new_feature.sql
+
+# 型定義を更新
+npm run supabase:type
+```
+
+### マイグレーションの適用
+
+**開発環境・本番環境へのマイグレーション適用は、すべてGitHub Actions経由で自動実行されます。**
+
+- `main`ブランチへのpush → 本番環境に自動適用
+- PRマージ → 開発環境に自動適用（設定済みの場合）
 
 ## アプリケーションの起動
 
@@ -80,7 +88,7 @@ npm run dev
 
 アプリケーションURL: http://localhost:3001
 
-Supabase Studio URL: http://localhost:54323
+Supabase Studio（リモート）: https://supabase.com/dashboard/project/ggkmppnjhrwzdsamzqbp
 
 # リンク
 
