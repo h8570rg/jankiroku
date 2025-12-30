@@ -57,44 +57,6 @@ npm run supabase:stop      # ローカルSupabaseを停止
 - **pre-commit**: `npm run check -- --write {staged_files}` を実行し、修正を自動ステージング
 - **pre-push**: typecheck、tests、spell checkを並列実行
 
-## Gitブランチ戦略 (Trunk-Based Development)
-
-このプロジェクトでは **Trunk-Based Development** を採用しています。
-
-### ブランチ構成
-- **main**: メインブランチ（トランク）
-  - すべての開発はmainブランチに直接コミットまたは短命なフィーチャーブランチからマージ
-  - mainへのプッシュでpreview環境へ自動デプロイ
-
-### デプロイフロー
-
-#### Preview環境（開発版）
-- **トリガー**: mainブランチへのpush
-- **ワークフロー**: `.github/workflows/deploy-preview.yml`
-- **用途**: 開発中の機能確認・テスト
-
-#### Production環境（本番）
-- **トリガー**: `v*` パターンのタグpush（例: `v1.0.0`, `v1.2.3`）
-- **ワークフロー**: `.github/workflows/deploy-production.yml`
-- **手順**:
-  ```bash
-  # 本番リリース時
-  git tag v1.0.0
-  git push origin v1.0.0
-  ```
-
-### GitHub Secrets設定
-以下のシークレットをGitHubリポジトリに設定する必要があります：
-- `VERCEL_TOKEN`: VercelアクセストークンをSettings > Tokensから取得
-- `VERCEL_ORG_ID`: Vercel組織ID（`.vercel/project.json`から取得）
-- `VERCEL_PROJECT_ID`: VercelプロジェクトID（`.vercel/project.json`から取得）
-
-### ベストプラクティス
-- 小さく頻繁なコミット
-- mainブランチは常にデプロイ可能な状態を保つ
-- フィーチャーブランチは短命に（1-2日以内にマージ）
-- タグはセマンティックバージョニング（SemVer）に従う
-
 ## アーキテクチャ
 
 ### サービス層パターン
