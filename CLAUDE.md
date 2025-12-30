@@ -236,7 +236,7 @@ const form = useForm({ resolver: zodResolver(schema) })
 **`.env.local` で必須:**
 ```
 NEXT_PUBLIC_SUPABASE_URL=<supabase:startから取得>
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<supabase:startから取得>
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<supabase:startから取得>
 GOOGLE_CLIENT_ID=<Google Cloud Consoleから取得>
 GOOGLE_CLIENT_SECRET=<Google Cloud Consoleから取得>
 MAINTENANCE_MODE=false
