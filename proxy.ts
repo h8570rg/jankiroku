@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { updateSession } from "./lib/utils/supabase/middleware";
+import { updateSession } from "./lib/supabase/proxy";
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=middleware
