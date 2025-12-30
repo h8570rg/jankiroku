@@ -4,7 +4,8 @@
 	"ignorePaths": [
 		"supabase/config.toml",
 		"supabase/migrations",
-		"lib/database.types.ts"
+		"lib/database.types.ts",
+		"package.json"
 	],
 	"words": [
 		"jankiroku",
@@ -19,7 +20,6 @@
 		"Postgrest",
 		"ilike",
 		"Inbucket",
-		"turbopack",
-		"ggkmppnjhrwzdsamzqbp"
+		"turbopack"
 	]
 }
