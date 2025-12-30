@@ -7,3 +7,8 @@ certificates
 lib/migration/dist
 lib/migration/old-data.json
 .vercel
+
+# Supabase
+supabase/.branches/
+supabase/.temp/
+.env*.local
