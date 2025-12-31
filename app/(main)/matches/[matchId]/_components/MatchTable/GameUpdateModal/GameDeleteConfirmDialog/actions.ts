@@ -4,14 +4,14 @@ import { revalidatePath } from "next/cache";
 import { serverServices } from "@/lib/services/server";
 
 export async function deleteGame({
-	gameId,
-	matchId,
+  gameId,
+  matchId,
 }: {
-	gameId: string;
-	matchId: string;
+  gameId: string;
+  matchId: string;
 }) {
-	const { deleteGame } = await serverServices();
-	await deleteGame({ gameId });
+  const { deleteGame } = await serverServices();
+  await deleteGame({ gameId });
 
-	revalidatePath(`/matches/${matchId}`);
+  revalidatePath(`/matches/${matchId}`);
 }

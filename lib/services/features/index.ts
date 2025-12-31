@@ -8,10 +8,10 @@ import { profileService } from "./profile";
 export type Supabase = SupabaseClient<Database>;
 
 export const services = (supabase: Supabase) => {
-	return {
-		...matchService(supabase),
-		...profileService(supabase),
-		...friendService(supabase),
-		...gameService(supabase),
-	};
+  return {
+    ...matchService(supabase),
+    ...profileService(supabase),
+    ...friendService(supabase),
+    ...gameService(supabase),
+  };
 };

@@ -8,67 +8,67 @@ import { createClient } from "@/lib/supabase/server";
 import { schema } from "@/lib/utils/schema";
 
 type State = {
-	errors?: {
-		base?: string[];
-		name?: string[];
-		displayId?: string[];
-	};
+  errors?: {
+    base?: string[];
+    name?: string[];
+    displayId?: string[];
+  };
 };
 
 const updateProfileSchema = z.object({
-	name: schema.name,
-	displayId: schema.displayId,
+  name: schema.name,
+  displayId: schema.displayId,
 });
 
 export async function updateProfile(
-	_userId: string,
-	_prevState: State,
-	formData: FormData,
+  _userId: string,
+  _prevState: State,
+  formData: FormData,
 ): Promise<State> {
-	const validatedFields = updateProfileSchema.safeParse({
-		name: formData.get("name"),
-		displayId: formData.get("displayId"),
-	});
+  const validatedFields = updateProfileSchema.safeParse({
+    name: formData.get("name"),
+    displayId: formData.get("displayId"),
+  });
 
-	if (!validatedFields.success) {
-		return {
-			errors: validatedFields.error.flatten().fieldErrors,
-		};
-	}
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
 
-	const { name, displayId } = validatedFields.data;
+  const { name, displayId } = validatedFields.data;
 
-	const { updateUserProfile } = await serverServices();
+  const { updateUserProfile } = await serverServices();
 
-	const result = await updateUserProfile({
-		name,
-		displayId,
-	});
+  const result = await updateUserProfile({
+    name,
+    displayId,
+  });
 
-	if (!result.success) {
-		if (result.error.code === "23505") {
-			return {
-				errors: {
-					displayId: ["このIDは既に使用されています。"],
-				},
-			};
-		} else {
-			throw result.error;
-		}
-	}
+  if (!result.success) {
+    if (result.error.code === "23505") {
+      return {
+        errors: {
+          displayId: ["このIDは既に使用されています。"],
+        },
+      };
+    } else {
+      throw result.error;
+    }
+  }
 
-	revalidatePath("/", "layout");
-	redirect("/matches");
+  revalidatePath("/", "layout");
+  redirect("/matches");
 }
 
 export async function signOut() {
-	const supabase = await createClient();
+  const supabase = await createClient();
 
-	await supabase.auth.signOut();
+  await supabase.auth.signOut();
 
-	/**
-	 * @see https://nextjs.org/docs/app/api-reference/functions/revalidatePath#revalidating-all-data
-	 */
-	revalidatePath("/", "layout");
-	redirect("/login");
+  /**
+   * @see https://nextjs.org/docs/app/api-reference/functions/revalidatePath#revalidating-all-data
+   */
+  revalidatePath("/", "layout");
+  redirect("/login");
 }

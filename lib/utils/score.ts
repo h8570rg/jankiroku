@@ -1,141 +1,141 @@
 import type { CalcMethod, GamePlayer, Rule } from "../type";
 
 export function calcPlayerScores({
-	players,
-	rule,
-	crackBoxPlayerId,
+  players,
+  rule,
+  crackBoxPlayerId,
 }: {
-	players: {
-		id: string;
-		points: number;
-	}[];
-	rule: Rule;
-	crackBoxPlayerId?: string;
+  players: {
+    id: string;
+    points: number;
+  }[];
+  rule: Rule;
+  crackBoxPlayerId?: string;
 }): GamePlayer[] {
-	if (rule.playersCount !== players.length) {
-		throw new Error("Invalid players count");
-	}
-	const sortedPlayers = players.sort((a, b) => b.points - a.points);
-	const crackedBoxPlayersCount = sortedPlayers.filter(
-		({ points }) => points < 0,
-	).length;
-	const totalCrackBoxBonus = crackBoxPlayerId
-		? rule.crackBoxBonus * crackedBoxPlayersCount
-		: 0;
-	const scores = sortedPlayers.map(({ id, points }, index) => {
-		// 飛ばしたプレイヤーかどうか
-		const isCrackBoxPlayer = id === crackBoxPlayerId;
-		// 飛ばされたプレイヤーかどうか
-		const isCrackedBoxPlayer = points < 0 && !!crackBoxPlayerId;
-		// 飛び賞
-		const crackBoxBonusPoints = isCrackedBoxPlayer
-			? -1 * rule.crackBoxBonus
-			: isCrackBoxPlayer
-				? totalCrackBoxBonus
-				: 0;
-		const score = calcScore({ points, index, rule, crackBoxBonusPoints });
-		return {
-			id,
-			score,
-			rank: index + 1,
-		};
-	});
+  if (rule.playersCount !== players.length) {
+    throw new Error("Invalid players count");
+  }
+  const sortedPlayers = players.sort((a, b) => b.points - a.points);
+  const crackedBoxPlayersCount = sortedPlayers.filter(
+    ({ points }) => points < 0,
+  ).length;
+  const totalCrackBoxBonus = crackBoxPlayerId
+    ? rule.crackBoxBonus * crackedBoxPlayersCount
+    : 0;
+  const scores = sortedPlayers.map(({ id, points }, index) => {
+    // 飛ばしたプレイヤーかどうか
+    const isCrackBoxPlayer = id === crackBoxPlayerId;
+    // 飛ばされたプレイヤーかどうか
+    const isCrackedBoxPlayer = points < 0 && !!crackBoxPlayerId;
+    // 飛び賞
+    const crackBoxBonusPoints = isCrackedBoxPlayer
+      ? -1 * rule.crackBoxBonus
+      : isCrackBoxPlayer
+        ? totalCrackBoxBonus
+        : 0;
+    const score = calcScore({ points, index, rule, crackBoxBonusPoints });
+    return {
+      id,
+      score,
+      rank: index + 1,
+    };
+  });
 
-	// scoresの先頭以外のscoreの合計
-	const totalScoreWithoutFirstPlace = scores
-		.slice(1)
-		.reduce((acc, { score }) => acc + score, 0);
+  // scoresの先頭以外のscoreの合計
+  const totalScoreWithoutFirstPlace = scores
+    .slice(1)
+    .reduce((acc, { score }) => acc + score, 0);
 
-	scores[0].score = -1 * totalScoreWithoutFirstPlace;
+  scores[0].score = -1 * totalScoreWithoutFirstPlace;
 
-	return scores;
+  return scores;
 }
 
 export function calcScore({
-	points,
-	index,
-	rule,
-	crackBoxBonusPoints,
+  points,
+  index,
+  rule,
+  crackBoxBonusPoints,
 }: {
-	points: number;
-	index: number;
-	rule: Rule;
-	crackBoxBonusPoints: number;
+  points: number;
+  index: number;
+  rule: Rule;
+  crackBoxBonusPoints: number;
 }) {
-	const { defaultCalcPoints, calcMethod, incline } = rule;
-	const { incline1, incline2, incline3, incline4 } = incline;
-	const _incline = [incline1, incline2, incline3, incline4][index];
+  const { defaultCalcPoints, calcMethod, incline } = rule;
+  const { incline1, incline2, incline3, incline4 } = incline;
+  const _incline = [incline1, incline2, incline3, incline4][index];
 
-	// 端数計算
-	const roundedPoints = calcRound({ points, calcMethod });
+  // 端数計算
+  const roundedPoints = calcRound({ points, calcMethod });
 
-	// オカ、飛び賞計算
-	const substantialPoints =
-		roundedPoints - defaultCalcPoints + crackBoxBonusPoints;
+  // オカ、飛び賞計算
+  const substantialPoints =
+    roundedPoints - defaultCalcPoints + crackBoxBonusPoints;
 
-	const score = substantialPoints / 1000 + _incline;
-	return score;
+  const score = substantialPoints / 1000 + _incline;
+  return score;
 }
 
 export function calcRound({
-	points,
-	calcMethod,
+  points,
+  calcMethod,
 }: {
-	points: number;
-	calcMethod: CalcMethod;
+  points: number;
+  calcMethod: CalcMethod;
 }) {
-	switch (calcMethod) {
-		case "round":
-			return round(points);
-		case "roundOff":
-			return roundOff(points);
-		case "roundDown":
-			return roundDown(points);
-		case "roundUp":
-			return roundUp(points);
-	}
+  switch (calcMethod) {
+    case "round":
+      return round(points);
+    case "roundOff":
+      return roundOff(points);
+    case "roundDown":
+      return roundDown(points);
+    case "roundUp":
+      return roundUp(points);
+  }
 }
 
 // 五捨六入
 export function round(points: number) {
-	if (points >= 0) {
-		if (points % 1000 < 600) {
-			return Math.floor(points / 1000) * 1000;
-		} else {
-			return Math.ceil(points / 1000) * 1000;
-		}
-	} else {
-		if (points % 1000 <= -600) {
-			return Math.floor(points / 1000) * 1000;
-		} else {
-			return Math.ceil(points / 1000) * 1000 + 0;
-		}
-	}
+  if (points >= 0) {
+    if (points % 1000 < 600) {
+      return Math.floor(points / 1000) * 1000;
+    } else {
+      return Math.ceil(points / 1000) * 1000;
+    }
+  } else {
+    if (points % 1000 <= -600) {
+      return Math.floor(points / 1000) * 1000;
+    } else {
+      return Math.ceil(points / 1000) * 1000 + 0;
+    }
+  }
 }
 
 // 四捨五入
 export function roundOff(points: number) {
-	if (points >= 0) {
-		return Math.round(points / 1000) * 1000;
-	} else {
-		return -1 * Math.round((-1 * points) / 1000) * 1000 + 0;
-	}
+  if (points >= 0) {
+    return Math.round(points / 1000) * 1000;
+  } else {
+    return -1 * Math.round((-1 * points) / 1000) * 1000 + 0;
+  }
 }
 
 // 切り捨て
 export function roundDown(points: number) {
-	if (points >= 0) {
-		return Math.floor(points / 1000) * 1000;
-	} else {
-		return Math.ceil(points / 1000) * 1000 + 0;
-	}
+  if (points >= 0) {
+    return Math.floor(points / 1000) * 1000;
+  } else {
+    return Math.ceil(points / 1000) * 1000 + 0;
+  }
 }
 
 // 切り上げ
 export function roundUp(points: number) {
-	if (points >= 0) {
-		return Math.ceil(points / 1000) * 1000;
-	} else {
-		return Math.floor(points / 1000) * 1000 + 0;
-	}
+  if (points >= 0) {
+    return Math.ceil(points / 1000) * 1000;
+  } else {
+    return Math.floor(points / 1000) * 1000 + 0;
+  }
 }

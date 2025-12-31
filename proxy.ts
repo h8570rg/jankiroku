@@ -6,20 +6,20 @@ import { updateSession } from "./lib/supabase/proxy";
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export async function proxy(request: NextRequest) {
-	if (request.nextUrl.pathname === "/") {
-		return NextResponse.next();
-	}
+  if (request.nextUrl.pathname === "/") {
+    return NextResponse.next();
+  }
 
-	if (process.env.MAINTENANCE_MODE !== "true") {
-		if (request.nextUrl.pathname === "/maintenance") {
-			return NextResponse.rewrite(new URL("/404", request.url));
-		}
-	} else {
-		return NextResponse.rewrite(new URL("/maintenance", request.url));
-	}
+  if (process.env.MAINTENANCE_MODE !== "true") {
+    if (request.nextUrl.pathname === "/maintenance") {
+      return NextResponse.rewrite(new URL("/404", request.url));
+    }
+  } else {
+    return NextResponse.rewrite(new URL("/maintenance", request.url));
+  }
 
-	/** @see https://github.com/orgs/supabase/discussions/20905 */
-	return await updateSession(request);
+  /** @see https://github.com/orgs/supabase/discussions/20905 */
+  return await updateSession(request);
 }
 
 /**
@@ -27,14 +27,14 @@ export async function proxy(request: NextRequest) {
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export const config = {
-	matcher: [
-		/*
-		 * Match all request paths except for the ones starting with:
-		 * - _next/static (static files)
-		 * - _next/image (image optimization files)
-		 * - favicon.ico (favicon file)
-		 * Feel free to modify this pattern to include more paths.
-		 */
-		"/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-	],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
+     */
+    "/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };
