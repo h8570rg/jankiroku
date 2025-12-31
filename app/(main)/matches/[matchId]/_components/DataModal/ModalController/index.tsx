@@ -4,21 +4,21 @@ import { Modal, ModalContent } from "@/components/Modal";
 import { useMatchContext } from "../../../context";
 
 export function DataModalController({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	const { dataModal } = useMatchContext();
+  const { dataModal } = useMatchContext();
 
-	return (
-		<Modal
-			{...dataModal.bind}
-			scrollBehavior="inside"
-			classNames={{
-				body: "pb-6",
-			}}
-		>
-			<ModalContent>{children}</ModalContent>
-		</Modal>
-	);
+  return (
+    <Modal
+      {...dataModal.bind}
+      scrollBehavior="inside"
+      classNames={{
+        body: "pb-6",
+      }}
+    >
+      <ModalContent>{children}</ModalContent>
+    </Modal>
+  );
 }

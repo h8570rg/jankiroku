@@ -5,13 +5,13 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 export async function signOut() {
-	const supabase = await createClient();
+  const supabase = await createClient();
 
-	await supabase.auth.signOut();
+  await supabase.auth.signOut();
 
-	/**
-	 * @see https://nextjs.org/docs/app/api-reference/functions/revalidatePath#revalidating-all-data
-	 */
-	revalidatePath("/", "layout");
-	redirect("/login");
+  /**
+   * @see https://nextjs.org/docs/app/api-reference/functions/revalidatePath#revalidating-all-data
+   */
+  revalidatePath("/", "layout");
+  redirect("/login");
 }

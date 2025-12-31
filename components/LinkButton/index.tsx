@@ -6,9 +6,9 @@ import { Button, type ButtonProps } from "@/components/Button";
 export type LinkButtonProps = LinkProps & ButtonProps;
 
 export function LinkButton({ children, ...props }: LinkButtonProps) {
-	return (
-		<Button as={NextLink} {...props}>
-			{children}
-		</Button>
-	);
+  return (
+    <Button as={NextLink} {...props}>
+      {children}
+    </Button>
+  );
 }

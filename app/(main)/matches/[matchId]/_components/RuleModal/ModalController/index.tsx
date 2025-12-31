@@ -4,15 +4,15 @@ import { Modal } from "@/components/Modal";
 import { useMatchContext } from "../../../context";
 
 export function RuleModalController({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	const { ruleModal } = useMatchContext();
+  const { ruleModal } = useMatchContext();
 
-	return (
-		<Modal {...ruleModal.bind} hideCloseButton>
-			{children}
-		</Modal>
-	);
+  return (
+    <Modal {...ruleModal.bind} hideCloseButton>
+      {children}
+    </Modal>
+  );
 }
