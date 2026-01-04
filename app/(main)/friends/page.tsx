@@ -1,7 +1,7 @@
-import { User } from "@/components/User";
+import { User } from "@/components/user";
 import { serverServices } from "@/lib/services/server";
-import { AddButton } from "./_components/AddButton";
-import { FriendMenu } from "./_components/FriendMenu";
+import { AddButton } from "./_components/add-button";
+import { FriendMenu } from "./_components/friend-menu";
 
 export default async function FriendsPage() {
   const { getFriends } = await serverServices();

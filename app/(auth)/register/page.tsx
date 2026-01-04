@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/button";
 import { serverServices } from "@/lib/services/server";
-import { RegisterForm } from "./_components/RegisterForm";
-import { signOut } from "./_components/RegisterForm/actions";
+import { RegisterForm } from "./_components/register-form";
+import { signOut } from "./_components/register-form/actions";
 
 export const metadata: Metadata = {
   title: "ユーザー情報登録",

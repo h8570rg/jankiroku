@@ -1,4 +1,4 @@
-import { User } from "@/components/User";
+import { User } from "@/components/user";
 
 export default function FriendsLoading() {
   return (

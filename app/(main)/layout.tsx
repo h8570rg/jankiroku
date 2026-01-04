@@ -1,5 +1,5 @@
-import Appbar from "./_components/Appbar";
-import { ReleaseNotes } from "./_components/ReleaseNotes";
+import Appbar from "./_components/appbar";
+import { ReleaseNotes } from "./_components/release-notes";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
