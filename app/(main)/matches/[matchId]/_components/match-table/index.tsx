@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 import type { CSSProperties } from "react";
 import { Icon } from "@/components/icon";
 import { serverServices } from "@/lib/services/server";
@@ -74,7 +74,7 @@ export async function MatchTable({
   };
 
   return (
-    <div className={classNames(className, "overflow-x-auto pb-4")}>
+    <div className={cn(className, "overflow-x-auto pb-4")}>
       <div className="flex h-full min-w-fit flex-col">
         {/* ヘッダー */}
         <PlayersModalTrigger
@@ -110,7 +110,7 @@ export async function MatchTable({
                 {columns.map((column) => (
                   <div
                     key={column.id}
-                    className={classNames(
+                    className={cn(
                       "flex h-full items-center justify-center break-all px-1 py-2 text-center text-small",
                       {
                         "text-danger": item.players[column.id] < 0,
@@ -141,7 +141,7 @@ export async function MatchTable({
             </div>
             {columns.map((column) => (
               <div
-                className={classNames(
+                className={cn(
                   "flex h-full items-center justify-center px-1 text-center text-tiny",
                   {
                     "text-danger": column.totalScore < 0,

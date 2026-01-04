@@ -3,7 +3,7 @@
 import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 import { useActionState, useCallback, useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Button } from "@/components/button";
@@ -138,7 +138,7 @@ export function GameForm({ match }: { match: Match }) {
                               endContent={
                                 <div className="pointer-events-none flex shrink-0 items-center gap-1">
                                   <span
-                                    className={classNames("mt-0.5 text-tiny", {
+                                    className={cn("mt-0.5 text-tiny", {
                                       "text-default-400":
                                         watch(`players.${index}.points`) === "",
                                     })}

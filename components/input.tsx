@@ -1,8 +1,8 @@
 "use client";
 
-import { Input as HeroUiInput, type InputProps } from "@heroui/react";
-import classNames from "classnames";
+import { cn, Input as HeroUiInput, type InputProps } from "@heroui/react";
 import { forwardRef } from "react";
+// import { cn } from "tailwind-variants";
 
 export const Input = forwardRef<
   HTMLInputElement,
@@ -12,7 +12,7 @@ export const Input = forwardRef<
     <HeroUiInput
       classNames={{
         ...propsClassNames,
-        input: classNames("text-medium", propsClassNames?.input), // ios safariで拡大されるのを防ぐ
+        input: cn("text-medium", propsClassNames?.input), // ios safariで拡大されるのを防ぐ
       }}
       {...props}
       ref={ref}

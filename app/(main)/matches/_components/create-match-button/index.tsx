@@ -1,6 +1,6 @@
 "use client";
 
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 import { useActionState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Accordion, AccordionItem } from "@/components/accordion";
@@ -251,7 +251,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                             name="customIncline.incline4"
                             render={({ field }) => (
                               <Input
-                                className={classNames({
+                                className={cn({
                                   hidden: playersCount === "3",
                                 })}
                                 hidden={playersCount === "3"}

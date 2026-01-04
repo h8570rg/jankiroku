@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 import type { Metadata } from "next";
 import { IconDefs } from "@/components/icon";
 import { SERVICE_NAME } from "@/lib/config";
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={classNames(fontClassNames, "h-full scroll-smooth")}
+      className={cn(fontClassNames, "h-full scroll-smooth")}
       suppressHydrationWarning
     >
       <body className="h-full font-rocknroll">

@@ -1,6 +1,6 @@
 "use client";
 
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 import { useActionState, useId } from "react";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
@@ -27,7 +27,7 @@ export function RegisterForm({
 
   return (
     <form
-      className={classNames(className, "space-y-2.5")}
+      className={cn(className, "space-y-2.5")}
       action={formAction}
       noValidate
     >

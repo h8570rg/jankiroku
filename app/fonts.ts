@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 import { Righteous, RocknRoll_One } from "next/font/google";
 
 const righteous = Righteous({
@@ -15,7 +15,4 @@ const rocknRollOne = RocknRoll_One({
   display: "swap",
 });
 
-export const fontClassNames = classNames(
-  righteous.variable,
-  rocknRollOne.variable,
-);
+export const fontClassNames = cn(righteous.variable, rocknRollOne.variable);
