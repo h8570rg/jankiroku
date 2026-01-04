@@ -1,6 +1,6 @@
 "use client";
 
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 import {
   Table,
   TableBody,
@@ -25,8 +25,8 @@ export function Summary({ match }: { match: Match }) {
   return (
     <Table
       classNames={{
-        wrapper: classNames("p-0"),
-        th: classNames("bg-inherit"),
+        wrapper: cn("p-0"),
+        th: cn("bg-inherit"),
       }}
     >
       <TableHeader columns={columns}>

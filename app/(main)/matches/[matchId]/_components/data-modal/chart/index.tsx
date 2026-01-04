@@ -1,6 +1,6 @@
 "use client";
 
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 import {
   Legend,
   Line,
@@ -50,7 +50,7 @@ export function DataChart({
 
   return (
     <div
-      className={classNames(
+      className={cn(
         "h-[300px] w-full rounded-large bg-content1 p-2 shadow-small",
         className,
       )}

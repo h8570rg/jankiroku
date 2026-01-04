@@ -4,7 +4,7 @@
  */
 /** biome-ignore-all lint/correctness/useUniqueElementIds: this is a static icon */
 
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 
 export type IconName =
   | "add"
@@ -41,7 +41,7 @@ export function Icon({
     <svg
       role="img"
       aria-label={name}
-      className={classNames("fill-current", className)}
+      className={cn("fill-current", className)}
       viewBox="0 0 44 44"
       height={size || height || 24}
       width={size || width || 24}

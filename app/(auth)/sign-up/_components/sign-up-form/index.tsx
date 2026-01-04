@@ -1,6 +1,6 @@
 "use client";
 
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 import { useActionState, useId } from "react";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
@@ -16,7 +16,7 @@ export function SignUpForm({ className }: { className?: string }) {
 
   return (
     <form
-      className={classNames("space-y-2.5 py-4", className)}
+      className={cn("space-y-2.5 py-4", className)}
       action={formAction}
       noValidate
     >

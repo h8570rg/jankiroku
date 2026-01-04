@@ -1,6 +1,6 @@
 "use client";
 
-import classNames from "classnames";
+import { cn } from "@heroui/react";
 import { Button } from "@/components/button";
 import { GoogleIcon } from "@/components/social-provider-icon";
 import { getIsWebview } from "@/lib/utils/userAgent";
@@ -21,7 +21,7 @@ export function SocialProviders({ className }: { className?: string }) {
   };
 
   return (
-    <ul className={classNames("space-y-2", className)}>
+    <ul className={cn("space-y-2", className)}>
       <li className="w-full">
         <Button
           fullWidth
