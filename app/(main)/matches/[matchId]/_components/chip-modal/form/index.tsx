@@ -66,7 +66,7 @@ export function ChipForm({ match }: { match: Match }) {
                 name={`playerChip.${index}.profileId`}
                 render={({ field }) => <input type="text" hidden {...field} />}
               />
-              <div className="shrink-0 grow text-small text-foreground">
+              <div className="shrink-0 grow text-sm text-foreground">
                 {players[index].name}
               </div>
               <Controller
@@ -100,7 +100,7 @@ export function ChipForm({ match }: { match: Match }) {
                     }
                     endContent={
                       <div className="pointer-events-none shrink-0">
-                        <span className="text-small text-default-400">枚</span>
+                        <span className="text-sm text-default-400">枚</span>
                       </div>
                     }
                     {...field}
@@ -111,7 +111,7 @@ export function ChipForm({ match }: { match: Match }) {
           ))}
         </ul>
         {errors?.playerChip && (
-          <p className="whitespace-pre-wrap text-tiny text-danger">
+          <p className="whitespace-pre-wrap text-xs text-danger">
             {errors.playerChip[0]}
           </p>
         )}

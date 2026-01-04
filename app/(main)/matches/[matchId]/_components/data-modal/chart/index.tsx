@@ -69,7 +69,7 @@ export function DataChart({
           <ReferenceLine y={0} strokeDasharray="4 4" />
           <Legend
             formatter={(v) => (
-              <span className="text-small">
+              <span className="text-sm">
                 {match.players.find((player) => player.id === v)?.name}
               </span>
             )}

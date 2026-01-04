@@ -87,7 +87,7 @@ export default function LandingPage() {
     <div className="min-h-full">
       <Navbar shouldHideOnScroll>
         <NavbarBrand>
-          <Logo className="text-large" />
+          <Logo className="text-lg" />
         </NavbarBrand>
         <NavbarContent as="div" justify="end">
           <NavbarItem>
@@ -101,7 +101,7 @@ export default function LandingPage() {
       {/* ヒーローセクション */}
       <section className="bg-linear-to-b from-background to-primary/10">
         <div className="container z-20 mx-auto px-4 pt-20">
-          <p className="mb-8 text-center text-large">
+          <p className="mb-8 text-center text-lg">
             麻雀の成績を簡単に記録・分析
             <br />
             あなたの麻雀ライフを快適に
@@ -128,7 +128,7 @@ export default function LandingPage() {
       <div className="container mx-auto space-y-24 px-5 py-16">
         {/* 機能紹介 */}
         <section id="features" className="">
-          <h2 className="mb-12 text-center text-large">主な機能</h2>
+          <h2 className="mb-12 text-center text-lg">主な機能</h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {features.map((feature) => (
               <Card key={feature.title} className="px-3">
@@ -144,14 +144,14 @@ export default function LandingPage() {
         {/* 使用方法 */}
         <section className="">
           <div className="container mx-auto">
-            <h2 className="mb-12 text-center text-large">使い方</h2>
+            <h2 className="mb-12 text-center text-lg">使い方</h2>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
               {steps.map((step) => (
                 <div key={step.number} className="text-center">
-                  <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-secondary text-large text-secondary-foreground">
+                  <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-secondary text-lg text-secondary-foreground">
                     {step.number}
                   </div>
-                  <h3 className="mb-2 text-medium">{step.title}</h3>
+                  <h3 className="mb-2 text-md">{step.title}</h3>
                   <p>{step.description}</p>
                 </div>
               ))}
@@ -162,7 +162,7 @@ export default function LandingPage() {
         {/* FAQ */}
         <section className="">
           <div className="container mx-auto">
-            <h2 className="mb-12 text-center text-large">よくある質問</h2>
+            <h2 className="mb-12 text-center text-lg">よくある質問</h2>
             <Faq faqs={faqs} />
           </div>
         </section>

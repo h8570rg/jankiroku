@@ -110,7 +110,7 @@ export function PlayersModalContent({
               <div className="flex h-[700px] max-h-[60dvh] flex-col">
                 {selectedPlayers.length > 0 && (
                   <div className="mb-6">
-                    <p className="mb-2 pl-1 text-tiny text-foreground-500">
+                    <p className="mb-2 pl-1 text-xs text-foreground-500">
                       参加者 ({selectedPlayers.length})
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -190,7 +190,7 @@ export function PlayersModalContent({
                   {searchedProfiles !== null && (
                     <>
                       {searchedProfiles.length === 0 && (
-                        <p className="mt-10 text-center text-small text-default-500">
+                        <p className="mt-10 text-center text-sm text-default-500">
                           見つかりませんでした
                         </p>
                       )}

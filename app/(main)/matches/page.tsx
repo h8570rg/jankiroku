@@ -11,7 +11,7 @@ export default async function Matches() {
     <div>
       <h1 className="heading-1 mb-1">成績表</h1>
       {matches.length === 0 && (
-        <p className="break-auto mt-14 text-center text-small text-default-500">
+        <p className="break-auto mt-14 text-center text-sm text-default-500">
           まだ成績表がありません。
           <br />
           「ゲームを始める」ボタンから、新しい成績表を作成しましょう。

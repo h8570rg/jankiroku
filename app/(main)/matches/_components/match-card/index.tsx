@@ -34,14 +34,14 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
       <CardBody>
         <div className="flex items-center">
           <div className="flex shrink-0 grow flex-col items-center px-8">
-            <div className="mb-2 text-tiny text-default-500">平均着順</div>
-            <div className="text-large">
+            <div className="mb-2 text-xs text-default-500">平均着順</div>
+            <div className="text-lg">
               {data.averageRank?.toFixed(2) ?? "なし"}
             </div>
           </div>
           <div className="flex basis-[224px] justify-center">
             <table className="[&_td]:text-center [&_th]:w-10 [&_th]:text-center">
-              <thead className="text-tiny text-default-500">
+              <thead className="text-xs text-default-500">
                 <tr>
                   <th>1位</th>
                   <th>2位</th>
@@ -49,7 +49,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
                   {match.rule.playersCount === 4 && <th>4位</th>}
                 </tr>
               </thead>
-              <tbody className="text-small">
+              <tbody className="text-sm">
                 <tr>
                   <td>{data.rankCounts[0]}</td>
                   <td>{data.rankCounts[1]}</td>

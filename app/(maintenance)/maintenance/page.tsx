@@ -18,14 +18,14 @@ export default function MaintenancePage() {
         <NavbarContent>
           <NavbarBrand>
             <Link color="foreground" href="/">
-              <Logo className="text-large" />
+              <Logo className="text-lg" />
             </Link>
           </NavbarBrand>
         </NavbarContent>
       </Navbar>
       <div className="flex grow items-center justify-center px-4">
         <div className="flex flex-col items-center gap-4">
-          <h1 className="text-center text-large">メンテナンス中</h1>
+          <h1 className="text-center text-lg">メンテナンス中</h1>
           <Alert
             color="warning"
             title="申し訳ありませんが、現在メンテナンス中です。しばらくしてから再度お試しください。"

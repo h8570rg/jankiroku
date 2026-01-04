@@ -19,8 +19,8 @@ export default async function RegisterPage() {
 
   return (
     <>
-      <h1 className="mx-auto mb-2 w-fit text-large">ユーザー情報登録</h1>
-      <p className="mb-6 mt-4 text-small text-default-500">
+      <h1 className="mx-auto mb-2 w-fit text-lg">ユーザー情報登録</h1>
+      <p className="mb-6 mt-4 text-sm text-default-500">
         ユーザーIDと名前を決めてください。
         <br />
         ユーザーIDはユーザー検索に、名前は成績表に使用されます。

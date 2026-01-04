@@ -36,7 +36,7 @@ export function LoginForm({ className }: { className?: string }) {
         />
       </div>
       {state.errors?.base && (
-        <p className="mt-1 p-1 text-tiny text-danger">{state.errors.base}</p>
+        <p className="mt-1 p-1 text-xs text-danger">{state.errors.base}</p>
       )}
       <Button
         className="mt-2.5"

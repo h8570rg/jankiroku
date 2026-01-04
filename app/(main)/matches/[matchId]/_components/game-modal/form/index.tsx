@@ -99,7 +99,7 @@ export function GameForm({ match }: { match: Match }) {
                             <input type="text" hidden {...field} />
                           )}
                         />
-                        <div className="shrink-0 grow text-small text-foreground">
+                        <div className="shrink-0 grow text-sm text-foreground">
                           {field.name}
                         </div>
                         <Controller
@@ -138,14 +138,14 @@ export function GameForm({ match }: { match: Match }) {
                               endContent={
                                 <div className="pointer-events-none flex shrink-0 items-center gap-1">
                                   <span
-                                    className={cn("mt-0.5 text-tiny", {
+                                    className={cn("mt-0.5 text-xs", {
                                       "text-default-400":
                                         watch(`players.${index}.points`) === "",
                                     })}
                                   >
                                     00
                                   </span>
-                                  <span className="text-small text-default-400">
+                                  <span className="text-sm text-default-400">
                                     点
                                   </span>
                                 </div>
@@ -173,7 +173,7 @@ export function GameForm({ match }: { match: Match }) {
           </DndContext>
         </ul>
         {errors?.players && (
-          <p className="whitespace-pre-wrap text-tiny text-danger">
+          <p className="whitespace-pre-wrap text-xs text-danger">
             {errors.players[0]}
           </p>
         )}

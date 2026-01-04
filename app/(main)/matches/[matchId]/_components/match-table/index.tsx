@@ -83,7 +83,7 @@ export async function MatchTable({
         >
           <div />
           {columns.map((column) => (
-            <div key={column?.id} className="truncate px-1 py-3 text-tiny">
+            <div key={column?.id} className="truncate px-1 py-3 text-xs">
               {column.name}
             </div>
           ))}
@@ -91,7 +91,7 @@ export async function MatchTable({
         {/* ボディ */}
         <div className="grow">
           {gameRows.length === 0 && (
-            <p className="my-10 text-center text-small text-default-500">
+            <p className="my-10 text-center text-sm text-default-500">
               まだデータはありません
             </p>
           )}
@@ -104,14 +104,14 @@ export async function MatchTable({
                 gameId={item.gameId}
                 style={rowStyle}
               >
-                <div className="flex h-full items-center justify-center break-all px-1 py-2 text-tiny text-default-500">
+                <div className="flex h-full items-center justify-center break-all px-1 py-2 text-xs text-default-500">
                   {index + 1}
                 </div>
                 {columns.map((column) => (
                   <div
                     key={column.id}
                     className={cn(
-                      "flex h-full items-center justify-center break-all px-1 py-2 text-center text-small",
+                      "flex h-full items-center justify-center break-all px-1 py-2 text-center text-sm",
                       {
                         "text-danger": item.players[column.id] < 0,
                       },
@@ -136,13 +136,13 @@ export async function MatchTable({
         {/* フッター */}
         <div className="mt-3 rounded-lg bg-default-100 text-foreground-500">
           <div className="min-h-10" style={rowStyle}>
-            <div className="flex h-full items-center justify-center truncate break-all px-1 py-3 text-tiny">
+            <div className="flex h-full items-center justify-center truncate break-all px-1 py-3 text-xs">
               合計
             </div>
             {columns.map((column) => (
               <div
                 className={cn(
-                  "flex h-full items-center justify-center px-1 text-center text-tiny",
+                  "flex h-full items-center justify-center px-1 text-center text-xs",
                   {
                     "text-danger": column.totalScore < 0,
                   },
@@ -154,12 +154,12 @@ export async function MatchTable({
             ))}
           </div>
           <ChipModalTrigger className="min-h-10" style={rowStyle}>
-            <div className="flex h-full items-center justify-center truncate px-1 text-tiny">
+            <div className="flex h-full items-center justify-center truncate px-1 text-xs">
               チップ
             </div>
             {columns.map((column) => (
               <div
-                className="flex h-full items-center justify-center break-all px-1 py-3 text-center text-tiny"
+                className="flex h-full items-center justify-center break-all px-1 py-3 text-center text-xs"
                 key={column.id}
               >
                 {column.chipCount}
@@ -170,12 +170,12 @@ export async function MatchTable({
             ))}
           </ChipModalTrigger>
           <div className="min-h-10" style={rowStyle}>
-            <div className="flex h-full items-center justify-center truncate px-1 text-tiny">
+            <div className="flex h-full items-center justify-center truncate px-1 text-xs">
               収支
             </div>
             {columns.map((column) => (
               <div
-                className="flex h-full items-center justify-center break-all px-1 py-3 text-center text-tiny"
+                className="flex h-full items-center justify-center break-all px-1 py-3 text-center text-xs"
                 key={column.id}
               >
                 {column.result}

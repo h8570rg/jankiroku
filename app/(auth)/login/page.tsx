@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <>
-      <h1 className="mx-auto mb-4 w-fit text-large">ログイン</h1>
+      <h1 className="mx-auto mb-4 w-fit text-lg">ログイン</h1>
       <SocialProviders />
       <div className="my-4 flex items-center gap-4">
         <Divider className="shrink" />
@@ -19,7 +19,7 @@ export default function LoginPage() {
         <Divider className="shrink" />
       </div>
       <LoginForm />
-      <p className="mt-4 text-center text-small">
+      <p className="mt-4 text-center text-sm">
         アカウントをお持ちでない方は
         <Link className="link" href="/sign-up">
           新規登録

@@ -74,7 +74,7 @@ export function AddButton() {
                 </li>
               )}
               {!isValidating && !!query && profiles?.length === 0 && (
-                <p className="mt-10 text-center text-small text-default-500">
+                <p className="mt-10 text-center text-sm text-default-500">
                   見つかりませんでした
                 </p>
               )}
@@ -88,7 +88,7 @@ export function AddButton() {
                   >
                     <User name={name} displayId={displayId} />
                     {isFriend ? (
-                      <div className="w-16 text-center text-tiny text-foreground-500">
+                      <div className="w-16 text-center text-xs text-foreground-500">
                         追加済み
                       </div>
                     ) : (

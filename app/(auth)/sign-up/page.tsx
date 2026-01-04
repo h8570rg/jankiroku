@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 export default function SignUpPage() {
   return (
     <>
-      <h1 className="mx-auto mb-2 w-fit text-large">新規登録</h1>
+      <h1 className="mx-auto mb-2 w-fit text-lg">新規登録</h1>
       <SignUpForm />
-      <p className="text-center text-small">
+      <p className="text-center text-sm">
         既にアカウントをお持ちの方は
         <Link className="link" href="/login">
           ログイン

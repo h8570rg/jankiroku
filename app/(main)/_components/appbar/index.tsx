@@ -11,7 +11,7 @@ export default function Appbar() {
       <NavbarContent>
         <NavbarBrand>
           <Link color="foreground" href="/matches">
-            <Logo className="text-large" />
+            <Logo className="text-lg" />
           </Link>
         </NavbarBrand>
       </NavbarContent>

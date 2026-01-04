@@ -66,13 +66,13 @@ export const User = forwardRef<HTMLDivElement, UserProps>(
             classNames?.wrapper,
           )}
         >
-          <span className={cn("text-small text-inherit", classNames?.name)}>
+          <span className={cn("text-sm text-inherit", classNames?.name)}>
             {name}
           </span>
           {displayId && (
             <span
               className={cn(
-                "text-tiny text-foreground-400",
+                "text-xs text-foreground-400",
                 classNames?.description,
               )}
             >

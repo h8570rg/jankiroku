@@ -12,7 +12,7 @@ export const Input = forwardRef<
     <HeroUiInput
       classNames={{
         ...propsClassNames,
-        input: cn("text-medium", propsClassNames?.input), // ios safariで拡大されるのを防ぐ
+        input: cn("text-md", propsClassNames?.input), // ios safariで拡大されるのを防ぐ
       }}
       {...props}
       ref={ref}

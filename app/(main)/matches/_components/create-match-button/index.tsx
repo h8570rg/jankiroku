@@ -265,7 +265,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                         </div>
                         {/* same as Input component error */}
                         {errors?.customIncline && (
-                          <div className="px-1 pt-1 text-tiny text-danger">
+                          <div className="px-1 pt-1 text-xs text-danger">
                             {errors?.customIncline[0]}
                           </div>
                         )}
@@ -278,7 +278,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                       hideIndicator
                       classNames={{
                         titleWrapper: "text-right",
-                        title: "text-small text-primary",
+                        title: "text-sm text-primary",
                       }}
                     >
                       <div className="space-y-3 px-1">
@@ -296,7 +296,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                               labelPlacement="outside-left"
                               endContent={
                                 <div className="pointer-events-none flex items-center">
-                                  <span className="text-small text-default-400">
+                                  <span className="text-sm text-default-400">
                                     点
                                   </span>
                                 </div>
@@ -320,7 +320,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                               labelPlacement="outside-left"
                               endContent={
                                 <div className="pointer-events-none flex items-center">
-                                  <span className="text-small text-default-400">
+                                  <span className="text-sm text-default-400">
                                     点
                                   </span>
                                 </div>
@@ -344,7 +344,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                               labelPlacement="outside-left"
                               endContent={
                                 <div className="pointer-events-none flex shrink-0 items-center">
-                                  <span className="text-small text-default-400">
+                                  <span className="text-sm text-default-400">
                                     点返し
                                   </span>
                                 </div>

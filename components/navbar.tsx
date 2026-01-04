@@ -108,7 +108,7 @@ export const NavbarBrand = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex basis-0 flex-row grow flex-nowrap justify-start bg-transparent items-center no-underline text-medium whitespace-nowrap box-border",
+        "flex basis-0 flex-row grow flex-nowrap justify-start bg-transparent items-center no-underline text-md whitespace-nowrap box-border",
         className,
       )}
       {...props}
@@ -163,7 +163,7 @@ export const NavbarItem = forwardRef<
     <li
       ref={ref}
       className={cn(
-        "text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold",
+        "text-md whitespace-nowrap box-border list-none data-[active=true]:font-semibold",
         className,
       )}
       {...props}
