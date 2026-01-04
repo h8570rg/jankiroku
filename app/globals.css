@@ -10,7 +10,7 @@
 }
 
 @utility heading-1 {
-  @apply text-md text-default-500;
+  @apply text-base text-default-500;
 }
 
 @utility z-header {

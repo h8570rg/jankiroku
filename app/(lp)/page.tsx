@@ -151,7 +151,7 @@ export default function LandingPage() {
                   <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-secondary text-lg text-secondary-foreground">
                     {step.number}
                   </div>
-                  <h3 className="mb-2 text-md">{step.title}</h3>
+                  <h3 className="mb-2 text-base">{step.title}</h3>
                   <p>{step.description}</p>
                 </div>
               ))}
