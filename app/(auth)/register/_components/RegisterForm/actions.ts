@@ -31,8 +31,9 @@ export async function updateProfile(
   });
 
   if (!validatedFields.success) {
+    const flattened = z.flattenError(validatedFields.error);
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: flattened.fieldErrors,
     };
   }
 
