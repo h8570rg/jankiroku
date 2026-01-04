@@ -22,29 +22,18 @@ const addChipSchema = z
       }),
     ),
   })
-  .refine(
-    ({ playerChip }) => {
-      const total = playerChip.reduce((acc, { chipCount }) => {
-        return acc + (chipCount ?? 0);
-      }, 0);
-      return total === 0;
-    },
-    {
-      error: (issue) => {
-        const data = issue.input as {
-          playerChip: Array<{ profileId: string; chipCount: number }>;
-        };
-        const total = data.playerChip.reduce(
-          (acc, { chipCount }) => acc + (chipCount ?? 0),
-          0,
-        );
-        return {
-          message: `チップの合計が0枚なるように入力してください\n現在: ${total.toLocaleString()}枚`,
-          path: ["playerChip"],
-        };
-      },
-    },
-  );
+  .superRefine(({ playerChip }, ctx) => {
+    const total = playerChip.reduce((acc, { chipCount }) => {
+      return acc + (chipCount ?? 0);
+    }, 0);
+    if (total !== 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: `チップの合計が0枚なるように入力してください\n現在: ${total.toLocaleString()}枚`,
+        path: ["playerChip"],
+      });
+    }
+  });
 
 export async function addChip(
   matchId: string,
@@ -64,8 +53,9 @@ export async function addChip(
   });
 
   if (!validatedFields.success) {
+    const flattened = z.flattenError(validatedFields.error);
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: flattened.fieldErrors,
     };
   }
 

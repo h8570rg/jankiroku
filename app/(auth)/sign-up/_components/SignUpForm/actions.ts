@@ -32,8 +32,9 @@ export async function signUp(
   });
 
   if (!validatedFields.success) {
+    const flattened = z.flattenError(validatedFields.error);
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: flattened.fieldErrors,
     };
   }
 
