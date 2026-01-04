@@ -3,7 +3,10 @@
 /* Note: You may need to change the path to fit your project structure */
 @source "../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
 @custom-variant dark (&:is(.dark *));
-@config "../tailwind.config.js";
+
+@theme {
+  --font-rocknroll: var(--font-rocknroll-one);
+}
 
 @utility link {
   @apply text-primary underline;
@@ -11,10 +14,6 @@
 
 @utility heading-1 {
   @apply text-base text-default-500;
-}
-
-@utility z-header {
-  @apply z-10;
 }
 
 @utility break-auto {

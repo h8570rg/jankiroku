@@ -13,7 +13,7 @@ export default function MaintenancePage() {
   const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
   return (
-    <main className="relative flex min-h-screen flex-col">
+    <main className="relative flex min-h-dvh flex-col">
       <Navbar position="static" className="absolute inset-x-0 top-0">
         <NavbarContent>
           <NavbarBrand>
