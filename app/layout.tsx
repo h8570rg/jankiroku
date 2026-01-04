@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import type { Metadata } from "next";
-import { IconDefs } from "@/components/Icon";
+import { IconDefs } from "@/components/icon";
 import { SERVICE_NAME } from "@/lib/config";
 import { fontClassNames } from "./fonts";
 import "./globals.css";

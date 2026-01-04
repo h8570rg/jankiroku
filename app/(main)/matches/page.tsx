@@ -1,6 +1,6 @@
 import { serverServices } from "@/lib/services/server";
-import { CreateMatchButton } from "./_components/CreateMatchButton";
-import { MatchCard } from "./_components/MatchCard";
+import { CreateMatchButton } from "./_components/create-match-button";
+import { MatchCard } from "./_components/match-card";
 
 export default async function Matches() {
   const { getMatches, getUser } = await serverServices();

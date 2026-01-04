@@ -1,14 +1,14 @@
 import { Suspense } from "react";
-import { Button } from "@/components/Button";
-import { Icon } from "@/components/Icon";
-import { LinkButton } from "@/components/LinkButton";
-import { ChipModal, ChipModalTrigger } from "./_components/ChipModal";
-import { MatchContextProvider } from "./_components/ContextProvider";
-import { DataModal, DataModalTrigger } from "./_components/DataModal";
-import { GameModal } from "./_components/GameModal";
-import { MatchTable } from "./_components/MatchTable";
-import { PlayersModal, PlayersModalTrigger } from "./_components/PlayersModal";
-import { RuleModal, RuleModalTrigger } from "./_components/RuleModal";
+import { Button } from "@/components/button";
+import { Icon } from "@/components/icon";
+import { LinkButton } from "@/components/link-button";
+import { ChipModal, ChipModalTrigger } from "./_components/chip-modal";
+import { MatchContextProvider } from "./_components/context-provider";
+import { DataModal, DataModalTrigger } from "./_components/data-modal";
+import { GameModal } from "./_components/game-modal";
+import { MatchTable } from "./_components/match-table";
+import { PlayersModal, PlayersModalTrigger } from "./_components/players-modal";
+import { RuleModal, RuleModalTrigger } from "./_components/rule-modal";
 
 export default async function Match({
   params,

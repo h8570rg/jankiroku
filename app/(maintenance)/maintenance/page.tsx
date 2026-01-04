@@ -4,10 +4,10 @@ import { Navbar, NavbarBrand, NavbarContent } from "@heroui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Alert } from "@/components/Alert";
-import { Button } from "@/components/Button";
-import { Icon } from "@/components/Icon";
-import Logo from "@/components/Logo";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
+import { Icon } from "@/components/icon";
+import Logo from "@/components/logo";
 
 export default function MaintenancePage() {
   const router = useRouter();

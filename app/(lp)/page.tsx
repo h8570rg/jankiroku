@@ -1,14 +1,14 @@
 import Image from "next/image";
-import { Button } from "@/components/Button";
-import { Card, CardBody } from "@/components/Card";
-import { LinkButton } from "@/components/LinkButton";
-import Logo from "@/components/Logo";
+import { Button } from "@/components/button";
+import { Card, CardBody } from "@/components/card";
+import { LinkButton } from "@/components/link-button";
+import Logo from "@/components/logo";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-} from "@/components/Navbar";
+} from "@/components/navbar";
 import { SERVICE_NAME } from "@/lib/config";
 import match from "./_assets/match.png";
 import { Faq } from "./_components/Faq";

@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { UseModalReturn } from "@/components/Modal";
+import type { UseModalReturn } from "@/components/modal";
 
 const modalDefaultValue = {
   isOpen: false,

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Divider } from "@/components/Divider";
-import { LoginForm } from "./_components/LoginForm";
-import { SocialProviders } from "./_components/SocialProviders";
+import { Divider } from "@/components/divider";
+import { LoginForm } from "./_components/login-form";
+import { SocialProviders } from "./_components/social-providers";
 
 export const metadata: Metadata = {
   title: "ログイン",

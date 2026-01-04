@@ -1,4 +1,4 @@
-import { LinkButton } from "@/components/LinkButton";
+import { LinkButton } from "@/components/link-button";
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr
