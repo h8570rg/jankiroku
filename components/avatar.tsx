@@ -1,3 +1,3 @@
 "use client";
 
-export { Avatar, AvatarGroup } from "@heroui/react";
+export { Avatar, AvatarGroup, type AvatarProps } from "@heroui/react";
