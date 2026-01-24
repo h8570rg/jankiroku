@@ -35,7 +35,7 @@
     "@supabase/ssr": "0.8.0",
     "@supabase/supabase-js": "2.91.0",
     "dayjs": "1.11.19",
-    "framer-motion": "12.27.5",
+    "framer-motion": "12.28.1",
     "next": "16.1.4",
     "next-themes": "0.4.6",
     "react": "19.2.3",
