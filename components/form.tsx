@@ -2,7 +2,7 @@ import {
   Form as HeroUiForm,
   type FormProps as HeroUiFormProps,
 } from "@heroui/react";
-import { type FormEvent, startTransition } from "react";
+import { type SyntheticEvent, startTransition } from "react";
 
 export type FormProps = Omit<
   HeroUiFormProps,
@@ -10,7 +10,7 @@ export type FormProps = Omit<
 >;
 
 export function Form({ children, action: formAction, ...props }: FormProps) {
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     startTransition(() =>

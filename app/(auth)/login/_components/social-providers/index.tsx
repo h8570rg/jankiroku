@@ -20,7 +20,6 @@ export function SocialProviders({ className }: { className?: string }) {
 
   return (
     <div className={cn("space-y-3", className)}>
-      <p>devicon</p>
       <Button className="w-full" variant="tertiary" onPress={handleGoogleClick}>
         <Icon icon="devicon:google" className="w-5" />
         Google でログイン
