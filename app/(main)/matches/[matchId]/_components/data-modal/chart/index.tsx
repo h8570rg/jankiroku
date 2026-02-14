@@ -51,7 +51,7 @@ export function DataChart({
   return (
     <div
       className={cn(
-        "h-[300px] w-full rounded-large bg-content1 p-2 shadow-small",
+        "h-[300px] w-full rounded-lg bg-surface p-2 shadow-sm",
         className,
       )}
     >

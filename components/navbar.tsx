@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@heroui/react";
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import {
   type ComponentPropsWithoutRef,
   forwardRef,
@@ -68,7 +68,11 @@ export const Navbar = forwardRef<
           }
         }}
         className={cn(
-          "flex z-40 w-full h-auto items-center justify-center sticky top-0 backdrop-blur-lg backdrop-saturate-150 bg-background/70 data-[menu-open=true]:border-none",
+          `
+            sticky top-0 z-40 flex h-auto w-full items-center justify-center
+            bg-background/70 backdrop-blur-lg backdrop-saturate-150
+            data-[menu-open=true]:border-none
+          `,
           className,
         )}
         animate={isHidden ? "hidden" : "visible"}
@@ -76,7 +80,12 @@ export const Navbar = forwardRef<
         variants={hideOnScrollVariants}
         {...(htmlProps as Record<string, unknown>)}
       >
-        <nav className="z-40 flex px-6 gap-4 w-full flex-row relative flex-nowrap items-center justify-between h-16">
+        <nav
+          className="
+          relative z-40 flex h-16 w-full flex-row flex-nowrap items-center
+          justify-between gap-4 px-6
+        "
+        >
           {children}
         </nav>
       </motion.header>
@@ -87,12 +96,21 @@ export const Navbar = forwardRef<
     <header
       ref={ref}
       className={cn(
-        "flex z-40 w-full h-auto items-center justify-center sticky top-0 backdrop-blur-lg backdrop-saturate-150 bg-background/70 data-[menu-open=true]:border-none",
+        `
+          sticky top-0 z-40 flex h-auto w-full items-center justify-center
+          bg-background/70 backdrop-blur-lg backdrop-saturate-150
+          data-[menu-open=true]:border-none
+        `,
         className,
       )}
       {...restProps}
     >
-      <nav className="z-40 flex px-6 gap-4 w-full flex-row relative flex-nowrap items-center justify-between h-16">
+      <nav
+        className="
+        relative z-40 flex h-16 w-full flex-row flex-nowrap items-center
+        justify-between gap-4 px-6
+      "
+      >
         {children}
       </nav>
     </header>
@@ -108,7 +126,10 @@ export const NavbarBrand = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex basis-0 flex-row grow flex-nowrap justify-start bg-transparent items-center no-underline text-base whitespace-nowrap box-border",
+        `
+          box-border flex grow basis-0 flex-row flex-nowrap items-center
+          justify-start bg-transparent text-base whitespace-nowrap no-underline
+        `,
         className,
       )}
       {...props}
@@ -134,13 +155,22 @@ export function NavbarContent({
 }) {
   const Component = as as "div";
   const classNameValue = cn(
-    "flex gap-4 h-full flex-row flex-nowrap items-center",
+    "flex h-full flex-row flex-nowrap items-center gap-4",
     justify === "start" &&
-      "data-[justify=start]:flex-grow data-[justify=start]:basis-0 data-[justify=start]:justify-start",
+      `
+        data-[justify=start]:grow data-[justify=start]:basis-0
+        data-[justify=start]:justify-start
+      `,
     justify === "center" &&
-      "data-[justify=center]:flex-grow data-[justify=center]:basis-0 data-[justify=center]:justify-center",
+      `
+        data-[justify=center]:grow data-[justify=center]:basis-0
+        data-[justify=center]:justify-center
+      `,
     justify === "end" &&
-      "data-[justify=end]:flex-grow data-[justify=end]:basis-0 data-[justify=end]:justify-end",
+      `
+        data-[justify=end]:grow data-[justify=end]:basis-0
+        data-[justify=end]:justify-end
+      `,
     className,
   );
 
@@ -163,7 +193,10 @@ export const NavbarItem = forwardRef<
     <li
       ref={ref}
       className={cn(
-        "text-base whitespace-nowrap box-border list-none data-[active=true]:font-semibold",
+        `
+          box-border list-none text-base whitespace-nowrap
+          data-[active=true]:font-semibold
+        `,
         className,
       )}
       {...props}

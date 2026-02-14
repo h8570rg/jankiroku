@@ -1,20 +1,16 @@
 "use client";
 
-import { Navbar, NavbarBrand, NavbarContent } from "@heroui/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
-import { Icon } from "@/components/icon";
-import Logo from "@/components/logo";
 
 export default function MaintenancePage() {
   const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
   return (
     <main className="relative flex min-h-dvh flex-col">
-      <Navbar position="static" className="absolute inset-x-0 top-0">
+      {/* <Navbar position="static" className="absolute inset-x-0 top-0">
         <NavbarContent>
           <NavbarBrand>
             <Link color="foreground" href="/">
@@ -22,30 +18,29 @@ export default function MaintenancePage() {
             </Link>
           </NavbarBrand>
         </NavbarContent>
-      </Navbar>
+      </Navbar> */}
       <div className="flex grow items-center justify-center px-4">
         <div className="flex flex-col items-center gap-4">
           <h1 className="text-center text-lg">メンテナンス中</h1>
           <Alert
             color="warning"
             title="申し訳ありませんが、現在メンテナンス中です。しばらくしてから再度お試しください。"
-            endContent={
-              <div className="flex items-center justify-center self-stretch"></div>
-            }
-            description
+            // endContent={
+            //   <div className="flex items-center justify-center self-stretch"></div>
+            // }
+            // description
           />
           <Button
-            color="default"
-            variant="flat"
-            startContent={
-              !isRefreshing && <Icon className="size-5" name="refresh" />
-            }
+            variant="secondary"
+            // startContent={
+            //   !isRefreshing && <Icon className="size-5" name="refresh" />
+            // }
             onPress={() => {
               router.refresh();
               setIsRefreshing(true);
               setTimeout(() => setIsRefreshing(false), 1000);
             }}
-            isLoading={isRefreshing}
+            isPending={isRefreshing}
           >
             再読み込み
           </Button>

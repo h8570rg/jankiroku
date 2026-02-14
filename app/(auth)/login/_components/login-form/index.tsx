@@ -1,8 +1,10 @@
 "use client";
 
-import { useActionState, useId } from "react";
+import { ErrorMessage } from "@heroui/react";
+import { useActionState } from "react";
 import { Button } from "@/components/button";
-import { Input } from "@/components/input";
+import { Form } from "@/components/form";
+import { TextField } from "@/components/text-field";
 import { signInEmail } from "./actions";
 
 /**
@@ -10,43 +12,31 @@ import { signInEmail } from "./actions";
  */
 export function LoginForm({ className }: { className?: string }) {
   const [state, formAction, isPending] = useActionState(signInEmail, {});
-  const emailId = useId();
-  const passwordId = useId();
 
   return (
-    <form className={className} action={formAction} noValidate>
-      <div className="space-y-2.5">
-        <Input
-          id={emailId}
+    <Form
+      className={className}
+      action={formAction}
+      validationErrors={state.errors}
+    >
+      <div className="space-y-4">
+        <TextField
           type="email"
           name="email"
           autoComplete="username"
-          required
           label="メールアドレス"
-          errorMessage={state.errors?.email?.[0]}
         />
-        <Input
-          id={passwordId}
+        <TextField
           name="password"
           label="パスワード"
           type="password"
           autoComplete="current-password"
-          required
-          errorMessage={state.errors?.password?.[0]}
         />
       </div>
-      {state.errors?.base && (
-        <p className="mt-1 p-1 text-xs text-danger">{state.errors.base}</p>
-      )}
-      <Button
-        className="mt-2.5"
-        fullWidth
-        color="primary"
-        type="submit"
-        isLoading={isPending}
-      >
+      <ErrorMessage>{state.errors?.base}</ErrorMessage>
+      <Button className="mt-4 w-full" type="submit" isPending={isPending}>
         ログイン
       </Button>
-    </form>
+    </Form>
   );
 }

@@ -2,13 +2,7 @@
 
 import { Suspense } from "react";
 import { Button } from "@/components/button";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from "@/components/modal";
+import { Modal } from "@/components/modal";
 import packageJson from "@/package.json";
 import { versionComponents } from "./versions";
 
@@ -56,27 +50,32 @@ function ReleaseNotesModal() {
 
   return (
     <Suspense>
-      <Modal defaultOpen={true} size="xs" placement="center" onClose={onClose}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                リリース情報
-              </ModalHeader>
-              <ModalBody>
-                {newVersions.reverse().map(([v, Component]) => (
-                  <Component key={v} />
-                ))}
-              </ModalBody>
-              <ModalFooter>
-                <Button variant="light" onPress={onClose}>
-                  閉じる
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      <Modal.Backdrop
+        defaultOpen={true}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            onClose();
+          }
+        }}
+      >
+        <Modal.Container size="xs" placement="center">
+          <Modal.Dialog>
+            <Modal.Header className="flex flex-col gap-1">
+              <Modal.Heading>リリース情報</Modal.Heading>
+            </Modal.Header>
+            <Modal.Body>
+              {newVersions.reverse().map(([v, Component]) => (
+                <Component key={v} />
+              ))}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="ghost" slot="close">
+                閉じる
+              </Button>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
     </Suspense>
   );
 }

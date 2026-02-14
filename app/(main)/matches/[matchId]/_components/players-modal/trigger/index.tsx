@@ -7,13 +7,13 @@ export const PlayersModalTrigger = forwardRef<
   HTMLButtonElement,
   React.ComponentPropsWithoutRef<"button">
 >(function PlayersModalTrigger({ onClick, ...props }, ref) {
-  const { onOpen } = useMatchContext().playersModal;
+  const { open } = useMatchContext().playersModal;
 
   return (
     <button
       ref={ref}
       onClick={(e) => {
-        onOpen();
+        open();
         onClick?.(e);
       }}
       {...props}

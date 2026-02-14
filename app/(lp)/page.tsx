@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { Button } from "@/components/button";
-import { Card, CardBody } from "@/components/card";
-import { LinkButton } from "@/components/link-button";
+import NextLink from "next/link";
+import { buttonVariants } from "@/components/button";
+import { Card } from "@/components/card";
 import Logo from "@/components/logo";
 import {
   Navbar,
@@ -84,35 +84,47 @@ export const metadata = {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-full">
+    <div>
       <Navbar shouldHideOnScroll>
         <NavbarBrand>
           <Logo className="text-lg" />
         </NavbarBrand>
         <NavbarContent as="div" justify="end">
           <NavbarItem>
-            <LinkButton variant="flat" size="sm" href="/login">
+            <NextLink
+              className={buttonVariants({ size: "sm", variant: "tertiary" })}
+              href="/login"
+            >
               ログイン
-            </LinkButton>
+            </NextLink>
           </NavbarItem>
         </NavbarContent>
       </Navbar>
 
       {/* ヒーローセクション */}
-      <section className="bg-linear-to-b from-background to-primary/10">
-        <div className="container z-20 mx-auto px-4 pt-20">
+      <section className="bg-linear-to-b from-background to-accent/10">
+        <div className="z-20 container mx-auto px-4 pt-20">
           <p className="mb-8 text-center text-lg">
             麻雀の成績を簡単に記録・分析
             <br />
             あなたの麻雀ライフを快適に
           </p>
           <div className="flex justify-center gap-4">
-            <LinkButton color="primary" size="lg" href="/login">
+            <NextLink
+              className={buttonVariants({ size: "lg", variant: "primary" })}
+              href="/login"
+            >
               今すぐ始める
-            </LinkButton>
-            <Button size="lg" variant="ghost" as="a" href="#features">
+            </NextLink>
+            <a
+              className={buttonVariants({
+                size: "lg",
+                variant: "outline",
+              })}
+              href="#features"
+            >
               詳しく見る
-            </Button>
+            </a>
           </div>
           <div className="mx-auto mt-12 h-[480px] w-4/5 max-w-[500px]">
             <Image
@@ -129,13 +141,19 @@ export default function LandingPage() {
         {/* 機能紹介 */}
         <section id="features" className="">
           <h2 className="mb-12 text-center text-lg">主な機能</h2>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div
+            className="
+              grid grid-cols-1 gap-8
+              md:grid-cols-2
+              lg:grid-cols-4
+            "
+          >
             {features.map((feature) => (
-              <Card key={feature.title} className="px-3">
-                <CardBody className="py-8">
-                  <h3 className="mb-2 text-center">{feature.title}</h3>
-                  <p>{feature.description}</p>
-                </CardBody>
+              <Card key={feature.title}>
+                <Card.Header>
+                  <Card.Title>{feature.title}</Card.Title>
+                  <Card.Description>{feature.description}</Card.Description>
+                </Card.Header>
               </Card>
             ))}
           </div>
@@ -145,10 +163,21 @@ export default function LandingPage() {
         <section className="">
           <div className="container mx-auto">
             <h2 className="mb-12 text-center text-lg">使い方</h2>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <div
+              className="
+                grid grid-cols-1 gap-8
+                md:grid-cols-2
+                lg:grid-cols-4
+              "
+            >
               {steps.map((step) => (
                 <div key={step.number} className="text-center">
-                  <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-secondary text-lg text-secondary-foreground">
+                  <div
+                    className="
+                      mx-auto mb-4 flex size-16 items-center justify-center
+                      rounded-full bg-accent text-lg text-accent-foreground
+                    "
+                  >
                     {step.number}
                   </div>
                   <h3 className="mb-2 text-base">{step.title}</h3>
@@ -169,7 +198,7 @@ export default function LandingPage() {
       </div>
 
       {/* フッター */}
-      <footer className="bg-primary py-8 text-center text-primary-foreground">
+      <footer className="bg-accent py-8 text-center text-accent-foreground">
         <p>&copy; 2024 Jankiroku. All rights reserved.</p>
       </footer>
     </div>

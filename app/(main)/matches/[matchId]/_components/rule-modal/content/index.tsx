@@ -1,19 +1,16 @@
 "use client";
 
-import {
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from "@/components/modal";
+import { Modal } from "@/components/modal";
 import { calcMethodLabel, chipRateLabel, rateLabel } from "@/lib/config";
 import type { Rule } from "@/lib/type";
 
 export function RuleModalContent({ rule }: { rule: Rule }) {
   return (
-    <ModalContent>
-      <ModalHeader>ルール</ModalHeader>
-      <ModalBody>
+    <>
+      <Modal.Header>
+        <Modal.Heading>ルール</Modal.Heading>
+      </Modal.Header>
+      <Modal.Body>
         <table className="table-fixed border-separate border-spacing-y-1">
           <tbody className="[&_td]:text-center">
             <tr>
@@ -57,9 +54,9 @@ export function RuleModalContent({ rule }: { rule: Rule }) {
             </tr>
           </tbody>
         </table>
-      </ModalBody>
+      </Modal.Body>
       {/* スペーサーとして */}
-      <ModalFooter />
-    </ModalContent>
+      <Modal.Footer />
+    </>
   );
 }

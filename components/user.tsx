@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@heroui/react";
 import { type ComponentPropsWithoutRef, forwardRef } from "react";
 import { Avatar, type AvatarProps } from "@/components/avatar";
@@ -36,7 +34,7 @@ export const User = forwardRef<HTMLDivElement, UserProps>(
         <div
           ref={ref}
           className={cn(
-            "inline-flex items-center justify-center gap-2 rounded-small",
+            "inline-flex items-center justify-center gap-2 rounded-sm",
             className,
           )}
         >
@@ -52,14 +50,21 @@ export const User = forwardRef<HTMLDivElement, UserProps>(
       <div
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center gap-2 rounded-small outline-solid outline-transparent",
-          "data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2",
+          `
+            inline-flex items-center justify-center gap-2 rounded-sm
+            outline-transparent outline-solid
+          `,
+          `
+            data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2
+            data-[focus-visible=true]:outline-offset-2
+            data-[focus-visible=true]:outline-focus
+          `,
           classNames?.base,
           className,
         )}
         {...restProps}
       >
-        <Avatar name="" {...avatarProps} />
+        <Avatar {...avatarProps} />
         <div
           className={cn(
             "inline-flex flex-col items-start",
@@ -70,12 +75,7 @@ export const User = forwardRef<HTMLDivElement, UserProps>(
             {name}
           </span>
           {displayId && (
-            <span
-              className={cn(
-                "text-xs text-foreground-400",
-                classNames?.description,
-              )}
-            >
+            <span className={cn("text-xs text-muted", classNames?.description)}>
               @{displayId}
             </span>
           )}

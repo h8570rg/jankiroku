@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { Avatar } from "@/components/avatar";
-import { Dropdown, DropdownTrigger } from "@/components/dropdown";
+import { Dropdown } from "@/components/dropdown";
 import { serverServices } from "@/lib/services/server";
 import { AppbarAvatarMenu } from "./menu";
 
@@ -14,11 +14,13 @@ export async function AppbarAvatar() {
   }
 
   return (
-    <Dropdown placement="bottom-end">
-      <DropdownTrigger>
-        <Avatar as="button" className="transition-transform" size="sm" />
-      </DropdownTrigger>
-      <AppbarAvatarMenu name={profile.name} displayId={profile.displayId} />
+    <Dropdown>
+      <Dropdown.Trigger>
+        <Avatar className="transition-transform" size="sm" />
+      </Dropdown.Trigger>
+      <Dropdown.Popover className="min-w-60">
+        <AppbarAvatarMenu name={profile.name} displayId={profile.displayId} />
+      </Dropdown.Popover>
     </Dropdown>
   );
 }

@@ -1,7 +1,7 @@
+import { CircleQuestion } from "@gravity-ui/icons";
 import { Button } from "@/components/button";
-import { Icon } from "@/components/icon";
-import { ModalHeader } from "@/components/modal";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/popover";
+import { Modal } from "@/components/modal";
+import { Popover } from "@/components/popover";
 import { serverServices } from "@/lib/services/server";
 import { GameForm } from "../form";
 import { GameModalController } from "../modal-controller";
@@ -12,20 +12,20 @@ export async function GameModalRoot({ matchId }: { matchId: string }) {
 
   return (
     <GameModalController>
-      <ModalHeader className="flex justify-between">
-        <div>結果入力</div>
-        <Popover size="sm" color="secondary">
-          <PopoverTrigger>
-            <Button className="gap-1" variant="light" size="sm">
-              <span className="text-secondary underline">同点の場合</span>
-              <Icon className="size-4 fill-secondary" name="help" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="max-w-[280px] py-2">
-            点数が同じプレイヤーがいる場合、順番が先のプレイヤーの着順が上になります。名前の左のアイコンをドラッグ&ドロップして順番を変更できます。
-          </PopoverContent>
+      <Modal.Header className="flex flex-row items-center justify-between">
+        <Modal.Heading>結果入力</Modal.Heading>
+        <Popover>
+          <Button className="gap-1" variant="ghost" size="sm">
+            <span className="text-accent underline">同点の場合</span>
+            <CircleQuestion className="text-accent" />
+          </Button>
+          <Popover.Content className="max-w-[280px] bg-surface-secondary">
+            <Popover.Dialog>
+              点数が同じプレイヤーがいる場合、順番が先のプレイヤーの着順が上になります。名前の左のアイコンをドラッグ&ドロップして順番を変更できます。
+            </Popover.Dialog>
+          </Popover.Content>
         </Popover>
-      </ModalHeader>
+      </Modal.Header>
       <GameForm match={match} />
     </GameModalController>
   );

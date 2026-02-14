@@ -1,17 +1,13 @@
 "use client";
 
+import { EllipsisVertical } from "@gravity-ui/icons";
+import { type Key, Label } from "@heroui/react";
 import { Button } from "@/components/button";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@/components/dropdown";
-import { Icon } from "@/components/icon";
+import { Dropdown } from "@/components/dropdown";
 import { deleteFriends } from "./actions";
 
 export function FriendMenu({ profileId }: { profileId: string }) {
-  function handleAction(key: unknown) {
+  function handleAction(key: Key) {
     if (key === "delete") {
       deleteFriends(profileId).catch((e) => {
         throw e;
@@ -21,14 +17,16 @@ export function FriendMenu({ profileId }: { profileId: string }) {
 
   return (
     <Dropdown>
-      <DropdownTrigger>
-        <Button size="sm" variant="light" isIconOnly>
-          <Icon className="size-5 fill-current" name="more" />
-        </Button>
-      </DropdownTrigger>
-      <DropdownMenu aria-label="フレンドメニュー" onAction={handleAction}>
-        <DropdownItem key="delete">削除</DropdownItem>
-      </DropdownMenu>
+      <Button size="sm" variant="ghost" isIconOnly>
+        <EllipsisVertical />
+      </Button>
+      <Dropdown.Popover>
+        <Dropdown.Menu aria-label="フレンドメニュー" onAction={handleAction}>
+          <Dropdown.Item id="delete" variant="danger">
+            <Label>削除</Label>
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown.Popover>
     </Dropdown>
   );
 }

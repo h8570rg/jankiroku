@@ -1,4 +1,4 @@
-import { ModalHeader } from "@/components/modal";
+import { Modal } from "@/components/modal";
 import { serverServices } from "@/lib/services/server";
 import { ChipForm } from "../form";
 import { ChipModalController } from "../modal-controller";
@@ -9,7 +9,9 @@ export async function ChipModalRoot({ matchId }: { matchId: string }) {
 
   return (
     <ChipModalController>
-      <ModalHeader className="flex justify-between">チップ入力</ModalHeader>
+      <Modal.Header className="flex justify-between">
+        <Modal.Heading>チップ入力</Modal.Heading>
+      </Modal.Header>
       <ChipForm match={match} />
     </ChipModalController>
   );

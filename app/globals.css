@@ -1,21 +1,18 @@
 @import "tailwindcss";
-@plugin "./hero.ts";
-/* Note: You may need to change the path to fit your project structure */
-@source "../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
-@custom-variant dark (&:is(.dark *));
+@import "@heroui/styles";
+
+:root {
+  --accent: #7c3bed;
+  --radius: 0.15rem;
+  --field-radius: 0.5rem;
+}
 
 @theme {
   --font-rocknroll: var(--font-rocknroll-one);
 }
 
-@utility link {
-  @apply text-primary underline;
-}
-
-@utility heading-1 {
-  @apply text-base text-default-500;
-}
-
-@utility break-auto {
-  word-break: auto-phrase;
+@layer components {
+  .heading-1 {
+    @apply text-base text-muted;
+  }
 }

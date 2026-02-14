@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@heroui/react";
+import { Icon } from "@iconify/react";
 import { Button } from "@/components/button";
-import { GoogleIcon } from "@/components/social-provider-icon";
 import { getIsWebview } from "@/lib/utils/userAgent";
 import { signInWithGoogle } from "../login-form/actions";
 
@@ -15,33 +15,23 @@ export function SocialProviders({ className }: { className?: string }) {
       );
       return;
     }
-    signInWithGoogle().catch((e) => {
-      throw e;
-    });
+    signInWithGoogle();
   };
 
   return (
-    <ul className={cn("space-y-2", className)}>
-      <li className="w-full">
-        <Button
-          fullWidth
-          className="flex items-center justify-center gap-3"
-          variant="bordered"
-          onPress={handleGoogleClick}
-        >
-          <GoogleIcon className="w-5" />
-          <span>Google でログイン</span>
-        </Button>
-      </li>
-      <li className="w-full">
-        <Button
-          fullWidth
-          variant="bordered"
-          onPress={() => alert("開発中です、しばらくお待ちください")}
-        >
-          <span>ログインせずに始める</span>
-        </Button>
-      </li>
-    </ul>
+    <div className={cn("space-y-3", className)}>
+      <p>devicon</p>
+      <Button className="w-full" variant="tertiary" onPress={handleGoogleClick}>
+        <Icon icon="devicon:google" className="w-5" />
+        Google でログイン
+      </Button>
+      <Button
+        className="w-full"
+        variant="tertiary"
+        onPress={() => alert("開発中です、しばらくお待ちください")}
+      >
+        ログインせずに始める
+      </Button>
+    </div>
   );
 }

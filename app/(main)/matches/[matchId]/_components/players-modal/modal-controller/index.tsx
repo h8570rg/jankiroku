@@ -15,13 +15,24 @@ export function PlayersModalController({
 
   useEffect(() => {
     if (isDefaultOpen) {
-      playersModal.onOpen();
+      playersModal.open();
     }
-  }, [isDefaultOpen, playersModal.onOpen]);
+  }, [isDefaultOpen, playersModal]);
 
   return (
-    <Modal {...playersModal.bind} hideCloseButton>
-      {children}
-    </Modal>
+    <Modal.Backdrop
+      isOpen={playersModal.isOpen}
+      onOpenChange={(isOpen) => {
+        if (isOpen) {
+          playersModal.open();
+        } else {
+          playersModal.close();
+        }
+      }}
+    >
+      <Modal.Container>
+        <Modal.Dialog>{children}</Modal.Dialog>
+      </Modal.Container>
+    </Modal.Backdrop>
   );
 }
