@@ -1,17 +1,12 @@
 import Image from "next/image";
-import NextLink from "next/link";
-import { buttonVariants } from "@/components/button";
 import { Card } from "@/components/card";
 import Logo from "@/components/logo";
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from "@/components/navbar";
+import { Navbar, NavbarBrand, NavbarContent } from "@/components/navbar";
 import { SERVICE_NAME } from "@/lib/config";
 import match from "./_assets/match.png";
 import { Faq } from "./_components/Faq";
+import { HeroCtaLinks } from "./_components/HeroCtaLinks";
+import { NavbarActions } from "./_components/NavbarActions";
 
 const features = [
   {
@@ -90,14 +85,7 @@ export default function LandingPage() {
           <Logo className="text-lg" />
         </NavbarBrand>
         <NavbarContent as="div" justify="end">
-          <NavbarItem>
-            <NextLink
-              className={buttonVariants({ size: "sm", variant: "tertiary" })}
-              href="/login"
-            >
-              ログイン
-            </NextLink>
-          </NavbarItem>
+          <NavbarActions />
         </NavbarContent>
       </Navbar>
 
@@ -109,23 +97,7 @@ export default function LandingPage() {
             <br />
             あなたの麻雀ライフを快適に
           </p>
-          <div className="flex justify-center gap-4">
-            <NextLink
-              className={buttonVariants({ size: "lg", variant: "primary" })}
-              href="/login"
-            >
-              今すぐ始める
-            </NextLink>
-            <a
-              className={buttonVariants({
-                size: "lg",
-                variant: "outline",
-              })}
-              href="#features"
-            >
-              詳しく見る
-            </a>
-          </div>
+          <HeroCtaLinks />
           <div className="mx-auto mt-12 h-[480px] w-4/5 max-w-[500px]">
             <Image
               src={match}
