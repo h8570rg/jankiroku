@@ -7,13 +7,13 @@ export const ChipModalTrigger = forwardRef<
   HTMLButtonElement,
   React.ComponentPropsWithoutRef<"button">
 >(function ChipModalTrigger({ onClick, ...props }, ref) {
-  const { onOpen } = useMatchContext().chipModal;
+  const { open } = useMatchContext().chipModal;
 
   return (
     <button
       ref={ref}
       onClick={(e) => {
-        onOpen();
+        open();
         onClick?.(e);
       }}
       {...props}

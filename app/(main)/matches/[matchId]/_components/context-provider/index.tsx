@@ -1,6 +1,6 @@
 "use client";
 
-import { useModal } from "@/components/modal";
+import { useOverlayState } from "@/components/modal";
 import { MatchContext } from "../../context";
 
 export function MatchContextProvider({
@@ -8,11 +8,11 @@ export function MatchContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const playersModal = useModal();
-  const gameModal = useModal();
-  const chipModal = useModal();
-  const ruleModal = useModal();
-  const dataModal = useModal();
+  const playersModal = useOverlayState({ defaultOpen: false });
+  const gameModal = useOverlayState({ defaultOpen: false });
+  const chipModal = useOverlayState({ defaultOpen: false });
+  const ruleModal = useOverlayState({ defaultOpen: false });
+  const dataModal = useOverlayState({ defaultOpen: false });
 
   return (
     <MatchContext.Provider

@@ -1,15 +1,6 @@
 "use client";
 
-import { cn } from "@heroui/react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@/components/table";
-import type { Match } from "@/lib/type";
+import type { Match, MatchPlayer } from "@/lib/type";
 
 export function Summary({ match }: { match: Match }) {
   const columns = [
@@ -23,37 +14,23 @@ export function Summary({ match }: { match: Match }) {
   ];
 
   return (
-    <Table
-      classNames={{
-        wrapper: cn("p-0"),
-        th: cn("bg-inherit"),
-      }}
-    >
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
-      </TableHeader>
-      <TableBody items={match.players}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell className="break-all">
-                {(() => {
-                  switch (columnKey) {
-                    case "name":
-                      return item.name;
-                    case "rankCount":
-                      return item.rankCounts.join("-");
-                    case "averageRank":
-                      return item.averageRank;
-                    case "totalScore":
-                      return item.totalScore;
-                  }
-                })()}
-              </TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <table>
+      <thead>
+        <tr>
+          {columns.map((column) => (
+            <th key={column.uid}>{column.name}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {match.players.map((item) => (
+          <tr key={item.id}>
+            {columns.map((column) => (
+              <td key={column.uid}>{item[column.uid as keyof MatchPlayer]}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }

@@ -11,8 +11,19 @@ export function RuleModalController({
   const { ruleModal } = useMatchContext();
 
   return (
-    <Modal {...ruleModal.bind} hideCloseButton>
-      {children}
-    </Modal>
+    <Modal.Backdrop
+      isOpen={ruleModal.isOpen}
+      onOpenChange={(isOpen) => {
+        if (isOpen) {
+          ruleModal.open();
+        } else {
+          ruleModal.close();
+        }
+      }}
+    >
+      <Modal.Container>
+        <Modal.Dialog>{children}</Modal.Dialog>
+      </Modal.Container>
+    </Modal.Backdrop>
   );
 }

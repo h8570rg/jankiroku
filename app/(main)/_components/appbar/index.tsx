@@ -1,5 +1,5 @@
+import NextLink from "next/link";
 import { Suspense } from "react";
-import { Link } from "@/components/link";
 import Logo from "@/components/logo";
 import { Navbar, NavbarBrand, NavbarContent } from "@/components/navbar";
 import { Skeleton } from "@/components/skeleton";
@@ -10,9 +10,9 @@ export default function Appbar() {
     <Navbar shouldHideOnScroll>
       <NavbarContent>
         <NavbarBrand>
-          <Link color="foreground" href="/matches">
-            <Logo className="text-large" />
-          </Link>
+          <NextLink href="/matches">
+            <Logo className="text-lg" />
+          </NextLink>
         </NavbarBrand>
       </NavbarContent>
       <NavbarContent as="div" justify="end">

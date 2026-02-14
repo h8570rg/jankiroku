@@ -3,14 +3,14 @@
 import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { ArrowsExpandVertical } from "@gravity-ui/icons";
 import { cn } from "@heroui/react";
 import { useActionState, useCallback, useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Button } from "@/components/button";
-import { Icon } from "@/components/icon";
-import { Input } from "@/components/input";
-import { ModalBody, ModalFooter } from "@/components/modal";
-import { Select, SelectItem } from "@/components/select";
+import { Modal } from "@/components/modal";
+import { Select } from "@/components/select";
+import { TextField } from "@/components/text-field";
 import type { Match } from "@/lib/type";
 import { useMatchContext } from "../../../context";
 import { addGame } from "./actions";
@@ -75,13 +75,13 @@ export function GameForm({ match }: { match: Match }) {
 
   useEffect(() => {
     if (success) {
-      gameModal.onClose();
+      gameModal.close();
     }
   }, [gameModal, success]);
 
   return (
     <form className="contents" action={formAction}>
-      <ModalBody>
+      <Modal.Body className="p-1">
         <ul className="space-y-1">
           <DndContext onDragEnd={handleDragEnd}>
             <SortableContext items={fields}>
@@ -99,31 +99,32 @@ export function GameForm({ match }: { match: Match }) {
                             <input type="text" hidden {...field} />
                           )}
                         />
-                        <div className="shrink-0 grow text-small text-foreground">
+                        <div className="shrink-0 grow text-sm text-foreground">
                           {field.name}
                         </div>
                         <Controller
                           control={control}
                           name={`players.${index}.points`}
                           render={({ field }) => (
-                            <Input
+                            <TextField
+                              className="shrink-0 basis-[160px]"
                               classNames={{
-                                base: "basis-[160px] shrink-0",
                                 input:
-                                  "text-right placeholder:text-default-400",
+                                  "w-full text-right placeholder:text-default-400",
                               }}
-                              size="md"
+                              fullWidth
+                              variant="secondary"
                               type="number"
                               autoFocus={index === 0}
-                              startContent={
+                              prefix={
                                 isAutoFillAvailable &&
                                 points === "" && (
                                   <Button
-                                    variant="flat"
                                     size="sm"
-                                    radius="md"
-                                    color="secondary"
-                                    className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
+                                    className="
+                                      h-6 w-max min-w-0 shrink-0 gap-1 px-2
+                                      text-[10px]
+                                    "
                                     onPress={() => {
                                       setValue(
                                         name,
@@ -135,20 +136,18 @@ export function GameForm({ match }: { match: Match }) {
                                   </Button>
                                 )
                               }
-                              endContent={
-                                <div className="pointer-events-none flex shrink-0 items-center gap-1">
+                              suffix={
+                                <>
                                   <span
-                                    className={cn("mt-0.5 text-tiny", {
-                                      "text-default-400":
-                                        watch(`players.${index}.points`) === "",
+                                    className={cn("mt-0.5 mr-1 text-xs", {
+                                      "text-foreground":
+                                        watch(`players.${index}.points`) !== "",
                                     })}
                                   >
                                     00
                                   </span>
-                                  <span className="text-small text-default-400">
-                                    点
-                                  </span>
-                                </div>
+                                  点
+                                </>
                               }
                               {...field}
                             />
@@ -159,10 +158,7 @@ export function GameForm({ match }: { match: Match }) {
                           {...attributes}
                           {...listeners}
                         >
-                          <Icon
-                            className="size-5 fill-current"
-                            name="dragIndicator"
-                          />
+                          <ArrowsExpandVertical />
                         </div>
                       </div>
                     )}
@@ -173,7 +169,7 @@ export function GameForm({ match }: { match: Match }) {
           </DndContext>
         </ul>
         {errors?.players && (
-          <p className="whitespace-pre-wrap text-tiny text-danger">
+          <p className="text-xs whitespace-pre-wrap text-danger">
             {errors.players[0]}
           </p>
         )}
@@ -182,31 +178,31 @@ export function GameForm({ match }: { match: Match }) {
           name="crackBoxPlayerId"
           render={({ field }) => (
             <Select
-              classNames={{
-                base: "items-center",
-                label: "shrink-0 basis-[120px]",
-              }}
+              variant="secondary"
               label="飛ばした人"
-              labelPlacement="outside-left"
-              defaultSelectedKeys={[""]}
+              labelPlacement="outside"
+              defaultValue=""
               errorMessage={errors?.crackBoxPlayerId?.[0]}
+              items={[
+                { key: "", label: "なし" },
+                ...players.map((player) => ({
+                  key: player.id,
+                  label: player.name ?? "",
+                })),
+              ]}
               {...field}
-            >
-              {[{ id: "", name: "なし" }, ...players].map((player) => (
-                <SelectItem key={player.id}>{player.name}</SelectItem>
-              ))}
-            </Select>
+            />
           )}
         />
-      </ModalBody>
-      <ModalFooter>
-        <Button variant="light" onPress={gameModal.onClose}>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="ghost" onPress={gameModal.close}>
           キャンセル
         </Button>
-        <Button type="submit" color="primary" isLoading={isPending}>
+        <Button type="submit" variant="primary" isPending={isPending}>
           保存
         </Button>
-      </ModalFooter>
+      </Modal.Footer>
     </form>
   );
 }

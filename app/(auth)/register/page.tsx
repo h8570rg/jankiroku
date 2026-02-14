@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/button";
+import { linkVariants } from "@/components/link";
 import { serverServices } from "@/lib/services/server";
 import { RegisterForm } from "./_components/register-form";
 import { signOut } from "./_components/register-form/actions";
@@ -18,24 +18,23 @@ export default async function RegisterPage() {
   }
 
   return (
-    <>
-      <h1 className="mx-auto mb-2 w-fit text-large">ユーザー情報登録</h1>
-      <p className="mb-6 mt-4 text-small text-default-500">
+    <div className="mx-auto max-w-md">
+      <h1 className="mx-auto mb-4 w-fit text-lg">ユーザー情報登録</h1>
+      <p className="mb-6 text-sm text-muted">
         ユーザーIDと名前を決めてください。
         <br />
         ユーザーIDはユーザー検索に、名前は成績表に使用されます。
       </p>
       <RegisterForm userId={user.id} />
-      <form className="mt-10 flex justify-center" action={signOut}>
-        <Button
-          isLoading={false}
-          variant="light"
-          type="submit"
-          className="text-default-500 underline"
+      <div className="mt-10 flex justify-center">
+        <button
+          className={linkVariants().base()}
+          type="button"
+          onClick={signOut}
         >
           ログアウト
-        </Button>
-      </form>
-    </>
+        </button>
+      </div>
+    </div>
   );
 }

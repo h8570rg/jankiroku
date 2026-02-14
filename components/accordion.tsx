@@ -1,3 +1,1 @@
-"use client";
-
-export { Accordion, AccordionItem } from "@heroui/react";
+export { Accordion } from "@heroui/react";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal, ModalContent } from "@/components/modal";
+import { Modal } from "@/components/modal";
 import { useMatchContext } from "../../../context";
 
 export function ChipModalController({
@@ -11,14 +11,23 @@ export function ChipModalController({
   const { chipModal } = useMatchContext();
 
   return (
-    <Modal
-      {...chipModal.bind}
-      hideCloseButton
-      placement="bottom"
-      scrollBehavior="inside"
-      className="max-h-[calc(100%-2rem)]"
+    <Modal.Backdrop
+      isOpen={chipModal.isOpen}
+      onOpenChange={(isOpen) => {
+        if (isOpen) {
+          chipModal.open();
+        } else {
+          chipModal.close();
+        }
+      }}
     >
-      <ModalContent>{children}</ModalContent>
-    </Modal>
+      <Modal.Container
+        placement="bottom"
+        scroll="inside"
+        className="max-h-[calc(100%-2rem)]"
+      >
+        <Modal.Dialog>{children}</Modal.Dialog>
+      </Modal.Container>
+    </Modal.Backdrop>
   );
 }

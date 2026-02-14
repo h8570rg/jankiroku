@@ -1,14 +1,7 @@
 "use client";
 
 import { Button } from "@/components/button";
-import {
-  Modal,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  type ModalProps,
-  useModal,
-} from "@/components/modal";
+import { Modal, useOverlayState } from "@/components/modal";
 import {
   GameDeleteConfirmDialog,
   useGameDeleteConfirmDialog,
@@ -18,42 +11,55 @@ export function GameUpdateModal({
   matchId,
   gameId,
   index,
-  ...props
-}: Omit<ModalProps, "children"> & {
+  isOpen,
+  onOpenChange,
+}: {
   matchId: string;
   gameId: string;
   index: number;
+  isOpen?: boolean;
+  onOpenChange?: (isOpen: boolean) => void;
 }) {
   const gameDeleteConfirmDialog = useGameDeleteConfirmDialog();
   return (
     <>
-      <Modal {...props} hideCloseButton>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader>{index + 1}ゲーム目</ModalHeader>
-              <ModalFooter>
-                <Button
-                  className="mr-auto"
-                  color="danger"
-                  variant="flat"
-                  onPress={gameDeleteConfirmDialog.onOpen}
-                >
-                  削除
-                </Button>
-                <Button variant="light" onPress={onClose}>
-                  キャンセル
-                </Button>
-                <Button type="submit" color="primary" onPress={onClose}>
-                  OK
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
+        <Modal.Container>
+          <Modal.Dialog>
+            <Modal.Header>
+              <Modal.Heading>{index + 1}ゲーム目</Modal.Heading>
+            </Modal.Header>
+            <Modal.Footer>
+              <Button
+                className="mr-auto"
+                variant="danger"
+                onPress={gameDeleteConfirmDialog.open}
+              >
+                削除
+              </Button>
+              <Button variant="ghost" onPress={() => onOpenChange?.(false)}>
+                キャンセル
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                onPress={() => onOpenChange?.(false)}
+              >
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
       <GameDeleteConfirmDialog
-        {...gameDeleteConfirmDialog.bind}
+        isOpen={gameDeleteConfirmDialog.isOpen}
+        onOpenChange={(isOpen) => {
+          if (isOpen) {
+            gameDeleteConfirmDialog.open();
+          } else {
+            gameDeleteConfirmDialog.close();
+          }
+        }}
         matchId={matchId}
         gameId={gameId}
       />
@@ -61,4 +67,4 @@ export function GameUpdateModal({
   );
 }
 
-export { useModal as useGameUpdateModal };
+export { useOverlayState as useGameUpdateModal };

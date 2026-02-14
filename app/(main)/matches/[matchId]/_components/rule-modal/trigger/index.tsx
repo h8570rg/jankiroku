@@ -7,13 +7,13 @@ export const RuleModalTrigger = forwardRef<
   HTMLButtonElement,
   React.ComponentPropsWithoutRef<"button">
 >(function DataModalTrigger({ onClick, ...props }, ref) {
-  const { onOpen } = useMatchContext().ruleModal;
+  const { open } = useMatchContext().ruleModal;
 
   return (
     <button
       ref={ref}
       onClick={(e) => {
-        onOpen();
+        open();
         onClick?.(e);
       }}
       {...props}

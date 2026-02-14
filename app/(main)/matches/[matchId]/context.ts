@@ -1,22 +1,22 @@
 import { createContext, useContext } from "react";
-import type { UseModalReturn } from "@/components/modal";
+import type { useOverlayState } from "@/components/modal";
 
-const modalDefaultValue = {
+type UseOverlayStateReturn = ReturnType<typeof useOverlayState>;
+
+const modalDefaultValue: UseOverlayStateReturn = {
   isOpen: false,
-  onOpen: () => {},
-  onClose: () => {},
-  bind: {
-    isOpen: false,
-    onOpenChange: () => {},
-  },
+  open: () => {},
+  close: () => {},
+  toggle: () => {},
+  setOpen: () => {},
 };
 
 export const MatchContext = createContext<{
-  playersModal: UseModalReturn;
-  gameModal: UseModalReturn;
-  chipModal: UseModalReturn;
-  ruleModal: UseModalReturn;
-  dataModal: UseModalReturn;
+  playersModal: UseOverlayStateReturn;
+  gameModal: UseOverlayStateReturn;
+  chipModal: UseOverlayStateReturn;
+  ruleModal: UseOverlayStateReturn;
+  dataModal: UseOverlayStateReturn;
 }>({
   playersModal: modalDefaultValue,
   gameModal: modalDefaultValue,

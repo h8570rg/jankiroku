@@ -3,8 +3,8 @@
 import { useActionState, useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Button } from "@/components/button";
-import { Input } from "@/components/input";
-import { ModalBody, ModalFooter } from "@/components/modal";
+import { Modal } from "@/components/modal";
+import { TextField } from "@/components/text-field";
 import type { Match } from "@/lib/type";
 import { useMatchContext } from "../../../context";
 import { addChip } from "./actions";
@@ -51,13 +51,13 @@ export function ChipForm({ match }: { match: Match }) {
 
   useEffect(() => {
     if (success) {
-      chipModal.onClose();
+      chipModal.close();
     }
   }, [chipModal, success]);
 
   return (
     <form className="contents" action={formAction}>
-      <ModalBody>
+      <Modal.Body>
         <ul className="space-y-1">
           {fields.map((field, index) => (
             <li key={field.id} className="flex items-center gap-1">
@@ -66,30 +66,29 @@ export function ChipForm({ match }: { match: Match }) {
                 name={`playerChip.${index}.profileId`}
                 render={({ field }) => <input type="text" hidden {...field} />}
               />
-              <div className="shrink-0 grow text-small text-foreground">
+              <div className="shrink-0 grow text-sm text-foreground">
                 {players[index].name}
               </div>
               <Controller
                 control={control}
                 name={`playerChip.${index}.chipCount`}
                 render={({ field }) => (
-                  <Input
-                    labelPlacement="outside-left" // 中心ずれを防ぐ
+                  <TextField
+                    className="flex flex-row items-center gap-2"
                     classNames={{
-                      base: "basis-[160px] shrink-0",
                       input: "text-right placeholder:text-default-400",
                     }}
+                    variant="secondary"
                     type="number"
-                    size="lg"
-                    startContent={
+                    prefix={
                       isAutoFillAvailable &&
                       field.value === "" && (
                         <Button
-                          variant="flat"
+                          variant="secondary"
                           size="sm"
-                          radius="md"
-                          color="secondary"
-                          className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
+                          className="
+                            h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]
+                          "
                           onPress={() => {
                             setValue(field.name, String(-1 * totalChipCount));
                           }}
@@ -98,11 +97,7 @@ export function ChipForm({ match }: { match: Match }) {
                         </Button>
                       )
                     }
-                    endContent={
-                      <div className="pointer-events-none shrink-0">
-                        <span className="text-small text-default-400">枚</span>
-                      </div>
-                    }
+                    suffix="枚"
                     {...field}
                   />
                 )}
@@ -111,19 +106,19 @@ export function ChipForm({ match }: { match: Match }) {
           ))}
         </ul>
         {errors?.playerChip && (
-          <p className="whitespace-pre-wrap text-tiny text-danger">
+          <p className="text-xs whitespace-pre-wrap text-danger">
             {errors.playerChip[0]}
           </p>
         )}
-      </ModalBody>
-      <ModalFooter>
-        <Button variant="light" onPress={chipModal.onClose}>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="ghost" onPress={chipModal.close}>
           キャンセル
         </Button>
-        <Button type="submit" color="primary" isLoading={isPending}>
+        <Button type="submit" variant="primary" isPending={isPending}>
           保存
         </Button>
-      </ModalFooter>
+      </Modal.Footer>
     </form>
   );
 }

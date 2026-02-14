@@ -1,4 +1,4 @@
-import { ModalBody, ModalHeader } from "@/components/modal";
+import { Modal } from "@/components/modal";
 import { serverServices } from "@/lib/services/server";
 import { DataChart } from "../chart";
 import { DataModalController } from "../modal-controller";
@@ -10,11 +10,13 @@ export async function DataModalRoot({ matchId }: { matchId: string }) {
 
   return (
     <DataModalController>
-      <ModalHeader>データ</ModalHeader>
-      <ModalBody className="overflow-y-auto">
+      <Modal.Header>
+        <Modal.Heading>データ</Modal.Heading>
+      </Modal.Header>
+      <Modal.Body className="overflow-y-auto">
         <DataChart className="shrink-0" match={match} />
         <Summary match={match} />
-      </ModalBody>
+      </Modal.Body>
     </DataModalController>
   );
 }

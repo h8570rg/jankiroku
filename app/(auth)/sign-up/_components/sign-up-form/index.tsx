@@ -1,9 +1,10 @@
 "use client";
 
 import { cn } from "@heroui/react";
-import { useActionState, useId } from "react";
+import { useActionState } from "react";
 import { Button } from "@/components/button";
-import { Input } from "@/components/input";
+import { Form } from "@/components/form";
+import { TextField } from "@/components/text-field";
 import { signUp } from "./actions";
 
 /**
@@ -11,41 +12,28 @@ import { signUp } from "./actions";
  */
 export function SignUpForm({ className }: { className?: string }) {
   const [state, formAction, isPending] = useActionState(signUp, {});
-  const emailId = useId();
-  const passwordId = useId();
 
   return (
-    <form
-      className={cn("space-y-2.5 py-4", className)}
+    <Form
+      className={cn("space-y-4 py-4", className)}
       action={formAction}
-      noValidate
+      validationErrors={state.errors}
     >
-      <Input
-        id={emailId}
+      <TextField
         type="email"
         name="email"
         autoComplete="username"
-        required
         label="メールアドレス"
-        errorMessage={state.errors?.email?.[0]}
       />
-      <Input
+      <TextField
         label="パスワード"
-        id={passwordId}
         name="password"
         type="password"
         autoComplete="current-password"
-        required
-        errorMessage={state.errors?.password?.[0]}
       />
-      <Button
-        className="w-full"
-        color="primary"
-        type="submit"
-        isLoading={isPending}
-      >
+      <Button className="w-full" type="submit" isPending={isPending}>
         新規登録
       </Button>
-    </form>
+    </Form>
   );
 }

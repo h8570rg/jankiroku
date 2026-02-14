@@ -51,7 +51,7 @@ export function DataChart({
   return (
     <div
       className={cn(
-        "h-[300px] w-full rounded-large bg-content1 p-2 shadow-small",
+        "h-[300px] w-full rounded-lg bg-surface p-2 shadow-sm",
         className,
       )}
     >
@@ -69,7 +69,7 @@ export function DataChart({
           <ReferenceLine y={0} strokeDasharray="4 4" />
           <Legend
             formatter={(v) => (
-              <span className="text-small">
+              <span className="text-sm">
                 {match.players.find((player) => player.id === v)?.name}
               </span>
             )}

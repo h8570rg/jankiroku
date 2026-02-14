@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal, ModalContent } from "@/components/modal";
+import { Modal } from "@/components/modal";
 import { useMatchContext } from "../../../context";
 
 export function DataModalController({
@@ -11,14 +11,22 @@ export function DataModalController({
   const { dataModal } = useMatchContext();
 
   return (
-    <Modal
-      {...dataModal.bind}
-      scrollBehavior="inside"
-      classNames={{
-        body: "pb-6",
+    <Modal.Backdrop
+      isOpen={dataModal.isOpen}
+      onOpenChange={(isOpen) => {
+        if (isOpen) {
+          dataModal.open();
+        } else {
+          dataModal.close();
+        }
       }}
     >
-      <ModalContent>{children}</ModalContent>
-    </Modal>
+      <Modal.Container scroll="inside">
+        <Modal.Dialog className="[&_.modal__body]:pb-6">
+          <Modal.CloseTrigger />
+          {children}
+        </Modal.Dialog>
+      </Modal.Container>
+    </Modal.Backdrop>
   );
 }
