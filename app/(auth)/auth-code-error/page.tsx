@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@heroui/react";
 import NextLink from "next/link";
 import { buttonVariants } from "@/components/button";
