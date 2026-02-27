@@ -12,19 +12,23 @@ import { Modal } from "@/components/modal";
 import { TextField } from "@/components/text-field";
 import type { Match } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
-import { useMatchContext } from "../../../context";
 import { addChip } from "./actions";
 import { addChipSchema } from "./schema";
 
-export function ChipForm({ match }: { match: Match }) {
+export function ChipForm({
+  match,
+  onOpenChange,
+}: {
+  match: Match;
+  onOpenChange: (isOpen: boolean) => void;
+}) {
   const formRef = useRef<HTMLFormElement>(null);
-  const { chipModal } = useMatchContext();
   const { players, rule } = match;
 
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(addChip, {
       onSuccess() {
-        chipModal.close();
+        onOpenChange(false);
       },
     }),
     null,
@@ -123,7 +127,7 @@ export function ChipForm({ match }: { match: Match }) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="ghost" onPress={chipModal.close}>
+        <Button variant="ghost" onPress={() => onOpenChange(false)}>
           キャンセル
         </Button>
         <Button type="submit" variant="primary" isPending={isPending}>

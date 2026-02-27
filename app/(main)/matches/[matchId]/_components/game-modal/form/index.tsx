@@ -15,19 +15,23 @@ import { Select } from "@/components/select";
 import { TextField } from "@/components/text-field";
 import type { Match } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
-import { useMatchContext } from "../../../context";
 import { addGame } from "./actions";
 import { addGameFormSchema } from "./schema";
 
-export function GameForm({ match }: { match: Match }) {
+export function GameForm({
+  match,
+  onOpenChange,
+}: {
+  match: Match;
+  onOpenChange: (isOpen: boolean) => void;
+}) {
   const formRef = useRef<HTMLFormElement>(null);
-  const gameModal = useMatchContext().gameModal;
 
   const { rule } = match;
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(addGame.bind(null, match.id, rule, match.players.length), {
       onSuccess() {
-        gameModal.close();
+        onOpenChange(false);
       },
     }),
     null,
@@ -202,7 +206,7 @@ export function GameForm({ match }: { match: Match }) {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="ghost" onPress={gameModal.close}>
+        <Button variant="ghost" onPress={() => onOpenChange(false)}>
           キャンセル
         </Button>
         <Button type="submit" variant="primary" isPending={isPending}>

@@ -1,12 +1,7 @@
 import { Suspense } from "react";
-import { ChipModal } from "./_components/chip-modal";
-import { MatchContextProvider } from "./_components/context-provider";
-import { DataModal } from "./_components/data-modal";
-import { GameModal } from "./_components/game-modal";
+import { serverServices } from "@/lib/services/server";
 import { MatchHeader } from "./_components/match-header";
 import { MatchTable } from "./_components/match-table";
-import { PlayersModal } from "./_components/players-modal";
-import { RuleModal } from "./_components/rule-modal";
 
 export default async function Match({
   params,
@@ -14,32 +9,18 @@ export default async function Match({
   params: Promise<{ matchId: string }>;
 }) {
   const { matchId } = await params;
-
-  // Modalの開閉のたびに実行されるのでここでfetchしないこと
+  const { getFriends, getMatch } = await serverServices();
+  const [friends, match] = await Promise.all([
+    getFriends(),
+    getMatch({ matchId }),
+  ]);
 
   return (
-    <MatchContextProvider>
-      <div className="flex h-full flex-col">
-        <MatchHeader />
-        <Suspense fallback={null}>
-          <MatchTable className="grow" matchId={matchId} />
-        </Suspense>
-        <Suspense fallback={null}>
-          <PlayersModal matchId={matchId} />
-        </Suspense>
-        <Suspense fallback={null}>
-          <GameModal matchId={matchId} />
-        </Suspense>
-        <Suspense fallback={null}>
-          <ChipModal matchId={matchId} />
-        </Suspense>
-        <Suspense fallback={null}>
-          <RuleModal matchId={matchId} />
-        </Suspense>
-        <Suspense fallback={null}>
-          <DataModal matchId={matchId} />
-        </Suspense>
-      </div>
-    </MatchContextProvider>
+    <div className="flex h-full flex-col">
+      <MatchHeader match={match} friends={friends} matchId={matchId} />
+      <Suspense fallback={null}>
+        <MatchTable className="grow" matchId={matchId} />
+      </Suspense>
+    </div>
   );
 }

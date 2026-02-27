@@ -3,10 +3,10 @@ import { cn } from "@heroui/react";
 import type { CSSProperties } from "react";
 import { serverServices } from "@/lib/services/server";
 import type { MatchPlayer } from "@/lib/type";
-import { ChipModalTrigger } from "../chip-modal";
-import { GameModalTrigger } from "../game-modal";
-import { PlayersModalTrigger } from "../players-modal";
+import { ChipRow } from "./chip-row";
+import { GameModalSection } from "./game-modal-section";
 import { GameRow } from "./game-row";
+import { PlayersRow } from "./players-row";
 
 type Column = {
   id: string;
@@ -27,8 +27,11 @@ export async function MatchTable({
   matchId: string;
   className?: string;
 }) {
-  const { getMatch } = await serverServices();
-  const [match] = await Promise.all([getMatch({ matchId })]);
+  const { getFriends, getMatch } = await serverServices();
+  const [friends, match] = await Promise.all([
+    getFriends(),
+    getMatch({ matchId }),
+  ]);
   const { rule, players } = match;
   const { playersCount } = rule;
 
@@ -77,9 +80,13 @@ export async function MatchTable({
     <div className={cn(className, "overflow-x-auto pb-4")}>
       <div className="flex h-full min-w-fit flex-col">
         {/* ヘッダー */}
-        <PlayersModalTrigger
+        <PlayersRow
           style={rowStyle}
           className="mb-1 rounded-3xl bg-surface text-muted"
+          matchId={matchId}
+          friends={friends}
+          players={players}
+          isDefaultOpen={players.length <= 1}
         >
           <div />
           {columns.map((column) => (
@@ -87,7 +94,7 @@ export async function MatchTable({
               {column.name}
             </div>
           ))}
-        </PlayersModalTrigger>
+        </PlayersRow>
         {/* ボディ */}
         <div className="grow">
           {gameRows.length === 0 && (
@@ -130,16 +137,17 @@ export async function MatchTable({
                 ))}
               </GameRow>
             ))}
-          <GameModalTrigger
+          <GameModalSection
+            match={match}
+            isPlayersShort={isPlayersShort}
             className="mt-1"
             fullWidth
             size="lg"
             variant="outline"
-            isPlayersShort={isPlayersShort}
           >
             <Pencil />
             結果を入力する
-          </GameModalTrigger>
+          </GameModalSection>
         </div>
         {/* フッター */}
         <div className="mt-3 rounded-3xl bg-surface text-muted">
@@ -169,7 +177,7 @@ export async function MatchTable({
               </div>
             ))}
           </div>
-          <ChipModalTrigger className="min-h-10" style={rowStyle}>
+          <ChipRow className="min-h-10" style={rowStyle} match={match}>
             <div
               className="
                 flex h-full items-center justify-center truncate px-1 text-xs
@@ -191,7 +199,7 @@ export async function MatchTable({
                 )}
               </div>
             ))}
-          </ChipModalTrigger>
+          </ChipRow>
           <div className="min-h-10" style={rowStyle}>
             <div
               className="

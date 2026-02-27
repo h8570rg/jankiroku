@@ -12,7 +12,6 @@ import { ScrollShadow } from "@/components/scroll-shadow";
 import { SearchField } from "@/components/search-field";
 import { User } from "@/components/user";
 import type { Profile } from "@/lib/type";
-import { useMatchContext } from "../../../context";
 import { searchProfiles, updateMatchPlayers } from "./actions";
 import { ProfileCreateModal } from "./profile-create-modal";
 
@@ -20,12 +19,13 @@ export function PlayersModalContent({
   matchId,
   friends,
   players,
+  onOpenChange,
 }: {
   matchId: string;
   friends: Profile[];
   players: Profile[];
+  onOpenChange: (isOpen: boolean) => void;
 }) {
-  const { playersModal } = useMatchContext();
   const [searchedProfiles, setSearchedProfiles] = useState<Profile[] | null>(
     null,
   );
@@ -208,7 +208,7 @@ export function PlayersModalContent({
             })
               .then(() => {
                 setIsPending(false);
-                playersModal.close();
+                onOpenChange(false);
               })
               .catch((e) => {
                 throw e;
