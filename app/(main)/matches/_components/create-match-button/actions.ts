@@ -1,83 +1,60 @@
 "use server";
 
+import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 import { serverServices } from "@/lib/services/server";
-import { schema } from "@/lib/utils/schema";
+import { createMatchSchema } from "./schema";
 
-type State = {
-  errors?: {
-    base?: string[];
-    playersCount?: string[];
-    incline?: string[];
-    customIncline?: string[];
-    rate?: string[];
-    chipRate?: string[];
-    crackBoxBonus?: string[];
-    defaultPoints?: string[];
-    defaultCalcPoints?: string[];
-    calcMethod?: string[];
+export async function createMatch(_prevState: unknown, formData: FormData) {
+  const submission = parseSubmission(formData);
+  const payload = submission.payload;
+
+  const inclineFormData = payload.incline;
+  const getCustomIncline = (): Record<string, string> | undefined => {
+    if (inclineFormData !== "custom") return undefined;
+    const raw = payload.customIncline as Record<string, unknown> | undefined;
+    const get = (key: string) =>
+      raw?.[key] ??
+      payload[`customIncline.${key}`] ??
+      formData.get(`customIncline.${key}`) ??
+      "";
+    return {
+      incline1: String(get("incline1")),
+      incline2: String(get("incline2")),
+      incline3: String(get("incline3")),
+      incline4: String(get("incline4")),
+    };
   };
-};
-
-const createMatchSchema = z.object({
-  playersCount: schema.playersCount,
-  incline: schema.incline,
-  customIncline: schema.customIncline,
-  rate: schema.rate,
-  chipRate: schema.chipRate,
-  crackBoxBonus: schema.crackBoxBonus,
-  defaultPoints: schema.defaultPoints,
-  defaultCalcPoints: schema.defaultCalcPoints,
-  calcMethod: schema.calcMethod,
-});
-
-export type InputSchema = z.input<typeof createMatchSchema>;
-
-export async function createMatch(
-  _prevState: State,
-  formData: FormData,
-): Promise<State> {
-  const inclineFormData = formData.get("incline");
   const validatedFields = createMatchSchema.safeParse({
-    playersCount: formData.get("playersCount"),
+    playersCount: payload.playersCount,
     incline: inclineFormData,
-    customIncline:
-      inclineFormData === "custom"
-        ? {
-            incline1: formData.get("customIncline.incline1"),
-            incline2: formData.get("customIncline.incline2"),
-            incline3: formData.get("customIncline.incline3"),
-            incline4: formData.get("customIncline.incline4"),
-          }
-        : {
-            incline1: "0", // validationを通すためにダミーの値を入れる。実際には使われない。
-            incline2: "0",
-            incline3: "0",
-            incline4: "0",
-          },
-    rate: formData.get("rate"),
-    chipRate: formData.get("chipRate"),
-    crackBoxBonus: formData.get("crackBoxBonus"),
-    defaultPoints: formData.get("defaultPoints"),
-    defaultCalcPoints: formData.get("defaultCalcPoints"),
-    calcMethod: formData.get("calcMethod"),
+    customIncline: getCustomIncline(),
+    rate: payload.rate,
+    chipRate: payload.chipRate,
+    crackBoxBonus: payload.crackBoxBonus,
+    defaultPoints: payload.defaultPoints,
+    defaultCalcPoints: payload.defaultCalcPoints,
+    calcMethod: payload.calcMethod,
   });
 
   if (!validatedFields.success) {
-    const flattened = z.flattenError(validatedFields.error);
-    return {
-      errors: flattened.fieldErrors,
-    };
+    return report(submission, {
+      error: { issues: validatedFields.error.issues },
+    });
   }
 
   const { incline, customIncline, ...restData } = validatedFields.data;
 
   const { createMatch } = await serverServices();
 
+  const inclineValue =
+    incline === "custom" && customIncline !== undefined
+      ? customIncline
+      : incline;
+
   const { id } = await createMatch({
-    incline: incline === "custom" ? customIncline : incline,
+    incline: inclineValue,
     ...restData,
   });
 

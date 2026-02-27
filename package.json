@@ -31,11 +31,11 @@
     "supabase:type": "supabase gen types typescript --linked > lib/database.types.ts"
   },
   "dependencies": {
-    "@dnd-kit/sortable": "10.0.0",
+    "@conform-to/react": "1.17.0",
+    "@conform-to/zod": "1.17.0",
     "@gravity-ui/icons": "2.16.0",
     "@heroui/react": "3.0.0-beta.6",
     "@heroui/styles": "3.0.0-beta.6",
-    "@hookform/resolvers": "5.2.2",
     "@iconify/react": "6.0.2",
     "@supabase/ssr": "0.8.0",
     "@supabase/supabase-js": "2.95.3",
@@ -47,7 +47,6 @@
     "postcss": "8.5.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-hook-form": "7.71.1",
     "recharts": "3.7.0",
     "sharp": "0.34.5",
     "swr": "2.4.0",

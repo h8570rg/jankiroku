@@ -9,36 +9,41 @@
     "rules": {
       "recommended": true,
       "correctness": {
-        "noUnusedImports": {
-          "level": "error",
-          "fix": "safe"
-        },
-        "noUnusedFunctionParameters": {
-          "level": "error",
-          "fix": "safe"
-        }
+        "noUnusedImports": { "level": "error", "fix": "safe" },
+        "noUnusedFunctionParameters": { "level": "error", "fix": "safe" }
       },
-      "suspicious": {
-        "noUnknownAtRules": {
-          "level": "warn"
+      "suspicious": { "noUnknownAtRules": { "level": "warn" } },
+      "style": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "react-hook-form": {
+                "importNames": ["Form"],
+                "message": "Formは@/components/formからimportしてください"
+              },
+              "@heroui/react": {
+                "importNames": ["Form"],
+                "message": "Formは@/components/formからimportしてください"
+              }
+            }
+          }
         }
       }
     }
   },
-  "formatter": {
-    "indentStyle": "space"
-  },
+  "formatter": { "indentStyle": "space" },
   "assist": {
     "enabled": true,
-    "actions": {
-      "source": {
-        "organizeImports": "on"
+    "actions": { "source": { "organizeImports": "on" } }
+  },
+  "css": { "parser": { "tailwindDirectives": true } },
+  "overrides": [
+    {
+      "includes": ["lib/utils/form.ts", "components/form.tsx"],
+      "linter": {
+        "rules": { "style": { "noRestrictedImports": { "level": "off" } } }
       }
     }
-  },
-  "css": {
-    "parser": {
-      "tailwindDirectives": true
-    }
-  }
+  ]
 }

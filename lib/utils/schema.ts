@@ -11,21 +11,20 @@ import {
 } from "@/lib/config";
 
 export const schema = {
-  email: z.email("メールアドレスを正しい形式で入力してください"),
+  email: z
+    .string("メールアドレスを入力してください")
+    .pipe(z.email("メールアドレスを正しい形式で入力してください")),
   password: z
-    .string()
-    .min(1, "パスワードを入力してください")
+    .string("パスワードを入力してください")
     .min(
       PASSWORD_MIN_LENGTH,
       `パスワードは${PASSWORD_MIN_LENGTH}文字以上で入力してください`,
     ),
   name: z
-    .string()
-    .min(1, "名前を入力してください")
+    .string("名前を入力してください")
     .max(NAME_MAX_LENGTH, `名前は${NAME_MAX_LENGTH}文字以内で入力してください`),
   displayId: z
-    .string()
-    .min(1, "ユーザーIDを入力してください")
+    .string("ユーザーIDを入力してください")
     .min(
       DISPLAY_ID_MIN_LENGTH,
       `ユーザーIDは${DISPLAY_ID_MIN_LENGTH}文字以上で入力してください`,
@@ -37,18 +36,9 @@ export const schema = {
     .regex(/^[a-zA-Z0-9]+$/, "ユーザーIDは半角英数字のみで入力してください"),
   calcMethod: z.enum(calcMethods),
   chipRate: z.string().transform((v) => chipRates[Number(v)]),
-  crackBoxBonus: z
-    .string()
-    .min(1, "飛び賞を入力してください")
-    .transform(Number),
-  defaultCalcPoints: z
-    .string()
-    .min(1, "オカを入力してください")
-    .transform(Number),
-  defaultPoints: z
-    .string()
-    .min(1, "持ち点を入力してください")
-    .transform(Number),
+  crackBoxBonus: z.string("飛び賞を入力してください").transform(Number),
+  defaultCalcPoints: z.string("オカを入力してください").transform(Number),
+  defaultPoints: z.string("持ち点を入力してください").transform(Number),
   matchId: z.string(),
   profileId: z.string(),
   playersCount: z.union([z.literal("4"), z.literal("3")]).transform(Number),

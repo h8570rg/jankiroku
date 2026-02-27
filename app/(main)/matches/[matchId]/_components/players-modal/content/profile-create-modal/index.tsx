@@ -1,10 +1,16 @@
+"use client";
+
+import { useForm } from "@conform-to/react/future";
 import { useActionState } from "react";
 import { Button } from "@/components/button";
+import { Form } from "@/components/form";
 import { Modal } from "@/components/modal";
 import { TextField } from "@/components/text-field";
 import { NAME_MAX_LENGTH } from "@/lib/config";
 import type { Profile } from "@/lib/type";
-import { createProfile, type State } from "./actions";
+import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
+import { createProfile } from "./actions";
+import { createProfileSchema } from "./schema";
 
 export function ProfileCreateModal({
   isOpen,
@@ -15,26 +21,34 @@ export function ProfileCreateModal({
   onClose?: () => void;
   onProfileCreate: (profile: Profile) => void;
 }) {
-  const [state, formAction, isPending] = useActionState(
-    async (prevState: State, formData: FormData) => {
-      const result = await createProfile(prevState, formData);
-      const player = result.data;
-      if (player) {
-        onProfileCreate(player);
+  const [lastResult, formAction, isPending] = useActionState(
+    withCallbacks(createProfile, {
+      onSuccess(result) {
+        const raw = (result as { targetValue?: { data?: string } })?.targetValue
+          ?.data;
+        if (typeof raw === "string") {
+          try {
+            const profile = JSON.parse(raw) as Profile;
+            onProfileCreate(profile);
+          } catch {
+            // ignore
+          }
+        }
         onClose?.();
-      }
-      return result;
-    },
-    {},
+      },
+    }),
+    null,
   );
+  const { form, fields } = useForm(createProfileSchema, {
+    lastResult,
+    onSubmit: createSubmitHandler(formAction),
+  });
 
   return (
     <Modal.Backdrop
       isOpen={isOpen}
-      onOpenChange={(isOpen) => {
-        if (!isOpen) {
-          onClose?.();
-        }
+      onOpenChange={(open) => {
+        if (!open) onClose?.();
       }}
     >
       <Modal.Container placement="center" className="max-w-[80%]">
@@ -42,12 +56,15 @@ export function ProfileCreateModal({
           <Modal.Header>
             <Modal.Heading>プレイヤー名入力</Modal.Heading>
           </Modal.Header>
-          <form action={formAction} noValidate className="contents">
+          <Form
+            className="contents"
+            validationErrors={form.fieldErrors}
+            {...form.props}
+          >
             <Modal.Body>
               <TextField
                 variant="secondary"
-                name="name"
-                errorMessage={state.errors?.name} // TODO: errorsを渡すのか、errorを渡すのかとういつ確認
+                name={fields.name.name}
                 description={`${NAME_MAX_LENGTH}文字以内で入力してください`}
                 maxLength={NAME_MAX_LENGTH}
               />
@@ -57,7 +74,7 @@ export function ProfileCreateModal({
                 決定
               </Button>
             </Modal.Footer>
-          </form>
+          </Form>
         </Modal.Dialog>
       </Modal.Container>
     </Modal.Backdrop>

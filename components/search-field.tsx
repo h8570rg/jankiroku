@@ -10,7 +10,6 @@ export type SearchFieldProps = Omit<HeroUiSearchFieldProps, "isInvalid"> & {
   label?: string;
   description?: string;
   placeholder?: string;
-  errorMessage?: React.ReactNode;
   required?: boolean;
 };
 
@@ -18,16 +17,11 @@ export function SearchField({
   label,
   description,
   placeholder,
-  errorMessage,
   required,
   ...props
 }: SearchFieldProps) {
   return (
-    <HeroUiSearchField
-      isInvalid={!!errorMessage}
-      isRequired={required}
-      {...props}
-    >
+    <HeroUiSearchField isRequired={required} {...props}>
       <Label>{label}</Label>
       <HeroUiSearchField.Group>
         <HeroUiSearchField.SearchIcon />
@@ -35,7 +29,7 @@ export function SearchField({
         <HeroUiSearchField.ClearButton />
       </HeroUiSearchField.Group>
       <Description>{description}</Description>
-      <FieldError>{errorMessage}</FieldError>
+      <FieldError />
     </HeroUiSearchField>
   );
 }

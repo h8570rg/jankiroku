@@ -1,198 +1,204 @@
 "use client";
 
-import { DndContext, type DragEndEvent } from "@dnd-kit/core";
-import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { ArrowsExpandVertical } from "@gravity-ui/icons";
+import {
+  parseSubmission,
+  useForm,
+  useFormData,
+} from "@conform-to/react/future";
+import { ChevronDown, ChevronUp } from "@gravity-ui/icons";
 import { cn } from "@heroui/react";
-import { useActionState, useCallback, useEffect } from "react";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { useActionState, useRef } from "react";
 import { Button } from "@/components/button";
+import { Form } from "@/components/form";
 import { Modal } from "@/components/modal";
 import { Select } from "@/components/select";
 import { TextField } from "@/components/text-field";
 import type { Match } from "@/lib/type";
+import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { useMatchContext } from "../../../context";
 import { addGame } from "./actions";
-
-type Schema = {
-  players: {
-    id: string;
-    name: string | null;
-    points?: string;
-  }[];
-  crackBoxPlayerId?: string;
-};
+import { addGameFormSchema } from "./schema";
 
 export function GameForm({ match }: { match: Match }) {
+  const formRef = useRef<HTMLFormElement>(null);
   const gameModal = useMatchContext().gameModal;
 
   const { rule } = match;
-  const [{ errors, success }, formAction, isPending] = useActionState(
-    addGame.bind(null, match.id, rule, match.players.length),
-    {},
+  const [lastResult, formAction, isPending] = useActionState(
+    withCallbacks(addGame.bind(null, match.id, rule, match.players.length), {
+      onSuccess() {
+        gameModal.close();
+      },
+    }),
+    null,
   );
 
-  const { control, watch, setValue } = useForm<Schema>({
-    defaultValues: {
+  const { form, fields, intent } = useForm(addGameFormSchema, {
+    lastResult,
+    onSubmit: createSubmitHandler(formAction),
+    defaultValue: {
       players: match.players.map((player) => ({
         id: player.id,
-        name: player.name,
         points: "",
       })),
     },
   });
 
-  const { fields, move } = useFieldArray<Schema>({
-    control,
-    name: "players",
-  });
-
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      const { active, over } = event;
-      if (over && active.id !== over.id) {
-        const oldIndex = fields.findIndex((field) => field.id === active.id);
-        const newIndex = fields.findIndex((field) => field.id === over.id);
-        move(oldIndex, newIndex);
-      }
-    },
-    [fields, move],
+  const payload = useFormData(
+    formRef,
+    (fd) => (fd ? parseSubmission(fd).payload : null),
+    { fallback: null },
   );
-
-  const players = watch("players");
-
-  const isAutoFillAvailable =
-    players.filter(({ points }) => points !== "").length ===
-    rule.playersCount - 1;
-
-  const totalPoints = players.reduce(
-    (sum, { points }) => sum + Number(points),
-    0,
+  const playerList = Array.isArray(payload?.players)
+    ? payload.players
+    : payload?.players && typeof payload.players === "object"
+      ? Object.keys(payload.players)
+          .sort((a, b) => Number(a) - Number(b))
+          .map((i) => (payload.players as Record<string, unknown>)[i])
+      : [];
+  const pointsList = playerList.map((item: unknown) =>
+    String((item as Record<string, unknown>)?.points ?? ""),
   );
+  const totalPoints = pointsList.reduce((sum, v) => sum + (Number(v) || 0), 0);
+  const totalPointsToBe = rule.defaultPoints * rule.playersCount;
+  const filledCount = pointsList.filter((v) => v !== "").length;
+  const isAutoFillAvailable = filledCount === rule.playersCount - 1;
 
-  const totalPointsToBe = (rule.defaultPoints * rule.playersCount) / 100;
-
-  useEffect(() => {
-    if (success) {
-      gameModal.close();
-    }
-  }, [gameModal, success]);
+  const playerListFields = fields.players.getFieldList();
 
   return (
-    <form className="contents" action={formAction}>
+    <Form
+      ref={formRef}
+      className="contents"
+      validationErrors={form.fieldErrors}
+      {...form.props}
+    >
       <Modal.Body className="p-1">
         <ul className="space-y-1">
-          <DndContext onDragEnd={handleDragEnd}>
-            <SortableContext items={fields}>
-              {fields.map((field, index) => {
-                const name = `players.${index}.points` as const;
-                const points = watch(name);
-                return (
-                  <SortableItem key={field.id} id={field.id}>
-                    {({ attributes, listeners }) => (
-                      <div className="flex items-center gap-1">
-                        <Controller
-                          control={control}
-                          name={`players.${index}.id`}
-                          render={({ field }) => (
-                            <input type="text" hidden {...field} />
-                          )}
-                        />
-                        <div className="shrink-0 grow text-sm text-foreground">
-                          {field.name}
-                        </div>
-                        <Controller
-                          control={control}
-                          name={`players.${index}.points`}
-                          render={({ field }) => (
-                            <TextField
-                              className="shrink-0 basis-[160px]"
-                              classNames={{
-                                input:
-                                  "w-full text-right placeholder:text-default-400",
-                              }}
-                              fullWidth
-                              variant="secondary"
-                              type="number"
-                              autoFocus={index === 0}
-                              prefix={
-                                isAutoFillAvailable &&
-                                points === "" && (
-                                  <Button
-                                    size="sm"
-                                    className="
-                                      h-6 w-max min-w-0 shrink-0 gap-1 px-2
-                                      text-[10px]
-                                    "
-                                    onPress={() => {
-                                      setValue(
-                                        name,
-                                        String(totalPointsToBe - totalPoints),
-                                      );
-                                    }}
-                                  >
-                                    残り入力
-                                  </Button>
-                                )
-                              }
-                              suffix={
-                                <>
-                                  <span
-                                    className={cn("mt-0.5 mr-1 text-xs", {
-                                      "text-foreground":
-                                        watch(`players.${index}.points`) !== "",
-                                    })}
-                                  >
-                                    00
-                                  </span>
-                                  点
-                                </>
-                              }
-                              {...field}
-                            />
-                          )}
-                        />
-                        <div
-                          className="flex w-6 shrink-0 touch-none items-center"
-                          {...attributes}
-                          {...listeners}
-                        >
-                          <ArrowsExpandVertical />
-                        </div>
-                      </div>
-                    )}
-                  </SortableItem>
-                );
-              })}
-            </SortableContext>
-          </DndContext>
+          {playerListFields.map((item, index) => {
+            const fieldset = item.getFieldset();
+            const points = pointsList[index] ?? "";
+            return (
+              <li key={item.key} className="flex items-center gap-1">
+                <input
+                  type="hidden"
+                  name={fieldset.id.name}
+                  value={(playerList[index] as { id?: string })?.id ?? ""}
+                />
+                <div className="shrink-0 grow text-sm text-foreground">
+                  {match.players.find(
+                    (p) => p.id === (playerList[index] as { id?: string })?.id,
+                  )?.name ?? ""}
+                </div>
+                <TextField
+                  className="shrink-0 basis-[160px]"
+                  classNames={{
+                    input: "w-full text-right placeholder:text-default-400",
+                  }}
+                  fullWidth
+                  variant="secondary"
+                  type="number"
+                  name={fieldset.points.name}
+                  autoFocus={index === 0}
+                  prefix={
+                    isAutoFillAvailable && points === "" ? (
+                      <Button
+                        size="sm"
+                        className="
+                          h-6 w-max min-w-0 shrink-0 gap-1 px-2
+                          text-[10px]
+                        "
+                        type="button"
+                        variant="secondary"
+                        onPress={() => {
+                          const remainder = totalPointsToBe - totalPoints;
+                          intent.update({
+                            name: fields.players.name,
+                            index,
+                            value: {
+                              id:
+                                (playerList[index] as { id?: string })?.id ??
+                                "",
+                              points: String(remainder),
+                            },
+                          });
+                        }}
+                      >
+                        残り入力
+                      </Button>
+                    ) : undefined
+                  }
+                  suffix={
+                    <>
+                      <span
+                        className={cn("mt-0.5 mr-1 text-xs", {
+                          "text-foreground": points !== "",
+                        })}
+                      >
+                        00
+                      </span>
+                      点
+                    </>
+                  }
+                />
+                <div className="flex shrink-0 flex-col gap-0">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    className="min-w-0 p-1"
+                    isIconOnly
+                    isDisabled={index === 0}
+                    onPress={() => {
+                      intent.reorder({
+                        name: fields.players.name,
+                        from: index,
+                        to: index - 1,
+                      });
+                    }}
+                  >
+                    <ChevronUp />
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    className="min-w-0 p-1"
+                    isIconOnly
+                    isDisabled={index === playerListFields.length - 1}
+                    onPress={() => {
+                      intent.reorder({
+                        name: fields.players.name,
+                        from: index,
+                        to: index + 1,
+                      });
+                    }}
+                  >
+                    <ChevronDown />
+                  </Button>
+                </div>
+              </li>
+            );
+          })}
         </ul>
-        {errors?.players && (
+        {form.fieldErrors?.players?.[0] && (
           <p className="text-xs whitespace-pre-wrap text-danger">
-            {errors.players[0]}
+            {form.fieldErrors.players[0]}
           </p>
         )}
-        <Controller
-          control={control}
-          name="crackBoxPlayerId"
-          render={({ field }) => (
-            <Select
-              variant="secondary"
-              label="飛ばした人"
-              labelPlacement="outside"
-              defaultValue=""
-              errorMessage={errors?.crackBoxPlayerId?.[0]}
-              items={[
-                { key: "", label: "なし" },
-                ...players.map((player) => ({
-                  key: player.id,
-                  label: player.name ?? "",
-                })),
-              ]}
-              {...field}
-            />
-          )}
+        <Select
+          variant="secondary"
+          label="飛ばした人"
+          labelPlacement="outside"
+          name={fields.crackBoxPlayerId.name}
+          defaultValue=""
+          items={[
+            { key: "", label: "なし" },
+            ...match.players.map((player) => ({
+              key: player.id,
+              label: player.name ?? "",
+            })),
+          ]}
         />
       </Modal.Body>
       <Modal.Footer>
@@ -203,32 +209,6 @@ export function GameForm({ match }: { match: Match }) {
           保存
         </Button>
       </Modal.Footer>
-    </form>
-  );
-}
-
-type UseSortableReturn = Omit<
-  ReturnType<typeof useSortable>,
-  "setNodeRef" | "transform" | "transition"
->;
-
-export function SortableItem({
-  id,
-  children,
-}: {
-  id: string;
-  children: (props: UseSortableReturn) => React.ReactNode;
-}) {
-  const { setNodeRef, transform, transition, ...rest } = useSortable({ id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
-  return (
-    <li ref={setNodeRef} style={style}>
-      {children({ ...rest })}
-    </li>
+    </Form>
   );
 }

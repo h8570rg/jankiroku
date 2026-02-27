@@ -1,9 +1,9 @@
 "use client";
 
+import { useForm, useFormData } from "@conform-to/react/future";
 import { ChevronDown } from "@gravity-ui/icons";
-import { cn, ErrorMessage } from "@heroui/react";
-import { useActionState, useId } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { cn } from "@heroui/react";
+import { useActionState, useRef } from "react";
 import { Accordion } from "@/components/accordion";
 import { Button, ButtonGroup } from "@/components/button";
 import { Form } from "@/components/form";
@@ -21,9 +21,11 @@ import {
   rateLabel,
   rates,
 } from "@/lib/config";
-import { createMatch, type InputSchema } from "./actions";
+import { createSubmitHandler } from "@/lib/utils/form";
+import { createMatch } from "./actions";
+import { type CreateMatchInput, createMatchSchema } from "./schema";
 
-const playersCount4DefaultValues: InputSchema = {
+const playersCount4DefaultValues: CreateMatchInput = {
   playersCount: "4",
   crackBoxBonus: "10000",
   defaultPoints: "25000",
@@ -40,7 +42,7 @@ const playersCount4DefaultValues: InputSchema = {
   chipRate: "0",
 };
 
-const playersCount3DefaultValues: InputSchema = {
+const playersCount3DefaultValues: CreateMatchInput = {
   playersCount: "3",
   crackBoxBonus: "10000",
   defaultPoints: "35000",
@@ -59,22 +61,28 @@ const playersCount3DefaultValues: InputSchema = {
 
 export function CreateMatchButton({ className }: { className?: string }) {
   const ruleCreateModal = useOverlayState();
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const [state, formAction, isPending] = useActionState(createMatch, {});
-  const { errors } = state;
+  const [lastResult, formAction, isPending] = useActionState(createMatch, null);
 
-  const { reset, control, watch } = useForm<InputSchema>({
-    defaultValues: playersCount4DefaultValues,
+  const { form, fields, intent } = useForm(createMatchSchema, {
+    lastResult,
+    onSubmit: createSubmitHandler(formAction),
+    defaultValue: playersCount4DefaultValues,
   });
 
-  const playersCount = watch("playersCount");
-  const incline = watch("incline");
+  const playersCount = useFormData(
+    formRef,
+    (fd) => fd?.get("playersCount") ?? "4",
+    { fallback: "4" },
+  );
+  const incline = useFormData(
+    formRef,
+    (fd) => fd?.get("incline") ?? "0_0_0_0",
+    { fallback: "0_0_0_0" },
+  );
   const inclineOption =
     playersCount === "4" ? inclineFor4PlayersLabel : inclineFor3PlayersLabel;
-
-  const formId = useId();
-
-  console.debug(errors);
 
   return (
     <>
@@ -97,170 +105,122 @@ export function CreateMatchButton({ className }: { className?: string }) {
             </Modal.Header>
             <Modal.Body>
               <Form
+                ref={formRef}
                 className="space-y-4"
-                id={formId}
-                action={formAction}
-                validationErrors={errors}
+                validationErrors={form.fieldErrors}
+                {...form.props}
               >
-                <Controller
-                  control={control}
-                  name="playersCount"
-                  render={({ field: { onChange, value, name } }) => (
-                    <>
-                      <ButtonGroup fullWidth>
-                        <Button
-                          variant={value === "4" ? "primary" : "secondary"}
-                          onPress={() => {
-                            onChange("4");
-                            reset(playersCount4DefaultValues);
-                          }}
+                <ButtonGroup fullWidth>
+                  <Button
+                    variant={playersCount === "4" ? "primary" : "secondary"}
+                    type="button"
+                    onPress={() => {
+                      intent.reset({
+                        defaultValue: playersCount4DefaultValues,
+                      });
+                    }}
+                  >
+                    四麻
+                  </Button>
+                  <Button
+                    variant={playersCount === "3" ? "primary" : "secondary"}
+                    type="button"
+                    onPress={() => {
+                      intent.reset({
+                        defaultValue: playersCount3DefaultValues,
+                      });
+                    }}
+                  >
+                    三麻
+                  </Button>
+                </ButtonGroup>
+                <input
+                  type="hidden"
+                  name={fields.playersCount.name}
+                  value={playersCount}
+                />
+                <Slider
+                  label="レート"
+                  name={fields.rate.name}
+                  maxValue={rates.length - 1}
+                  outputProps={{
+                    children: ({ state }) =>
+                      rateLabel[rates[Number(state.values)]],
+                  }}
+                  defaultValue={0}
+                />
+                <Slider
+                  label="チップ"
+                  name={fields.chipRate.name}
+                  maxValue={chipRates.length - 1}
+                  outputProps={{
+                    children: ({ state }) =>
+                      chipRateLabel[chipRates[Number(state.values)]],
+                  }}
+                  defaultValue={0}
+                />
+                <Select
+                  label="ウマ"
+                  variant="secondary"
+                  name={fields.incline.name}
+                  items={Object.entries(inclineOption).map(([key, value]) => ({
+                    key,
+                    label: value,
+                  }))}
+                  defaultValue={incline}
+                />
+                {incline === "custom" &&
+                  (() => {
+                    const customInclineFields =
+                      fields.customIncline.getFieldset();
+                    return (
+                      <div className="py-2">
+                        <div
+                          className="
+                          flex gap-1
+                          *:min-w-0
+                        "
                         >
-                          四麻
-                        </Button>
-                        <Button
-                          variant={value === "3" ? "primary" : "secondary"}
-                          onPress={() => {
-                            onChange("3");
-                            reset(playersCount3DefaultValues);
-                          }}
-                        >
-                          三麻
-                        </Button>
-                      </ButtonGroup>
-                      <input
-                        type="number"
-                        hidden
-                        name={name}
-                        value={value}
-                        readOnly
-                      />
-                    </>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="rate"
-                  render={({ field: { onChange, value, ...field } }) => (
-                    <Slider
-                      label="レート"
-                      maxValue={rates.length - 1}
-                      outputProps={{
-                        children: ({ state }) =>
-                          rateLabel[rates[Number(state.values)]],
-                      }}
-                      onChange={(v) => {
-                        onChange(String(v));
-                      }}
-                      value={Number(value)}
-                      {...field}
-                    />
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="chipRate"
-                  render={({ field: { onChange, value, ...field } }) => (
-                    <Slider
-                      label="チップ"
-                      maxValue={chipRates.length - 1}
-                      outputProps={{
-                        children: ({ state }) =>
-                          chipRateLabel[chipRates[Number(state.values)]],
-                      }}
-                      onChange={(v) => {
-                        onChange(String(v));
-                      }}
-                      value={Number(value)}
-                      {...field}
-                    />
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="incline"
-                  render={({ field: { value, ...field } }) => (
-                    <Select
-                      label="ウマ"
-                      variant="secondary"
-                      items={Object.entries(inclineOption).map(
-                        ([key, value]) => ({
-                          key,
-                          label: value,
-                        }),
-                      )}
-                      defaultValue={value}
-                      {...field}
-                    />
-                  )}
-                />
-                {incline === "custom" && (
-                  <div className="py-2">
-                    <div
-                      className="
-                        flex gap-1
-                        *:min-w-0
-                      "
-                    >
-                      <Controller
-                        control={control}
-                        name="customIncline.incline1"
-                        render={({ field }) => (
                           <TextField
                             type="number"
                             label="1着"
                             placeholder="10"
                             variant="secondary"
-                            {...field}
+                            name={customInclineFields.incline1.name}
                           />
-                        )}
-                      />
-                      <Controller
-                        control={control}
-                        name="customIncline.incline2"
-                        render={({ field }) => (
                           <TextField
                             type="number"
                             label="2着"
                             placeholder={playersCount === "4" ? "5" : "0"}
                             variant="secondary"
-                            {...field}
+                            name={customInclineFields.incline2.name}
                           />
-                        )}
-                      />
-                      <Controller
-                        control={control}
-                        name="customIncline.incline3"
-                        render={({ field }) => (
                           <TextField
                             type="number"
                             label="3着"
                             placeholder={playersCount === "4" ? "-5" : "-10"}
                             variant="secondary"
-                            {...field}
+                            name={customInclineFields.incline3.name}
                           />
-                        )}
-                      />
-                      <Controller
-                        control={control}
-                        name="customIncline.incline4"
-                        render={({ field }) => (
                           <TextField
                             className={cn({
                               hidden: playersCount === "3",
                             })}
-                            hidden={playersCount === "3"}
                             type="number"
                             label="4着"
                             placeholder="-10"
                             variant="secondary"
-                            {...field}
+                            name={customInclineFields.incline4.name}
                           />
+                        </div>
+                        {form.fieldErrors?.customIncline?.[0] && (
+                          <p className="text-sm text-danger">
+                            {form.fieldErrors.customIncline[0]}
+                          </p>
                         )}
-                      />
-                    </div>
-                    <ErrorMessage>{errors?.customIncline?.[0]}</ErrorMessage>
-                  </div>
-                )}
+                      </div>
+                    );
+                  })()}
                 <Accordion>
                   <Accordion.Item>
                     <Accordion.Heading>
@@ -273,60 +233,39 @@ export function CreateMatchButton({ className }: { className?: string }) {
                     </Accordion.Heading>
                     <Accordion.Panel>
                       <div className="space-y-3 px-1">
-                        <Controller
-                          control={control}
-                          name="crackBoxBonus"
-                          render={({ field }) => (
-                            <TextField
-                              type="number"
-                              label="飛び賞"
-                              variant="secondary"
-                              suffix="点"
-                              {...field}
-                            />
-                          )}
+                        <TextField
+                          type="number"
+                          label="飛び賞"
+                          variant="secondary"
+                          suffix="点"
+                          name={fields.crackBoxBonus.name}
+                          defaultValue={fields.crackBoxBonus.defaultValue}
                         />
-                        <Controller
-                          control={control}
-                          name="defaultPoints"
-                          render={({ field }) => (
-                            <TextField
-                              type="number"
-                              label="持ち点"
-                              variant="secondary"
-                              suffix="点"
-                              {...field}
-                            />
-                          )}
+                        <TextField
+                          type="number"
+                          label="持ち点"
+                          variant="secondary"
+                          suffix="点"
+                          name={fields.defaultPoints.name}
+                          defaultValue={fields.defaultPoints.defaultValue}
                         />
-                        <Controller
-                          control={control}
-                          name="defaultCalcPoints"
-                          render={({ field }) => (
-                            <TextField
-                              type="number"
-                              label="オカ"
-                              variant="secondary"
-                              suffix="点"
-                              {...field}
-                            />
-                          )}
+                        <TextField
+                          type="number"
+                          label="オカ"
+                          variant="secondary"
+                          suffix="点"
+                          name={fields.defaultCalcPoints.name}
+                          defaultValue={fields.defaultCalcPoints.defaultValue}
                         />
-                        <Controller
-                          control={control}
-                          name="calcMethod"
-                          render={({ field: { value, ...field } }) => (
-                            <Select
-                              label="計算"
-                              variant="secondary"
-                              items={calcMethods.map((calcMethod) => ({
-                                key: calcMethod,
-                                label: calcMethodLabel[calcMethod],
-                              }))}
-                              defaultValue={value}
-                              {...field}
-                            />
-                          )}
+                        <Select
+                          label="計算"
+                          variant="secondary"
+                          name={fields.calcMethod.name}
+                          items={calcMethods.map((calcMethod) => ({
+                            key: calcMethod,
+                            label: calcMethodLabel[calcMethod],
+                          }))}
+                          defaultValue={fields.calcMethod.defaultValue}
                         />
                       </div>
                     </Accordion.Panel>
@@ -339,7 +278,7 @@ export function CreateMatchButton({ className }: { className?: string }) {
                 キャンセル
               </Button>
               <Button
-                form={formId}
+                form={form.props.id}
                 variant="primary"
                 type="submit"
                 isPending={isPending}

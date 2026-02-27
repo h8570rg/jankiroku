@@ -1,18 +1,16 @@
 "use client";
 
 import { PersonPlus } from "@gravity-ui/icons";
-import { useActionState, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import { useDebouncedCallback } from "use-debounce";
 import { Button } from "@/components/button";
-import { Form } from "@/components/form";
 import { Modal, useOverlayState } from "@/components/modal";
 import { ScrollShadow } from "@/components/scroll-shadow";
 import { SearchField } from "@/components/search-field";
 import { User } from "@/components/user";
 import { browserServices } from "@/lib/services/browser";
-import { withCallbacks } from "@/lib/utils/form";
-import { addFriends } from "./actions";
+import { AddFriendButton } from "./add-friend-button";
 
 export function AddButton() {
   const addModalState = useOverlayState();
@@ -31,20 +29,11 @@ export function AddButton() {
   const handleSearch = useDebouncedCallback((value: string) => {
     setQuery(value);
   }, 300);
-  6;
-  const handleAdd = () => {
+
+  const handleAddSuccess = () => {
     setQuery("");
     addModalState.close();
   };
-
-  const [_, formAction, isPending] = useActionState(
-    withCallbacks(addFriends, {
-      onSuccess: () => {
-        handleAdd();
-      },
-    }),
-    null,
-  );
 
   return (
     <>
@@ -99,17 +88,10 @@ export function AddButton() {
                           追加済み
                         </div>
                       ) : (
-                        <Form action={formAction}>
-                          <input type="hidden" name="profileId" value={id} />
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            type="submit"
-                            isPending={isPending} // TODO: 全部がisPendingになってしまう
-                          >
-                            追加
-                          </Button>
-                        </Form>
+                        <AddFriendButton
+                          profileId={id}
+                          onSuccess={handleAddSuccess}
+                        />
                       )}
                     </li>
                   ))}

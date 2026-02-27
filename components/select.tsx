@@ -13,14 +13,12 @@ type SelectProps = {
     key: string;
     label: string;
   }[];
-  errorMessage?: React.ReactNode;
   labelPlacement?: "inside" | "outside";
 } & Omit<HeroUiSelectProps<{ value: string }>, "items">;
 
 export function Select({
   label,
   items,
-  errorMessage,
   labelPlacement = "inside",
   className,
   ...props
@@ -54,7 +52,7 @@ export function Select({
           ))}
         </ListBox>
       </HeroUiSelect.Popover>
-      <FieldError>{errorMessage}</FieldError>
+      <FieldError />
     </HeroUiSelect>
   );
 }

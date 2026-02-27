@@ -1,5 +1,6 @@
 "use server";
 
+import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { serverServices } from "@/lib/services/server";
@@ -7,14 +8,32 @@ import type { Rule } from "@/lib/type";
 import { schema } from "@/lib/utils/schema";
 import { calcPlayerScores } from "@/lib/utils/score";
 
-type AddGameState = {
-  success?: boolean;
-  errors?: {
-    base?: string[];
-    players?: string[];
-    crackBoxPlayerId?: string[];
-  };
-};
+function ensurePlayersArray(
+  payload: Record<string, unknown>,
+): { id: string; points: string }[] {
+  const raw = payload.players;
+  if (Array.isArray(raw)) {
+    return raw.map((item) => ({
+      id: String((item as Record<string, unknown>)?.id ?? ""),
+      points: String((item as Record<string, unknown>)?.points ?? ""),
+    }));
+  }
+  if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+    return Object.keys(raw)
+      .sort((a, b) => Number(a) - Number(b))
+      .map((i) => {
+        const item = (raw as Record<string, unknown>)[i] as Record<
+          string,
+          unknown
+        >;
+        return {
+          id: String(item?.id ?? ""),
+          points: String(item?.points ?? ""),
+        };
+      });
+  }
+  return [];
+}
 
 const addGameSchema = z
   .object({
@@ -68,41 +87,34 @@ const addGameSchema = z
     }
   });
 
-export type AddGameInputSchema = z.input<typeof addGameSchema>;
-
 export async function addGame(
   matchId: string,
   rule: Rule,
-  totalPlayersCount: number,
-  _prevState: AddGameState,
+  _totalPlayersCount: number,
+  _prevState: unknown,
   formData: FormData,
-): Promise<AddGameState> {
-  const players = Array.from({ length: totalPlayersCount }).map((_, i) => {
-    return {
-      id: formData.get(`players.${i}.id`),
-      points: formData.get(`players.${i}.points`),
-    };
-  });
+) {
+  const submission = parseSubmission(formData);
+  const players = ensurePlayersArray(submission.payload);
 
   const validatedFields = addGameSchema.safeParse({
     players,
     playersCount: rule.playersCount,
     defaultPoints: rule.defaultPoints,
-    crackBoxPlayerId: formData.get("crackBoxPlayerId"),
+    crackBoxPlayerId: submission.payload.crackBoxPlayerId,
   });
 
   if (!validatedFields.success) {
-    const flattened = z.flattenError(validatedFields.error);
-    return {
-      errors: flattened.fieldErrors,
-    };
+    return report(submission, {
+      error: { issues: validatedFields.error.issues },
+    });
   }
 
   const { createGame } = await serverServices();
 
   const playerScores = calcPlayerScores({
     players: validatedFields.data.players.filter(
-      (players) => players.points !== undefined,
+      (p) => p.points !== undefined,
     ) as { id: string; points: number }[],
     rule,
     crackBoxPlayerId: validatedFields.data.crackBoxPlayerId,
@@ -115,7 +127,5 @@ export async function addGame(
 
   revalidatePath(`/matches/${matchId}`);
 
-  return {
-    success: true,
-  };
+  return report(submission, {});
 }

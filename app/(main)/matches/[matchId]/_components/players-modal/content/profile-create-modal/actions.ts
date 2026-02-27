@@ -1,44 +1,28 @@
 "use server";
 
-import { z } from "zod";
+import { parseSubmission, report } from "@conform-to/react/future";
 import { serverServices } from "@/lib/services/server";
-import type { Profile } from "@/lib/type";
-import { schema } from "@/lib/utils/schema";
+import { createProfileSchema } from "./schema";
 
-export type State = {
-  errors?: {
-    name?: string[];
-  };
-  data?: Profile;
-};
+export async function createProfile(_prevState: unknown, formData: FormData) {
+  const submission = parseSubmission(formData);
+  const result = createProfileSchema.safeParse(submission.payload);
 
-const createProfileSchema = z.object({
-  name: schema.name,
-});
-
-export async function createProfile(
-  _prevState: State,
-  formData: FormData,
-): Promise<State> {
-  const validatedFields = createProfileSchema.safeParse({
-    name: formData.get("name"),
-  });
-
-  if (!validatedFields.success) {
-    const flattened = z.flattenError(validatedFields.error);
-    return {
-      errors: flattened.fieldErrors,
-    };
+  if (!result.success) {
+    return report(submission, {
+      error: {
+        issues: result.error.issues,
+      },
+    });
   }
+  const { name } = result.data;
 
-  const { name } = validatedFields.data;
-
-  const { createProfile } = await serverServices();
-  const profile = await createProfile({
+  const { createProfile: createProfileService } = await serverServices();
+  const profile = await createProfileService({
     name,
   });
 
-  return {
-    data: profile,
-  };
+  return report(submission, {
+    value: { data: JSON.stringify(profile) },
+  });
 }

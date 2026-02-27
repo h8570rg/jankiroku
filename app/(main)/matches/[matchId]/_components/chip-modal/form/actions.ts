@@ -1,79 +1,68 @@
 "use server";
 
+import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 import { serverServices } from "@/lib/services/server";
-import { schema } from "@/lib/utils/schema";
+import { addChipSchema } from "./schema";
 
-export type AddChipState = {
-  success?: boolean;
-  errors?: {
-    base?: string[];
-    playerChip?: string[];
-  };
-};
-
-const addChipSchema = z
-  .object({
-    playerChip: z.array(
-      z.object({
-        profileId: schema.profileId,
-        chipCount: z.string().transform(Number),
-      }),
-    ),
-  })
-  .superRefine(({ playerChip }, ctx) => {
-    const total = playerChip.reduce((acc, { chipCount }) => {
-      return acc + (chipCount ?? 0);
-    }, 0);
-    if (total !== 0) {
-      ctx.addIssue({
-        code: "custom",
-        message: `チップの合計が0枚なるように入力してください\n現在: ${total.toLocaleString()}枚`,
-        path: ["playerChip"],
+function ensurePlayerChipArray(
+  payload: Record<string, unknown>,
+): { profileId: string; chipCount: string }[] {
+  const raw = payload.playerChip;
+  if (Array.isArray(raw)) {
+    return raw.map((item) => ({
+      profileId: String((item as Record<string, unknown>)?.profileId ?? ""),
+      chipCount: String((item as Record<string, unknown>)?.chipCount ?? ""),
+    }));
+  }
+  if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+    return Object.keys(raw)
+      .sort((a, b) => Number(a) - Number(b))
+      .map((i) => {
+        const item = (raw as Record<string, unknown>)[i] as Record<
+          string,
+          unknown
+        >;
+        return {
+          profileId: String(item?.profileId ?? ""),
+          chipCount: String(item?.chipCount ?? ""),
+        };
       });
-    }
-  });
+  }
+  return [];
+}
 
-export async function addChip(
-  matchId: string,
-  totalPlayersCount: number,
-  _prevState: AddChipState,
-  formData: FormData,
-): Promise<AddChipState> {
-  const playerChip = Array.from({ length: totalPlayersCount }).map((_, i) => {
-    return {
-      profileId: formData.get(`playerChip.${i}.profileId`),
-      chipCount: formData.get(`playerChip.${i}.chipCount`),
-    };
-  });
+export async function addChip(_prevState: unknown, formData: FormData) {
+  const submission = parseSubmission(formData);
+  const matchId = submission.payload.matchId;
+  if (typeof matchId !== "string") {
+    return report(submission, {
+      error: { formErrors: ["無効なリクエストです。"] },
+    });
+  }
 
-  const validatedFields = addChipSchema.safeParse({
-    playerChip,
-  });
+  const playerChip = ensurePlayerChipArray(submission.payload);
+  const result = addChipSchema.safeParse({ playerChip });
 
-  if (!validatedFields.success) {
-    const flattened = z.flattenError(validatedFields.error);
-    return {
-      errors: flattened.fieldErrors,
-    };
+  if (!result.success) {
+    return report(submission, {
+      error: { issues: result.error.issues },
+    });
   }
 
   const { updateMatchPlayer } = await serverServices();
 
   await Promise.all(
-    validatedFields.data.playerChip.map((playerChip) =>
+    result.data.playerChip.map((row) =>
       updateMatchPlayer({
         matchId,
-        playerId: playerChip.profileId,
-        chipCount: playerChip.chipCount,
+        playerId: row.profileId,
+        chipCount: row.chipCount,
       }),
     ),
   );
 
   revalidatePath(`/matches/${matchId}`);
 
-  return {
-    success: true,
-  };
+  return report(submission, {});
 }

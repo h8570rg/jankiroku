@@ -11,7 +11,6 @@ export type TextFieldProps = Omit<HeroUiTextFieldProps, "isInvalid"> & {
   label?: string;
   description?: string;
   placeholder?: string;
-  errorMessage?: React.ReactNode;
   required?: boolean;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
@@ -42,9 +41,7 @@ export function TextField({
         {suffix && <InputGroup.Suffix>{suffix}</InputGroup.Suffix>}
       </InputGroup>
       <Description>{description}</Description>
-      <FieldError>
-        {(validation) => validation.validationErrors?.[0]}
-      </FieldError>
+      <FieldError />
     </HeroUiTextField>
   );
 }

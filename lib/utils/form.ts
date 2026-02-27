@@ -1,10 +1,5 @@
-type ActionState =
-  | {
-      message?: string;
-      success?: boolean;
-    }
-  | null
-  | undefined;
+import type { SubmissionResult } from "@conform-to/react/future";
+import { startTransition } from "react";
 
 type Callbacks<T, R = unknown> = {
   onStart?: () => R;
@@ -15,27 +10,49 @@ type Callbacks<T, R = unknown> = {
 
 export const withCallbacks = <
   Args extends unknown[],
-  T extends ActionState,
+  T extends SubmissionResult,
   R = unknown,
 >(
   fn: (...args: Args) => Promise<T>,
-  callbacks: Callbacks<T, R>,
+  callbacks?: Callbacks<T, R>,
 ): ((...args: Args) => Promise<T>) => {
   return async (...args: Args) => {
     const promise = fn(...args);
-    const reference = callbacks.onStart?.();
+    const reference = callbacks?.onStart?.();
     const result = await promise;
 
     if (reference) {
-      callbacks.onEnd?.(reference);
+      callbacks?.onEnd?.(reference);
     }
-    if (result?.success) {
-      callbacks.onSuccess?.(result);
+    if (!result.error) {
+      callbacks?.onSuccess?.(result);
     }
-    if (!result?.success) {
-      callbacks.onError?.(result);
+    if (result.error) {
+      callbacks?.onError?.(result);
     }
 
     return result;
+  };
+};
+
+/**
+ * Conform useFormのonSubmitで使用する共通ハンドラー。
+ * preventDefault、formData取得、startTransitionでformActionを実行する。
+ */
+export const createSubmitHandler = (
+  formAction: (formData: FormData) => void,
+) => {
+  return (
+    event: React.SyntheticEvent,
+    context?: {
+      formData?: FormData;
+    },
+  ): void => {
+    event.preventDefault();
+    const formData =
+      context?.formData ?? new FormData(event.target as HTMLFormElement);
+    startTransition(() => {
+      formAction(formData);
+    });
   };
 };

@@ -1,45 +1,27 @@
 "use server";
 
+import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { schema } from "@/lib/utils/schema";
 import { getURL } from "@/lib/utils/url";
-
-type State = {
-  errors?: {
-    base?: string[];
-    email?: string[];
-    password?: string[];
-  };
-};
-
-const signInEmailSchema = z.object({
-  email: schema.email,
-  password: schema.password,
-});
+import { signInEmailSchema } from "./schema";
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
-export async function signInEmail(
-  _prevState: State,
-  formData: FormData,
-): Promise<State> {
-  const validatedFields = signInEmailSchema.safeParse({
-    email: formData.get("email"),
-    password: formData.get("password"),
-  });
+export async function signInEmail(_prevState: unknown, formData: FormData) {
+  const submission = parseSubmission(formData);
+  const result = signInEmailSchema.safeParse(submission.payload);
 
-  if (!validatedFields.success) {
-    const flattened = z.flattenError(validatedFields.error);
-    return {
-      errors: flattened.fieldErrors,
-    };
+  if (!result.success) {
+    return report(submission, {
+      error: {
+        issues: result.error.issues,
+      },
+    });
   }
-
-  const { email, password } = validatedFields.data;
+  const { email, password } = result.data;
 
   const supabase = await createClient();
 
@@ -49,11 +31,11 @@ export async function signInEmail(
   });
 
   if (error) {
-    return {
-      errors: {
-        base: ["メールアドレスまたはパスワードが間違っています。"],
+    return report(submission, {
+      error: {
+        formErrors: ["メールアドレスまたはパスワードが間違っています。"],
       },
-    };
+    });
   }
 
   revalidatePath("/", "layout");

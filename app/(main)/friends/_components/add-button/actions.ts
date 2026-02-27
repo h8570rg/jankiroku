@@ -3,15 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { serverServices } from "@/lib/services/server";
 
-export async function addFriends(_prevState: unknown, formData: FormData) {
-  const profileId = formData.get("profileId") as string;
-
-  const { addFriends } = await serverServices();
-
-  await addFriends({ profileId });
+export async function addFriends(profileId: string) {
+  const { addFriends: addFriendsService } = await serverServices();
+  await addFriendsService({ profileId });
 
   revalidatePath("/friends");
-  return {
-    success: true,
-  };
 }
