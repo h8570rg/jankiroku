@@ -8,4 +8,5 @@ export async function addFriends(profileId: string) {
   await addFriendsService({ profileId });
 
   revalidatePath("/friends");
+  revalidatePath("/friends/add");
 }
