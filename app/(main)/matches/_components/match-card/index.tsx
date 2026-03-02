@@ -1,5 +1,7 @@
+import { Avatar } from "@heroui/react";
+import { UserRound } from "lucide-react";
 import NextLink from "next/link";
-import { Avatar, AvatarGroup } from "@/components/avatar";
+import { AvatarGroup } from "@/components/avatar";
 import { Card, cardVariants } from "@/components/card";
 import { Separator } from "@/components/separator";
 import type { Match } from "@/lib/type";
@@ -25,7 +27,11 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
           <p>{displayDate}</p>
           <AvatarGroup>
             {match.players.map((player) => (
-              <Avatar key={player.id} />
+              <Avatar key={player.id}>
+                <Avatar.Fallback>
+                  <UserRound />
+                </Avatar.Fallback>
+              </Avatar>
             ))}
           </AvatarGroup>
         </div>

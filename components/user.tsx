@@ -1,6 +1,6 @@
-import { cn } from "@heroui/react";
+import { Avatar, type AvatarProps, cn } from "@heroui/react";
+import { UserRound } from "lucide-react";
 import { type ComponentPropsWithoutRef, forwardRef } from "react";
-import { Avatar, type AvatarProps } from "@/components/avatar";
 import { Skeleton } from "@/components/skeleton";
 
 export type UserProps = ComponentPropsWithoutRef<"div"> & {
@@ -64,7 +64,11 @@ export const User = forwardRef<HTMLDivElement, UserProps>(
         )}
         {...restProps}
       >
-        <Avatar {...avatarProps} />
+        <Avatar {...avatarProps}>
+          <Avatar.Fallback>
+            <UserRound />
+          </Avatar.Fallback>
+        </Avatar>
         <div
           className={cn(
             "inline-flex flex-col items-start",

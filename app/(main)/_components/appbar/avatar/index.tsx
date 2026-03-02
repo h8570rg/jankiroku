@@ -1,5 +1,6 @@
+import { Avatar } from "@heroui/react";
+import { UserRound } from "lucide-react";
 import { redirect } from "next/navigation";
-import { Avatar } from "@/components/avatar";
 import { Dropdown } from "@/components/dropdown";
 import { serverServices } from "@/lib/services/server";
 import { AppbarAvatarMenu } from "./menu";
@@ -16,7 +17,11 @@ export async function AppbarAvatar() {
   return (
     <Dropdown>
       <Dropdown.Trigger>
-        <Avatar className="transition-transform" size="sm" />
+        <Avatar className="transition-transform" size="sm">
+          <Avatar.Fallback>
+            <UserRound />
+          </Avatar.Fallback>
+        </Avatar>
       </Dropdown.Trigger>
       <Dropdown.Popover className="min-w-60">
         <AppbarAvatarMenu name={profile.name} displayId={profile.displayId} />

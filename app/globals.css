@@ -15,4 +15,16 @@
   .heading-1 {
     @apply text-base text-muted;
   }
+
+  .avatar__fallback svg {
+    @apply size-5;
+  }
+
+  .avatar--sm .avatar__fallback svg {
+    @apply size-4;
+  }
+
+  .avatar--lg .avatar__fallback svg {
+    @apply size-6;
+  }
 }
