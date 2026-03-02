@@ -7,13 +7,13 @@ import {
   ListBox,
   Modal,
   ScrollShadow,
+  SearchField,
   useOverlayState,
 } from "@heroui/react";
 import { Check, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { Button } from "@/components/button";
-import { SearchField } from "@/components/search-field";
 import { User } from "@/components/user";
 import type { Profile } from "@/lib/type";
 import { searchProfiles, updateMatchPlayers } from "./actions";
@@ -128,9 +128,14 @@ export function PlayersModalContent({
           <SearchField
             variant="secondary"
             className="mb-1"
-            placeholder="ユーザーIDもしくは名前で検索"
             onChange={handleSearch}
-          />
+          >
+            <SearchField.Group>
+              <SearchField.SearchIcon />
+              <SearchField.Input placeholder="ユーザーIDもしくは名前で検索" />
+              <SearchField.ClearButton />
+            </SearchField.Group>
+          </SearchField>
           <ScrollShadow className="min-h-0">
             {searchedProfiles === null && (
               <ListBox

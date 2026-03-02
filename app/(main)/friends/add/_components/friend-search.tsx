@@ -1,8 +1,8 @@
 "use client";
 
+import { SearchField } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { SearchField } from "@/components/search-field";
 
 type Props = {
   defaultValue: string;
@@ -26,10 +26,15 @@ export function FriendSearch({ defaultValue }: Props) {
   return (
     <SearchField
       variant="secondary"
-      placeholder="ユーザーIDもしくは名前で検索"
       autoFocus
       onChange={handleSearch}
       defaultValue={defaultValue}
-    />
+    >
+      <SearchField.Group>
+        <SearchField.SearchIcon />
+        <SearchField.Input placeholder="ユーザーIDもしくは名前で検索" />
+        <SearchField.ClearButton />
+      </SearchField.Group>
+    </SearchField>
   );
 }
