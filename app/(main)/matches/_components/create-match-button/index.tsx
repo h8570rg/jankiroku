@@ -1,8 +1,8 @@
 "use client";
 
 import { useForm, useFormData } from "@conform-to/react/future";
-import { ChevronDown } from "@gravity-ui/icons";
 import { cn } from "@heroui/react";
+import { ChevronDown } from "lucide-react";
 import { useActionState, useRef } from "react";
 import { Accordion } from "@/components/accordion";
 import { Button, ButtonGroup } from "@/components/button";

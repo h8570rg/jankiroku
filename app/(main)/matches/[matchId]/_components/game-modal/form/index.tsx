@@ -5,8 +5,8 @@ import {
   useForm,
   useFormData,
 } from "@conform-to/react/future";
-import { ChevronDown, ChevronUp } from "@gravity-ui/icons";
 import { cn } from "@heroui/react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useActionState, useRef } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";

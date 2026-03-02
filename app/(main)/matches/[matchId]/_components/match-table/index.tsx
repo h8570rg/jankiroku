@@ -1,5 +1,5 @@
-import { Pencil } from "@gravity-ui/icons";
 import { cn } from "@heroui/react";
+import { Pencil } from "lucide-react";
 import type { CSSProperties } from "react";
 import { serverServices } from "@/lib/services/server";
 import type { MatchPlayer } from "@/lib/type";

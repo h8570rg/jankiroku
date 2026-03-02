@@ -1,7 +1,7 @@
 "use client";
 
-import { EllipsisVertical } from "@gravity-ui/icons";
 import { type Key, Label } from "@heroui/react";
+import { EllipsisVertical } from "lucide-react";
 import { Button } from "@/components/button";
 import { Dropdown } from "@/components/dropdown";
 import { deleteFriends } from "./actions";

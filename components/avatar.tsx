@@ -1,8 +1,8 @@
-import { Person } from "@gravity-ui/icons";
 import {
   Avatar as HeroUiAvatar,
   type AvatarProps as HeroUiAvatarProps,
 } from "@heroui/react";
+import { User } from "lucide-react";
 
 export function AvatarGroup({ children }: { children: React.ReactNode }) {
   return (
@@ -22,7 +22,7 @@ export type AvatarProps = HeroUiAvatarProps;
 export function Avatar({ ...props }: AvatarProps) {
   return (
     <HeroUiAvatar {...props}>
-      <Person />
+      <User />
     </HeroUiAvatar>
   );
 }

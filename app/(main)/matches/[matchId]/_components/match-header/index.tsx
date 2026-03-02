@@ -3,10 +3,10 @@
 import {
   ChartColumn,
   ChevronLeft,
-  CircleDollar,
+  CircleDollarSign,
   FileText,
-  PersonPlus,
-} from "@gravity-ui/icons";
+  UserPlus,
+} from "lucide-react";
 import NextLink from "next/link";
 import { Button, buttonVariants } from "@/components/button";
 import { useOverlayState } from "@/components/modal";
@@ -73,7 +73,7 @@ export function MatchHeader({
               chipModal.open();
             }}
           >
-            <CircleDollar />
+            <CircleDollarSign />
           </Button>
           <Button
             isIconOnly
@@ -84,7 +84,7 @@ export function MatchHeader({
               variant: "ghost",
             })}
           >
-            <PersonPlus />
+            <UserPlus />
           </Button>
         </div>
       </div>

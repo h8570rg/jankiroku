@@ -1,7 +1,7 @@
 "use client";
 
-import { Check, Person } from "@gravity-ui/icons";
 import { CloseButton, Header } from "@heroui/react";
+import { Check, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { Button } from "@/components/button";
@@ -109,7 +109,7 @@ export function PlayersModalContent({
               <div className="flex flex-wrap gap-2">
                 {selectedPlayers.map((player) => (
                   <Chip key={player.id} variant="primary" color="accent">
-                    <Person />
+                    <UserIcon />
 
                     <Chip.Label>{player.name}</Chip.Label>
                     <CloseButton

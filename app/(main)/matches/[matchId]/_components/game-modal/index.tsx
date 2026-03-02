@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleQuestion } from "@gravity-ui/icons";
+import { CircleHelp } from "lucide-react";
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
 import { Popover } from "@/components/popover";
@@ -27,7 +27,7 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
             <Popover>
               <Button className="gap-1" variant="ghost" size="sm">
                 <span className="text-accent underline">同点の場合</span>
-                <CircleQuestion className="text-accent" />
+                <CircleHelp className="text-accent" />
               </Button>
               <Popover.Content className="max-w-[280px] bg-surface-secondary">
                 <Popover.Dialog>
