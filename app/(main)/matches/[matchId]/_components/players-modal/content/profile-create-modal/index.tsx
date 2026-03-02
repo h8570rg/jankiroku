@@ -1,11 +1,16 @@
 "use client";
 
 import { useForm } from "@conform-to/react/future";
-import { Modal } from "@heroui/react";
+import {
+  Description,
+  FieldError,
+  Input,
+  Modal,
+  TextField,
+} from "@heroui/react";
 import { useActionState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import { TextField } from "@/components/text-field";
 import { NAME_MAX_LENGTH } from "@/lib/config";
 import type { Profile } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
@@ -65,9 +70,12 @@ export function ProfileCreateModal({
               <TextField
                 variant="secondary"
                 name={fields.name.name}
-                description={`${NAME_MAX_LENGTH}文字以内で入力してください`}
                 maxLength={NAME_MAX_LENGTH}
-              />
+              >
+                <Input />
+                <Description>{`${NAME_MAX_LENGTH}文字以内で入力してください`}</Description>
+                <FieldError />
+              </TextField>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="primary" type="submit" isPending={isPending}>

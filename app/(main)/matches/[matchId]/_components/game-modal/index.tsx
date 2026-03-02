@@ -1,13 +1,21 @@
 "use client";
 
 import { getFieldValue, useForm, useFormData } from "@conform-to/react/future";
-import { cn, Modal, Popover } from "@heroui/react";
+import {
+  cn,
+  FieldError,
+  InputGroup,
+  Label,
+  ListBox,
+  Modal,
+  Popover,
+  Select,
+  TextField,
+} from "@heroui/react";
 import { ChevronDown, ChevronUp, CircleHelp } from "lucide-react";
 import { useActionState, useRef } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import { Select } from "@/components/select";
-import { TextField } from "@/components/text-field";
 import type { Match } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { addGame } from "./actions";
@@ -104,46 +112,45 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
                       </div>
                       <TextField
                         className="shrink-0 basis-[160px]"
-                        classNames={{
-                          input:
-                            "w-full text-right placeholder:text-default-400",
-                        }}
                         fullWidth
                         variant="secondary"
                         type="number"
                         name={playerFields.points.name}
                         autoFocus={index === 0}
-                        prefix={
-                          isAutoFillAvailable && !!playerPoints ? (
-                            <Button
-                              size="sm"
-                              className="
-                          h-6 w-max min-w-0 shrink-0 gap-1 px-2
-                          text-[10px]
-                        "
-                              type="button"
-                              variant="secondary"
-                              onPress={() => {
-                                const remainder = totalPointsToBe - totalPoints;
-                                intent.update({
-                                  name: fields.players.name,
-                                  index,
-                                  value: {
-                                    id:
-                                      (players?.[index] as { id?: string })
-                                        ?.id ?? "",
-                                    points: String(remainder),
-                                    name: playerFields.name.defaultValue,
-                                  },
-                                });
-                              }}
-                            >
-                              残り入力
-                            </Button>
-                          ) : undefined
-                        }
-                        suffix={
-                          <>
+                      >
+                        <InputGroup>
+                          {isAutoFillAvailable && !!playerPoints && (
+                            <InputGroup.Prefix>
+                              <Button
+                                size="sm"
+                                className="
+                            h-6 w-max min-w-0 shrink-0 gap-1 px-2
+                            text-[10px]
+                          "
+                                type="button"
+                                variant="secondary"
+                                onPress={() => {
+                                  const remainder =
+                                    totalPointsToBe - totalPoints;
+                                  intent.update({
+                                    name: fields.players.name,
+                                    index,
+                                    value: {
+                                      id:
+                                        (players?.[index] as { id?: string })
+                                          ?.id ?? "",
+                                      points: String(remainder),
+                                      name: playerFields.name.defaultValue,
+                                    },
+                                  });
+                                }}
+                              >
+                                残り入力
+                              </Button>
+                            </InputGroup.Prefix>
+                          )}
+                          <InputGroup.Input className="text-right placeholder:text-default-400" />
+                          <InputGroup.Suffix>
                             <span
                               className={cn("mt-0.5 mr-1 text-xs", {
                                 "text-foreground": !!playerPoints,
@@ -152,9 +159,10 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
                               00
                             </span>
                             点
-                          </>
-                        }
-                      />
+                          </InputGroup.Suffix>
+                        </InputGroup>
+                        <FieldError />
+                      </TextField>
                       <div className="flex shrink-0 flex-col gap-0">
                         <Button
                           type="button"
@@ -201,19 +209,38 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
                 </p>
               )}
               <Select
+                className="flex-row items-center gap-2"
                 variant="secondary"
-                label="飛ばした人"
-                labelPlacement="outside"
                 name={fields.crackBoxPlayerId.name}
                 defaultValue=""
-                items={[
-                  { key: "", label: "なし" },
-                  ...match.players.map((player) => ({
-                    key: player.id,
-                    label: player.name ?? "",
-                  })),
-                ]}
-              />
+              >
+                <Label>飛ばした人</Label>
+                <Select.Trigger className="grow">
+                  <Select.Value />
+                  <Select.Indicator />
+                </Select.Trigger>
+                <Select.Popover>
+                  <ListBox>
+                    {[
+                      { key: "", label: "なし" },
+                      ...match.players.map((player) => ({
+                        key: player.id,
+                        label: player.name ?? "",
+                      })),
+                    ].map((item) => (
+                      <ListBox.Item
+                        key={item.key}
+                        id={item.key}
+                        textValue={item.label}
+                      >
+                        {item.label}
+                        <ListBox.ItemIndicator />
+                      </ListBox.Item>
+                    ))}
+                  </ListBox>
+                </Select.Popover>
+                <FieldError />
+              </Select>
             </Form>
           </Modal.Body>
           <Modal.Footer>

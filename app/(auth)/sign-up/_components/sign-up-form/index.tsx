@@ -1,11 +1,17 @@
 "use client";
 
 import { useForm } from "@conform-to/react/future";
-import { cn, ErrorMessage } from "@heroui/react";
+import {
+  cn,
+  ErrorMessage,
+  FieldError,
+  Input,
+  Label,
+  TextField,
+} from "@heroui/react";
 import { useActionState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import { TextField } from "@/components/text-field";
 import { createSubmitHandler } from "@/lib/utils/form";
 import { signUp } from "./actions";
 import { signUpSchema } from "./schema";
@@ -31,15 +37,21 @@ export function SignUpForm({ className }: { className?: string }) {
           <TextField
             type="email"
             name={fields.email.name}
-            label="メールアドレス"
             autoComplete="username"
-          />
+          >
+            <Label>メールアドレス</Label>
+            <Input />
+            <FieldError />
+          </TextField>
           <TextField
             type="password"
             name={fields.password.name}
-            label="パスワード"
             autoComplete="current-password"
-          />
+          >
+            <Label>パスワード</Label>
+            <Input />
+            <FieldError />
+          </TextField>
         </div>
         {form.errors && <ErrorMessage>{form.errors}</ErrorMessage>}
       </div>

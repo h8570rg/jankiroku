@@ -5,11 +5,10 @@ import {
   useForm,
   useFormData,
 } from "@conform-to/react/future";
-import { Modal } from "@heroui/react";
+import { FieldError, InputGroup, Modal, TextField } from "@heroui/react";
 import { useActionState, useRef } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import { TextField } from "@/components/text-field";
 import type { Match } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { addChip } from "./actions";
@@ -86,36 +85,38 @@ export function ChipForm({
                 </div>
                 <TextField
                   className="flex flex-row items-center gap-2"
-                  classNames={{
-                    input: "text-right placeholder:text-default-400",
-                  }}
                   variant="secondary"
                   type="number"
                   name={fieldset.chipCount.name}
-                  prefix={
-                    isAutoFillAvailable && chipCounts[index] === "" ? (
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
-                        type="button"
-                        onPress={() => {
-                          intent.update({
-                            name: fields.playerChip.name,
-                            index,
-                            value: {
-                              profileId: players[index].id,
-                              chipCount: String(-1 * totalChipCount),
-                            },
-                          });
-                        }}
-                      >
-                        残り入力
-                      </Button>
-                    ) : undefined
-                  }
-                  suffix="枚"
-                />
+                >
+                  <InputGroup>
+                    {isAutoFillAvailable && chipCounts[index] === "" && (
+                      <InputGroup.Prefix>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
+                          type="button"
+                          onPress={() => {
+                            intent.update({
+                              name: fields.playerChip.name,
+                              index,
+                              value: {
+                                profileId: players[index].id,
+                                chipCount: String(-1 * totalChipCount),
+                              },
+                            });
+                          }}
+                        >
+                          残り入力
+                        </Button>
+                      </InputGroup.Prefix>
+                    )}
+                    <InputGroup.Input className="text-right placeholder:text-default-400" />
+                    <InputGroup.Suffix>枚</InputGroup.Suffix>
+                  </InputGroup>
+                  <FieldError />
+                </TextField>
               </li>
             );
           })}

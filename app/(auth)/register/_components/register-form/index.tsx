@@ -1,11 +1,18 @@
 "use client";
 
 import { useForm } from "@conform-to/react/future";
-import { cn, ErrorMessage } from "@heroui/react";
+import {
+  cn,
+  Description,
+  ErrorMessage,
+  FieldError,
+  Input,
+  Label,
+  TextField,
+} from "@heroui/react";
 import { useActionState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import { TextField } from "@/components/text-field";
 import {
   DISPLAY_ID_MAX_LENGTH,
   DISPLAY_ID_MIN_LENGTH,
@@ -39,17 +46,18 @@ export function RegisterForm({
     >
       <input type="hidden" name="userId" value={userId} />
       <div className="space-y-4">
-        <TextField
-          name={fields.displayId.name}
-          label="ユーザーID"
-          description={`半角英数字${DISPLAY_ID_MIN_LENGTH}~${DISPLAY_ID_MAX_LENGTH}文字で入力してください`}
-        />
-        <TextField
-          name={fields.name.name}
-          label="名前"
-          autoComplete="name"
-          description={`${NAME_MAX_LENGTH}文字以内で入力してください`}
-        />
+        <TextField name={fields.displayId.name}>
+          <Label>ユーザーID</Label>
+          <Input />
+          <Description>{`半角英数字${DISPLAY_ID_MIN_LENGTH}~${DISPLAY_ID_MAX_LENGTH}文字で入力してください`}</Description>
+          <FieldError />
+        </TextField>
+        <TextField name={fields.name.name} autoComplete="name">
+          <Label>名前</Label>
+          <Input />
+          <Description>{`${NAME_MAX_LENGTH}文字以内で入力してください`}</Description>
+          <FieldError />
+        </TextField>
       </div>
       {form.errors && <ErrorMessage>{form.errors}</ErrorMessage>}
       <div className="flex justify-end">

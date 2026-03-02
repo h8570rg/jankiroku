@@ -1,14 +1,24 @@
 "use client";
 
 import { useForm, useFormData } from "@conform-to/react/future";
-import { Accordion, cn, Modal, useOverlayState } from "@heroui/react";
+import {
+  Accordion,
+  cn,
+  FieldError,
+  Input,
+  InputGroup,
+  Label,
+  ListBox,
+  Modal,
+  Select,
+  Slider,
+  TextField,
+  useOverlayState,
+} from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { useActionState, useRef } from "react";
 import { Button, ButtonGroup } from "@/components/button";
 import { Form } from "@/components/form";
-import { Select } from "@/components/select";
-import { Slider } from "@/components/slider";
-import { TextField } from "@/components/text-field";
 import {
   calcMethodLabel,
   calcMethods,
@@ -137,36 +147,50 @@ export function CreateMatchButton({ className }: { className?: string }) {
                   name={fields.playersCount.name}
                   value={playersCount}
                 />
-                <Slider
-                  label="レート"
-                  name={fields.rate.name}
-                  maxValue={rates.length - 1}
-                  outputProps={{
-                    children: ({ state }) =>
-                      rateLabel[rates[Number(state.values)]],
-                  }}
-                  defaultValue={0}
-                />
-                <Slider
-                  label="チップ"
-                  name={fields.chipRate.name}
-                  maxValue={chipRates.length - 1}
-                  outputProps={{
-                    children: ({ state }) =>
-                      chipRateLabel[chipRates[Number(state.values)]],
-                  }}
-                  defaultValue={0}
-                />
+                <Slider maxValue={rates.length - 1} defaultValue={0}>
+                  <Label>レート</Label>
+                  <Slider.Output>
+                    {({ state }) => rateLabel[rates[Number(state.values)]]}
+                  </Slider.Output>
+                  <Slider.Track>
+                    <Slider.Fill />
+                    <Slider.Thumb name={fields.rate.name} />
+                  </Slider.Track>
+                </Slider>
+                <Slider maxValue={chipRates.length - 1} defaultValue={0}>
+                  <Label>チップ</Label>
+                  <Slider.Output>
+                    {({ state }) =>
+                      chipRateLabel[chipRates[Number(state.values)]]
+                    }
+                  </Slider.Output>
+                  <Slider.Track>
+                    <Slider.Fill />
+                    <Slider.Thumb name={fields.chipRate.name} />
+                  </Slider.Track>
+                </Slider>
                 <Select
-                  label="ウマ"
                   variant="secondary"
                   name={fields.incline.name}
-                  items={Object.entries(inclineOption).map(([key, value]) => ({
-                    key,
-                    label: value,
-                  }))}
                   defaultValue={incline}
-                />
+                >
+                  <Label>ウマ</Label>
+                  <Select.Trigger>
+                    <Select.Value />
+                    <Select.Indicator />
+                  </Select.Trigger>
+                  <Select.Popover>
+                    <ListBox>
+                      {Object.entries(inclineOption).map(([key, value]) => (
+                        <ListBox.Item key={key} id={key} textValue={value}>
+                          {value}
+                          <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                      ))}
+                    </ListBox>
+                  </Select.Popover>
+                  <FieldError />
+                </Select>
                 {incline === "custom" &&
                   (() => {
                     const customInclineFields =
@@ -181,35 +205,45 @@ export function CreateMatchButton({ className }: { className?: string }) {
                         >
                           <TextField
                             type="number"
-                            label="1着"
-                            placeholder="10"
                             variant="secondary"
                             name={customInclineFields.incline1.name}
-                          />
+                          >
+                            <Label>1着</Label>
+                            <Input placeholder="10" />
+                            <FieldError />
+                          </TextField>
                           <TextField
                             type="number"
-                            label="2着"
-                            placeholder={playersCount === "4" ? "5" : "0"}
                             variant="secondary"
                             name={customInclineFields.incline2.name}
-                          />
+                          >
+                            <Label>2着</Label>
+                            <Input
+                              placeholder={playersCount === "4" ? "5" : "0"}
+                            />
+                            <FieldError />
+                          </TextField>
                           <TextField
                             type="number"
-                            label="3着"
-                            placeholder={playersCount === "4" ? "-5" : "-10"}
                             variant="secondary"
                             name={customInclineFields.incline3.name}
-                          />
+                          >
+                            <Label>3着</Label>
+                            <Input
+                              placeholder={playersCount === "4" ? "-5" : "-10"}
+                            />
+                            <FieldError />
+                          </TextField>
                           <TextField
-                            className={cn({
-                              hidden: playersCount === "3",
-                            })}
+                            className={cn({ hidden: playersCount === "3" })}
                             type="number"
-                            label="4着"
-                            placeholder="-10"
                             variant="secondary"
                             name={customInclineFields.incline4.name}
-                          />
+                          >
+                            <Label>4着</Label>
+                            <Input placeholder="-10" />
+                            <FieldError />
+                          </TextField>
                         </div>
                         {form.fieldErrors?.customIncline?.[0] && (
                           <p className="text-sm text-danger">
@@ -233,38 +267,69 @@ export function CreateMatchButton({ className }: { className?: string }) {
                       <div className="space-y-3 px-1">
                         <TextField
                           type="number"
-                          label="飛び賞"
                           variant="secondary"
-                          suffix="点"
                           name={fields.crackBoxBonus.name}
                           defaultValue={fields.crackBoxBonus.defaultValue}
-                        />
+                        >
+                          <Label>飛び賞</Label>
+                          <InputGroup>
+                            <InputGroup.Input />
+                            <InputGroup.Suffix>点</InputGroup.Suffix>
+                          </InputGroup>
+                          <FieldError />
+                        </TextField>
                         <TextField
                           type="number"
-                          label="持ち点"
                           variant="secondary"
-                          suffix="点"
                           name={fields.defaultPoints.name}
                           defaultValue={fields.defaultPoints.defaultValue}
-                        />
+                        >
+                          <Label>持ち点</Label>
+                          <InputGroup>
+                            <InputGroup.Input />
+                            <InputGroup.Suffix>点</InputGroup.Suffix>
+                          </InputGroup>
+                          <FieldError />
+                        </TextField>
                         <TextField
                           type="number"
-                          label="オカ"
                           variant="secondary"
-                          suffix="点"
                           name={fields.defaultCalcPoints.name}
                           defaultValue={fields.defaultCalcPoints.defaultValue}
-                        />
+                        >
+                          <Label>オカ</Label>
+                          <InputGroup>
+                            <InputGroup.Input />
+                            <InputGroup.Suffix>点</InputGroup.Suffix>
+                          </InputGroup>
+                          <FieldError />
+                        </TextField>
                         <Select
-                          label="計算"
                           variant="secondary"
                           name={fields.calcMethod.name}
-                          items={calcMethods.map((calcMethod) => ({
-                            key: calcMethod,
-                            label: calcMethodLabel[calcMethod],
-                          }))}
                           defaultValue={fields.calcMethod.defaultValue}
-                        />
+                        >
+                          <Label>計算</Label>
+                          <Select.Trigger>
+                            <Select.Value />
+                            <Select.Indicator />
+                          </Select.Trigger>
+                          <Select.Popover>
+                            <ListBox>
+                              {calcMethods.map((calcMethod) => (
+                                <ListBox.Item
+                                  key={calcMethod}
+                                  id={calcMethod}
+                                  textValue={calcMethodLabel[calcMethod]}
+                                >
+                                  {calcMethodLabel[calcMethod]}
+                                  <ListBox.ItemIndicator />
+                                </ListBox.Item>
+                              ))}
+                            </ListBox>
+                          </Select.Popover>
+                          <FieldError />
+                        </Select>
                       </div>
                     </Accordion.Panel>
                   </Accordion.Item>
