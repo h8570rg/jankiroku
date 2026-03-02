@@ -1,8 +1,7 @@
 "use client";
 
-import { type Key, Label } from "@heroui/react";
+import { Dropdown, type Key, Label } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import { Dropdown } from "@/components/dropdown";
 import { signOut } from "./actions";
 
 export function AppbarAvatarMenu({

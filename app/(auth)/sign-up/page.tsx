@@ -1,6 +1,6 @@
+import { linkVariants } from "@heroui/react";
 import type { Metadata } from "next";
 import NextLink from "next/link";
-import { linkVariants } from "@/components/link";
 import { SignUpForm } from "./_components/sign-up-form";
 
 export const metadata: Metadata = {

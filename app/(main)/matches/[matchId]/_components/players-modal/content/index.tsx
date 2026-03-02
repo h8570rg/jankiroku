@@ -1,14 +1,18 @@
 "use client";
 
-import { CloseButton, Header } from "@heroui/react";
+import {
+  Chip,
+  CloseButton,
+  Header,
+  ListBox,
+  Modal,
+  ScrollShadow,
+  useOverlayState,
+} from "@heroui/react";
 import { Check, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { Button } from "@/components/button";
-import { Chip } from "@/components/chip";
-import { ListBox } from "@/components/listbox";
-import { Modal, useOverlayState } from "@/components/modal";
-import { ScrollShadow } from "@/components/scroll-shadow";
 import { SearchField } from "@/components/search-field";
 import { User } from "@/components/user";
 import type { Profile } from "@/lib/type";

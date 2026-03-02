@@ -1,7 +1,7 @@
 "use client";
 
+import { useOverlayState } from "@heroui/react";
 import { Button, type ButtonProps } from "@/components/button";
-import { useOverlayState } from "@/components/modal";
 import type { Match } from "@/lib/type";
 import { GameModal } from "../../game-modal";
 

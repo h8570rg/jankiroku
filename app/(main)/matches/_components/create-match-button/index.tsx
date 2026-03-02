@@ -1,13 +1,11 @@
 "use client";
 
 import { useForm, useFormData } from "@conform-to/react/future";
-import { cn } from "@heroui/react";
+import { Accordion, cn, Modal, useOverlayState } from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { useActionState, useRef } from "react";
-import { Accordion } from "@/components/accordion";
 import { Button, ButtonGroup } from "@/components/button";
 import { Form } from "@/components/form";
-import { Modal, useOverlayState } from "@/components/modal";
 import { Select } from "@/components/select";
 import { Slider } from "@/components/slider";
 import { TextField } from "@/components/text-field";

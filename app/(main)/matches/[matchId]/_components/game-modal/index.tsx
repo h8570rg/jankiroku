@@ -1,13 +1,11 @@
 "use client";
 
 import { getFieldValue, useForm, useFormData } from "@conform-to/react/future";
-import { cn } from "@heroui/react";
+import { cn, Modal, Popover } from "@heroui/react";
 import { ChevronDown, ChevronUp, CircleHelp } from "lucide-react";
 import { useActionState, useRef } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import { Modal } from "@/components/modal";
-import { Popover } from "@/components/popover";
 import { Select } from "@/components/select";
 import { TextField } from "@/components/text-field";
 import type { Match } from "@/lib/type";

@@ -1,7 +1,6 @@
-import { Avatar, type AvatarProps, cn } from "@heroui/react";
+import { Avatar, type AvatarProps, cn, Skeleton } from "@heroui/react";
 import { UserRound } from "lucide-react";
 import { type ComponentPropsWithoutRef, forwardRef } from "react";
-import { Skeleton } from "@/components/skeleton";
 
 export type UserProps = ComponentPropsWithoutRef<"div"> & {
   name?: string | null;

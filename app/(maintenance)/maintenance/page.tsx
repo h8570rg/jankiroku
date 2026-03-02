@@ -1,8 +1,8 @@
 "use client";
 
+import { Alert } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
 
 export default function MaintenancePage() {

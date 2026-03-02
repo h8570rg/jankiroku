@@ -1,8 +1,8 @@
 "use client";
 
+import { Modal } from "@heroui/react";
 import { Suspense } from "react";
 import { Button } from "@/components/button";
-import { Modal } from "@/components/modal";
 import packageJson from "@/package.json";
 import { versionComponents } from "./versions";
 

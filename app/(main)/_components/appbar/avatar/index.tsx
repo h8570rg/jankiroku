@@ -1,7 +1,6 @@
-import { Avatar } from "@heroui/react";
+import { Avatar, Dropdown } from "@heroui/react";
 import { UserRound } from "lucide-react";
 import { redirect } from "next/navigation";
-import { Dropdown } from "@/components/dropdown";
 import { serverServices } from "@/lib/services/server";
 import { AppbarAvatarMenu } from "./menu";
 

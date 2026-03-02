@@ -5,10 +5,10 @@ import {
   useForm,
   useFormData,
 } from "@conform-to/react/future";
+import { Modal } from "@heroui/react";
 import { useActionState, useRef } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import { Modal } from "@/components/modal";
 import { TextField } from "@/components/text-field";
 import type { Match } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";

@@ -1,5 +1,6 @@
 "use client";
 
+import { useOverlayState } from "@heroui/react";
 import {
   ChartColumn,
   ChevronLeft,
@@ -9,7 +10,6 @@ import {
 } from "lucide-react";
 import NextLink from "next/link";
 import { Button, buttonVariants } from "@/components/button";
-import { useOverlayState } from "@/components/modal";
 import type { Match, Profile } from "@/lib/type";
 import { ChipModal } from "../chip-modal";
 import { DataModal } from "../data-modal";

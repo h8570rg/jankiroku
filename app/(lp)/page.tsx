@@ -1,5 +1,5 @@
+import { Card } from "@heroui/react";
 import Image from "next/image";
-import { Card } from "@/components/card";
 import Logo from "@/components/logo";
 import { Navbar, NavbarBrand, NavbarContent } from "@/components/navbar";
 import { SERVICE_NAME } from "@/lib/config";

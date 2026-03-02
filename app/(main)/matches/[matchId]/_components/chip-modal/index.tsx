@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal } from "@/components/modal";
+import { Modal } from "@heroui/react";
 import type { Match } from "@/lib/type";
 import { ChipForm } from "./form";
 

@@ -1,7 +1,6 @@
+import { linkVariants, Separator } from "@heroui/react";
 import type { Metadata } from "next";
 import NextLink from "next/link";
-import { linkVariants } from "@/components/link";
-import { Separator } from "@/components/separator";
 import { LoginForm } from "./_components/login-form";
 import { SocialProviders } from "./_components/social-providers";
 

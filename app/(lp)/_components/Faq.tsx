@@ -1,6 +1,6 @@
 "use client";
 
-import { Accordion } from "@/components/accordion";
+import { Accordion } from "@heroui/react";
 
 export function Faq({
   faqs,

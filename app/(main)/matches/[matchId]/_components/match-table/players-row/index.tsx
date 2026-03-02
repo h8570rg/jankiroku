@@ -1,6 +1,6 @@
 "use client";
 
-import { useOverlayState } from "@/components/modal";
+import { useOverlayState } from "@heroui/react";
 import type { Profile } from "@/lib/type";
 import { PlayersModal } from "../../players-modal";
 

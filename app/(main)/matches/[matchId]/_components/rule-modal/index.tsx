@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal } from "@/components/modal";
+import { Modal } from "@heroui/react";
 import type { Rule } from "@/lib/type";
 import { RuleModalContent } from "./content";
 

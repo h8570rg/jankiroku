@@ -1,6 +1,6 @@
 "use client";
 
-import { useOverlayState } from "@/components/modal";
+import { useOverlayState } from "@heroui/react";
 import type { Match } from "@/lib/type";
 import { ChipModal } from "../../chip-modal";
 

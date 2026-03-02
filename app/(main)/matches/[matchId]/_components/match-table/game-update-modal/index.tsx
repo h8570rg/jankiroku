@@ -1,7 +1,7 @@
 "use client";
 
+import { Modal, useOverlayState } from "@heroui/react";
 import { Button } from "@/components/button";
-import { Modal, useOverlayState } from "@/components/modal";
 import {
   GameDeleteConfirmDialog,
   useGameDeleteConfirmDialog,

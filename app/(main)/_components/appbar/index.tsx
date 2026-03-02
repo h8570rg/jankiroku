@@ -1,8 +1,8 @@
+import { Skeleton } from "@heroui/react";
 import NextLink from "next/link";
 import { Suspense } from "react";
 import Logo from "@/components/logo";
 import { Navbar, NavbarBrand, NavbarContent } from "@/components/navbar";
-import { Skeleton } from "@/components/skeleton";
 import { AppbarAvatar } from "./avatar";
 
 export default function Appbar() {

@@ -1,9 +1,6 @@
-import { Avatar } from "@heroui/react";
+import { Avatar, Card, cardVariants, Separator } from "@heroui/react";
 import { UserRound } from "lucide-react";
 import NextLink from "next/link";
-import { AvatarGroup } from "@/components/avatar";
-import { Card, cardVariants } from "@/components/card";
-import { Separator } from "@/components/separator";
 import type { Match } from "@/lib/type";
 import { dayjs } from "@/lib/utils/date";
 
@@ -25,7 +22,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
       <Card.Header>
         <div className="flex w-full items-center justify-between">
           <p>{displayDate}</p>
-          <AvatarGroup>
+          <div className="flex -space-x-2 *:ring-2 *:ring-background">
             {match.players.map((player) => (
               <Avatar key={player.id}>
                 <Avatar.Fallback>
@@ -33,7 +30,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
                 </Avatar.Fallback>
               </Avatar>
             ))}
-          </AvatarGroup>
+          </div>
         </div>
       </Card.Header>
       <Separator />

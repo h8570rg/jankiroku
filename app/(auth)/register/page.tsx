@@ -1,6 +1,6 @@
+import { linkVariants } from "@heroui/react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { linkVariants } from "@/components/link";
 import { serverServices } from "@/lib/services/server";
 import { RegisterForm } from "./_components/register-form";
 import { signOut } from "./_components/register-form/actions";

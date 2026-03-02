@@ -1,9 +1,8 @@
 "use client";
 
-import { type Key, Label } from "@heroui/react";
+import { Dropdown, type Key, Label } from "@heroui/react";
 import { EllipsisVertical } from "lucide-react";
 import { Button } from "@/components/button";
-import { Dropdown } from "@/components/dropdown";
 import { deleteFriends } from "./actions";
 
 export function FriendMenu({ profileId }: { profileId: string }) {
