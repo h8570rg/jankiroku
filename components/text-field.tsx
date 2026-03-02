@@ -32,12 +32,9 @@ export function TextField({
   return (
     <HeroUiTextField isRequired={required} {...props}>
       <Label>{label}</Label>
-      <InputGroup>
+      <InputGroup className="w-full">
         {prefix && <InputGroup.Prefix>{prefix}</InputGroup.Prefix>}
-        <InputGroup.Input
-          className={classNames?.input}
-          placeholder={placeholder}
-        />
+        <InputGroup.Input className="w-full" placeholder={placeholder} />
         {suffix && <InputGroup.Suffix>{suffix}</InputGroup.Suffix>}
       </InputGroup>
       <Description>{description}</Description>

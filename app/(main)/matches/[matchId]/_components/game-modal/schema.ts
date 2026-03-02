@@ -7,6 +7,7 @@ export const addGameFormSchema = z.object({
     z.object({
       id: schema.profileId,
       points: schema.points,
+      name: schema.name,
     }),
   ),
   crackBoxPlayerId: schema.profileId.transform((v) =>
