@@ -20,8 +20,11 @@
     "jankiroku",
     "Postgrest",
     "pressable",
+    "reauthentication",
     "rocknroll",
     "supabase",
-    "turbopack"
+    "testuser",
+    "turbopack",
+    "wrongpassword"
   ]
 }

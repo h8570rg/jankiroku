@@ -15,7 +15,7 @@ export async function AppbarAvatar() {
 
   return (
     <Dropdown>
-      <Dropdown.Trigger>
+      <Dropdown.Trigger aria-label="プロフィールメニュー">
         <Avatar className="transition-transform" size="sm">
           <Avatar.Fallback>
             <UserRound />
