@@ -1,13 +1,14 @@
 import { z } from "zod";
 import {
   calcMethods,
-  chipRates,
+  chipRatePresets,
+  chipRatePresetValue,
   DISPLAY_ID_MAX_LENGTH,
   DISPLAY_ID_MIN_LENGTH,
-  inclines,
+  inclinesPresetsFor3Players,
+  inclinesPresetsFor4Players,
   NAME_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
-  rates,
 } from "@/lib/config";
 
 export const schema = {
@@ -35,7 +36,38 @@ export const schema = {
     )
     .regex(/^[a-zA-Z0-9]+$/, "ユーザーIDは半角英数字のみで入力してください"),
   calcMethod: z.enum(calcMethods),
-  chipRate: z.string().transform((v) => chipRates[Number(v)]),
+  chipRate: z
+    .object({
+      preset: z.enum(chipRatePresets),
+      custom: z.string().optional(),
+    })
+    .superRefine(({ preset, custom }, ctx) => {
+      if (preset !== "custom") {
+        return;
+      }
+      if (custom === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          message: "チップレートを入力してください",
+          path: [],
+        });
+        return;
+      }
+      if (Number(custom) < 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: "チップレートは0以上で入力してください",
+          path: [],
+        });
+      }
+    })
+    .transform(({ preset, custom }) => {
+      if (preset !== "custom" || custom === undefined) {
+        // biome-ignore lint/style/noNonNullAssertion: preset is not undefined
+        return chipRatePresetValue[preset]!;
+      }
+      return Number(custom);
+    }),
   crackBoxBonus: z.string("飛び賞を入力してください").transform(Number),
   defaultCalcPoints: z.string("オカを入力してください").transform(Number),
   defaultPoints: z.string("持ち点を入力してください").transform(Number),
@@ -45,26 +77,99 @@ export const schema = {
   points: z
     .string()
     .transform((v) => (v === "0" || !!v ? Number(v) * 100 : undefined)),
-  rate: z.string().transform((v) => rates[Number(v)]),
-  incline: z.enum(inclines),
-  customIncline: z
+  rate: z.string().transform(Number),
+  inclineFor4Players: z
     .object({
-      incline1: z.string().min(1, "ウマを入力してください").transform(Number),
-      incline2: z.string().min(1, "ウマを入力してください").transform(Number),
-      incline3: z.string().min(1, "ウマを入力してください").transform(Number),
-      incline4: z.string().min(1, "ウマを入力してください").transform(Number),
+      presets: z.enum(inclinesPresetsFor4Players),
+      custom: z
+        .object({
+          incline1: z.coerce.number().optional(),
+          incline2: z.coerce.number().optional(),
+          incline3: z.coerce.number().optional(),
+          incline4: z.coerce.number().optional(),
+        })
+        .optional(),
     })
-    .refine(
-      ({ incline1, incline2, incline3, incline4 }) => {
-        const sum = incline1 + incline2 + incline3 + incline4;
-        return sum === 0;
-      },
-      {
-        path: ["root"],
-        message: "ウマの合計が0になるように入力してください",
-      },
-    )
-    .transform(({ incline1, incline2, incline3, incline4 }) => {
-      return `${incline1}_${incline2}_${incline3}_${incline4}`;
+    .superRefine(({ presets, custom }, ctx) => {
+      if (presets !== "custom") {
+        return;
+      }
+      if (
+        custom?.incline1 === undefined ||
+        custom?.incline2 === undefined ||
+        custom?.incline3 === undefined ||
+        custom?.incline4 === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "ウマを入力してください",
+          path: [],
+        });
+        return;
+      }
+      const sum = [
+        custom.incline1,
+        custom.incline2,
+        custom.incline3,
+        custom.incline4,
+      ].reduce((acc, incline) => acc + incline, 0);
+      if (sum !== 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: "ウマの合計が0になるように入力してください",
+          path: [],
+        });
+      }
+    })
+    .transform(({ presets, custom }) => {
+      if (presets !== "custom" || !custom) {
+        return presets;
+      }
+      return `${custom.incline1}_${custom.incline2}_${custom.incline3}_${custom.incline4}`;
+    }),
+  inclineFor3Players: z
+    .object({
+      presets: z.enum(inclinesPresetsFor3Players),
+      custom: z
+        .object({
+          incline1: z.coerce.number().optional(),
+          incline2: z.coerce.number().optional(),
+          incline3: z.coerce.number().optional(),
+        })
+        .optional(),
+    })
+    .superRefine(({ presets, custom }, ctx) => {
+      if (presets !== "custom") {
+        return;
+      }
+      if (
+        custom?.incline1 === undefined ||
+        custom?.incline2 === undefined ||
+        custom?.incline3 === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "ウマを入力してください",
+          path: [],
+        });
+        return;
+      }
+      const sum = [custom.incline1, custom.incline2, custom.incline3].reduce(
+        (acc, incline) => acc + incline,
+        0,
+      );
+      if (sum !== 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: "ウマの合計が0になるように入力してください",
+          path: [],
+        });
+      }
+    })
+    .transform(({ presets, custom }) => {
+      if (presets !== "custom" || !custom) {
+        return presets;
+      }
+      return `${custom.incline1}_${custom.incline2}_${custom.incline3}_0`;
     }),
 };

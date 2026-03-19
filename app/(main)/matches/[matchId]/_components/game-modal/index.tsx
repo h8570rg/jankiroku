@@ -124,9 +124,9 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
                               <Button
                                 size="sm"
                                 className="
-                            h-6 w-max min-w-0 shrink-0 gap-1 px-2
-                            text-[10px]
-                          "
+                                  h-6 w-max min-w-0 shrink-0 gap-1 px-2
+                                  text-[10px]
+                                "
                                 type="button"
                                 variant="secondary"
                                 onPress={() => {
@@ -149,7 +149,12 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
                               </Button>
                             </InputGroup.Prefix>
                           )}
-                          <InputGroup.Input className="text-right placeholder:text-default-400" />
+                          <InputGroup.Input
+                            className="
+                            placeholder:text-default-400
+                            text-right
+                          "
+                          />
                           <InputGroup.Suffix>
                             <span
                               className={cn("mt-0.5 mr-1 text-xs", {

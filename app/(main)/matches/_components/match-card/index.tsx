@@ -22,7 +22,12 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
       <Card.Header>
         <div className="flex w-full items-center justify-between">
           <p>{displayDate}</p>
-          <div className="flex -space-x-2 *:ring-2 *:ring-background">
+          <div
+            className="
+            flex -space-x-2
+            *:ring-2 *:ring-background
+          "
+          >
             {match.players.map((player) => (
               <Avatar key={player.id}>
                 <Avatar.Fallback>

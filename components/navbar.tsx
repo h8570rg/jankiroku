@@ -82,9 +82,9 @@ export const Navbar = forwardRef<
       >
         <nav
           className="
-          relative z-40 flex h-16 w-full flex-row flex-nowrap items-center
-          justify-between gap-4 px-6
-        "
+            relative z-40 flex h-16 w-full flex-row flex-nowrap items-center
+            justify-between gap-4 px-6
+          "
         >
           {children}
         </nav>
@@ -107,9 +107,9 @@ export const Navbar = forwardRef<
     >
       <nav
         className="
-        relative z-40 flex h-16 w-full flex-row flex-nowrap items-center
-        justify-between gap-4 px-6
-      "
+          relative z-40 flex h-16 w-full flex-row flex-nowrap items-center
+          justify-between gap-4 px-6
+        "
       >
         {children}
       </nav>

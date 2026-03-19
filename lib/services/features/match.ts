@@ -1,6 +1,5 @@
 import type {
   CalcMethod,
-  ChipRate,
   GamePlayer,
   Match,
   MatchPlayer,
@@ -257,7 +256,7 @@ const formatMatch = (match: {
       defaultPoints: rule.default_points,
       defaultCalcPoints: rule.default_calc_points,
       rate: rule.rate as Rate,
-      chipRate: rule.chip_rate as ChipRate,
+      chipRate: rule.chip_rate,
       crackBoxBonus: rule.crack_box_bonus,
       calcMethod: rule.calc_method as CalcMethod,
       incline: {

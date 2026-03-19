@@ -1,7 +1,7 @@
 "use client";
 
 import { Modal } from "@heroui/react";
-import { calcMethodLabel, chipRateLabel, rateLabel } from "@/lib/config";
+import { calcMethodLabel, rateLabel } from "@/lib/config";
 import type { Rule } from "@/lib/type";
 
 export function RuleModalContent({ rule }: { rule: Rule }) {
@@ -23,7 +23,7 @@ export function RuleModalContent({ rule }: { rule: Rule }) {
             </tr>
             <tr>
               <th>チップ</th>
-              <td>{chipRateLabel[rule.chipRate]}</td>
+              <td>{rule.chipRate}円</td>
             </tr>
             <tr>
               <th>ウマ</th>

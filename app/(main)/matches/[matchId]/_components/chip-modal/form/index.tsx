@@ -95,7 +95,9 @@ export function ChipForm({
                         <Button
                           variant="secondary"
                           size="sm"
-                          className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
+                          className="
+                            h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]
+                          "
                           type="button"
                           onPress={() => {
                             intent.update({
@@ -112,7 +114,12 @@ export function ChipForm({
                         </Button>
                       </InputGroup.Prefix>
                     )}
-                    <InputGroup.Input className="text-right placeholder:text-default-400" />
+                    <InputGroup.Input
+                      className="
+                      placeholder:text-default-400
+                      text-right
+                    "
+                    />
                     <InputGroup.Suffix>枚</InputGroup.Suffix>
                   </InputGroup>
                   <FieldError />
