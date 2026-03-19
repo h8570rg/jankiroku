@@ -5,6 +5,7 @@ import {
   Accordion,
   cn,
   Description,
+  Drawer,
   FieldError,
   FieldGroup,
   Fieldset,
@@ -12,7 +13,6 @@ import {
   InputGroup,
   Label,
   ListBox,
-  Modal,
   Radio,
   RadioGroup,
   Select,
@@ -137,19 +137,17 @@ export function CreateMatchModal({
   }));
 
   return (
-    <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
-      <Modal.Container>
-        {/* position:relative + overflow:hidden がブラウザの layout boundary 最適化を誤発火させ、
-            コンテンツ高さの変化時に親 flex の mt-auto が再計算されず隙間が出るため static で上書き */}
-        <Modal.Dialog className="static">
-          <Modal.Header>
-            <Modal.Heading>ゲーム作成</Modal.Heading>
-          </Modal.Header>
-          <Modal.Body className="pt-4 -mx-1">
+    <Drawer.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Drawer.Content>
+        <Drawer.Dialog>
+          <Drawer.Header>
+            <Drawer.Heading>ゲーム作成</Drawer.Heading>
+          </Drawer.Header>
+          <Drawer.Body>
             <Form
               key={form.key}
               ref={formRef}
-              className="space-y-4 px-1"
+              className="space-y-4"
               validationErrors={form.fieldErrors}
               {...form.props}
             >
@@ -422,8 +420,8 @@ export function CreateMatchModal({
                 </Accordion.Item>
               </Accordion>
             </Form>
-          </Modal.Body>
-          <Modal.Footer>
+          </Drawer.Body>
+          <Drawer.Footer>
             <Button variant="ghost" slot="close">
               キャンセル
             </Button>
@@ -435,9 +433,9 @@ export function CreateMatchModal({
             >
               開始
             </Button>
-          </Modal.Footer>
-        </Modal.Dialog>
-      </Modal.Container>
-    </Modal.Backdrop>
+          </Drawer.Footer>
+        </Drawer.Dialog>
+      </Drawer.Content>
+    </Drawer.Backdrop>
   );
 }
