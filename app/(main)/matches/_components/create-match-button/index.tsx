@@ -2,10 +2,10 @@
 
 import { useOverlayState } from "@heroui/react";
 import { Button } from "@/components/button";
-import { CreateMatchModal } from "../create-match-modal";
+import { CreateMatchDrawer } from "../create-match-drawer";
 
 export function CreateMatchButton({ className }: { className?: string }) {
-  const ruleCreateModal = useOverlayState();
+  const createMatchDrawer = useOverlayState();
 
   return (
     <>
@@ -13,13 +13,13 @@ export function CreateMatchButton({ className }: { className?: string }) {
         className={className}
         size="lg"
         variant="primary"
-        onPress={ruleCreateModal.open}
+        onPress={createMatchDrawer.open}
       >
         ゲームを始める
       </Button>
-      <CreateMatchModal
-        isOpen={ruleCreateModal.isOpen}
-        onOpenChange={ruleCreateModal.setOpen}
+      <CreateMatchDrawer
+        isOpen={createMatchDrawer.isOpen}
+        onOpenChange={createMatchDrawer.setOpen}
       />
     </>
   );

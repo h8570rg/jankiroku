@@ -81,7 +81,7 @@ const playersCount3DefaultValues: CreateMatchInput = {
   },
 };
 
-export function CreateMatchModal({
+export function CreateMatchDrawer({
   isOpen,
   onOpenChange,
 }: {
