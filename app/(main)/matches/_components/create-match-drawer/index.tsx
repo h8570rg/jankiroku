@@ -62,10 +62,8 @@ export function CreateMatchDrawer({
   return (
     <Drawer.Backdrop isOpen={isOpen} onOpenChange={handleOpenChange}>
       <Drawer.Content>
-        <Drawer.Dialog className="h-[85dvh]">
-          <Drawer.Header className="mb-5">
-            <Stepper steps={steps} currentStep={currentStep} className="" />
-          </Drawer.Header>
+        <Drawer.Dialog className="h-[85dvh]" aria-label="ゲーム作成">
+          <Stepper steps={steps} currentStep={currentStep} className="mb-5" />
 
           <FormProvider context={form.context}>
             {/*

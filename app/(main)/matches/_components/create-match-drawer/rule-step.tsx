@@ -8,9 +8,10 @@ import {
   useIntent,
 } from "@conform-to/react/future";
 import {
-  Accordion,
+  Button,
   cn,
   Description,
+  Disclosure,
   FieldError,
   FieldGroup,
   Fieldset,
@@ -24,7 +25,7 @@ import {
   TextField,
   tv,
 } from "@heroui/react";
-import { ChevronDown } from "lucide-react";
+import { useRef } from "react";
 import {
   calcMethodLabel,
   calcMethods,
@@ -103,6 +104,7 @@ export function RuleStep() {
     label: chipRatePresetLabel[preset],
   }));
 
+  const disclosureContentRef = useRef<HTMLDivElement>(null);
   const intent = useIntent(form.id);
 
   function handlePlayersCountChange(value: string) {
@@ -280,87 +282,95 @@ export function RuleStep() {
         </TextField>
       </div>
 
-      <Accordion>
-        <Accordion.Item>
-          <Accordion.Heading>
-            <Accordion.Trigger className="px-1">
-              詳細設定
-              <Accordion.Indicator>
-                <ChevronDown />
-              </Accordion.Indicator>
-            </Accordion.Trigger>
-          </Accordion.Heading>
-          <Accordion.Panel>
-            <div className="space-y-3 px-1">
-              <TextField
-                type="number"
-                variant="secondary"
-                name={crackBoxBonusField.name}
-                defaultValue={crackBoxBonusField.defaultValue}
-              >
-                <Label>飛び賞</Label>
-                <InputGroup>
-                  <InputGroup.Input />
-                  <InputGroup.Suffix>点</InputGroup.Suffix>
-                </InputGroup>
-                <FieldError />
-              </TextField>
-              <TextField
-                type="number"
-                variant="secondary"
-                name={defaultPointsField.name}
-                defaultValue={defaultPointsField.defaultValue}
-              >
-                <Label>持ち点</Label>
-                <InputGroup>
-                  <InputGroup.Input />
-                  <InputGroup.Suffix>点</InputGroup.Suffix>
-                </InputGroup>
-                <FieldError />
-              </TextField>
-              <TextField
-                type="number"
-                variant="secondary"
-                name={defaultCalcPointsField.name}
-                defaultValue={defaultCalcPointsField.defaultValue}
-              >
-                <Label>オカ</Label>
-                <InputGroup>
-                  <InputGroup.Input />
-                  <InputGroup.Suffix>点</InputGroup.Suffix>
-                </InputGroup>
-                <FieldError />
-              </TextField>
-              <Select
-                variant="secondary"
-                name={calcMethodField.name}
-                defaultValue={calcMethodField.defaultValue}
-              >
-                <Label>計算</Label>
-                <Select.Trigger>
-                  <Select.Value />
-                  <Select.Indicator />
-                </Select.Trigger>
-                <Select.Popover>
-                  <ListBox>
-                    {calcMethods.map((calcMethod) => (
-                      <ListBox.Item
-                        key={calcMethod}
-                        id={calcMethod}
-                        textValue={calcMethodLabel[calcMethod]}
-                      >
-                        {calcMethodLabel[calcMethod]}
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                    ))}
-                  </ListBox>
-                </Select.Popover>
-                <FieldError />
-              </Select>
-            </div>
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
+      <Disclosure>
+        <Disclosure.Heading className="flex justify-end">
+          <Button
+            slot="trigger"
+            size="sm"
+            variant="outline"
+            onPress={() => {
+              setTimeout(() => {
+                disclosureContentRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "nearest",
+                });
+              }, 150);
+            }}
+          >
+            詳細設定
+            <Disclosure.Indicator />
+          </Button>
+        </Disclosure.Heading>
+        <Disclosure.Content ref={disclosureContentRef}>
+          <div className="space-y-3 px-1">
+            <TextField
+              type="number"
+              variant="secondary"
+              name={crackBoxBonusField.name}
+              defaultValue={crackBoxBonusField.defaultValue}
+            >
+              <Label>飛び賞</Label>
+              <InputGroup>
+                <InputGroup.Input />
+                <InputGroup.Suffix>点</InputGroup.Suffix>
+              </InputGroup>
+              <FieldError />
+            </TextField>
+            <TextField
+              type="number"
+              variant="secondary"
+              name={defaultPointsField.name}
+              defaultValue={defaultPointsField.defaultValue}
+            >
+              <Label>持ち点</Label>
+              <InputGroup>
+                <InputGroup.Input />
+                <InputGroup.Suffix>点</InputGroup.Suffix>
+              </InputGroup>
+              <FieldError />
+            </TextField>
+            <TextField
+              type="number"
+              variant="secondary"
+              name={defaultCalcPointsField.name}
+              defaultValue={defaultCalcPointsField.defaultValue}
+            >
+              <Label>オカ</Label>
+              <InputGroup>
+                <InputGroup.Input />
+                <InputGroup.Suffix>点</InputGroup.Suffix>
+              </InputGroup>
+              <FieldError />
+            </TextField>
+            <Select
+              variant="secondary"
+              name={calcMethodField.name}
+              defaultValue={calcMethodField.defaultValue}
+            >
+              <Label>計算</Label>
+              <Select.Trigger>
+                <Select.Value />
+                <Select.Indicator />
+              </Select.Trigger>
+              <Select.Popover>
+                <ListBox>
+                  {calcMethods.map((calcMethod) => (
+                    <ListBox.Item
+                      key={calcMethod}
+                      id={calcMethod}
+                      textValue={calcMethodLabel[calcMethod]}
+                    >
+                      {calcMethodLabel[calcMethod]}
+                      <ListBox.ItemIndicator />
+                    </ListBox.Item>
+                  ))}
+                </ListBox>
+              </Select.Popover>
+              <FieldError />
+            </Select>
+          </div>
+        </Disclosure.Content>
+      </Disclosure>
     </>
   );
 }

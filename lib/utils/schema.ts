@@ -49,7 +49,7 @@ export const schema = {
         ctx.addIssue({
           code: "custom",
           message: "チップレートを入力してください",
-          path: [],
+          path: ["custom"],
         });
         return;
       }
@@ -57,7 +57,7 @@ export const schema = {
         ctx.addIssue({
           code: "custom",
           message: "チップレートは0以上で入力してください",
-          path: [],
+          path: ["custom"],
         });
       }
     })
