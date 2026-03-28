@@ -18,6 +18,7 @@ export const matchService = (supabase: Supabase) => {
       playersCount,
       rate,
       incline,
+      playerIds,
     }: {
       calcMethod: string;
       chipRate: number;
@@ -27,6 +28,7 @@ export const matchService = (supabase: Supabase) => {
       playersCount: number;
       rate: number;
       incline: string;
+      playerIds?: string[];
     }): Promise<{
       id: string;
     }> => {
@@ -37,6 +39,14 @@ export const matchService = (supabase: Supabase) => {
         .single();
       if (createMatchResponse.error) throw createMatchResponse.error;
       const match = createMatchResponse.data;
+
+      const matchPlayerRows =
+        playerIds && playerIds.length > 0
+          ? playerIds.map((playerId) => ({
+              match_id: match.id,
+              player_id: playerId,
+            }))
+          : [{ match_id: match.id }];
 
       const [createRuleResponse, createMatchPlayerResponse] = await Promise.all(
         [
@@ -51,7 +61,7 @@ export const matchService = (supabase: Supabase) => {
             rate,
             incline,
           }),
-          supabase.from("match_players").insert({ match_id: match.id }),
+          supabase.from("match_players").insert(matchPlayerRows),
         ],
       );
       if (createRuleResponse.error) throw createRuleResponse.error;

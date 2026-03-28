@@ -10,16 +10,59 @@ const commonFields = {
   calcMethod: schema.calcMethod,
 };
 
+const fourPlayerFields = {
+  playersCount: z.literal("4").transform(() => 4 as const),
+  incline: schema.inclineFor4Players,
+  ...commonFields,
+};
+
+const threePlayerFields = {
+  playersCount: z.literal("3").transform(() => 3 as const),
+  incline: schema.inclineFor3Players,
+  ...commonFields,
+};
+
+export const ruleSchema = z.discriminatedUnion("playersCount", [
+  z.object(fourPlayerFields),
+  z.object(threePlayerFields),
+]);
+
 export const createMatchSchema = z.discriminatedUnion("playersCount", [
   z.object({
-    playersCount: z.literal("4").transform(() => 4),
-    incline: schema.inclineFor4Players,
-    ...commonFields,
+    ...fourPlayerFields,
+    playerIds: z
+      .array(z.string())
+      .min(1, "プレイヤーを1人以上選択してください"),
   }),
   z.object({
-    playersCount: z.literal("3").transform(() => 3),
-    incline: schema.inclineFor3Players,
-    ...commonFields,
+    ...threePlayerFields,
+    playerIds: z
+      .array(z.string())
+      .min(1, "プレイヤーを1人以上選択してください"),
   }),
 ]);
+
+export type RuleInput = z.input<typeof ruleSchema>;
 export type CreateMatchInput = z.input<typeof createMatchSchema>;
+
+export const playersCount4DefaultValues = {
+  playersCount: "4",
+  incline: { presets: "0_0_0_0" },
+  crackBoxBonus: "10000",
+  defaultPoints: "25000",
+  defaultCalcPoints: "30000",
+  calcMethod: "round",
+  rate: "0",
+  chipRate: { preset: "0" },
+} satisfies RuleInput;
+
+export const playersCount3DefaultValues = {
+  playersCount: "3",
+  incline: { presets: "0_0_0_0" },
+  crackBoxBonus: "10000",
+  defaultPoints: "35000",
+  defaultCalcPoints: "40000",
+  calcMethod: "round",
+  rate: "0",
+  chipRate: { preset: "0" },
+} satisfies RuleInput;

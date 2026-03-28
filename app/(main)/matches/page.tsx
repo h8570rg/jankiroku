@@ -3,10 +3,14 @@ import { CreateMatchButton } from "./_components/create-match-button";
 import { MatchCard } from "./_components/match-card";
 
 export default async function Matches() {
-  const { getMatches, getUser } = await serverServices();
+  const { getMatches, getUser, getFriends } = await serverServices();
 
   // TODO: infinite scroll
-  const [matches, user] = await Promise.all([getMatches({}), getUser()]);
+  const [matches, user, friends] = await Promise.all([
+    getMatches({}),
+    getUser(),
+    getFriends(),
+  ]);
   return (
     <div>
       <h1 className="heading-1 mb-1">成績表</h1>
@@ -27,7 +31,7 @@ export default async function Matches() {
           sticky inset-x-0 bottom-0 z-10 bg-linear-to-t from-background p-4
         "
       >
-        <CreateMatchButton className="w-full" />
+        <CreateMatchButton className="w-full" friends={friends} />
       </div>
     </div>
   );

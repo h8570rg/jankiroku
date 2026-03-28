@@ -25,6 +25,7 @@ export async function createMatch(_prevState: unknown, formData: FormData) {
     defaultPoints,
     defaultCalcPoints,
     calcMethod,
+    playerIds,
   } = result.data;
 
   const { createMatch } = await serverServices();
@@ -37,6 +38,7 @@ export async function createMatch(_prevState: unknown, formData: FormData) {
     defaultPoints,
     defaultCalcPoints,
     calcMethod,
+    playerIds,
   });
 
   revalidatePath("/matches");

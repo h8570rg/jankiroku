@@ -151,9 +151,9 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
                           )}
                           <InputGroup.Input
                             className="
-                            placeholder:text-default-400
-                            text-right
-                          "
+                              placeholder:text-default-400
+                              text-right
+                            "
                           />
                           <InputGroup.Suffix>
                             <span
