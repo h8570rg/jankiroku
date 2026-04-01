@@ -15,11 +15,18 @@ import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { User } from "@/components/user";
 import type { Profile } from "@/lib/type";
-import { searchProfiles } from "./player-actions";
 import { ProfileCreateModal } from "./profile-create-modal";
+import { searchProfiles } from "./search-profiles";
 
-export function PlayerStep({ friends }: { friends: Profile[] }) {
-  const [selectedPlayers, setSelectedPlayers] = useState<Profile[]>([]);
+export function PlayerForm({
+  friends,
+  selectedPlayers,
+  onSelectedPlayersChange,
+}: {
+  friends: Profile[];
+  selectedPlayers: Profile[];
+  onSelectedPlayersChange: (players: Profile[]) => void;
+}) {
   const [searchedProfiles, setSearchedProfiles] = useState<Profile[] | null>(
     null,
   );
@@ -44,18 +51,18 @@ export function PlayerStep({ friends }: { friends: Profile[] }) {
       return;
     }
     if (selectedPlayers.find((p) => p.id === key)) {
-      setSelectedPlayers(selectedPlayers.filter((p) => p.id !== key));
+      onSelectedPlayersChange(selectedPlayers.filter((p) => p.id !== key));
       return;
     }
     const allProfiles = searchedProfiles ?? friends;
     const player = allProfiles.find((p) => p.id === key);
     if (player) {
-      setSelectedPlayers([...selectedPlayers, player]);
+      onSelectedPlayersChange([...selectedPlayers, player]);
     }
   }
 
   function handleRemove(player: Profile) {
-    setSelectedPlayers(selectedPlayers.filter((p) => p.id !== player.id));
+    onSelectedPlayersChange(selectedPlayers.filter((p) => p.id !== player.id));
   }
 
   return (
@@ -154,7 +161,7 @@ export function PlayerStep({ friends }: { friends: Profile[] }) {
         isOpen={profileCreateModal.isOpen}
         onClose={profileCreateModal.close}
         onProfileCreate={(profile: Profile) => {
-          setSelectedPlayers([...selectedPlayers, profile]);
+          onSelectedPlayersChange([...selectedPlayers, profile]);
         }}
       />
     </div>

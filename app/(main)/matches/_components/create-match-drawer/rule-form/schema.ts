@@ -27,23 +27,8 @@ export const ruleSchema = z.discriminatedUnion("playersCount", [
   z.object(threePlayerFields),
 ]);
 
-export const createMatchSchema = z.discriminatedUnion("playersCount", [
-  z.object({
-    ...fourPlayerFields,
-    playerIds: z
-      .array(z.string())
-      .min(1, "プレイヤーを1人以上選択してください"),
-  }),
-  z.object({
-    ...threePlayerFields,
-    playerIds: z
-      .array(z.string())
-      .min(1, "プレイヤーを1人以上選択してください"),
-  }),
-]);
-
 export type RuleInput = z.input<typeof ruleSchema>;
-export type CreateMatchInput = z.input<typeof createMatchSchema>;
+export type RuleOutput = z.output<typeof ruleSchema>;
 
 export const playersCount4DefaultValues = {
   playersCount: "4",

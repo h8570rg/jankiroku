@@ -1,21 +1,23 @@
 "use client";
 
 import { FormProvider, useForm } from "@conform-to/react/future";
-import { formatResult } from "@conform-to/zod/v4/future";
 import { Drawer } from "@heroui/react";
-import { Activity, startTransition, useActionState, useState } from "react";
+import { Activity, useActionState, useState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
 import { Stepper } from "@/components/stepper";
 import type { Profile } from "@/lib/type";
-import { createMatch } from "./actions";
-import { PlayerStep } from "./player-step";
-import { RuleStep } from "./rule-step";
+import { createSubmitHandler } from "@/lib/utils/form";
+import { PlayerForm } from "./player-form";
+import { createMatch } from "./player-form/actions";
+import { playerStepSchema } from "./player-form/schema";
+import { RuleForm } from "./rule-form";
+import { parseRuleFormSubmission } from "./rule-form/actions";
 import {
-  createMatchSchema,
   playersCount4DefaultValues,
+  type RuleOutput,
   ruleSchema,
-} from "./schema";
+} from "./rule-form/schema";
 
 const steps = [{ title: "ルール設定" }, { title: "プレイヤー選択" }];
 
@@ -29,33 +31,43 @@ export function CreateMatchDrawer({
   friends: Profile[];
 }) {
   const [currentStep, setCurrentStep] = useState(0);
+  const [ruleData, setRuleData] = useState<RuleOutput | null>(null);
+  const [selectedPlayers, setSelectedPlayers] = useState<Profile[]>([]);
 
-  const [lastResult, formAction, isPending] = useActionState(createMatch, null);
+  function handleRuleSubmit(formData: FormData) {
+    setRuleData(parseRuleFormSubmission(formData));
+    setCurrentStep(1);
+  }
 
-  const { form } = useForm(createMatchSchema, {
-    lastResult,
+  const { form: ruleForm, intent: ruleIntent } = useForm(ruleSchema, {
     defaultValue: playersCount4DefaultValues,
-    onValidate({ payload, formData }) {
-      const step = formData.get("__step");
-      const schema = step === "rule" ? ruleSchema : createMatchSchema;
-      return formatResult(schema.safeParse(payload));
-    },
-    onSubmit(event, context) {
-      event.preventDefault();
-      const formData =
-        context?.formData ?? new FormData(event.target as HTMLFormElement);
-      if (formData.get("__step") === "rule") {
-        setCurrentStep(1);
-        return;
+    onSubmit: createSubmitHandler(handleRuleSubmit),
+    shouldRevalidate: "onInput",
+  });
+
+  const [lastResult, formAction, isPending] = useActionState(
+    async (prevState: unknown, formData: FormData) => {
+      if (ruleData === null) {
+        return null;
       }
-      startTransition(() => formAction(formData));
+      return createMatch(ruleData, prevState, formData);
     },
+    null,
+  );
+
+  const { form: playerForm } = useForm(playerStepSchema, {
+    lastResult,
+    onSubmit: createSubmitHandler(formAction),
+    shouldRevalidate: "onInput",
   });
 
   function handleOpenChange(open: boolean) {
     onOpenChange(open);
     if (!open) {
       setCurrentStep(0);
+      setRuleData(null);
+      setSelectedPlayers([]);
+      ruleIntent.reset();
     }
   }
 
@@ -65,70 +77,67 @@ export function CreateMatchDrawer({
         <Drawer.Dialog className="h-[85dvh]" aria-label="ゲーム作成">
           <Stepper steps={steps} currentStep={currentStep} className="mb-5" />
 
-          <FormProvider context={form.context}>
-            {/*
-              conform の intent 送信（reset/update）は内部で requestSubmit() を使うが、
-              useForm に schema を第1引数で渡しつつ onValidate も指定している場合、
-              intent submission 時に syncResult / asyncResult が共に undefined になり
-              conform 内部の preventDefault() が呼ばれない。
-              その結果ブラウザが GET ナビゲーションを行い Drawer が閉じてしまう。
-              これを回避するため、conform のハンドラ実行後に preventDefault を補完する。
-            */}
-            <Form
-              className="contents"
-              validationErrors={form.fieldErrors}
-              {...form.props}
-              onSubmit={(e) => {
-                form.props.onSubmit?.(e);
-                if (!e.defaultPrevented) {
-                  e.preventDefault();
-                }
-              }}
-            >
-              <input
-                type="hidden"
-                name="__step"
-                value={currentStep === 0 ? "rule" : "player"}
-              />
-              <Drawer.Body>
-                <Activity mode={currentStep === 0 ? "visible" : "hidden"}>
+          <Drawer.Body>
+            <Activity mode={currentStep === 0 ? "visible" : "hidden"}>
+              <FormProvider context={ruleForm.context}>
+                <Form
+                  className="contents"
+                  validationErrors={ruleForm.fieldErrors}
+                  {...ruleForm.props}
+                >
                   <div className="space-y-4">
-                    <RuleStep />
+                    <RuleForm />
                   </div>
-                </Activity>
-                <Activity mode={currentStep === 1 ? "visible" : "hidden"}>
-                  <PlayerStep friends={friends} />
-                </Activity>
-              </Drawer.Body>
+                </Form>
+              </FormProvider>
+            </Activity>
+            <Activity mode={currentStep === 1 ? "visible" : "hidden"}>
+              <FormProvider context={playerForm.context}>
+                <Form
+                  className="contents"
+                  validationErrors={playerForm.fieldErrors}
+                  {...playerForm.props}
+                >
+                  <PlayerForm
+                    friends={friends}
+                    selectedPlayers={selectedPlayers}
+                    onSelectedPlayersChange={setSelectedPlayers}
+                  />
+                </Form>
+              </FormProvider>
+            </Activity>
+          </Drawer.Body>
 
-              <Drawer.Footer>
-                {currentStep === 0 ? (
-                  <>
-                    <Button variant="ghost" slot="close">
-                      キャンセル
-                    </Button>
-                    <Button variant="primary" type="submit">
-                      次へ
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button variant="ghost" onPress={() => setCurrentStep(0)}>
-                      戻る
-                    </Button>
-                    <Button
-                      form={form.props.id}
-                      variant="primary"
-                      type="submit"
-                      isPending={isPending}
-                    >
-                      開始
-                    </Button>
-                  </>
-                )}
-              </Drawer.Footer>
-            </Form>
-          </FormProvider>
+          <Drawer.Footer>
+            {currentStep === 0 ? (
+              <>
+                <Button variant="ghost" slot="close">
+                  キャンセル
+                </Button>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  form={ruleForm.props.id}
+                >
+                  プレイヤー選択へ
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" onPress={() => setCurrentStep(0)}>
+                  戻る
+                </Button>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  form={playerForm.props.id}
+                  isPending={isPending}
+                >
+                  ゲーム開始
+                </Button>
+              </>
+            )}
+          </Drawer.Footer>
         </Drawer.Dialog>
       </Drawer.Content>
     </Drawer.Backdrop>

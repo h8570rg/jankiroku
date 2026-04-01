@@ -31,8 +31,8 @@ export function Stepper({ steps, currentStep, className }: StepperProps) {
                     transition-colors
                   `,
                   {
-                    "bg-default-foreground text-default":
-                      isCompleted || isCurrent,
+                    "bg-default-foreground text-default": isCurrent,
+                    "bg-default text-muted": isCompleted,
                     "text-muted": !isCompleted && !isCurrent,
                   },
                 )}
@@ -42,7 +42,7 @@ export function Stepper({ steps, currentStep, className }: StepperProps) {
               </div>
               <span
                 className={cn("text-xs transition-colors", {
-                  "text-muted": !isCompleted && !isCurrent,
+                  "text-muted": !isCurrent,
                 })}
               >
                 {step.title}
@@ -51,8 +51,10 @@ export function Stepper({ steps, currentStep, className }: StepperProps) {
             {index < steps.length - 1 && (
               <div
                 className={cn(
-                  "h-0.5 shrink-0 basis-10 rounded-full transition-colors",
-                  isCompleted ? "bg-default-foreground" : "bg-default",
+                  `
+                    h-0.5 shrink-0 basis-10 rounded-full bg-default
+                    transition-colors
+                  `,
                 )}
               />
             )}

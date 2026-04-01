@@ -55,7 +55,7 @@ const optionCard = tv({
   ],
 });
 
-export function RuleStep() {
+export function RuleForm() {
   const form = useFormMetadata();
 
   const playersCountField = useField("playersCount");
