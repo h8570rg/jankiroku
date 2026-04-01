@@ -3,12 +3,12 @@ import { CreateMatchButton } from "./_components/create-match-button";
 import { MatchCard } from "./_components/match-card";
 
 export default async function Matches() {
-  const { getMatches, getUser, getFriends } = await serverServices();
+  const { getMatches, getUserProfile, getFriends } = await serverServices();
 
   // TODO: infinite scroll
-  const [matches, user, friends] = await Promise.all([
+  const [matches, userProfile, friends] = await Promise.all([
     getMatches({}),
-    getUser(),
+    getUserProfile(),
     getFriends(),
   ]);
   return (
@@ -22,7 +22,7 @@ export default async function Matches() {
       <ul className="space-y-4">
         {matches?.map((match) => (
           <li key={match.id}>
-            <MatchCard match={match} userId={user.id} />
+            <MatchCard match={match} userId={userProfile.id} />
           </li>
         ))}
       </ul>
@@ -31,7 +31,11 @@ export default async function Matches() {
           sticky inset-x-0 bottom-0 z-10 bg-linear-to-t from-background p-4
         "
       >
-        <CreateMatchButton className="w-full" friends={friends} />
+        <CreateMatchButton
+          className="w-full"
+          friends={friends}
+          userProfile={userProfile}
+        />
       </div>
     </div>
   );

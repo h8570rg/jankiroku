@@ -24,15 +24,19 @@ const steps = [{ title: "ルール設定" }, { title: "プレイヤー選択" }]
 export function CreateMatchDrawer({
   isOpen,
   onOpenChange,
+  userProfile,
   friends,
 }: {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
+  userProfile: Profile;
   friends: Profile[];
 }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [ruleData, setRuleData] = useState<RuleOutput | null>(null);
-  const [selectedPlayers, setSelectedPlayers] = useState<Profile[]>([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<Profile[]>([
+    userProfile,
+  ]);
 
   function handleRuleSubmit(formData: FormData) {
     setRuleData(parseRuleFormSubmission(formData));
@@ -66,7 +70,7 @@ export function CreateMatchDrawer({
     if (!open) {
       setCurrentStep(0);
       setRuleData(null);
-      setSelectedPlayers([]);
+      setSelectedPlayers([userProfile]);
       ruleIntent.reset();
     }
   }

@@ -2,12 +2,13 @@
 
 import { useField } from "@conform-to/react/future";
 import {
-  Chip,
+  Avatar,
   CloseButton,
   Header,
   ListBox,
   ScrollShadow,
   SearchField,
+  Surface,
   useOverlayState,
 } from "@heroui/react";
 import { Check, User as UserIcon } from "lucide-react";
@@ -73,21 +74,30 @@ export function PlayerForm({
       {playerIdsField.errors && (
         <p className="mb-2 text-sm text-danger">{playerIdsField.errors}</p>
       )}
+
       {selectedPlayers.length > 0 && (
         <div className="mb-4">
           <p className="mb-2 pl-1 text-xs text-muted">
-            参加者 ({selectedPlayers.length})
+            選択中 ({selectedPlayers.length})
           </p>
           <div className="flex flex-wrap gap-2">
             {selectedPlayers.map((player) => (
-              <Chip key={player.id} variant="primary" color="accent">
-                <UserIcon className="size-3" />
-                <Chip.Label>{player.name}</Chip.Label>
+              <Surface
+                key={player.id}
+                variant="secondary"
+                className="basis-1/4 p-2 rounded-2xl border border-accent flex flex-col items-center gap-0"
+              >
+                <Avatar size="sm">
+                  <Avatar.Fallback>
+                    <UserIcon />
+                  </Avatar.Fallback>
+                </Avatar>
+                <p>{player.name}</p>
                 <CloseButton
-                  className="bg-transparent text-foreground"
+                  className="absolute -top-2 -right-2 rounded-full"
                   onPress={() => handleRemove(player)}
                 />
-              </Chip>
+              </Surface>
             ))}
           </div>
         </div>

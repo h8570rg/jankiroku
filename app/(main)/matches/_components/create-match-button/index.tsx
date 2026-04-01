@@ -8,9 +8,11 @@ import { CreateMatchDrawer } from "../create-match-drawer";
 export function CreateMatchButton({
   className,
   friends,
+  userProfile,
 }: {
   className?: string;
   friends: Profile[];
+  userProfile: Profile;
 }) {
   const createMatchDrawer = useOverlayState();
 
@@ -28,6 +30,7 @@ export function CreateMatchButton({
         isOpen={createMatchDrawer.isOpen}
         onOpenChange={createMatchDrawer.setOpen}
         friends={friends}
+        userProfile={userProfile}
       />
     </>
   );
