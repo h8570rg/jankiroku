@@ -114,12 +114,7 @@ export function ChipForm({
                         </Button>
                       </InputGroup.Prefix>
                     )}
-                    <InputGroup.Input
-                      className="
-                        placeholder:text-default-400
-                        text-right
-                      "
-                    />
+                    <InputGroup.Input className="text-right" />
                     <InputGroup.Suffix>枚</InputGroup.Suffix>
                   </InputGroup>
                   <FieldError />

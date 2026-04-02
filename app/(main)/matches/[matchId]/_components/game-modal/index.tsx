@@ -149,12 +149,7 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
                               </Button>
                             </InputGroup.Prefix>
                           )}
-                          <InputGroup.Input
-                            className="
-                              placeholder:text-default-400
-                              text-right
-                            "
-                          />
+                          <InputGroup.Input className="text-right" />
                           <InputGroup.Suffix>
                             <span
                               className={cn("mt-0.5 mr-1 text-xs", {

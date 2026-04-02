@@ -117,7 +117,10 @@ export function PlayerForm({
                   <Surface
                     key={player.id}
                     variant="secondary"
-                    className="basis-1/4 p-2 rounded-2xl border border-accent flex flex-col items-center gap-0"
+                    className="
+                      flex basis-1/4 flex-col items-center gap-0 rounded-2xl
+                      border border-accent p-2
+                    "
                   >
                     <Avatar size="sm">
                       <Avatar.Fallback>
