@@ -25,11 +25,11 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
           <div
             className="
               flex -space-x-2
-              *:ring-2 *:ring-background
+              *:ring-2 *:ring-segment
             "
           >
             {match.players.map((player) => (
-              <Avatar key={player.id}>
+              <Avatar key={player.id} size="sm">
                 <Avatar.Fallback>
                   <UserRound />
                 </Avatar.Fallback>
