@@ -100,7 +100,7 @@ export function PlayerForm({
   return (
     <>
       <Form className="contents" onSubmit={createSubmitHandler(formAction)}>
-        <Drawer.Body className="h-[60dvh] max-h-[500px]">
+        <Drawer.Body>
           {selectedPlayers.map((p) => (
             <input key={p.id} type="hidden" name="playerIds" value={p.id} />
           ))}

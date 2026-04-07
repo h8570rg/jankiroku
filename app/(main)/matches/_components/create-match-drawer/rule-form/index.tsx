@@ -121,7 +121,7 @@ export function RuleForm({
       validationErrors={form.fieldErrors}
       {...form.props}
     >
-      <Drawer.Body className="h-[60dvh] max-h-[500px] pt-2">
+      <Drawer.Body className="pt-2">
         <div className="space-y-4">
           <RadioGroup
             name={fields.playersCount.name}
