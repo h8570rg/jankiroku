@@ -23,7 +23,7 @@ import { createSubmitHandler } from "@/lib/utils/form";
 import type { RuleOutput } from "../rule-form/schema";
 import { createMatch } from "./actions";
 import { ProfileCreateModal } from "./profile-create-modal";
-import { playerStepSchema } from "./schema";
+import { createPlayerStepSchema } from "./schema";
 import { searchProfiles } from "./search-profiles";
 
 export function PlayerForm({
@@ -50,10 +50,11 @@ export function PlayerForm({
     null,
   );
 
+  const playerStepSchema = createPlayerStepSchema(ruleData.playersCount);
+
   const { form, fields, intent } = useForm(playerStepSchema, {
     lastResult,
     onSubmit: createSubmitHandler(formAction),
-    shouldRevalidate: "onInput",
     defaultValue: {
       playerIds: selectedPlayers.map((p) => p.id),
     },
@@ -125,131 +126,127 @@ export function PlayerForm({
       {...form.props}
     >
       <Drawer.Body className="h-[60dvh] max-h-[500px]">
-        <div className="flex flex-col">
-          {selectedPlayerIds.map((p) => (
-            <input
-              key={p.id}
-              type="hidden"
-              name={p.name}
-              value={p.defaultValue}
-            />
-          ))}
-          {fields.playerIds.errors && (
-            <p className="mb-2 text-sm text-danger">
-              {fields.playerIds.errors}
-            </p>
-          )}
+        {selectedPlayerIds.map((p) => (
+          <input
+            key={p.id}
+            type="hidden"
+            name={p.name}
+            value={p.defaultValue}
+          />
+        ))}
 
-          {selectedPlayers.length > 0 && (
-            <div className="mb-4 flex items-center gap-3">
-              <p className="mb-2 shrink-0 pl-1 text-xs text-muted">選択中</p>
-              <ScrollShadow orientation="horizontal" className="grow">
-                <div className="flex gap-2 pt-2">
-                  {selectedPlayers.map((player) => (
-                    <div
-                      key={player.id}
+        {selectedPlayers.length > 0 && (
+          <div className="flex items-center gap-3">
+            <p className="mb-2 shrink-0 pl-1 text-xs text-muted">選択中</p>
+            <ScrollShadow orientation="horizontal" className="grow">
+              <div className="flex gap-2 pt-2">
+                {selectedPlayers.map((player) => (
+                  <div
+                    key={player.id}
+                    className="
+                      flex w-12 shrink-0 animate-in flex-col items-center
+                      gap-0.5 fade-in
+                    "
+                  >
+                    <div className="relative w-fit">
+                      <Avatar size="md" className="">
+                        <Avatar.Fallback>
+                          <UserIcon />
+                        </Avatar.Fallback>
+                      </Avatar>
+                      {player.id !== userProfile.id && (
+                        <CloseButton
+                          className="
+                            absolute -top-1 -right-1 size-4 rounded-full ring
+                            ring-segment
+                            *:size-3
+                          "
+                          onPress={() => removeSelectedPlayer(player.id)}
+                        />
+                      )}
+                    </div>
+                    <p
                       className="
-                        flex w-12 shrink-0 animate-in flex-col items-center
-                        gap-0.5 fade-in
+                        line-clamp-2 w-full text-center text-xs break-all
+                        text-foreground
                       "
                     >
-                      <div className="relative w-fit">
-                        <Avatar size="md" className="">
-                          <Avatar.Fallback>
-                            <UserIcon />
-                          </Avatar.Fallback>
-                        </Avatar>
-                        {player.id !== userProfile.id && (
-                          <CloseButton
-                            className="
-                              absolute -top-1 -right-1 size-4 rounded-full ring
-                              ring-segment
-                              *:size-3
-                            "
-                            onPress={() => removeSelectedPlayer(player.id)}
-                          />
-                        )}
-                      </div>
-                      <p
-                        className="
-                          line-clamp-2 w-full text-center text-xs break-all
-                          text-foreground
-                        "
-                      >
-                        {player.name}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </ScrollShadow>
-            </div>
-          )}
-          <SearchField
-            variant="secondary"
-            className="mx-1 mb-1"
-            onChange={handleSearch}
+                      {player.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </ScrollShadow>
+          </div>
+        )}
+        {fields.playerIds.errors && (
+          <p className="mt-2 text-sm text-danger">{fields.playerIds.errors}</p>
+        )}
+        <SearchField
+          variant="secondary"
+          className="mx-1 mt-4 mb-1"
+          onChange={handleSearch}
+        >
+          <SearchField.Group>
+            <SearchField.SearchIcon />
+            <SearchField.Input placeholder="IDもしくは名前で検索" />
+            <SearchField.ClearButton />
+          </SearchField.Group>
+        </SearchField>
+        {searchedProfiles === null && (
+          <ListBox
+            aria-label="フレンド選択"
+            onAction={handleFriendListBoxAction}
+            className="px-0"
           >
-            <SearchField.Group>
-              <SearchField.SearchIcon />
-              <SearchField.Input placeholder="IDもしくは名前で検索" />
-              <SearchField.ClearButton />
-            </SearchField.Group>
-          </SearchField>
-          {searchedProfiles === null && (
-            <ListBox
-              aria-label="フレンド選択"
-              onAction={handleFriendListBoxAction}
-              className="px-0"
-            >
-              <ListBox.Item id="new" className="flex w-full items-center">
-                <Avatar size="sm" variant="soft" color="accent">
-                  <Avatar.Fallback>
-                    <PlusIcon />
-                  </Avatar.Fallback>
-                </Avatar>
-                <Label>新規プレイヤー作成</Label>
-              </ListBox.Item>
-              {friends.map((friend) => (
-                <PlayerListBoxItem
-                  key={friend.id}
-                  player={friend}
-                  isSelected={selectedPlayers.some((p) => p.id === friend.id)}
-                />
-              ))}
-            </ListBox>
-          )}
-          {searchedProfiles !== null && (
-            <>
-              {searchedProfiles.length === 0 && (
-                <EmptyState className="mt-10 text-center">
-                  ユーザーが見つかりませんでした
-                </EmptyState>
-              )}
-              {searchedProfiles.length > 0 && (
-                <ListBox
-                  aria-label="検索結果"
-                  onAction={handleSearchedProfileListBoxAction}
-                  className="px-0"
-                >
-                  {searchedProfiles.map((item) => (
-                    <PlayerListBoxItem
-                      key={item.id}
-                      player={item}
-                      isSelected={selectedPlayers.some((p) => p.id === item.id)}
-                    />
-                  ))}
-                </ListBox>
-              )}
-            </>
-          )}
-          <ProfileCreateModal
-            isOpen={profileCreateModal.isOpen}
-            onClose={profileCreateModal.close}
-            onProfileCreate={(profile: Profile) => {
-              setSelectedPlayers([...selectedPlayers, profile]);
-            }}
-          />
-        </div>
+            <ListBox.Item id="new" className="flex w-full items-center">
+              <Avatar size="sm" variant="soft" color="accent">
+                <Avatar.Fallback>
+                  <PlusIcon />
+                </Avatar.Fallback>
+              </Avatar>
+              <Label>新規プレイヤー作成</Label>
+            </ListBox.Item>
+            {friends.map((friend) => (
+              <PlayerListBoxItem
+                key={friend.id}
+                player={friend}
+                isSelected={selectedPlayers.some((p) => p.id === friend.id)}
+              />
+            ))}
+          </ListBox>
+        )}
+        {searchedProfiles !== null && (
+          <>
+            {searchedProfiles.length === 0 && (
+              <EmptyState className="mt-10 text-center">
+                ユーザーが見つかりませんでした
+              </EmptyState>
+            )}
+            {searchedProfiles.length > 0 && (
+              <ListBox
+                aria-label="検索結果"
+                onAction={handleSearchedProfileListBoxAction}
+                className="px-0"
+              >
+                {searchedProfiles.map((item) => (
+                  <PlayerListBoxItem
+                    key={item.id}
+                    player={item}
+                    isSelected={selectedPlayers.some((p) => p.id === item.id)}
+                  />
+                ))}
+              </ListBox>
+            )}
+          </>
+        )}
+        <ProfileCreateModal
+          isOpen={profileCreateModal.isOpen}
+          onClose={profileCreateModal.close}
+          onProfileCreate={(profile: Profile) => {
+            setSelectedPlayers([...selectedPlayers, profile]);
+          }}
+        />
       </Drawer.Body>
       <Drawer.Footer>
         <Button variant="ghost" onPress={onBack}>

@@ -69,7 +69,6 @@ export function RuleForm({
     onSubmit: createSubmitHandler((formData) => {
       onSubmit(ruleSchema.parse(parseSubmission(formData).payload));
     }),
-    shouldRevalidate: "onInput",
   });
 
   const inclineField = fields.incline.getFieldset();

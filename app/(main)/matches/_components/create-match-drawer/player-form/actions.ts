@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { serverServices } from "@/lib/services/server";
 import type { RuleOutput } from "../rule-form/schema";
-import { playerStepSchema } from "./schema";
+import { createPlayerStepSchema } from "./schema";
 
 export async function createMatch(
   ruleData: RuleOutput,
@@ -13,6 +13,7 @@ export async function createMatch(
   formData: FormData,
 ) {
   const submission = parseSubmission(formData);
+  const playerStepSchema = createPlayerStepSchema(ruleData.playersCount);
   const result = playerStepSchema.safeParse(submission.payload);
 
   if (!result.success) {

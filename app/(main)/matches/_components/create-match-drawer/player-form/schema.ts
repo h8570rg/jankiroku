@@ -1,7 +1,8 @@
 import { z } from "zod";
 
-const playerIds = z
-  .array(z.string())
-  .min(1, "プレイヤーを1人以上選択してください");
-
-export const playerStepSchema = z.object({ playerIds });
+export const createPlayerStepSchema = (playersCount: number) =>
+  z.object({
+    playerIds: z
+      .array(z.string())
+      .min(playersCount, `プレイヤーを${playersCount}人以上選択してください`),
+  });
