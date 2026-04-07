@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { schema } from "@/lib/utils/schema";
 
-export const createProfileSchema = z.object({
+export const createPlayerSchema = z.object({
   name: schema.name,
 });

@@ -14,10 +14,10 @@ import { Form } from "@/components/form";
 import { NAME_MAX_LENGTH } from "@/lib/config";
 import type { Profile } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
-import { createProfile } from "./profile-create-actions";
-import { createProfileSchema } from "./profile-create-schema";
+import { createPlayer } from "./actions";
+import { createPlayerSchema } from "./schema";
 
-export function ProfileCreateModal({
+export function CreatePlayerModal({
   isOpen,
   onClose,
   onProfileCreate,
@@ -27,7 +27,7 @@ export function ProfileCreateModal({
   onProfileCreate: (profile: Profile) => void;
 }) {
   const [lastResult, formAction, isPending] = useActionState(
-    withCallbacks(createProfile, {
+    withCallbacks(createPlayer, {
       onSuccess(result) {
         const raw = (result as { targetValue?: { data?: string } })?.targetValue
           ?.data;
@@ -44,7 +44,7 @@ export function ProfileCreateModal({
     }),
     null,
   );
-  const { form, fields } = useForm(createProfileSchema, {
+  const { form, fields } = useForm(createPlayerSchema, {
     lastResult,
     onSubmit: createSubmitHandler(formAction),
   });

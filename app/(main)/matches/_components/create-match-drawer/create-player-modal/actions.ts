@@ -2,11 +2,11 @@
 
 import { parseSubmission, report } from "@conform-to/react/future";
 import { serverServices } from "@/lib/services/server";
-import { createProfileSchema } from "./profile-create-schema";
+import { createPlayerSchema } from "./schema";
 
-export async function createProfile(_prevState: unknown, formData: FormData) {
+export async function createPlayer(_prevState: unknown, formData: FormData) {
   const submission = parseSubmission(formData);
-  const result = createProfileSchema.safeParse(submission.payload);
+  const result = createPlayerSchema.safeParse(submission.payload);
 
   if (!result.success) {
     return report(submission, {
