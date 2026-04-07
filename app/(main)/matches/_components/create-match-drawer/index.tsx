@@ -41,7 +41,7 @@ export function CreateMatchDrawer({
     <Drawer.Backdrop isOpen={isOpen} onOpenChange={handleOpenChange}>
       <Drawer.Content>
         <Drawer.Dialog className="h-[85dvh]" aria-label="ゲーム作成">
-          <Stepper steps={steps} currentStep={currentStep} className="mb-5" />
+          <Stepper steps={steps} currentStep={currentStep} className="mb-2" />
           <Activity mode={currentStep === 0 ? "visible" : "hidden"}>
             <RuleForm onSubmit={handleRuleSubmit} />
           </Activity>
@@ -49,8 +49,8 @@ export function CreateMatchDrawer({
             {ruleData && (
               <PlayerForm
                 ruleData={ruleData}
+                userProfile={userProfile}
                 friends={friends}
-                defaultSelectedPlayers={[userProfile]}
                 onBack={() => setCurrentStep(0)}
               />
             )}

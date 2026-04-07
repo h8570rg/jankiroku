@@ -59,8 +59,6 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
     }),
   ) as { id: string; points: string }[] | undefined;
 
-  console.debug(players);
-
   const pointsList = players?.map((player) => player.points) ?? [];
 
   const totalPoints = pointsList.reduce((sum, v) => sum + (Number(v) || 0), 0);

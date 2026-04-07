@@ -18,10 +18,6 @@
           "level": "error",
           "options": {
             "paths": {
-              "react-hook-form": {
-                "importNames": ["Form"],
-                "message": "Formは@/components/formからimportしてください"
-              },
               "@heroui/react": {
                 "importNames": ["Form"],
                 "message": "Formは@/components/formからimportしてください"

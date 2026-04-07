@@ -19,6 +19,7 @@ export const friendService = (supabase: Supabase) => {
         id: friend.profiles.id,
         name: friend.profiles.name,
         displayId: friend.profiles.display_id,
+        isFriend: true,
       }));
     },
 

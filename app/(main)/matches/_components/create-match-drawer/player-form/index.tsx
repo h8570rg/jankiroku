@@ -4,20 +4,20 @@ import { useForm } from "@conform-to/react/future";
 import {
   Avatar,
   CloseButton,
+  Description,
   Drawer,
-  Header,
+  EmptyState,
+  Label,
   ListBox,
   ScrollShadow,
   SearchField,
-  Surface,
   useOverlayState,
 } from "@heroui/react";
-import { Check, User as UserIcon } from "lucide-react";
+import { Check, PlusIcon, User as UserIcon } from "lucide-react";
 import { useActionState, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import { User } from "@/components/user";
 import type { Profile } from "@/lib/type";
 import { createSubmitHandler } from "@/lib/utils/form";
 import type { RuleOutput } from "../rule-form/schema";
@@ -28,18 +28,18 @@ import { searchProfiles } from "./search-profiles";
 
 export function PlayerForm({
   ruleData,
+  userProfile,
   friends,
-  defaultSelectedPlayers,
   onBack,
 }: {
   ruleData: RuleOutput;
+  userProfile: Profile;
   friends: Profile[];
-  defaultSelectedPlayers: Profile[];
   onBack: () => void;
 }) {
-  const [selectedPlayers, setSelectedPlayers] = useState<Profile[]>(
-    defaultSelectedPlayers,
-  );
+  const [selectedPlayers, setSelectedPlayers] = useState<Profile[]>([
+    userProfile,
+  ]);
   const [searchedProfiles, setSearchedProfiles] = useState<Profile[] | null>(
     null,
   );
@@ -96,8 +96,8 @@ export function PlayerForm({
       validationErrors={form.fieldErrors}
       {...form.props}
     >
-      <Drawer.Body>
-        <div className="flex h-[60dvh] max-h-[500px] flex-col">
+      <Drawer.Body className="h-[60dvh] max-h-[500px]">
+        <div className="flex flex-col">
           {selectedPlayers.map((p) => (
             <input key={p.id} type="hidden" name="playerIds" value={p.id} />
           ))}
@@ -108,108 +108,105 @@ export function PlayerForm({
           )}
 
           {selectedPlayers.length > 0 && (
-            <div className="mb-4">
-              <p className="mb-2 pl-1 text-xs text-muted">
-                選択中 ({selectedPlayers.length})
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {selectedPlayers.map((player) => (
-                  <Surface
-                    key={player.id}
-                    variant="secondary"
-                    className="
-                      flex basis-1/4 flex-col items-center gap-0 rounded-2xl
-                      border border-accent p-2
-                    "
-                  >
-                    <Avatar size="sm">
-                      <Avatar.Fallback>
-                        <UserIcon />
-                      </Avatar.Fallback>
-                    </Avatar>
-                    <p>{player.name}</p>
-                    <CloseButton
-                      className="absolute -top-2 -right-2 rounded-full"
-                      onPress={() => handleRemove(player)}
-                    />
-                  </Surface>
-                ))}
-              </div>
+            <div className="mb-4 flex items-center gap-3">
+              <p className="mb-2 shrink-0 pl-1 text-xs text-muted">選択中</p>
+              <ScrollShadow orientation="horizontal" className="grow">
+                <div className="flex gap-2 pt-2">
+                  {selectedPlayers.map((player) => (
+                    <div
+                      key={player.id}
+                      className="
+                        flex w-12 shrink-0 animate-in flex-col items-center
+                        gap-0.5 fade-in
+                      "
+                    >
+                      <div className="relative w-fit">
+                        <Avatar size="md" className="">
+                          <Avatar.Fallback>
+                            <UserIcon />
+                          </Avatar.Fallback>
+                        </Avatar>
+                        {player.id !== userProfile.id && (
+                          <CloseButton
+                            className="
+                              absolute -top-1 -right-1 size-4 rounded-full ring
+                              ring-segment
+                              *:size-3
+                            "
+                            onPress={() => handleRemove(player)}
+                          />
+                        )}
+                      </div>
+                      <p className="
+                        line-clamp-2 w-full text-center text-xs break-all
+                        text-foreground
+                      ">
+                        {player.name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </ScrollShadow>
             </div>
           )}
           <SearchField
             variant="secondary"
-            className="mb-1"
+            className="mx-1 mb-1"
             onChange={handleSearch}
           >
             <SearchField.Group>
               <SearchField.SearchIcon />
-              <SearchField.Input placeholder="ユーザーIDもしくは名前で検索" />
+              <SearchField.Input placeholder="IDもしくは名前で検索" />
               <SearchField.ClearButton />
             </SearchField.Group>
           </SearchField>
-          <ScrollShadow className="min-h-0">
-            {searchedProfiles === null && (
-              <ListBox
-                aria-label="ユーザー選択"
-                onAction={handleSelect}
-                className="px-0"
-              >
-                <ListBox.Section>
-                  <Header>新規ユーザー</Header>
-                  <ListBox.Item id="new" textValue="新規ユーザー">
-                    <User name="プレイヤー名を入力" />
-                  </ListBox.Item>
-                </ListBox.Section>
-                <ListBox.Section>
-                  <Header>フレンド</Header>
-                  {friends.map((friend) => (
-                    <ListBox.Item
-                      key={friend.id}
-                      id={friend.id}
-                      textValue={friend.name ?? ""}
-                      className="flex w-full items-center justify-between"
-                    >
-                      <User name={friend.name} displayId={friend.displayId} />
-                      {selectedPlayers.some((p) => p.id === friend.id) && (
-                        <Check />
-                      )}
-                    </ListBox.Item>
+          {searchedProfiles === null && (
+            <ListBox
+              aria-label="フレンド選択"
+              onAction={handleSelect}
+              className="px-0"
+            >
+              <ListBox.Item id="new" className="flex w-full items-center">
+                <Avatar size="sm" variant="soft" color="accent">
+                  <Avatar.Fallback>
+                    <PlusIcon />
+                  </Avatar.Fallback>
+                </Avatar>
+                <Label>新規プレイヤー作成</Label>
+              </ListBox.Item>
+              {friends.map((friend) => (
+                <PlayerListBoxItem
+                  key={friend.id}
+                  player={friend}
+                  isSelected={selectedPlayers.some((p) => p.id === friend.id)}
+                />
+              ))}
+            </ListBox>
+          )}
+          {searchedProfiles !== null && (
+            <>
+              {searchedProfiles.length === 0 && (
+                <EmptyState className="mt-10 text-center">
+                  ユーザーが見つかりませんでした
+                </EmptyState>
+              )}
+              {searchedProfiles.length > 0 && (
+                <ListBox
+                  aria-label="検索結果"
+                  onAction={handleSelect}
+                  className="px-0"
+                >
+                  {searchedProfiles.map((item) => (
+                    <PlayerListBoxItem
+                      key={item.id}
+                      player={item}
+                      isSelected={selectedPlayers.some((p) => p.id === item.id)}
+                    />
                   ))}
-                </ListBox.Section>
-              </ListBox>
-            )}
-            {searchedProfiles !== null && (
-              <>
-                {searchedProfiles.length === 0 && (
-                  <p className="mt-10 text-center text-sm text-muted">
-                    見つかりませんでした
-                  </p>
-                )}
-                {searchedProfiles.length > 0 && (
-                  <ListBox
-                    aria-label="検索結果"
-                    onAction={handleSelect}
-                    className="px-0"
-                  >
-                    {searchedProfiles.map((item) => (
-                      <ListBox.Item
-                        key={item.id}
-                        id={item.id}
-                        textValue={item.name ?? ""}
-                        className="flex w-full items-center justify-between"
-                      >
-                        <User name={item.name} displayId={item.displayId} />
-                        {selectedPlayers.some((p) => p.id === item.id) && (
-                          <Check />
-                        )}
-                      </ListBox.Item>
-                    ))}
-                  </ListBox>
-                )}
-              </>
-            )}
-          </ScrollShadow>
+                </ListBox>
+              )}
+            </>
+          )}
           <ProfileCreateModal
             isOpen={profileCreateModal.isOpen}
             onClose={profileCreateModal.close}
@@ -228,5 +225,30 @@ export function PlayerForm({
         </Button>
       </Drawer.Footer>
     </Form>
+  );
+}
+
+function PlayerListBoxItem({
+  player,
+  isSelected,
+}: {
+  player: Profile;
+  isSelected: boolean;
+}) {
+  return (
+    <ListBox.Item id={player.id}>
+      <Avatar size="sm">
+        <Avatar.Fallback>
+          <UserIcon />
+        </Avatar.Fallback>
+      </Avatar>
+      <div className="flex flex-col">
+        <div className="flex items-center gap-1">
+          <Label>{player.name}</Label>
+        </div>
+        <Description>@{player.displayId}</Description>
+      </div>
+      <ListBox.ItemIndicator>{isSelected && <Check />}</ListBox.ItemIndicator>
+    </ListBox.Item>
   );
 }
