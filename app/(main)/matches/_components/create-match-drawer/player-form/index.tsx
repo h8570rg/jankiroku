@@ -1,6 +1,5 @@
 "use client";
 
-import { useForm } from "@conform-to/react/future";
 import {
   Avatar,
   CloseButton,
@@ -23,7 +22,6 @@ import { createSubmitHandler } from "@/lib/utils/form";
 import type { RuleOutput } from "../rule-form/schema";
 import { createMatch } from "./actions";
 import { ProfileCreateModal } from "./profile-create-modal";
-import { createPlayerStepSchema } from "./schema";
 import { searchProfiles } from "./search-profiles";
 
 export function PlayerForm({
@@ -50,29 +48,11 @@ export function PlayerForm({
     null,
   );
 
-  const playerStepSchema = createPlayerStepSchema(ruleData.playersCount);
-
-  const { form, fields, intent } = useForm(playerStepSchema, {
-    lastResult,
-    onSubmit: createSubmitHandler(formAction),
-    defaultValue: {
-      playerIds: selectedPlayers.map((p) => p.id),
-    },
-  });
-
   function insertSelectedPlayer(player: Profile) {
-    intent.insert({
-      name: fields.playerIds.name,
-      defaultValue: String(player.id),
-    });
     setSelectedPlayers([...selectedPlayers, player]);
   }
 
   function removeSelectedPlayer(playerId: string) {
-    intent.remove({
-      name: fields.playerIds.name,
-      index: selectedPlayers.findIndex((p) => p.id === playerId),
-    });
     setSelectedPlayers(selectedPlayers.filter((p) => p.id !== playerId));
   }
 
@@ -117,22 +97,11 @@ export function PlayerForm({
     }
   }
 
-  const selectedPlayerIds = fields.playerIds.getFieldList();
-
   return (
-    <Form
-      className="contents"
-      validationErrors={form.fieldErrors}
-      {...form.props}
-    >
+    <Form className="contents" onSubmit={createSubmitHandler(formAction)}>
       <Drawer.Body className="h-[60dvh] max-h-[500px]">
-        {selectedPlayerIds.map((p) => (
-          <input
-            key={p.id}
-            type="hidden"
-            name={p.name}
-            value={p.defaultValue}
-          />
+        {selectedPlayers.map((p) => (
+          <input key={p.id} type="hidden" name="playerIds" value={p.id} />
         ))}
 
         {selectedPlayers.length > 0 && (
@@ -179,8 +148,10 @@ export function PlayerForm({
             </ScrollShadow>
           </div>
         )}
-        {fields.playerIds.errors && (
-          <p className="mt-2 text-sm text-danger">{fields.playerIds.errors}</p>
+        {lastResult?.error?.fieldErrors?.playerIds && (
+          <p className="mt-2 text-sm text-danger">
+            {lastResult.error.fieldErrors.playerIds}
+          </p>
         )}
         <SearchField
           variant="secondary"

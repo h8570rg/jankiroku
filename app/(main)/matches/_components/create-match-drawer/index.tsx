@@ -1,7 +1,7 @@
 "use client";
 
 import { Drawer } from "@heroui/react";
-import { Activity, useState } from "react";
+import { useState } from "react";
 import { Stepper } from "@/components/stepper";
 import type { Profile } from "@/lib/type";
 import { PlayerForm } from "./player-form";
@@ -42,10 +42,10 @@ export function CreateMatchDrawer({
       <Drawer.Content>
         <Drawer.Dialog className="h-[85dvh]" aria-label="ゲーム作成">
           <Stepper steps={steps} currentStep={currentStep} className="mb-2" />
-          <Activity mode={currentStep === 0 ? "visible" : "hidden"}>
+          <div className={currentStep === 0 ? "contents" : "hidden"}>
             <RuleForm onSubmit={handleRuleSubmit} />
-          </Activity>
-          <Activity mode={currentStep === 1 ? "visible" : "hidden"}>
+          </div>
+          <div className={currentStep === 1 ? "contents" : "hidden"}>
             {ruleData && (
               <PlayerForm
                 ruleData={ruleData}
@@ -54,7 +54,7 @@ export function CreateMatchDrawer({
                 onBack={() => setCurrentStep(0)}
               />
             )}
-          </Activity>
+          </div>
         </Drawer.Dialog>
       </Drawer.Content>
     </Drawer.Backdrop>

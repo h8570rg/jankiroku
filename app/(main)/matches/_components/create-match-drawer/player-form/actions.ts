@@ -14,7 +14,11 @@ export async function createMatch(
 ) {
   const submission = parseSubmission(formData);
   const playerStepSchema = createPlayerStepSchema(ruleData.playersCount);
-  const result = playerStepSchema.safeParse(submission.payload);
+  const result = playerStepSchema.safeParse({
+    playerIds: Array.isArray(submission.payload.playerIds)
+      ? submission.payload.playerIds
+      : [submission.payload.playerIds],
+  });
 
   if (!result.success) {
     return report(submission, {
