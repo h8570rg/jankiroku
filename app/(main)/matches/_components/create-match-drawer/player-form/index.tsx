@@ -224,7 +224,7 @@ export function PlayerForm({
       </Form>
       <CreatePlayerModal
         isOpen={profileCreateModal.isOpen}
-        onClose={profileCreateModal.close}
+        onOpenChange={profileCreateModal.setOpen}
         onProfileCreate={(profile: Profile) => {
           setSelectedPlayers([...selectedPlayers, profile]);
         }}

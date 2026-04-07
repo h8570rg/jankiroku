@@ -6,6 +6,7 @@ import {
   FieldError,
   Input,
   Modal,
+  type ModalBackdropProps,
   TextField,
 } from "@heroui/react";
 import { useActionState } from "react";
@@ -18,28 +19,18 @@ import { createPlayer } from "./actions";
 import { createPlayerSchema } from "./schema";
 
 export function CreatePlayerModal({
-  isOpen,
-  onClose,
   onProfileCreate,
+  ...props
 }: {
-  isOpen?: boolean;
-  onClose?: () => void;
   onProfileCreate: (profile: Profile) => void;
-}) {
+} & ModalBackdropProps) {
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(createPlayer, {
       onSuccess(result) {
-        const raw = (result as { targetValue?: { data?: string } })?.targetValue
-          ?.data;
-        if (typeof raw === "string") {
-          try {
-            const profile = JSON.parse(raw) as Profile;
-            onProfileCreate(profile);
-          } catch {
-            // ignore
-          }
+        if (result.profile) {
+          onProfileCreate(result.profile);
         }
-        onClose?.();
+        props.onOpenChange?.(false);
       },
     }),
     null,
@@ -50,34 +41,32 @@ export function CreatePlayerModal({
   });
 
   return (
-    <Modal.Backdrop
-      isOpen={isOpen}
-      onOpenChange={(open) => {
-        if (!open) onClose?.();
-      }}
-    >
-      <Modal.Container placement="center" className="max-w-[80%]">
+    <Modal.Backdrop {...props}>
+      <Modal.Container placement="center" size="xs">
         <Modal.Dialog>
           <Modal.Header>
-            <Modal.Heading>プレイヤー名入力</Modal.Heading>
+            <Modal.Heading>新規プレイヤー作成</Modal.Heading>
           </Modal.Header>
           <Form
             className="contents"
             validationErrors={form.fieldErrors}
             {...form.props}
           >
-            <Modal.Body>
+            <Modal.Body className="px-1 py-4">
               <TextField
                 variant="secondary"
                 name={fields.name.name}
                 maxLength={NAME_MAX_LENGTH}
               >
-                <Input />
+                <Input placeholder="プレイヤー名を入力" />
                 <Description>{`${NAME_MAX_LENGTH}文字以内で入力してください`}</Description>
                 <FieldError />
               </TextField>
             </Modal.Body>
             <Modal.Footer>
+              <Button variant="ghost" slot="close">
+                キャンセル
+              </Button>
               <Button variant="primary" type="submit" isPending={isPending}>
                 決定
               </Button>

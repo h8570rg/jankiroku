@@ -2,9 +2,17 @@
 
 import { parseSubmission, report } from "@conform-to/react/future";
 import { serverServices } from "@/lib/services/server";
+import type { Profile } from "@/lib/type";
 import { createProfileSchema } from "./schema";
 
-export async function createProfile(_prevState: unknown, formData: FormData) {
+export type CreateProfileResult = ReturnType<typeof report> & {
+  profile?: Profile;
+};
+
+export async function createProfile(
+  _prevState: unknown,
+  formData: FormData,
+): Promise<CreateProfileResult> {
   const submission = parseSubmission(formData);
   const result = createProfileSchema.safeParse(submission.payload);
 
@@ -22,7 +30,5 @@ export async function createProfile(_prevState: unknown, formData: FormData) {
     name,
   });
 
-  return report(submission, {
-    value: { data: JSON.stringify(profile) },
-  });
+  return { ...report(submission, {}), profile };
 }

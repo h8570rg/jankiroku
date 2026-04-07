@@ -1,10 +1,22 @@
 "use server";
 
-import { parseSubmission, report } from "@conform-to/react/future";
+import {
+  parseSubmission,
+  report,
+  type SubmissionResult,
+} from "@conform-to/react/future";
 import { serverServices } from "@/lib/services/server";
+import type { Profile } from "@/lib/type";
 import { createPlayerSchema } from "./schema";
 
-export async function createPlayer(_prevState: unknown, formData: FormData) {
+export type CreatePlayerResult = SubmissionResult & {
+  profile?: Profile;
+};
+
+export async function createPlayer(
+  _prevState: unknown,
+  formData: FormData,
+): Promise<CreatePlayerResult> {
   const submission = parseSubmission(formData);
   const result = createPlayerSchema.safeParse(submission.payload);
 
@@ -22,7 +34,5 @@ export async function createPlayer(_prevState: unknown, formData: FormData) {
     name,
   });
 
-  return report(submission, {
-    value: { data: JSON.stringify(profile) },
-  });
+  return { ...report(submission, {}), profile };
 }

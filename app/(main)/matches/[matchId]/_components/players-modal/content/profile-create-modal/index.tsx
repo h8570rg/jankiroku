@@ -29,15 +29,8 @@ export function ProfileCreateModal({
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(createProfile, {
       onSuccess(result) {
-        const raw = (result as { targetValue?: { data?: string } })?.targetValue
-          ?.data;
-        if (typeof raw === "string") {
-          try {
-            const profile = JSON.parse(raw) as Profile;
-            onProfileCreate(profile);
-          } catch {
-            // ignore
-          }
+        if (result.profile) {
+          onProfileCreate(result.profile);
         }
         onClose?.();
       },
