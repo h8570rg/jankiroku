@@ -46,17 +46,34 @@ export function PlayerForm({
   const profileCreateModal = useOverlayState({ defaultOpen: false });
 
   const [lastResult, formAction, isPending] = useActionState(
-    async (prevState: unknown, formData: FormData) => {
-      return createMatch(ruleData, prevState, formData);
-    },
+    createMatch.bind(null, ruleData),
     null,
   );
 
-  const { form, fields } = useForm(playerStepSchema, {
+  const { form, fields, intent } = useForm(playerStepSchema, {
     lastResult,
     onSubmit: createSubmitHandler(formAction),
     shouldRevalidate: "onInput",
+    defaultValue: {
+      playerIds: selectedPlayers.map((p) => p.id),
+    },
   });
+
+  function insertSelectedPlayer(player: Profile) {
+    intent.insert({
+      name: fields.playerIds.name,
+      defaultValue: String(player.id),
+    });
+    setSelectedPlayers([...selectedPlayers, player]);
+  }
+
+  function removeSelectedPlayer(playerId: string) {
+    intent.remove({
+      name: fields.playerIds.name,
+      index: selectedPlayers.findIndex((p) => p.id === playerId),
+    });
+    setSelectedPlayers(selectedPlayers.filter((p) => p.id !== playerId));
+  }
 
   const handleSearch = useDebouncedCallback((text: string) => {
     if (!text) {
@@ -70,25 +87,36 @@ export function PlayerForm({
       });
   }, 300);
 
-  function handleSelect(key: string | number) {
+  function handleFriendListBoxAction(key: string | number) {
+    // 新規プレイヤー作成の場合
     if (key === "new") {
       profileCreateModal.open();
       return;
     }
-    if (selectedPlayers.find((p) => p.id === key)) {
-      setSelectedPlayers(selectedPlayers.filter((p) => p.id !== key));
+    const isPlayerSelected = selectedPlayers.some((p) => p.id === key);
+    if (isPlayerSelected) {
+      removeSelectedPlayer(String(key));
       return;
     }
-    const allProfiles = searchedProfiles ?? friends;
-    const player = allProfiles.find((p) => p.id === key);
+    const player = friends.find((p) => p.id === key);
     if (player) {
-      setSelectedPlayers([...selectedPlayers, player]);
+      insertSelectedPlayer(player);
     }
   }
 
-  function handleRemove(player: Profile) {
-    setSelectedPlayers(selectedPlayers.filter((p) => p.id !== player.id));
+  function handleSearchedProfileListBoxAction(key: string | number) {
+    const isPlayerSelected = selectedPlayers.some((p) => p.id === key);
+    if (isPlayerSelected) {
+      removeSelectedPlayer(String(key));
+      return;
+    }
+    const player = searchedProfiles?.find((p) => p.id === key);
+    if (player) {
+      insertSelectedPlayer(player);
+    }
   }
+
+  const selectedPlayerIds = fields.playerIds.getFieldList();
 
   return (
     <Form
@@ -98,8 +126,13 @@ export function PlayerForm({
     >
       <Drawer.Body className="h-[60dvh] max-h-[500px]">
         <div className="flex flex-col">
-          {selectedPlayers.map((p) => (
-            <input key={p.id} type="hidden" name="playerIds" value={p.id} />
+          {selectedPlayerIds.map((p) => (
+            <input
+              key={p.id}
+              type="hidden"
+              name={p.name}
+              value={p.defaultValue}
+            />
           ))}
           {fields.playerIds.errors && (
             <p className="mb-2 text-sm text-danger">
@@ -133,14 +166,16 @@ export function PlayerForm({
                               ring-segment
                               *:size-3
                             "
-                            onPress={() => handleRemove(player)}
+                            onPress={() => removeSelectedPlayer(player.id)}
                           />
                         )}
                       </div>
-                      <p className="
-                        line-clamp-2 w-full text-center text-xs break-all
-                        text-foreground
-                      ">
+                      <p
+                        className="
+                          line-clamp-2 w-full text-center text-xs break-all
+                          text-foreground
+                        "
+                      >
                         {player.name}
                       </p>
                     </div>
@@ -163,7 +198,7 @@ export function PlayerForm({
           {searchedProfiles === null && (
             <ListBox
               aria-label="フレンド選択"
-              onAction={handleSelect}
+              onAction={handleFriendListBoxAction}
               className="px-0"
             >
               <ListBox.Item id="new" className="flex w-full items-center">
@@ -193,7 +228,7 @@ export function PlayerForm({
               {searchedProfiles.length > 0 && (
                 <ListBox
                   aria-label="検索結果"
-                  onAction={handleSelect}
+                  onAction={handleSearchedProfileListBoxAction}
                   className="px-0"
                 >
                   {searchedProfiles.map((item) => (
