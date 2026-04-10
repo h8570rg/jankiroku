@@ -3,11 +3,11 @@
 import { getFieldValue, useForm, useFormData } from "@conform-to/react/future";
 import {
   cn,
+  Drawer,
   FieldError,
   InputGroup,
   Label,
   ListBox,
-  Modal,
   Popover,
   Select,
   TextField,
@@ -21,13 +21,17 @@ import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { addGame } from "./actions";
 import { addGameFormSchema } from "./schema";
 
-export type GameModalProps = {
+export type CreateGameDrawerProps = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   match: Match;
 };
 
-export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
+export function CreateGameDrawer({
+  isOpen,
+  onOpenChange,
+  match,
+}: CreateGameDrawerProps) {
   const formRef = useRef<HTMLFormElement>(null);
 
   const { rule } = match;
@@ -67,15 +71,12 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
   const isAutoFillAvailable = filledCount === rule.playersCount - 1;
 
   return (
-    <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
-      <Modal.Container
-        placement="bottom"
-        scroll="inside"
-        className="max-h-[calc(100%-2rem)]"
-      >
-        <Modal.Dialog>
-          <Modal.Header className="flex flex-row items-center justify-between">
-            <Modal.Heading>結果入力</Modal.Heading>
+    <Drawer.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Drawer.Content placement="bottom">
+        <Drawer.Dialog>
+          <Drawer.Handle />
+          <Drawer.Header className="flex flex-row items-center justify-between">
+            <Drawer.Heading>結果入力</Drawer.Heading>
             <Popover>
               <Button className="gap-1" variant="ghost" size="sm">
                 <span className="text-accent underline">同点の場合</span>
@@ -87,8 +88,8 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
                 </Popover.Dialog>
               </Popover.Content>
             </Popover>
-          </Modal.Header>
-          <Modal.Body className="p-1">
+          </Drawer.Header>
+          <Drawer.Body className="p-1">
             <Form
               ref={formRef}
               validationErrors={form.fieldErrors}
@@ -240,8 +241,8 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
                 <FieldError />
               </Select>
             </Form>
-          </Modal.Body>
-          <Modal.Footer>
+          </Drawer.Body>
+          <Drawer.Footer>
             <Button variant="ghost" slot="close">
               キャンセル
             </Button>
@@ -253,9 +254,9 @@ export function GameModal({ isOpen, onOpenChange, match }: GameModalProps) {
             >
               保存
             </Button>
-          </Modal.Footer>
-        </Modal.Dialog>
-      </Modal.Container>
-    </Modal.Backdrop>
+          </Drawer.Footer>
+        </Drawer.Dialog>
+      </Drawer.Content>
+    </Drawer.Backdrop>
   );
 }

@@ -1,39 +1,41 @@
 "use client";
 
 import { useOverlayState } from "@heroui/react";
+import { Pencil } from "lucide-react";
 import { Button, type ButtonProps } from "@/components/button";
 import type { Match } from "@/lib/type";
-import { GameModal } from "../../game-modal";
+import { CreateGameDrawer } from "../../create-game-drawer";
 
-export function GameModalSection({
+export function CreateGameButton({
   match,
   isPlayersShort,
-  children,
   ...buttonProps
 }: {
   match: Match;
   isPlayersShort: boolean;
-  children: React.ReactNode;
 } & ButtonProps) {
-  const gameModal = useOverlayState();
+  const gameDrawer = useOverlayState();
 
   return (
     <>
       <Button
-        {...buttonProps}
+        size="lg"
+        variant="outline"
         onPress={() => {
           if (isPlayersShort) {
             alert("プレイヤーが足りません");
             return;
           }
-          gameModal.open();
+          gameDrawer.open();
         }}
+        {...buttonProps}
       >
-        {children}
+        <Pencil />
+        結果を入力する
       </Button>
-      <GameModal
-        isOpen={gameModal.isOpen}
-        onOpenChange={gameModal.setOpen}
+      <CreateGameDrawer
+        isOpen={gameDrawer.isOpen}
+        onOpenChange={gameDrawer.setOpen}
         match={match}
       />
     </>

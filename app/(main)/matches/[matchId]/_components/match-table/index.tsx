@@ -1,10 +1,9 @@
 import { cn } from "@heroui/react";
-import { Pencil } from "lucide-react";
 import type { CSSProperties } from "react";
 import { serverServices } from "@/lib/services/server";
 import type { MatchPlayer } from "@/lib/type";
 import { ChipRow } from "./chip-row";
-import { GameModalSection } from "./game-modal-section";
+import { CreateGameButton } from "./create-game-button";
 import { GameRow } from "./game-row";
 import { PlayersRow } from "./players-row";
 
@@ -137,17 +136,12 @@ export async function MatchTable({
                 ))}
               </GameRow>
             ))}
-          <GameModalSection
-            match={match}
-            isPlayersShort={isPlayersShort}
+          <CreateGameButton
             className="mt-1"
             fullWidth
-            size="lg"
-            variant="outline"
-          >
-            <Pencil />
-            結果を入力する
-          </GameModalSection>
+            match={match}
+            isPlayersShort={isPlayersShort}
+          />
         </div>
         {/* フッター */}
         <div className="mt-3 rounded-3xl bg-surface text-muted">
