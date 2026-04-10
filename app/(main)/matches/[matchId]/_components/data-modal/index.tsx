@@ -2,7 +2,7 @@
 
 import { Modal } from "@heroui/react";
 import type { Match } from "@/lib/type";
-import { DataChart } from "./chart";
+import { DataChart } from "./data-chart";
 import { Summary } from "./summary";
 
 export type DataModalProps = {

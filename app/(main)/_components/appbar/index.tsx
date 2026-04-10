@@ -3,7 +3,7 @@ import NextLink from "next/link";
 import { Suspense } from "react";
 import Logo from "@/components/logo";
 import { Navbar, NavbarBrand, NavbarContent } from "@/components/navbar";
-import { AppbarAvatar } from "./avatar";
+import { AppbarAvatar } from "./appbar-avatar";
 
 export default function Appbar() {
   return (

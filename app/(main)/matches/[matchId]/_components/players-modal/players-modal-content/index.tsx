@@ -17,7 +17,7 @@ import { Button } from "@/components/button";
 import { User } from "@/components/user";
 import type { Profile } from "@/lib/type";
 import { searchProfiles, updateMatchPlayers } from "./actions";
-import { CreateProfileModal } from "./profile-create-modal";
+import { CreateProfileModal } from "./create-profile-modal";
 
 export function PlayersModalContent({
   matchId,

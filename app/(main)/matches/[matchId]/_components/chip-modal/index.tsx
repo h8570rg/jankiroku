@@ -2,7 +2,7 @@
 
 import { Modal } from "@heroui/react";
 import type { Match } from "@/lib/type";
-import { ChipForm } from "./form";
+import { ChipForm } from "./chip-form";
 
 export type ChipModalProps = {
   isOpen: boolean;

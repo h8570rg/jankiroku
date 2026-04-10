@@ -2,7 +2,7 @@
 
 import { Modal } from "@heroui/react";
 import type { Profile } from "@/lib/type";
-import { PlayersModalContent } from "./content";
+import { PlayersModalContent } from "./players-modal-content";
 
 export type PlayersModalProps = {
   isOpen: boolean;

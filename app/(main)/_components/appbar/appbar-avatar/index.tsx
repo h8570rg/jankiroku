@@ -2,7 +2,7 @@ import { Avatar, Dropdown } from "@heroui/react";
 import { UserRound } from "lucide-react";
 import { redirect } from "next/navigation";
 import { serverServices } from "@/lib/services/server";
-import { AppbarAvatarMenu } from "./menu";
+import { AppbarAvatarMenu } from "./appbar-avatar-menu";
 
 export async function AppbarAvatar() {
   const { getUserProfile } = await serverServices();

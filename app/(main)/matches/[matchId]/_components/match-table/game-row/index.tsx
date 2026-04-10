@@ -1,6 +1,6 @@
 "use client";
 
-import { UpdateGameModal, useUpdateGameModal } from "../game-update-modal";
+import { UpdateGameModal, useUpdateGameModal } from "../update-game-modal";
 
 export function GameRow({
   index,

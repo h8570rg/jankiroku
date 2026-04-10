@@ -5,7 +5,7 @@ import { Button } from "@/components/button";
 import {
   DeleteGameConfirmDialog,
   useDeleteGameConfirmDialog,
-} from "./game-delete-confirm-dialog";
+} from "./delete-game-confirm-dialog";
 
 export function UpdateGameModal({
   matchId,

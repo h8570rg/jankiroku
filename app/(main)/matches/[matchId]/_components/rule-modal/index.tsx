@@ -2,7 +2,7 @@
 
 import { Modal } from "@heroui/react";
 import type { Rule } from "@/lib/type";
-import { RuleModalContent } from "./content";
+import { RuleModalContent } from "./rule-modal-content";
 
 export type RuleModalProps = {
   isOpen: boolean;
