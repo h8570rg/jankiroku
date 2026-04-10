@@ -4,7 +4,7 @@ import { Modal, useOverlayState } from "@heroui/react";
 import { Button } from "@/components/button";
 import { deleteGame } from "./actions";
 
-export function GameDeleteConfirmDialog({
+export function DeleteGameConfirmDialog({
   matchId,
   gameId,
   isOpen,
@@ -46,4 +46,4 @@ export function GameDeleteConfirmDialog({
   );
 }
 
-export { useOverlayState as useGameDeleteConfirmDialog };
+export { useOverlayState as useDeleteGameConfirmDialog };

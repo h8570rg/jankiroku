@@ -3,11 +3,11 @@
 import { Modal, useOverlayState } from "@heroui/react";
 import { Button } from "@/components/button";
 import {
-  GameDeleteConfirmDialog,
-  useGameDeleteConfirmDialog,
+  DeleteGameConfirmDialog,
+  useDeleteGameConfirmDialog,
 } from "./game-delete-confirm-dialog";
 
-export function GameUpdateModal({
+export function UpdateGameModal({
   matchId,
   gameId,
   index,
@@ -20,7 +20,7 @@ export function GameUpdateModal({
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
 }) {
-  const gameDeleteConfirmDialog = useGameDeleteConfirmDialog();
+  const deleteGameConfirmDialog = useDeleteGameConfirmDialog();
   return (
     <>
       <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -33,7 +33,7 @@ export function GameUpdateModal({
               <Button
                 className="mr-auto"
                 variant="danger"
-                onPress={gameDeleteConfirmDialog.open}
+                onPress={deleteGameConfirmDialog.open}
               >
                 削除
               </Button>
@@ -51,13 +51,13 @@ export function GameUpdateModal({
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>
-      <GameDeleteConfirmDialog
-        isOpen={gameDeleteConfirmDialog.isOpen}
+      <DeleteGameConfirmDialog
+        isOpen={deleteGameConfirmDialog.isOpen}
         onOpenChange={(isOpen) => {
           if (isOpen) {
-            gameDeleteConfirmDialog.open();
+            deleteGameConfirmDialog.open();
           } else {
-            gameDeleteConfirmDialog.close();
+            deleteGameConfirmDialog.close();
           }
         }}
         matchId={matchId}
@@ -67,4 +67,4 @@ export function GameUpdateModal({
   );
 }
 
-export { useOverlayState as useGameUpdateModal };
+export { useOverlayState as useUpdateGameModal };

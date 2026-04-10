@@ -17,7 +17,7 @@ import { Button } from "@/components/button";
 import { User } from "@/components/user";
 import type { Profile } from "@/lib/type";
 import { searchProfiles, updateMatchPlayers } from "./actions";
-import { ProfileCreateModal } from "./profile-create-modal";
+import { CreateProfileModal } from "./profile-create-modal";
 
 export function PlayersModalContent({
   matchId,
@@ -227,7 +227,7 @@ export function PlayersModalContent({
           決定
         </Button>
       </Modal.Footer>
-      <ProfileCreateModal
+      <CreateProfileModal
         isOpen={profileCreateModal.isOpen}
         onClose={profileCreateModal.close}
         onProfileCreate={(profile: Profile) => {

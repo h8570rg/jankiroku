@@ -17,7 +17,7 @@ import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { createProfile } from "./actions";
 import { createProfileSchema } from "./schema";
 
-export function ProfileCreateModal({
+export function CreateProfileModal({
   isOpen,
   onClose,
   onProfileCreate,

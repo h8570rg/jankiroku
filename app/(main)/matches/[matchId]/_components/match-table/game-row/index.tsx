@@ -1,6 +1,6 @@
 "use client";
 
-import { GameUpdateModal, useGameUpdateModal } from "../game-update-modal";
+import { UpdateGameModal, useUpdateGameModal } from "../game-update-modal";
 
 export function GameRow({
   index,
@@ -15,20 +15,20 @@ export function GameRow({
   gameId: string;
   style?: React.CSSProperties;
 }) {
-  const gameUpdateModal = useGameUpdateModal();
+  const updateGameModal = useUpdateGameModal();
   return (
     <>
       <button
         type="button"
         className="bg-transparent py-1 shadow-none"
-        onClick={gameUpdateModal.open}
+        onClick={updateGameModal.open}
         style={style}
       >
         {children}
       </button>
-      <GameUpdateModal
-        isOpen={gameUpdateModal.isOpen}
-        onOpenChange={gameUpdateModal.setOpen}
+      <UpdateGameModal
+        isOpen={updateGameModal.isOpen}
+        onOpenChange={updateGameModal.setOpen}
         index={index}
         matchId={matchId}
         gameId={gameId}
