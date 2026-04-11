@@ -2,18 +2,18 @@
 
 import { getFieldValue, useForm, useFormData } from "@conform-to/react/future";
 import {
+  ButtonGroup,
   cn,
   Drawer,
   FieldError,
   InputGroup,
   Label,
   ListBox,
-  Popover,
   Select,
   Separator,
   TextField,
 } from "@heroui/react";
-import { ChevronDown, ChevronUp, CircleHelp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useActionState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
@@ -21,6 +21,7 @@ import type { Match } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { createGame } from "./actions";
 import { createCreateGameSchema } from "./schema";
+import { TiedPlayersAlert } from "./tied-players-alert";
 
 export type CreateGameDrawerProps = {
   isOpen: boolean;
@@ -73,7 +74,7 @@ export function CreateGameDrawer({
     (sum, p) => sum + (Number(p.points) || 0),
     0,
   );
-  const totalPointsToBe = rule.defaultPoints * rule.playersCount;
+  const totalPointsToBe = (rule.defaultPoints / 100) * rule.playersCount;
   const filledCount = players.filter((p) => p.points !== "").length;
   const isAutoFillAvailable = filledCount === rule.playersCount - 1;
 
@@ -94,21 +95,11 @@ export function CreateGameDrawer({
     <Drawer.Backdrop isOpen={isOpen} onOpenChange={handleOpenChange}>
       <Drawer.Content placement="bottom">
         <Drawer.Dialog>
-          <Drawer.Header className="flex flex-row items-center justify-between">
+          <Drawer.Header>
             <Drawer.Heading>結果入力</Drawer.Heading>
-            <Popover>
-              <Button className="gap-1" variant="ghost" size="sm">
-                <span className="text-accent underline">同点の場合</span>
-                <CircleHelp className="text-accent" />
-              </Button>
-              <Popover.Content className="max-w-[280px] bg-surface-secondary">
-                <Popover.Dialog>
-                  点数が同じプレイヤーがいる場合、順番が先のプレイヤーの着順が上になります。名前の左のアイコンをドラッグ&ドロップして順番を変更できます。
-                </Popover.Dialog>
-              </Popover.Content>
-            </Popover>
           </Drawer.Header>
-          <Drawer.Body className="p-1">
+          <Drawer.Body className="space-y-3 p-1">
+            {hasTiedPlayers && <TiedPlayersAlert />}
             <Form
               validationErrors={form.fieldErrors}
               className="space-y-3"
@@ -132,100 +123,104 @@ export function CreateGameDrawer({
                           value={playerFields.name.defaultValue}
                         />
                         <TextField
-                          className="flex min-w-0 flex-row items-center gap-2"
                           variant="secondary"
                           type="number"
                           name={playerFields.points.name}
                           autoFocus={index === 0}
                         >
-                          <Label
-                            className="grow text-sm text-foreground"
-                          >
-                            {playerFields.name.defaultValue}
-                          </Label>
-                          <InputGroup className="min-w-0 shrink-0 basis-40">
-                            {isAutoFillAvailable && !playerPoints && (
-                              <InputGroup.Prefix>
+                          <div className="flex flex-row items-center gap-2">
+                            <Label className="grow text-sm text-foreground">
+                              {playerFields.name.defaultValue}
+                            </Label>
+                            <InputGroup className="min-w-0 shrink-0 basis-32">
+                              {isAutoFillAvailable && !playerPoints && (
+                                <InputGroup.Prefix>
+                                  <Button
+                                    size="sm"
+                                    className="
+                                      h-6 w-max min-w-0 shrink-0 gap-1 px-2
+                                      text-[10px]
+                                    "
+                                    type="button"
+                                    variant="secondary"
+                                    onPress={() => {
+                                      const remainder =
+                                        totalPointsToBe - totalPoints;
+                                      intent.update({
+                                        name: fields.players.name,
+                                        index,
+                                        value: {
+                                          id:
+                                            (
+                                              players?.[index] as {
+                                                id?: string;
+                                              }
+                                            )?.id ?? "",
+                                          points: String(remainder),
+                                          name: playerFields.name.defaultValue,
+                                        },
+                                      });
+                                    }}
+                                  >
+                                    残り入力
+                                  </Button>
+                                </InputGroup.Prefix>
+                              )}
+                              <InputGroup.Input className="min-w-0 text-right" />
+                              <InputGroup.Suffix className="pl-1">
+                                <span
+                                  className={cn("mt-0.5 mr-1 text-xs", {
+                                    "text-foreground": !!playerPoints,
+                                  })}
+                                >
+                                  00
+                                </span>
+                                点
+                              </InputGroup.Suffix>
+                            </InputGroup>
+                            {hasTiedPlayers && (
+                              <ButtonGroup
+                                orientation="vertical"
+                                size="sm"
+                                variant="secondary"
+                              >
                                 <Button
-                                  size="sm"
-                                  className="
-                                    h-6 w-max min-w-0 shrink-0 gap-1 px-2
-                                    text-[10px]
-                                  "
-                                  type="button"
-                                  variant="secondary"
+                                  className="h-1/2"
+                                  isIconOnly
+                                  isDisabled={index === 0}
                                   onPress={() => {
-                                    const remainder =
-                                      totalPointsToBe - totalPoints;
-                                    intent.update({
+                                    intent.reorder({
                                       name: fields.players.name,
-                                      index,
-                                      value: {
-                                        id:
-                                          (players?.[index] as { id?: string })
-                                            ?.id ?? "",
-                                        points: String(remainder),
-                                        name: playerFields.name.defaultValue,
-                                      },
+                                      from: index,
+                                      to: index - 1,
                                     });
                                   }}
                                 >
-                                  残り入力
+                                  <ChevronUp />
                                 </Button>
-                              </InputGroup.Prefix>
+                                <Button
+                                  size="sm"
+                                  className="h-1/2"
+                                  isIconOnly
+                                  isDisabled={
+                                    index === playersFieldList.length - 1
+                                  }
+                                  onPress={() => {
+                                    intent.reorder({
+                                      name: fields.players.name,
+                                      from: index,
+                                      to: index + 1,
+                                    });
+                                  }}
+                                >
+                                  <ButtonGroup.Separator />
+                                  <ChevronDown />
+                                </Button>
+                              </ButtonGroup>
                             )}
-                            <InputGroup.Input className="min-w-0 text-right" />
-                            <InputGroup.Suffix>
-                              <span
-                                className={cn("mt-0.5 mr-1 text-xs", {
-                                  "text-foreground": !!playerPoints,
-                                })}
-                              >
-                                00
-                              </span>
-                              点
-                            </InputGroup.Suffix>
-                          </InputGroup>
+                          </div>
                           <FieldError />
                         </TextField>
-                        {hasTiedPlayers && (
-                          <div className="flex shrink-0 flex-col gap-0">
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="secondary"
-                              className="min-w-0 p-1"
-                              isIconOnly
-                              isDisabled={index === 0}
-                              onPress={() => {
-                                intent.reorder({
-                                  name: fields.players.name,
-                                  from: index,
-                                  to: index - 1,
-                                });
-                              }}
-                            >
-                              <ChevronUp />
-                            </Button>
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="secondary"
-                              className="min-w-0 p-1"
-                              isIconOnly
-                              isDisabled={index === playersFieldList.length - 1}
-                              onPress={() => {
-                                intent.reorder({
-                                  name: fields.players.name,
-                                  from: index,
-                                  to: index + 1,
-                                });
-                              }}
-                            >
-                              <ChevronDown />
-                            </Button>
-                          </div>
-                        )}
                       </li>
                     );
                   })}
