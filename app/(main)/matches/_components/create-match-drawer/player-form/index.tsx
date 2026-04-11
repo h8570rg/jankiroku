@@ -7,7 +7,7 @@ import { Form } from "@/components/form";
 import type { Profile } from "@/lib/type";
 import { createSubmitHandler } from "@/lib/utils/form";
 import { PlayerSelector } from "../../player-selector";
-import { CreatePlayerModal } from "../create-player-modal";
+import { CreatePlayerModal } from "../../player-selector/create-player-modal";
 import type { RuleOutput } from "../rule-form/schema";
 import { createMatch } from "./actions";
 import { searchProfiles } from "./search-profiles";

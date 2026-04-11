@@ -5,8 +5,8 @@ import { useState } from "react";
 import { Button } from "@/components/button";
 import type { Profile } from "@/lib/type";
 import { PlayerSelector } from "../../../../_components/player-selector";
+import { CreatePlayerModal } from "../../../../_components/player-selector/create-player-modal";
 import { searchProfiles, updateMatchPlayers } from "./actions";
-import { CreateProfileModal } from "./create-profile-modal";
 
 export function PlayersModalContent({
   matchId,
@@ -70,9 +70,9 @@ export function PlayersModalContent({
           決定
         </Button>
       </Modal.Footer>
-      <CreateProfileModal
+      <CreatePlayerModal
         isOpen={profileCreateModal.isOpen}
-        onClose={profileCreateModal.close}
+        onOpenChange={profileCreateModal.setOpen}
         onProfileCreate={(profile: Profile) => {
           setSelectedPlayers((prev) => [...prev, profile]);
         }}
