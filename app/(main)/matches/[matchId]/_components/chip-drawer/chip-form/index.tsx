@@ -5,7 +5,13 @@ import {
   useForm,
   useFormData,
 } from "@conform-to/react/future";
-import { FieldError, InputGroup, Modal, TextField } from "@heroui/react";
+import {
+  Drawer,
+  FieldError,
+  InputGroup,
+  Label,
+  TextField,
+} from "@heroui/react";
 import { useActionState, useRef } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
@@ -24,6 +30,8 @@ export function ChipForm({
   const formRef = useRef<HTMLFormElement>(null);
   const { players, rule } = match;
 
+  console.log(players);
+
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(addChip, {
       onSuccess() {
@@ -36,7 +44,10 @@ export function ChipForm({
     lastResult,
     onSubmit: createSubmitHandler(formAction),
     defaultValue: {
-      playerChip: players.map((p) => ({ profileId: p.id, chipCount: "" })),
+      playerChip: players.map((p) => ({
+        profileId: p.id,
+        chipCount: p.chipCount != null ? String(p.chipCount) : "",
+      })),
     },
   });
 
@@ -69,54 +80,56 @@ export function ChipForm({
       {...form.props}
     >
       <input type="hidden" name="matchId" value={match.id} />
-      <Modal.Body>
-        <ul className="space-y-1">
+      <Drawer.Body className="space-y-3 p-1">
+        <ul className="space-y-2">
           {playerChipListFields.map((item, index) => {
             const fieldset = item.getFieldset();
             return (
-              <li key={item.key} className="flex items-center gap-1">
+              <li key={item.key}>
                 <input
                   type="hidden"
                   name={fieldset.profileId.name}
                   value={players[index].id}
                 />
-                <div className="shrink-0 grow text-sm text-foreground">
-                  {players[index].name}
-                </div>
                 <TextField
-                  className="flex flex-row items-center gap-2"
                   variant="secondary"
                   type="number"
                   name={fieldset.chipCount.name}
+                  defaultValue={fieldset.chipCount.defaultValue}
                 >
-                  <InputGroup>
-                    {isAutoFillAvailable && chipCounts[index] === "" && (
-                      <InputGroup.Prefix>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          className="
-                            h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]
-                          "
-                          type="button"
-                          onPress={() => {
-                            intent.update({
-                              name: fields.playerChip.name,
-                              index,
-                              value: {
-                                profileId: players[index].id,
-                                chipCount: String(-1 * totalChipCount),
-                              },
-                            });
-                          }}
-                        >
-                          残り入力
-                        </Button>
-                      </InputGroup.Prefix>
-                    )}
-                    <InputGroup.Input className="text-right" />
-                    <InputGroup.Suffix>枚</InputGroup.Suffix>
-                  </InputGroup>
+                  <div className="flex flex-row items-center gap-2">
+                    <Label className="grow text-sm text-foreground">
+                      {players[index].name}
+                    </Label>
+                    <InputGroup className="min-w-0 shrink-0 basis-32">
+                      {isAutoFillAvailable && chipCounts[index] === "" && (
+                        <InputGroup.Prefix>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="
+                              h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]
+                            "
+                            type="button"
+                            onPress={() => {
+                              intent.update({
+                                name: fields.playerChip.name,
+                                index,
+                                value: {
+                                  profileId: players[index].id,
+                                  chipCount: String(-1 * totalChipCount),
+                                },
+                              });
+                            }}
+                          >
+                            残り入力
+                          </Button>
+                        </InputGroup.Prefix>
+                      )}
+                      <InputGroup.Input className="min-w-0 text-right" />
+                      <InputGroup.Suffix>枚</InputGroup.Suffix>
+                    </InputGroup>
+                  </div>
                   <FieldError />
                 </TextField>
               </li>
@@ -128,15 +141,20 @@ export function ChipForm({
             {form.errors}
           </p>
         )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="ghost" onPress={() => onOpenChange(false)}>
+      </Drawer.Body>
+      <Drawer.Footer>
+        <Button variant="ghost" slot="close">
           キャンセル
         </Button>
-        <Button type="submit" variant="primary" isPending={isPending}>
+        <Button
+          form={form.props.id}
+          type="submit"
+          variant="primary"
+          isPending={isPending}
+        >
           保存
         </Button>
-      </Modal.Footer>
+      </Drawer.Footer>
     </Form>
   );
 }
