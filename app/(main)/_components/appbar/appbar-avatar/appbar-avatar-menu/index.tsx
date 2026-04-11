@@ -4,17 +4,14 @@ import { Dropdown, type Key, Label } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { signOut } from "./actions";
 
-export function AppbarAvatarMenu({
-  name,
-  displayId,
-}: {
-  name: string;
-  displayId: string;
-}) {
+export function AppbarAvatarMenu() {
   const router = useRouter();
 
   function handleProfileMenuAction(key: Key) {
     switch (key) {
+      case "editProfile":
+        router.push("/profile");
+        break;
       case "friends":
         // prefetchしたほうが早いかも
         router.push("/friends");
@@ -33,13 +30,8 @@ export function AppbarAvatarMenu({
       aria-label="プロフィール"
       onAction={handleProfileMenuAction}
     >
-      <Dropdown.Item
-        id="profile"
-        className="h-14 gap-2"
-        textValue={`${name}@${displayId}`}
-      >
-        <p className="text-wrap break-all">{name}</p>
-        <p className="text-wrap break-all">@{displayId}</p>
+      <Dropdown.Item id="editProfile">
+        <Label>プロフィール編集</Label>
       </Dropdown.Item>
       <Dropdown.Item id="friends">
         <Label>フレンド</Label>
