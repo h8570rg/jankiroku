@@ -37,6 +37,8 @@
     "@supabase/ssr": "0.10.2",
     "@supabase/supabase-js": "2.103.0",
     "@tailwindcss/postcss": "4.2.2",
+    "@vercel/analytics": "2.0.1",
+    "@vercel/speed-insights": "2.0.0",
     "dayjs": "1.11.20",
     "lucide-react": "1.8.0",
     "motion": "12.38.0",
