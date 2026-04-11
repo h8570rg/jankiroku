@@ -2,8 +2,8 @@ import { cn } from "@heroui/react";
 import type { CSSProperties } from "react";
 import { serverServices } from "@/lib/services/server";
 import type { MatchPlayer } from "@/lib/type";
-import { ChipRow } from "./chip-row";
 import { CreateGameButton } from "./create-game-button";
+import { EditChipButton } from "./edit-chip-button";
 import { GameRow } from "./game-row";
 import { PlayersRow } from "./players-row";
 
@@ -136,12 +136,15 @@ export async function MatchTable({
                 ))}
               </GameRow>
             ))}
-          <CreateGameButton
-            className="mt-1"
-            fullWidth
-            match={match}
-            isPlayersShort={isPlayersShort}
-          />
+          <div className="space-y-1.5">
+            <CreateGameButton
+              className="mt-1"
+              fullWidth
+              match={match}
+              isPlayersShort={isPlayersShort}
+            />
+            <EditChipButton fullWidth match={match} />
+          </div>
         </div>
         {/* フッター */}
         <div className="mt-3 rounded-3xl bg-surface text-muted">
@@ -171,7 +174,7 @@ export async function MatchTable({
               </div>
             ))}
           </div>
-          <ChipRow className="min-h-10" style={rowStyle} match={match}>
+          <div className="min-h-10" style={rowStyle}>
             <div
               className="
                 flex h-full items-center justify-center truncate px-1 text-xs
@@ -193,7 +196,7 @@ export async function MatchTable({
                 )}
               </div>
             ))}
-          </ChipRow>
+          </div>
           <div className="min-h-10" style={rowStyle}>
             <div
               className="

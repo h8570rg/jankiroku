@@ -20,7 +20,7 @@ export function CreateGameButton({
     <>
       <Button
         size="lg"
-        variant="outline"
+        variant="primary"
         onPress={() => {
           if (isPlayersShort) {
             alert("プレイヤーが足りません");

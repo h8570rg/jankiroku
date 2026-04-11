@@ -1,17 +1,10 @@
 "use client";
 
 import { useOverlayState } from "@heroui/react";
-import {
-  ChartColumn,
-  ChevronLeft,
-  CircleDollarSign,
-  FileText,
-  UserPlus,
-} from "lucide-react";
+import { ChartColumn, ChevronLeft, FileText, UserPlus } from "lucide-react";
 import NextLink from "next/link";
 import { Button, buttonVariants } from "@/components/button";
 import type { Match, Profile } from "@/lib/type";
-import { ChipModal } from "../chip-modal";
 import { DataModal } from "../data-modal";
 import { PlayersModal } from "../players-modal";
 import { RuleModal } from "../rule-modal";
@@ -25,7 +18,6 @@ export function MatchHeader({
   friends: Profile[];
   matchId: string;
 }) {
-  const chipModal = useOverlayState();
   const dataModal = useOverlayState();
   const ruleModal = useOverlayState();
   const playersModal = useOverlayState();
@@ -66,15 +58,7 @@ export function MatchHeader({
           >
             <FileText />
           </Button>
-          <Button
-            isIconOnly
-            variant="ghost"
-            onClick={() => {
-              chipModal.open();
-            }}
-          >
-            <CircleDollarSign />
-          </Button>
+
           <Button
             isIconOnly
             variant="ghost"
@@ -88,11 +72,7 @@ export function MatchHeader({
           </Button>
         </div>
       </div>
-      <ChipModal
-        isOpen={chipModal.isOpen}
-        onOpenChange={chipModal.setOpen}
-        match={match}
-      />
+
       <DataModal
         isOpen={dataModal.isOpen}
         onOpenChange={dataModal.setOpen}
