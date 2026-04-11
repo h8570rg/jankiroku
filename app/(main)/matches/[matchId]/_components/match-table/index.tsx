@@ -1,7 +1,8 @@
-import { cn } from "@heroui/react";
+import { cn, Separator, Surface } from "@heroui/react";
 import type { CSSProperties } from "react";
 import { serverServices } from "@/lib/services/server";
 import type { MatchPlayer } from "@/lib/type";
+import { DataChart } from "../data-chart";
 import { CreateGameButton } from "./create-game-button";
 import { EditChipButton } from "./edit-chip-button";
 import { GameRow } from "./game-row";
@@ -53,7 +54,7 @@ export async function MatchTable({
           name: "",
           type: "empty",
           rankCounts: [0] as number[],
-          averageRank: 0,
+          averageRank: null,
           totalScore: 0,
           chipCount: null,
           result: 0,
@@ -76,7 +77,7 @@ export async function MatchTable({
   };
 
   return (
-    <div className={cn(className, "overflow-x-auto pb-4")}>
+    <div className={cn(className, "overflow-x-auto pb-6")}>
       <div className="flex h-full min-w-fit flex-col">
         {/* ヘッダー */}
         <PlayersRow
@@ -147,12 +148,12 @@ export async function MatchTable({
           </div>
         </div>
         {/* フッター */}
-        <div className="mt-3 rounded-3xl bg-surface text-muted">
+        <Surface className="mt-6 rounded-3xl">
           <div className="min-h-10" style={rowStyle}>
             <div
               className="
-                flex h-full items-center justify-center truncate px-1 py-3
-                text-xs break-all
+                flex h-full items-center justify-center truncate px-1 text-xs
+                break-all text-muted
               "
             >
               合計
@@ -178,6 +179,7 @@ export async function MatchTable({
             <div
               className="
                 flex h-full items-center justify-center truncate px-1 text-xs
+                text-muted
               "
             >
               チップ
@@ -185,7 +187,7 @@ export async function MatchTable({
             {columns.map((column) => (
               <div
                 className="
-                  flex h-full items-center justify-center px-1 py-3 text-center
+                  flex h-full items-center justify-center px-1 text-center
                   text-xs break-all
                 "
                 key={column.id}
@@ -201,6 +203,7 @@ export async function MatchTable({
             <div
               className="
                 flex h-full items-center justify-center truncate px-1 text-xs
+                text-muted
               "
             >
               収支
@@ -208,7 +211,7 @@ export async function MatchTable({
             {columns.map((column) => (
               <div
                 className="
-                  flex h-full items-center justify-center px-1 py-3 text-center
+                  flex h-full items-center justify-center px-1 text-center
                   text-xs break-all
                 "
                 key={column.id}
@@ -218,7 +221,51 @@ export async function MatchTable({
               </div>
             ))}
           </div>
-        </div>
+          <Separator />
+          <div className="min-h-10" style={rowStyle}>
+            <div
+              className="
+                flex h-full items-center justify-center truncate px-1 text-xs
+                text-muted
+              "
+            >
+              平着
+            </div>
+            {columns.map((column) => (
+              <div
+                className="
+                  flex h-full items-center justify-center px-1 text-center
+                  text-xs break-all text-muted
+                "
+                key={column.id}
+              >
+                {column.averageRank}
+              </div>
+            ))}
+          </div>
+          <div className="min-h-10" style={rowStyle}>
+            <div
+              className="
+                flex h-full items-center justify-center truncate px-1 text-xs
+                text-muted
+              "
+            >
+              着順
+            </div>
+            {columns.map((column) => (
+              <div
+                className="
+                  flex h-full items-center justify-center px-1 text-center
+                  text-xs break-all text-muted
+                "
+                key={column.id}
+              >
+                {column.rankCounts.join("-")}
+              </div>
+            ))}
+          </div>
+        </Surface>
+        {match.games.length > 1 && <DataChart className="mt-6" match={match} />}
       </div>
     </div>
   );

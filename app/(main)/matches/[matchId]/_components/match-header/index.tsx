@@ -1,11 +1,10 @@
 "use client";
 
 import { useOverlayState } from "@heroui/react";
-import { ChartColumn, ChevronLeft, FileText, UserPlus } from "lucide-react";
+import { ChevronLeft, FileText, UserPlus } from "lucide-react";
 import NextLink from "next/link";
 import { Button, buttonVariants } from "@/components/button";
 import type { Match, Profile } from "@/lib/type";
-import { DataModal } from "../data-modal";
 import { PlayersModal } from "../players-modal";
 import { RuleModal } from "../rule-modal";
 
@@ -18,7 +17,6 @@ export function MatchHeader({
   friends: Profile[];
   matchId: string;
 }) {
-  const dataModal = useOverlayState();
   const ruleModal = useOverlayState();
   const playersModal = useOverlayState();
 
@@ -36,17 +34,6 @@ export function MatchHeader({
           {/* <p>{displayDate}</p> */}
         </div>
         <div className="flex items-center gap-0.5">
-          <Button
-            isIconOnly
-            variant="ghost"
-            onClick={dataModal.open}
-            className={buttonVariants({
-              isIconOnly: true,
-              variant: "ghost",
-            })}
-          >
-            <ChartColumn />
-          </Button>
           <Button
             isIconOnly
             variant="ghost"
@@ -73,11 +60,6 @@ export function MatchHeader({
         </div>
       </div>
 
-      <DataModal
-        isOpen={dataModal.isOpen}
-        onOpenChange={dataModal.setOpen}
-        match={match}
-      />
       <RuleModal
         isOpen={ruleModal.isOpen}
         onOpenChange={ruleModal.setOpen}

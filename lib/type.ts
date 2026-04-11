@@ -22,7 +22,7 @@ export type Match = {
 
 export type MatchPlayer = Profile & {
   rankCounts: number[];
-  averageRank: number | null;
+  averageRank: string | null;
   totalScore: number;
   chipCount: number | null;
   result: number;

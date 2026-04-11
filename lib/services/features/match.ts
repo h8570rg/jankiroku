@@ -246,11 +246,12 @@ const formatMatch = (match: {
 
   players.forEach((player) => {
     if (player.rankCounts.reduce((acc, cur) => acc + cur, 0) > 0) {
-      player.averageRank =
+      player.averageRank = (
         player.rankCounts.reduce(
           (acc, cur, index) => acc + cur * (index + 1),
           0,
-        ) / player.rankCounts.reduce((acc, cur) => acc + cur, 0);
+        ) / player.rankCounts.reduce((acc, cur) => acc + cur, 0)
+      ).toFixed(2);
     }
     player.result =
       (player.chipCount ?? 0) * rule.chip_rate +

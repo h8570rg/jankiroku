@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Surface } from "@heroui/react";
 import {
   Legend,
   Line,
@@ -49,31 +49,44 @@ export function DataChart({
   );
 
   return (
-    <div
-      className={cn(
-        "h-[300px] w-full rounded-lg bg-surface p-2 shadow-sm",
-        className,
-      )}
-    >
+    <Surface className={cn("h-[300px] rounded-3xl p-2", className)}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <XAxis
             type="number"
             dataKey="name"
             domain={[1, "dataMax"]}
-            padding={{ left: 20, right: 20 }}
+            padding={{ left: 15, right: 15 }}
             tickLine={false}
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: 10 }}
+            allowDecimals={false}
           />
-          <YAxis type="number" tickLine={false} tick={{ fontSize: 12 }} />
+          <YAxis
+            type="number"
+            tickLine={false}
+            tick={{ fontSize: 10 }}
+            width={30}
+          />
           <ReferenceLine y={0} strokeDasharray="4 4" />
           <Legend
-            formatter={(v) => (
-              <span className="text-sm">
-                {match.players.find((player) => player.id === v)?.name}
-              </span>
+            content={({ payload }) => (
+              <ul className="flex justify-center gap-3">
+                {payload?.map((entry) => (
+                  <li key={entry.value} className="flex items-center gap-1">
+                    <span
+                      className="size-1.5 rounded-full"
+                      style={{ background: entry.color }}
+                    />
+                    <span
+                      className="text-[10px]"
+                      style={{ color: entry.color }}
+                    >
+                      {match.players.find((p) => p.id === entry.value)?.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             )}
-            fontSize={11}
           />
           {match.players.map((player) => (
             <Line
@@ -87,6 +100,6 @@ export function DataChart({
           ))}
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </Surface>
   );
 }

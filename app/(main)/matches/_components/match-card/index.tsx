@@ -43,9 +43,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
         <div className="flex items-center">
           <div className="flex shrink-0 grow flex-col items-center px-8">
             <div className="mb-2 text-xs text-muted">平均着順</div>
-            <div className="text-lg">
-              {data.averageRank?.toFixed(2) ?? "なし"}
-            </div>
+            <div className="text-lg">{data.averageRank ?? "なし"}</div>
           </div>
           <div className="flex basis-[224px] justify-center">
             <table
