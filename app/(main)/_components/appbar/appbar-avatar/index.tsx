@@ -23,7 +23,22 @@ export async function AppbarAvatar() {
         </Avatar>
       </Dropdown.Trigger>
       <Dropdown.Popover className="min-w-60">
-        <AppbarAvatarMenu name={profile.name} displayId={profile.displayId} />
+        <div className="px-3 pt-3 pb-1">
+          <div className="flex items-center gap-2">
+            <Avatar size="sm">
+              <Avatar.Fallback>
+                <UserRound />
+              </Avatar.Fallback>
+            </Avatar>
+            <div className="flex flex-col gap-0">
+              <p className="text-sm/5 font-medium">{profile.name}</p>
+              <p className="text-xs leading-none text-muted">
+                @{profile.displayId}
+              </p>
+            </div>
+          </div>
+        </div>
+        <AppbarAvatarMenu />
       </Dropdown.Popover>
     </Dropdown>
   );
