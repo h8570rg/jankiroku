@@ -6,7 +6,6 @@ import { DataChart } from "../data-chart";
 import { CreateGameButton } from "./create-game-button";
 import { EditChipButton } from "./edit-chip-button";
 import { GameRow } from "./game-row";
-import { PlayersRow } from "./players-row";
 
 type Column = {
   id: string;
@@ -27,11 +26,8 @@ export async function MatchTable({
   matchId: string;
   className?: string;
 }) {
-  const { getFriends, getMatch } = await serverServices();
-  const [friends, match] = await Promise.all([
-    getFriends(),
-    getMatch({ matchId }),
-  ]);
+  const { getMatch } = await serverServices();
+  const match = await getMatch({ matchId });
   const { rule, players } = match;
   const { playersCount } = rule;
 
@@ -80,21 +76,20 @@ export async function MatchTable({
     <div className={cn(className, "overflow-x-auto pb-6")}>
       <div className="flex h-full min-w-fit flex-col">
         {/* ヘッダー */}
-        <PlayersRow
+        <div
           style={rowStyle}
           className="mb-1 rounded-3xl bg-surface text-muted"
-          matchId={matchId}
-          friends={friends}
-          players={players}
-          isDefaultOpen={players.length <= 1}
         >
           <div />
           {columns.map((column) => (
-            <div key={column?.id} className="truncate px-1 py-3 text-xs">
+            <div
+              key={column?.id}
+              className="truncate px-1 py-3 text-center text-xs"
+            >
               {column.name}
             </div>
           ))}
-        </PlayersRow>
+        </div>
         {/* ボディ */}
         <div className="grow">
           {gameRows.length === 0 && (
