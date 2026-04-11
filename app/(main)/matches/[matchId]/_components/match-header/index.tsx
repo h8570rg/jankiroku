@@ -5,7 +5,7 @@ import { ChevronLeft, FileText, UserPlus } from "lucide-react";
 import NextLink from "next/link";
 import { Button, buttonVariants } from "@/components/button";
 import type { Match, Profile } from "@/lib/type";
-import { PlayersModal } from "../players-modal";
+import { PlayersDrawer } from "../players-drawer";
 import { RuleModal } from "../rule-modal";
 
 export function MatchHeader({
@@ -65,7 +65,7 @@ export function MatchHeader({
         onOpenChange={ruleModal.setOpen}
         rule={match.rule}
       />
-      <PlayersModal
+      <PlayersDrawer
         isOpen={playersModal.isOpen}
         onOpenChange={playersModal.setOpen}
         matchId={matchId}

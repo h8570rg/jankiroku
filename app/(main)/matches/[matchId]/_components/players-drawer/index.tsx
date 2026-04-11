@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal, useOverlayState } from "@heroui/react";
+import { Drawer, useOverlayState } from "@heroui/react";
 import { useActionState, useState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
@@ -10,7 +10,7 @@ import { PlayerSelector } from "../../../_components/player-selector";
 import { CreatePlayerModal } from "../../../_components/player-selector/create-player-modal";
 import { searchProfiles, updateMatchPlayers } from "./actions";
 
-export type PlayersModalProps = {
+export type PlayersDrawerProps = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   matchId: string;
@@ -18,13 +18,13 @@ export type PlayersModalProps = {
   players: Profile[];
 };
 
-export function PlayersModal({
+export function PlayersDrawer({
   isOpen,
   onOpenChange,
   matchId,
   friends,
   players,
-}: PlayersModalProps) {
+}: PlayersDrawerProps) {
   const [selectedPlayers, setSelectedPlayers] = useState<Profile[]>(players);
   const profileCreateModal = useOverlayState({ defaultOpen: false });
 
@@ -40,42 +40,35 @@ export function PlayersModal({
   );
 
   return (
-    <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
-      <Modal.Container>
-        <Modal.Dialog>
-          <Modal.Header>
-            <Modal.Heading>プレイヤー選択</Modal.Heading>
-          </Modal.Header>
+    <Drawer.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Drawer.Content>
+        <Drawer.Dialog>
+          <Drawer.Header>
+            <Drawer.Heading>プレイヤー選択</Drawer.Heading>
+          </Drawer.Header>
           <Form className="contents" onSubmit={createSubmitHandler(formAction)}>
-            <Modal.Body className="p-1">
-              <div className="flex h-[700px] max-h-[60dvh] flex-col">
-                {selectedPlayers.map((p) => (
-                  <input
-                    key={p.id}
-                    type="hidden"
-                    name="playerIds"
-                    value={p.id}
-                  />
-                ))}
-                <PlayerSelector
-                  friends={friends}
-                  selectedPlayers={selectedPlayers}
-                  onSelectedPlayersChange={setSelectedPlayers}
-                  disabledPlayerIds={existingPlayerIds}
-                  onNewPlayerRequest={profileCreateModal.open}
-                  searchAction={searchProfiles}
-                  error={lastResult?.error?.fieldErrors?.playerIds}
-                />
-              </div>
-            </Modal.Body>
-            <Modal.Footer>
+            <Drawer.Body>
+              {selectedPlayers.map((p) => (
+                <input key={p.id} type="hidden" name="playerIds" value={p.id} />
+              ))}
+              <PlayerSelector
+                friends={friends}
+                selectedPlayers={selectedPlayers}
+                onSelectedPlayersChange={setSelectedPlayers}
+                disabledPlayerIds={existingPlayerIds}
+                onNewPlayerRequest={profileCreateModal.open}
+                searchAction={searchProfiles}
+                error={lastResult?.error?.fieldErrors?.playerIds}
+              />
+            </Drawer.Body>
+            <Drawer.Footer>
               <Button variant="primary" type="submit" isPending={isPending}>
                 決定
               </Button>
-            </Modal.Footer>
+            </Drawer.Footer>
           </Form>
-        </Modal.Dialog>
-      </Modal.Container>
+        </Drawer.Dialog>
+      </Drawer.Content>
       <CreatePlayerModal
         isOpen={profileCreateModal.isOpen}
         onOpenChange={profileCreateModal.setOpen}
@@ -83,6 +76,6 @@ export function PlayersModal({
           setSelectedPlayers((prev) => [...prev, profile]);
         }}
       />
-    </Modal.Backdrop>
+    </Drawer.Backdrop>
   );
 }

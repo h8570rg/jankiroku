@@ -2,7 +2,7 @@
 
 import { useOverlayState } from "@heroui/react";
 import type { Profile } from "@/lib/type";
-import { PlayersModal } from "../../players-modal";
+import { PlayersDrawer } from "../../players-drawer";
 
 export function PlayersRow({
   className,
@@ -33,7 +33,7 @@ export function PlayersRow({
       >
         {children}
       </button>
-      <PlayersModal
+      <PlayersDrawer
         isOpen={playersModal.isOpen}
         onOpenChange={playersModal.setOpen}
         matchId={matchId}
