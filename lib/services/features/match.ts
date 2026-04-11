@@ -1,6 +1,5 @@
 import type {
   CalcMethod,
-  ChipRate,
   GamePlayer,
   Match,
   MatchPlayer,
@@ -19,6 +18,7 @@ export const matchService = (supabase: Supabase) => {
       playersCount,
       rate,
       incline,
+      playerIds,
     }: {
       calcMethod: string;
       chipRate: number;
@@ -28,6 +28,7 @@ export const matchService = (supabase: Supabase) => {
       playersCount: number;
       rate: number;
       incline: string;
+      playerIds?: string[];
     }): Promise<{
       id: string;
     }> => {
@@ -38,6 +39,14 @@ export const matchService = (supabase: Supabase) => {
         .single();
       if (createMatchResponse.error) throw createMatchResponse.error;
       const match = createMatchResponse.data;
+
+      const matchPlayerRows =
+        playerIds && playerIds.length > 0
+          ? playerIds.map((playerId) => ({
+              match_id: match.id,
+              player_id: playerId,
+            }))
+          : [{ match_id: match.id }];
 
       const [createRuleResponse, createMatchPlayerResponse] = await Promise.all(
         [
@@ -52,7 +61,7 @@ export const matchService = (supabase: Supabase) => {
             rate,
             incline,
           }),
-          supabase.from("match_players").insert({ match_id: match.id }),
+          supabase.from("match_players").insert(matchPlayerRows),
         ],
       );
       if (createRuleResponse.error) throw createRuleResponse.error;
@@ -237,11 +246,12 @@ const formatMatch = (match: {
 
   players.forEach((player) => {
     if (player.rankCounts.reduce((acc, cur) => acc + cur, 0) > 0) {
-      player.averageRank =
+      player.averageRank = (
         player.rankCounts.reduce(
           (acc, cur, index) => acc + cur * (index + 1),
           0,
-        ) / player.rankCounts.reduce((acc, cur) => acc + cur, 0);
+        ) / player.rankCounts.reduce((acc, cur) => acc + cur, 0)
+      ).toFixed(2);
     }
     player.result =
       (player.chipCount ?? 0) * rule.chip_rate +
@@ -257,7 +267,7 @@ const formatMatch = (match: {
       defaultPoints: rule.default_points,
       defaultCalcPoints: rule.default_calc_points,
       rate: rule.rate as Rate,
-      chipRate: rule.chip_rate as ChipRate,
+      chipRate: rule.chip_rate,
       crackBoxBonus: rule.crack_box_bonus,
       calcMethod: rule.calc_method as CalcMethod,
       incline: {

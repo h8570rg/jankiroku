@@ -1,11 +1,10 @@
-import { cn } from "@heroui/react";
+import { cn, Separator, Surface } from "@heroui/react";
 import type { CSSProperties } from "react";
-import { Icon } from "@/components/icon";
 import { serverServices } from "@/lib/services/server";
 import type { MatchPlayer } from "@/lib/type";
-import { ChipModalTrigger } from "../chip-modal";
-import { GameModalTrigger } from "../game-modal";
-import { PlayersModalTrigger } from "../players-modal";
+import { DataChart } from "../data-chart";
+import { CreateGameButton } from "./create-game-button";
+import { EditChipButton } from "./edit-chip-button";
 import { GameRow } from "./game-row";
 
 type Column = {
@@ -28,7 +27,7 @@ export async function MatchTable({
   className?: string;
 }) {
   const { getMatch } = await serverServices();
-  const [match] = await Promise.all([getMatch({ matchId })]);
+  const match = await getMatch({ matchId });
   const { rule, players } = match;
   const { playersCount } = rule;
 
@@ -51,7 +50,7 @@ export async function MatchTable({
           name: "",
           type: "empty",
           rankCounts: [0] as number[],
-          averageRank: 0,
+          averageRank: null,
           totalScore: 0,
           chipCount: null,
           result: 0,
@@ -74,24 +73,27 @@ export async function MatchTable({
   };
 
   return (
-    <div className={cn(className, "overflow-x-auto pb-4")}>
+    <div className={cn(className, "overflow-x-auto pb-6")}>
       <div className="flex h-full min-w-fit flex-col">
         {/* ヘッダー */}
-        <PlayersModalTrigger
+        <div
           style={rowStyle}
-          className="mb-1 rounded-lg bg-default-100 text-foreground-500"
+          className="mb-1 rounded-3xl bg-surface text-muted"
         >
           <div />
           {columns.map((column) => (
-            <div key={column?.id} className="truncate px-1 py-3 text-tiny">
+            <div
+              key={column?.id}
+              className="truncate px-1 py-3 text-center text-xs"
+            >
               {column.name}
             </div>
           ))}
-        </PlayersModalTrigger>
+        </div>
         {/* ボディ */}
         <div className="grow">
           {gameRows.length === 0 && (
-            <p className="my-10 text-center text-small text-default-500">
+            <p className="my-10 text-center text-sm text-muted">
               まだデータはありません
             </p>
           )}
@@ -104,14 +106,22 @@ export async function MatchTable({
                 gameId={item.gameId}
                 style={rowStyle}
               >
-                <div className="flex h-full items-center justify-center break-all px-1 py-2 text-tiny text-default-500">
+                <div
+                  className="
+                    flex h-full items-center justify-center px-1 py-2 text-xs
+                    break-all text-muted
+                  "
+                >
                   {index + 1}
                 </div>
                 {columns.map((column) => (
                   <div
                     key={column.id}
                     className={cn(
-                      "flex h-full items-center justify-center break-all px-1 py-2 text-center text-small",
+                      `
+                        flex h-full items-center justify-center px-1 py-2
+                        text-center text-sm break-all
+                      `,
                       {
                         "text-danger": item.players[column.id] < 0,
                       },
@@ -122,27 +132,34 @@ export async function MatchTable({
                 ))}
               </GameRow>
             ))}
-          <GameModalTrigger
-            className="mt-1"
-            fullWidth
-            size="lg"
-            startContent={<Icon className="size-5" name="edit" />}
-            variant="ghost"
-            isPlayersShort={isPlayersShort}
-          >
-            結果を入力する
-          </GameModalTrigger>
+          <div className="space-y-1.5">
+            <CreateGameButton
+              className="mt-1"
+              fullWidth
+              match={match}
+              isPlayersShort={isPlayersShort}
+            />
+            <EditChipButton fullWidth match={match} />
+          </div>
         </div>
         {/* フッター */}
-        <div className="mt-3 rounded-lg bg-default-100 text-foreground-500">
+        <Surface className="mt-6 rounded-3xl">
           <div className="min-h-10" style={rowStyle}>
-            <div className="flex h-full items-center justify-center truncate break-all px-1 py-3 text-tiny">
+            <div
+              className="
+                flex h-full items-center justify-center truncate px-1 text-xs
+                break-all text-muted
+              "
+            >
               合計
             </div>
             {columns.map((column) => (
               <div
                 className={cn(
-                  "flex h-full items-center justify-center px-1 text-center text-tiny",
+                  `
+                    flex h-full items-center justify-center px-1 text-center
+                    text-xs
+                  `,
                   {
                     "text-danger": column.totalScore < 0,
                   },
@@ -153,13 +170,21 @@ export async function MatchTable({
               </div>
             ))}
           </div>
-          <ChipModalTrigger className="min-h-10" style={rowStyle}>
-            <div className="flex h-full items-center justify-center truncate px-1 text-tiny">
+          <div className="min-h-10" style={rowStyle}>
+            <div
+              className="
+                flex h-full items-center justify-center truncate px-1 text-xs
+                text-muted
+              "
+            >
               チップ
             </div>
             {columns.map((column) => (
               <div
-                className="flex h-full items-center justify-center break-all px-1 py-3 text-center text-tiny"
+                className="
+                  flex h-full items-center justify-center px-1 text-center
+                  text-xs break-all
+                "
                 key={column.id}
               >
                 {column.chipCount}
@@ -168,14 +193,22 @@ export async function MatchTable({
                 )}
               </div>
             ))}
-          </ChipModalTrigger>
+          </div>
           <div className="min-h-10" style={rowStyle}>
-            <div className="flex h-full items-center justify-center truncate px-1 text-tiny">
+            <div
+              className="
+                flex h-full items-center justify-center truncate px-1 text-xs
+                text-muted
+              "
+            >
               収支
             </div>
             {columns.map((column) => (
               <div
-                className="flex h-full items-center justify-center break-all px-1 py-3 text-center text-tiny"
+                className="
+                  flex h-full items-center justify-center px-1 text-center
+                  text-xs break-all
+                "
                 key={column.id}
               >
                 {column.result}
@@ -183,7 +216,51 @@ export async function MatchTable({
               </div>
             ))}
           </div>
-        </div>
+          <Separator />
+          <div className="min-h-10" style={rowStyle}>
+            <div
+              className="
+                flex h-full items-center justify-center truncate px-1 text-xs
+                text-muted
+              "
+            >
+              平着
+            </div>
+            {columns.map((column) => (
+              <div
+                className="
+                  flex h-full items-center justify-center px-1 text-center
+                  text-xs break-all text-muted
+                "
+                key={column.id}
+              >
+                {column.averageRank}
+              </div>
+            ))}
+          </div>
+          <div className="min-h-10" style={rowStyle}>
+            <div
+              className="
+                flex h-full items-center justify-center truncate px-1 text-xs
+                text-muted
+              "
+            >
+              着順
+            </div>
+            {columns.map((column) => (
+              <div
+                className="
+                  flex h-full items-center justify-center px-1 text-center
+                  text-xs break-all text-muted
+                "
+                key={column.id}
+              >
+                {column.rankCounts.join("-")}
+              </div>
+            ))}
+          </div>
+        </Surface>
+        {match.games.length > 1 && <DataChart className="mt-6" match={match} />}
       </div>
     </div>
   );

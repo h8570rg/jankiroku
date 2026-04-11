@@ -8,18 +8,23 @@
     "package.json"
   ],
   "words": [
-    "jankiroku",
-    "supabase",
-    "heroui",
-    "rocknroll",
     "appbar",
-    "pressable",
-    "hoverable",
+    "devicon",
     "firestore",
     "fkey",
-    "Postgrest",
+    "heroui",
+    "hoverable",
+    "iconify",
     "ilike",
     "Inbucket",
-    "turbopack"
+    "jankiroku",
+    "Postgrest",
+    "pressable",
+    "reauthentication",
+    "rocknroll",
+    "supabase",
+    "testuser",
+    "turbopack",
+    "wrongpassword"
   ]
 }

@@ -1,52 +1,60 @@
 "use client";
 
-import { useActionState, useId } from "react";
+import { useForm } from "@conform-to/react/future";
+import {
+  ErrorMessage,
+  FieldError,
+  Input,
+  Label,
+  TextField,
+} from "@heroui/react";
+import { useActionState } from "react";
 import { Button } from "@/components/button";
-import { Input } from "@/components/input";
+import { Form } from "@/components/form";
+import { createSubmitHandler } from "@/lib/utils/form";
 import { signInEmail } from "./actions";
+import { signInEmailSchema } from "./schema";
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export function LoginForm({ className }: { className?: string }) {
-  const [state, formAction, isPending] = useActionState(signInEmail, {});
-  const emailId = useId();
-  const passwordId = useId();
+  const [lastResult, formAction, isPending] = useActionState(signInEmail, null);
+  const { form, fields } = useForm(signInEmailSchema, {
+    lastResult,
+    onSubmit: createSubmitHandler(formAction),
+  });
 
   return (
-    <form className={className} action={formAction} noValidate>
-      <div className="space-y-2.5">
-        <Input
-          id={emailId}
+    <Form
+      className={className}
+      validationErrors={form.fieldErrors}
+      {...form.props}
+    >
+      <div className="space-y-4">
+        <TextField
           type="email"
-          name="email"
+          name={fields.email.name}
           autoComplete="username"
-          required
-          label="メールアドレス"
-          errorMessage={state.errors?.email?.[0]}
-        />
-        <Input
-          id={passwordId}
-          name="password"
-          label="パスワード"
+        >
+          <Label>メールアドレス</Label>
+          <Input />
+          <FieldError />
+        </TextField>
+        <TextField
           type="password"
+          name={fields.password.name}
           autoComplete="current-password"
-          required
-          errorMessage={state.errors?.password?.[0]}
-        />
+        >
+          <Label>パスワード</Label>
+          <Input />
+          <FieldError />
+        </TextField>
       </div>
-      {state.errors?.base && (
-        <p className="mt-1 p-1 text-tiny text-danger">{state.errors.base}</p>
-      )}
-      <Button
-        className="mt-2.5"
-        fullWidth
-        color="primary"
-        type="submit"
-        isLoading={isPending}
-      >
+      {form.errors && <ErrorMessage>{form.errors}</ErrorMessage>}
+      <Button className="mt-4 w-full" type="submit" isPending={isPending}>
         ログイン
       </Button>
-    </form>
+    </Form>
   );
 }

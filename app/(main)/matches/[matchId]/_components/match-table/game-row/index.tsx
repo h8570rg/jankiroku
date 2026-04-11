@@ -1,7 +1,6 @@
 "use client";
 
-import { Card } from "@/components/card";
-import { GameUpdateModal, useGameUpdateModal } from "../game-update-modal";
+import { UpdateGameModal, useUpdateGameModal } from "../update-game-modal";
 
 export function GameRow({
   index,
@@ -16,20 +15,20 @@ export function GameRow({
   gameId: string;
   style?: React.CSSProperties;
 }) {
-  const gameUpdateModal = useGameUpdateModal();
+  const updateGameModal = useUpdateGameModal();
   return (
     <>
-      <Card
-        isPressable
-        isHoverable
-        className="bg-transparent shadow-none"
-        onPress={gameUpdateModal.onOpen}
+      <button
+        type="button"
+        className="bg-transparent py-1 shadow-none"
+        onClick={updateGameModal.open}
         style={style}
       >
         {children}
-      </Card>
-      <GameUpdateModal
-        {...gameUpdateModal.bind}
+      </button>
+      <UpdateGameModal
+        isOpen={updateGameModal.isOpen}
+        onOpenChange={updateGameModal.setOpen}
         index={index}
         matchId={matchId}
         gameId={gameId}

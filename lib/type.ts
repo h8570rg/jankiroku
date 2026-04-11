@@ -1,5 +1,5 @@
 import type { User as SupabaseUser } from "@supabase/supabase-js";
-import type { calcMethods, chipRates, rates } from "./config";
+import type { calcMethods, rates } from "./config";
 
 export type User = SupabaseUser;
 
@@ -22,7 +22,7 @@ export type Match = {
 
 export type MatchPlayer = Profile & {
   rankCounts: number[];
-  averageRank: number | null;
+  averageRank: string | null;
   totalScore: number;
   chipCount: number | null;
   result: number;
@@ -30,14 +30,13 @@ export type MatchPlayer = Profile & {
 
 export type CalcMethod = (typeof calcMethods)[number];
 export type Rate = (typeof rates)[number];
-export type ChipRate = (typeof chipRates)[number];
 
 export type Rule = {
   playersCount: number;
   defaultPoints: number;
   defaultCalcPoints: number;
   rate: Rate;
-  chipRate: ChipRate;
+  chipRate: number;
   crackBoxBonus: number;
   calcMethod: CalcMethod;
   incline: {

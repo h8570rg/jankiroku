@@ -1,15 +1,26 @@
 "use client";
 
-import { cn } from "@heroui/react";
-import { useActionState, useId } from "react";
+import { useForm } from "@conform-to/react/future";
+import {
+  cn,
+  Description,
+  ErrorMessage,
+  FieldError,
+  Input,
+  Label,
+  TextField,
+} from "@heroui/react";
+import { useActionState } from "react";
 import { Button } from "@/components/button";
-import { Input } from "@/components/input";
+import { Form } from "@/components/form";
 import {
   DISPLAY_ID_MAX_LENGTH,
   DISPLAY_ID_MIN_LENGTH,
   NAME_MAX_LENGTH,
 } from "@/lib/config";
+import { createSubmitHandler } from "@/lib/utils/form";
 import { updateProfile } from "./actions";
+import { updateProfileSchema } from "./schema";
 
 export function RegisterForm({
   className,
@@ -18,48 +29,42 @@ export function RegisterForm({
   className?: string;
   userId: string;
 }) {
-  const [state, formAction, isPending] = useActionState(
-    updateProfile.bind(null, userId),
-    {},
+  const [lastResult, formAction, isPending] = useActionState(
+    updateProfile,
+    null,
   );
-  const displayIdId = useId();
-  const nameId = useId();
+  const { form, fields } = useForm(updateProfileSchema, {
+    lastResult,
+    onSubmit: createSubmitHandler(formAction),
+  });
 
   return (
-    <form
-      className={cn(className, "space-y-2.5")}
-      action={formAction}
-      noValidate
+    <Form
+      className={cn(className, "space-y-4")}
+      validationErrors={form.fieldErrors}
+      {...form.props}
     >
-      <Input
-        id={displayIdId}
-        type="text"
-        name="displayId"
-        required
-        label="ユーザーID"
-        errorMessage={state.errors?.displayId?.[0]}
-        description={`半角英数字${DISPLAY_ID_MIN_LENGTH}~${DISPLAY_ID_MAX_LENGTH}文字で入力してください`}
-      />
-      <Input
-        id={nameId}
-        name="name"
-        label="名前"
-        type="text"
-        autoComplete="name"
-        required
-        errorMessage={state.errors?.name?.[0]}
-        description={`${NAME_MAX_LENGTH}文字以内で入力してください`}
-      />
+      <input type="hidden" name="userId" value={userId} />
+      <div className="space-y-4">
+        <TextField name={fields.displayId.name}>
+          <Label>ユーザーID</Label>
+          <Input />
+          <Description>{`半角英数字${DISPLAY_ID_MIN_LENGTH}~${DISPLAY_ID_MAX_LENGTH}文字で入力してください`}</Description>
+          <FieldError />
+        </TextField>
+        <TextField name={fields.name.name} autoComplete="name">
+          <Label>名前</Label>
+          <Input />
+          <Description>{`${NAME_MAX_LENGTH}文字以内で入力してください`}</Description>
+          <FieldError />
+        </TextField>
+      </div>
+      {form.errors && <ErrorMessage>{form.errors}</ErrorMessage>}
       <div className="flex justify-end">
-        <Button
-          className="ml-auto"
-          color="primary"
-          type="submit"
-          isLoading={isPending}
-        >
+        <Button variant="primary" type="submit" isPending={isPending}>
           決定
         </Button>
       </div>
-    </form>
+    </Form>
   );
 }

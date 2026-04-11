@@ -20,7 +20,7 @@ export default async function FriendsPage() {
             className="flex items-center justify-between py-1"
             key={friend.id}
           >
-            <User {...friend} />
+            <User name={friend.name} displayId={friend.displayId} />
             <FriendMenu profileId={friend.id} />
           </li>
         ))}

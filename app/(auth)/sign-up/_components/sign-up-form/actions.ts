@@ -1,44 +1,26 @@
 "use server";
 
+import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { schema } from "@/lib/utils/schema";
-
-type State = {
-  errors?: {
-    base?: string[];
-    email?: string[];
-    password?: string[];
-  };
-};
-
-const signUpSchema = z.object({
-  email: schema.email,
-  password: schema.password,
-});
+import { signUpSchema } from "./schema";
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
-export async function signUp(
-  _prevState: State,
-  formData: FormData,
-): Promise<State> {
-  const validatedFields = signUpSchema.safeParse({
-    email: formData.get("email"),
-    password: formData.get("password"),
-  });
+export async function signUp(_prevState: unknown, formData: FormData) {
+  const submission = parseSubmission(formData);
+  const result = signUpSchema.safeParse(submission.payload);
 
-  if (!validatedFields.success) {
-    const flattened = z.flattenError(validatedFields.error);
-    return {
-      errors: flattened.fieldErrors,
-    };
+  if (!result.success) {
+    return report(submission, {
+      error: {
+        issues: result.error.issues,
+      },
+    });
   }
-
-  const { email, password } = validatedFields.data;
+  const { email, password } = result.data;
 
   const supabase = await createClient();
 
@@ -48,11 +30,11 @@ export async function signUp(
   });
 
   if (error) {
-    return {
-      errors: {
-        email: ["このメールアドレスは使用できません。"],
+    return report(submission, {
+      error: {
+        formErrors: ["このメールアドレスは使用できません。"],
       },
-    };
+    });
   }
 
   revalidatePath("/", "layout");

@@ -1,51 +1,63 @@
 "use client";
 
-import { cn } from "@heroui/react";
-import { useActionState, useId } from "react";
+import { useForm } from "@conform-to/react/future";
+import {
+  cn,
+  ErrorMessage,
+  FieldError,
+  Input,
+  Label,
+  TextField,
+} from "@heroui/react";
+import { useActionState } from "react";
 import { Button } from "@/components/button";
-import { Input } from "@/components/input";
+import { Form } from "@/components/form";
+import { createSubmitHandler } from "@/lib/utils/form";
 import { signUp } from "./actions";
+import { signUpSchema } from "./schema";
 
 /**
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 export function SignUpForm({ className }: { className?: string }) {
-  const [state, formAction, isPending] = useActionState(signUp, {});
-  const emailId = useId();
-  const passwordId = useId();
+  const [lastResult, formAction, isPending] = useActionState(signUp, null);
+  const { form, fields } = useForm(signUpSchema, {
+    lastResult,
+    onSubmit: createSubmitHandler(formAction),
+  });
 
   return (
-    <form
-      className={cn("space-y-2.5 py-4", className)}
-      action={formAction}
-      noValidate
+    <Form
+      className={cn("space-y-4 py-4", className)}
+      validationErrors={form.fieldErrors}
+      {...form.props}
     >
-      <Input
-        id={emailId}
-        type="email"
-        name="email"
-        autoComplete="username"
-        required
-        label="メールアドレス"
-        errorMessage={state.errors?.email?.[0]}
-      />
-      <Input
-        label="パスワード"
-        id={passwordId}
-        name="password"
-        type="password"
-        autoComplete="current-password"
-        required
-        errorMessage={state.errors?.password?.[0]}
-      />
-      <Button
-        className="w-full"
-        color="primary"
-        type="submit"
-        isLoading={isPending}
-      >
+      <div>
+        <div className="space-y-4">
+          <TextField
+            type="email"
+            name={fields.email.name}
+            autoComplete="username"
+          >
+            <Label>メールアドレス</Label>
+            <Input />
+            <FieldError />
+          </TextField>
+          <TextField
+            type="password"
+            name={fields.password.name}
+            autoComplete="current-password"
+          >
+            <Label>パスワード</Label>
+            <Input />
+            <FieldError />
+          </TextField>
+        </div>
+        {form.errors && <ErrorMessage>{form.errors}</ErrorMessage>}
+      </div>
+      <Button className="w-full" type="submit" isPending={isPending}>
         新規登録
       </Button>
-    </form>
+    </Form>
   );
 }

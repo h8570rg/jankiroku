@@ -90,6 +90,90 @@ npm run dev
 
 Supabase Studio（リモート）: https://supabase.com/dashboard/project/ggkmppnjhrwzdsamzqbp
 
+# E2Eテスト
+
+E2Eテストには [Playwright](https://playwright.dev/) を使用し、ローカルの Supabase 環境に対して実行します。
+
+## 前提条件
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) が起動していること
+
+## セットアップ
+
+Playwright のブラウザをインストールします（初回のみ）。
+
+```shell
+npx playwright install chromium
+```
+
+## テストの実行
+
+### 1. ローカル Supabase を起動する
+
+```shell
+npx supabase start
+```
+
+初回はイメージのダウンロードに数分かかります。`supabase start` はマイグレーションの適用とシードデータ（テストユーザー）の投入を自動で行います。
+
+### 2. テストを実行する
+
+```shell
+npm run test:e2e
+```
+
+UI モードで実行する場合：
+
+```shell
+npm run test:e2e:ui
+```
+
+### 3. ローカル Supabase を停止する（任意）
+
+テストが終わったら停止できます。次回のテストまで起動したままでも問題ありません。
+
+```shell
+npx supabase stop
+```
+
+## データのリセット
+
+テストデータを初期状態に戻したい場合：
+
+```shell
+npx supabase db reset
+```
+
+マイグレーションの再適用とシードデータの再投入が行われます。
+
+## テストユーザー
+
+| 項目 | 値 |
+| --- | --- |
+| メールアドレス | `test@example.com` |
+| パスワード | `password123` |
+| 表示名 | テストユーザー |
+| 表示ID | testuser |
+
+テストユーザーは `supabase/seed.sql` で定義されています。
+
+## 構成
+
+```
+e2e/
+├── auth.setup.ts   # 認証セットアップ（ログインしてセッションを保存）
+├── auth.spec.ts    # ログイン・ログアウトのテスト
+└── .auth/          # セッション情報の保存先（.gitignore済み）
+playwright.config.ts  # Playwright設定
+```
+
+## 仕組み
+
+- Playwright の `webServer` 設定により、テスト実行時に Next.js 開発サーバーが自動起動します
+- 開発サーバーはローカル Supabase に接続するよう環境変数が設定されます（`.env.local` の値は上書きされます）
+- `auth.setup.ts` がテスト用ユーザーでログインし、セッション情報を保存します
+- 各テストは保存されたセッションを再利用するため、毎回ログインする必要がありません
+
 # リンク
 
 - [supabase](https://supabase.com/docs)
