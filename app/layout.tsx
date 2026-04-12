@@ -1,6 +1,7 @@
 import { cn } from "@heroui/react";
 import type { Metadata } from "next";
 import { SERVICE_NAME } from "@/lib/config";
+import { getURL } from "@/lib/utils/url";
 import { fontClassNames } from "./fonts";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
@@ -8,12 +9,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getURL()),
   title: {
     template: `%s | ${SERVICE_NAME}`,
     default: SERVICE_NAME,
   },
   description:
-    "麻雀成績管理ウェブアプリです。無料で使え、簡単に麻雀の成績を記録することができます。",
+    "麻雀の成績を自動計算・記録・分析できる無料Webアプリ。対局ごとの成績をウマ・オカ・チップ対応で管理。フレンドと成績表を共有できます。",
   robots: {
     index: false,
     follow: false,
