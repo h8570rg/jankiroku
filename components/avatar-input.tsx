@@ -2,7 +2,7 @@
 
 import { Avatar, toast } from "@heroui/react";
 import { CameraIcon, EditIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AVATAR_ALLOWED_TYPES, AVATAR_MAX_SIZE } from "@/lib/config";
 import { browserServices } from "@/lib/services/browser";
 
@@ -27,9 +27,17 @@ export function AvatarInput({
   onUploadingChange,
 }: AvatarInputProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState(defaultValue);
+  const [previewUrl, setPreviewUrl] = useState<string>();
+  const displayUrl = previewUrl ?? defaultValue;
   const [uploadedUrl, setUploadedUrl] = useState(defaultValue);
   const [isUploading, setIsUploading] = useState(false);
+
+  useEffect(() => {
+    if (!previewUrl) return;
+    return () => {
+      URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -57,7 +65,7 @@ export function AvatarInput({
       setUploadedUrl(avatarUrl);
     } catch {
       toast.danger("画像のアップロードに失敗しました");
-      setPreviewUrl(defaultValue);
+      setPreviewUrl(undefined);
     } finally {
       setIsUploading(false);
       onUploadingChange?.(false);
@@ -74,15 +82,15 @@ export function AvatarInput({
         className="relative"
       >
         <Avatar className="size-20">
-          {previewUrl ? (
-            <Avatar.Image src={previewUrl} alt="プロフィール画像" />
+          {displayUrl ? (
+            <Avatar.Image src={displayUrl} alt="プロフィール画像" />
           ) : (
             <Avatar.Fallback>
               <CameraIcon className="size-6" />
             </Avatar.Fallback>
           )}
         </Avatar>
-        {previewUrl && (
+        {displayUrl && (
           <div className="absolute right-0 bottom-0 rounded-full bg-default p-1">
             <EditIcon className="size-4" />
           </div>
