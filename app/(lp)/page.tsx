@@ -1,4 +1,5 @@
 import { Card } from "@heroui/react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Logo from "@/components/logo";
 import { Navbar, NavbarBrand, NavbarContent } from "@/components/navbar";
@@ -73,7 +74,7 @@ const faqs = [
 
 const siteUrl = getURL();
 
-export const metadata = {
+export const metadata: Metadata = {
   title: { absolute: "麻雀成績表・記録アプリ | 雀鬼録" },
   description:
     "麻雀の成績を自動計算・記録・分析できる無料Webアプリ。対局ごとの成績をウマ・オカ・チップ対応で管理。フレンドと成績表を共有できます。",

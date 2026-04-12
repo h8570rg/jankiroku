@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: SERVICE_NAME,
   },
   description:
-    "麻雀成績管理ウェブアプリです。無料で使え、簡単に麻雀の成績を記録することができます。",
+    "麻雀の成績を自動計算・記録・分析できる無料Webアプリ。対局ごとの成績をウマ・オカ・チップ対応で管理。フレンドと成績表を共有できます。",
   robots: {
     index: false,
     follow: false,
