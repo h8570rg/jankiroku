@@ -5,7 +5,14 @@ import { revalidatePath } from "next/cache";
 import { serverServices } from "@/lib/services/server";
 import { profileUpdateSchema } from "./schema";
 
-export async function updateProfile(_prevState: unknown, formData: FormData) {
+export async function updateProfile(
+  // avatarUrlはformDataではなく.bind()で渡す。
+  // Next.jsはbindされた引数をサーバー側で暗号化するため、
+  // クライアントからの読み取り・改ざんが不可能。
+  avatarUrl: string | undefined,
+  _prevState: unknown,
+  formData: FormData,
+) {
   const submission = parseSubmission(formData);
   const result = profileUpdateSchema.safeParse(submission.payload);
 
@@ -16,7 +23,7 @@ export async function updateProfile(_prevState: unknown, formData: FormData) {
       },
     });
   }
-  const { name, avatarUrl } = result.data;
+  const { name } = result.data;
 
   const { getUserProfile, updateUserProfile } = await serverServices();
 

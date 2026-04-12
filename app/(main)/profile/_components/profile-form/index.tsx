@@ -27,22 +27,25 @@ export function ProfileForm({
   className?: string;
   profile: Profile;
 }) {
+  // avatarUrlはformDataに含めず.bind()でserver actionに渡す。
+  // Next.jsはbind引数をサーバー側で暗号化するため、クライアントからの改ざんが不可能。
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
+    profile.avatarUrl ?? undefined,
+  );
+  const [isAvatarUploading, setIsAvatarUploading] = useState(false);
+
   const [lastResult, formAction, isPending] = useActionState(
-    withCallbacks(updateProfile, {
+    withCallbacks(updateProfile.bind(null, avatarUrl), {
       onSuccess() {
         toast.success("プロフィールを更新しました");
       },
     }),
     null,
   );
-  const [isAvatarUploading, setIsAvatarUploading] = useState(false);
 
   const { form, fields } = useForm(profileUpdateSchema, {
     lastResult,
-    defaultValue: {
-      name: profile.name ?? "",
-      avatarUrl: profile.avatarUrl ?? undefined,
-    },
+    defaultValue: { name: profile.name ?? "" },
     onSubmit: createSubmitHandler(formAction),
   });
 
@@ -54,8 +57,8 @@ export function ProfileForm({
     >
       <div className="flex justify-center">
         <AvatarInput
-          name={fields.avatarUrl.name}
-          defaultValue={fields.avatarUrl.defaultValue}
+          defaultValue={profile.avatarUrl ?? undefined}
+          onUpload={setAvatarUrl}
           onUploadingChange={setIsAvatarUploading}
         />
       </div>

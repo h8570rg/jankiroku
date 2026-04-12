@@ -7,29 +7,28 @@ import { AVATAR_ALLOWED_TYPES, AVATAR_MAX_SIZE } from "@/lib/config";
 import { browserServices } from "@/lib/services/browser";
 
 type AvatarInputProps = {
-  name: string;
   defaultValue?: string;
+  onUpload?: (url: string) => void;
   onUploadingChange?: (isUploading: boolean) => void;
 };
 
 /**
  * ファイル選択時に即座に Supabase Storage へアップロードし、
- * 取得した公開 URL を hidden input で保持するコンポーネント。
+ * 取得した公開 URL を onUpload コールバックで親に通知するコンポーネント。
  *
  * アップロードはフォーム送信前に完了するが、設計上問題ない。
- * アバターのファイルパスは `{uid}/avatar.{ext}` 固定で upsert するため、
+ * アバターのファイルパスは `{uid}/avatar` 固定で upsert するため、
  * 保存せずにページを離脱しても孤立ファイルは最大 1 ファイル/ユーザーに留まり、
  * 次回アップロード時に自動的に上書きされる。
  */
 export function AvatarInput({
-  name,
   defaultValue,
+  onUpload,
   onUploadingChange,
 }: AvatarInputProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>();
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
   const displayUrl = previewUrl ?? defaultValue;
-  const [uploadedUrl, setUploadedUrl] = useState(defaultValue);
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
@@ -62,7 +61,7 @@ export function AvatarInput({
     try {
       const { uploadAvatar } = browserServices();
       const avatarUrl = await uploadAvatar(file);
-      setUploadedUrl(avatarUrl);
+      onUpload?.(avatarUrl);
     } catch {
       toast.danger("画像のアップロードに失敗しました");
       setPreviewUrl(undefined);
@@ -103,7 +102,6 @@ export function AvatarInput({
         className="sr-only"
         onChange={handleFileChange}
       />
-      <input type="hidden" name={name} value={uploadedUrl ?? ""} />
     </div>
   );
 }
