@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.1";
   };
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
   public: {
     Tables: {
       friends: {
@@ -123,16 +148,19 @@ export type Database = {
         Row: {
           chip_count: number | null;
           match_id: string;
+          order: number;
           player_id: string;
         };
         Insert: {
           chip_count?: number | null;
           match_id: string;
+          order?: number;
           player_id?: string;
         };
         Update: {
           chip_count?: number | null;
           match_id?: string;
+          order?: number;
           player_id?: string;
         };
         Relationships: [
@@ -409,6 +437,9 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },

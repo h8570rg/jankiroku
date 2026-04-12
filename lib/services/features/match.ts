@@ -42,11 +42,12 @@ export const matchService = (supabase: Supabase) => {
 
       const matchPlayerRows =
         playerIds && playerIds.length > 0
-          ? playerIds.map((playerId) => ({
+          ? playerIds.map((playerId, index) => ({
               match_id: match.id,
               player_id: playerId,
+              order: index,
             }))
-          : [{ match_id: match.id }];
+          : [{ match_id: match.id, order: 0 }];
 
       const [createRuleResponse, createMatchPlayerResponse] = await Promise.all(
         [
@@ -79,6 +80,7 @@ export const matchService = (supabase: Supabase) => {
           "*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))",
         )
         .eq("id", matchId)
+        .order("order", { referencedTable: "match_players", ascending: true })
         .single();
       if (matchResult.error) throw matchResult.error;
       const match = matchResult.data;
@@ -100,7 +102,8 @@ export const matchService = (supabase: Supabase) => {
           { count: "exact" },
         )
         .range((page - 1) * size, page * size - 1)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .order("order", { referencedTable: "match_players", ascending: true });
 
       if (matchesResponse.error) throw matchesResponse.error;
       const matches = matchesResponse.data;
@@ -111,15 +114,18 @@ export const matchService = (supabase: Supabase) => {
     addMatchPlayers: async ({
       matchId,
       playerIds,
+      startOrder = 0,
     }: {
       matchId: string;
       playerIds: string[];
+      startOrder?: number;
     }): Promise<void> => {
       const addMatchPlayerResponses = await Promise.all(
-        playerIds.map((playerId) =>
+        playerIds.map((playerId, index) =>
           supabase.from("match_players").insert({
             match_id: matchId,
             player_id: playerId,
+            order: startOrder + index,
           }),
         ),
       );
