@@ -28,7 +28,10 @@
       }
     }
   },
-  "formatter": { "indentStyle": "space" },
+  "formatter": {
+    "indentStyle": "space",
+    "includes": ["**", "!lib/database.types.ts"]
+  },
   "assist": {
     "enabled": true,
     "actions": { "source": { "organizeImports": "on" } }

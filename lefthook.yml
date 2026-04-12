@@ -10,3 +10,27 @@ pre-commit:
       run: "npm run test"
     "spell":
       run: "npm run spell"
+
+pre-push:
+  commands:
+    "supabase-diff":
+      run: |
+        npm run supabase:diff
+        if ! git diff --quiet -- supabase/migrations; then
+          echo ""
+          echo "ERROR: supabase:diff で新しいマイグレーションファイルが生成されました。"
+          echo "Supabase Studio の変更がマイグレーションに反映されていません。"
+          echo "生成されたファイルをコミットしてから再度 push してください。"
+          echo ""
+          exit 1
+        fi
+    "supabase-type":
+      run: |
+        npm run supabase:type
+        if ! git diff --quiet -- lib/database.types.ts; then
+          echo ""
+          echo "ERROR: supabase:type で型定義ファイルが更新されました。"
+          echo "lib/database.types.ts の変更をコミットしてから再度 push してください。"
+          echo ""
+          exit 1
+        fi
