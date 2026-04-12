@@ -30,9 +30,9 @@ export default async function AddFriendPage({
             見つかりませんでした
           </p>
         )}
-        {profiles.map(({ id, name, displayId, isFriend }) => (
+        {profiles.map(({ id, name, displayId, avatarUrl, isFriend }) => (
           <li key={id} className="flex items-center justify-between py-2">
-            <User name={name} displayId={displayId} />
+            <User name={name} displayId={displayId} avatarUrl={avatarUrl} />
             {isFriend ? (
               <div className="w-16 text-center text-xs text-muted">
                 追加済み

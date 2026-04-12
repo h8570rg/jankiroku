@@ -3,11 +3,18 @@
 import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
 import { serverServices } from "@/lib/services/server";
-import { updateNameSchema } from "./schema";
+import { profileUpdateSchema } from "./schema";
 
-export async function updateName(_prevState: unknown, formData: FormData) {
+export async function updateProfile(
+  // avatarUrlはformDataではなく.bind()で渡す。
+  // Next.jsはbindされた引数をサーバー側で暗号化するため、
+  // クライアントからの読み取り・改ざんが不可能。
+  avatarUrl: string | undefined,
+  _prevState: unknown,
+  formData: FormData,
+) {
   const submission = parseSubmission(formData);
-  const result = updateNameSchema.safeParse(submission.payload);
+  const result = profileUpdateSchema.safeParse(submission.payload);
 
   if (!result.success) {
     return report(submission, {
@@ -30,6 +37,7 @@ export async function updateName(_prevState: unknown, formData: FormData) {
   const updateResult = await updateUserProfile({
     name,
     displayId: profile.displayId,
+    avatarUrl,
   });
 
   if (!updateResult.success) {

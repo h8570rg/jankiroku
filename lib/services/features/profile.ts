@@ -28,6 +28,7 @@ export const profileService = (supabase: Supabase) => {
           id: user.id,
           name: null,
           displayId: null,
+          avatarUrl: null,
           isUnregistered: true,
           isAnonymous: !!user.is_anonymous,
         };
@@ -37,6 +38,7 @@ export const profileService = (supabase: Supabase) => {
         id: userProfile.id,
         name: userProfile.name,
         displayId: userProfile.display_id,
+        avatarUrl: userProfile.avatar_url,
         isUnregistered:
           userProfile.name === null || userProfile.display_id === null,
         isAnonymous: !!user.is_anonymous,
@@ -46,9 +48,11 @@ export const profileService = (supabase: Supabase) => {
     updateUserProfile: async ({
       name,
       displayId,
+      avatarUrl,
     }: {
       name: string;
       displayId: string;
+      avatarUrl?: string;
     }): Promise<
       | {
           success: true;
@@ -65,7 +69,11 @@ export const profileService = (supabase: Supabase) => {
 
       const updatedUserProfileResponse = await supabase
         .from("profiles")
-        .update({ name, display_id: displayId })
+        .update({
+          name,
+          display_id: displayId,
+          avatar_url: avatarUrl,
+        })
         .eq("id", user.id)
         .select()
         .single();
@@ -79,6 +87,7 @@ export const profileService = (supabase: Supabase) => {
           id: updatedUserProfile.id,
           name: updatedUserProfile.name,
           displayId: updatedUserProfile.display_id,
+          avatarUrl: updatedUserProfile.avatar_url,
           isUnregistered:
             updatedUserProfile.name === null ||
             updatedUserProfile.display_id === null,
@@ -118,6 +127,7 @@ export const profileService = (supabase: Supabase) => {
         id: profile.id,
         name: profile.name,
         displayId: profile.display_id,
+        avatarUrl: profile.avatar_url,
         isFriend: friends.some((friend) => friend.friend_id === profile.id),
       }));
     },
@@ -135,7 +145,24 @@ export const profileService = (supabase: Supabase) => {
         id: profile.id,
         name: profile.name ?? name,
         displayId: profile.display_id,
+        avatarUrl: profile.avatar_url,
       };
+    },
+
+    uploadAvatar: async (file: File): Promise<string> => {
+      const userResponse = await supabase.auth.getUser();
+      if (userResponse.error) throw userResponse.error;
+      const user = userResponse.data.user;
+
+      const path = `${user.id}/avatar`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(path, file, { upsert: true, contentType: file.type });
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+      return `${data.publicUrl}?t=${Date.now()}`;
     },
   };
 };

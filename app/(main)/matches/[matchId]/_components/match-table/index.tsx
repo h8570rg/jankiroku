@@ -48,6 +48,7 @@ export async function MatchTable({
           id: `player-${i}`,
           displayId: "",
           name: "",
+          avatarUrl: null,
           type: "empty",
           rankCounts: [0] as number[],
           averageRank: null,

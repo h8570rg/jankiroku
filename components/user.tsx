@@ -1,90 +1,39 @@
-import { Avatar, type AvatarProps, cn, Skeleton } from "@heroui/react";
-import { UserRound } from "lucide-react";
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import { cn, Skeleton } from "@heroui/react";
+import type { ComponentPropsWithoutRef } from "react";
+import { UserAvatar } from "./user-avatar";
 
 export type UserProps = ComponentPropsWithoutRef<"div"> & {
-  name?: string | null;
-  displayId?: string | null;
-  skeleton?: boolean;
-  avatarProps?: AvatarProps;
-  classNames?: {
-    base?: string;
-    wrapper?: string;
-    name?: string;
-    description?: string;
-  };
+  name: string | null;
+  displayId: string | null;
+  avatarUrl: string | null;
 };
 
-export const User = forwardRef<HTMLDivElement, UserProps>(
-  (
-    {
-      name,
-      displayId,
-      skeleton,
-      avatarProps,
-      className,
-      classNames,
-      ...restProps
-    },
-    ref,
-  ) => {
-    if (skeleton) {
-      return (
-        <div
-          ref={ref}
-          className={cn(
-            "inline-flex items-center justify-center gap-2 rounded-sm",
-            className,
-          )}
-        >
-          <Skeleton className="size-10 rounded-full" />
-          <div className="inline-flex flex-col items-start gap-1">
-            <Skeleton className="h-4 w-20 rounded-lg" />
-            <Skeleton className="h-3 w-24 rounded-lg" />
-          </div>
-        </div>
-      );
-    }
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          `
-            inline-flex items-center justify-center gap-2 rounded-sm
-            outline-transparent outline-solid
-          `,
-          `
-            data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2
-            data-[focus-visible=true]:outline-offset-2
-            data-[focus-visible=true]:outline-focus
-          `,
-          classNames?.base,
-          className,
-        )}
-        {...restProps}
-      >
-        <Avatar {...avatarProps}>
-          <Avatar.Fallback>
-            <UserRound />
-          </Avatar.Fallback>
-        </Avatar>
-        <div
-          className={cn(
-            "inline-flex flex-col items-start",
-            classNames?.wrapper,
-          )}
-        >
-          <span className={cn("text-sm text-inherit", classNames?.name)}>
-            {name}
-          </span>
-          {displayId && (
-            <span className={cn("text-xs text-muted", classNames?.description)}>
-              @{displayId}
-            </span>
-          )}
-        </div>
+export function User({ name, displayId, avatarUrl, className }: UserProps) {
+  return (
+    <div
+      className={cn(
+        "flex items-center justify-center gap-2 rounded-sm",
+        className,
+      )}
+    >
+      <UserAvatar avatarUrl={avatarUrl} name={name} />
+      <div className="flex flex-col items-start">
+        <span className="text-sm text-inherit">{name}</span>
+        {displayId && <span className="text-xs text-muted">@{displayId}</span>}
       </div>
-    );
-  },
-);
-User.displayName = "User";
+    </div>
+  );
+}
+
+// TODO: Userと高さを合わせる
+export function UserSkeleton() {
+  return (
+    <div className="flex items-center justify-center gap-2 rounded-sm">
+      <Skeleton className="size-10 rounded-full" />
+      <div className="flex-1 space-y-2">
+        <Skeleton className="h-3 w-36 rounded-lg" />
+        <Skeleton className="h-3 w-24 rounded-lg" />
+      </div>
+    </div>
+  );
+}

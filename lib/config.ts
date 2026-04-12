@@ -1,6 +1,12 @@
 export const SERVICE_NAME = "雀鬼録";
 export const PASSWORD_MIN_LENGTH = 6;
 export const NAME_MAX_LENGTH = 12;
+export const AVATAR_MAX_SIZE = 2 * 1024 * 1024;
+export const AVATAR_ALLOWED_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+] as const;
 export const DISPLAY_ID_MIN_LENGTH = 4;
 export const DISPLAY_ID_MAX_LENGTH = 12;
 

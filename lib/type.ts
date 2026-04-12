@@ -7,6 +7,7 @@ export type Profile = {
   id: string;
   name: string | null;
   displayId: string | null;
+  avatarUrl: string | null;
   isUnregistered?: boolean;
   isAnonymous?: boolean;
   isFriend?: boolean;

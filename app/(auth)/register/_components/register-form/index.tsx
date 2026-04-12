@@ -10,7 +10,8 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import { AvatarInput } from "@/components/avatar-input";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
 import {
@@ -29,8 +30,11 @@ export function RegisterForm({
   className?: string;
   userId: string;
 }) {
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
+  const [isAvatarUploading, setIsAvatarUploading] = useState(false);
+
   const [lastResult, formAction, isPending] = useActionState(
-    updateProfile,
+    updateProfile.bind(null, avatarUrl),
     null,
   );
   const { form, fields } = useForm(updateProfileSchema, {
@@ -45,6 +49,12 @@ export function RegisterForm({
       {...form.props}
     >
       <input type="hidden" name="userId" value={userId} />
+      <div className="flex justify-center">
+        <AvatarInput
+          onUpload={setAvatarUrl}
+          onUploadingChange={setIsAvatarUploading}
+        />
+      </div>
       <div className="space-y-4">
         <TextField name={fields.displayId.name}>
           <Label>ユーザーID</Label>
@@ -61,7 +71,12 @@ export function RegisterForm({
       </div>
       {form.errors && <ErrorMessage>{form.errors}</ErrorMessage>}
       <div className="flex justify-end">
-        <Button variant="primary" type="submit" isPending={isPending}>
+        <Button
+          variant="primary"
+          type="submit"
+          isPending={isPending}
+          isDisabled={isAvatarUploading}
+        >
           決定
         </Button>
       </div>

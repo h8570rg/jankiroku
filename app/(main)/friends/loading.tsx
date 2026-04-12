@@ -1,4 +1,4 @@
-import { User } from "@/components/user";
+import { UserSkeleton } from "@/components/user";
 
 export default function FriendsLoading() {
   return (
@@ -9,7 +9,7 @@ export default function FriendsLoading() {
       <ul className="space-y-1">
         {Array.from({ length: 3 }, (_, i) => `skeleton-${i}`).map((id) => (
           <li className="flex items-center justify-between py-2" key={id}>
-            <User skeleton />
+            <UserSkeleton />
           </li>
         ))}
       </ul>
