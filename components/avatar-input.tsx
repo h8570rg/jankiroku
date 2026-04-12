@@ -1,0 +1,101 @@
+"use client";
+
+import { Avatar, toast } from "@heroui/react";
+import { CameraIcon, EditIcon } from "lucide-react";
+import { useRef, useState } from "react";
+import { AVATAR_ALLOWED_TYPES, AVATAR_MAX_SIZE } from "@/lib/config";
+import { browserServices } from "@/lib/services/browser";
+
+type AvatarInputProps = {
+  name: string;
+  defaultValue?: string;
+  onUploadingChange?: (isUploading: boolean) => void;
+};
+
+/**
+ * ファイル選択時に即座に Supabase Storage へアップロードし、
+ * 取得した公開 URL を hidden input で保持するコンポーネント。
+ *
+ * アップロードはフォーム送信前に完了するが、設計上問題ない。
+ * アバターのファイルパスは `{uid}/avatar.{ext}` 固定で upsert するため、
+ * 保存せずにページを離脱しても孤立ファイルは最大 1 ファイル/ユーザーに留まり、
+ * 次回アップロード時に自動的に上書きされる。
+ */
+export function AvatarInput({
+  name,
+  defaultValue,
+  onUploadingChange,
+}: AvatarInputProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState(defaultValue);
+  const [uploadedUrl, setUploadedUrl] = useState(defaultValue);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (
+      !AVATAR_ALLOWED_TYPES.includes(
+        file.type as (typeof AVATAR_ALLOWED_TYPES)[number],
+      )
+    ) {
+      toast.danger("jpg、png、webp形式の画像を選択してください");
+      return;
+    }
+    if (file.size > AVATAR_MAX_SIZE) {
+      toast.danger("画像のサイズは2MB以内にしてください");
+      return;
+    }
+
+    setPreviewUrl(URL.createObjectURL(file));
+    setIsUploading(true);
+    onUploadingChange?.(true);
+    try {
+      const { uploadAvatar } = browserServices();
+      const avatarUrl = await uploadAvatar(file);
+      setUploadedUrl(avatarUrl);
+    } catch {
+      toast.danger("画像のアップロードに失敗しました");
+      setPreviewUrl(defaultValue);
+    } finally {
+      setIsUploading(false);
+      onUploadingChange?.(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <button
+        type="button"
+        onClick={() => fileInputRef.current?.click()}
+        disabled={isUploading}
+        aria-label="プロフィール画像を変更"
+        className="relative"
+      >
+        <Avatar className="size-20">
+          {previewUrl ? (
+            <Avatar.Image src={previewUrl} alt="プロフィール画像" />
+          ) : (
+            <Avatar.Fallback>
+              <CameraIcon className="size-6" />
+            </Avatar.Fallback>
+          )}
+        </Avatar>
+        {previewUrl && (
+          <div className="absolute right-0 bottom-0 rounded-full bg-default p-1">
+            <EditIcon className="size-4" />
+          </div>
+        )}
+      </button>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={AVATAR_ALLOWED_TYPES.join(",")}
+        className="sr-only"
+        onChange={handleFileChange}
+      />
+      <input type="hidden" name={name} value={uploadedUrl ?? ""} />
+    </div>
+  );
+}

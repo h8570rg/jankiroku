@@ -17,18 +17,26 @@ export async function AppbarAvatar() {
     <Dropdown>
       <Dropdown.Trigger aria-label="プロフィールメニュー">
         <Avatar className="transition-transform" size="sm">
-          <Avatar.Fallback>
-            <UserRound />
-          </Avatar.Fallback>
+          {profile.avatarUrl ? (
+            <Avatar.Image src={profile.avatarUrl} alt="プロフィール画像" />
+          ) : (
+            <Avatar.Fallback>
+              <UserRound />
+            </Avatar.Fallback>
+          )}
         </Avatar>
       </Dropdown.Trigger>
       <Dropdown.Popover className="min-w-60">
         <div className="px-3 pt-3 pb-1">
           <div className="flex items-center gap-2">
             <Avatar size="sm">
-              <Avatar.Fallback>
-                <UserRound />
-              </Avatar.Fallback>
+              {profile.avatarUrl ? (
+                <Avatar.Image src={profile.avatarUrl} alt="プロフィール画像" />
+              ) : (
+                <Avatar.Fallback>
+                  <UserRound />
+                </Avatar.Fallback>
+              )}
             </Avatar>
             <div className="flex flex-col gap-0">
               <p className="text-sm/5 font-medium">{profile.name}</p>

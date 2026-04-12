@@ -196,6 +196,7 @@ const formatMatch = (match: {
       id: string;
       name: string | null;
       display_id: string | null;
+      avatar_url: string | null;
     };
     chip_count: number | null;
   }[];
@@ -227,6 +228,7 @@ const formatMatch = (match: {
       id: profiles.id,
       name: profiles.name,
       displayId: profiles.display_id,
+      avatarUrl: profiles.avatar_url,
       rankCounts: new Array(rule.players_count).fill(0),
       averageRank: null,
       totalScore: 0,

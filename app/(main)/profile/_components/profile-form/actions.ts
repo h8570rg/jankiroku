@@ -3,11 +3,11 @@
 import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
 import { serverServices } from "@/lib/services/server";
-import { updateNameSchema } from "./schema";
+import { profileUpdateSchema } from "./schema";
 
-export async function updateName(_prevState: unknown, formData: FormData) {
+export async function updateProfile(_prevState: unknown, formData: FormData) {
   const submission = parseSubmission(formData);
-  const result = updateNameSchema.safeParse(submission.payload);
+  const result = profileUpdateSchema.safeParse(submission.payload);
 
   if (!result.success) {
     return report(submission, {
@@ -16,7 +16,7 @@ export async function updateName(_prevState: unknown, formData: FormData) {
       },
     });
   }
-  const { name } = result.data;
+  const { name, avatarUrl } = result.data;
 
   const { getUserProfile, updateUserProfile } = await serverServices();
 
@@ -30,6 +30,7 @@ export async function updateName(_prevState: unknown, formData: FormData) {
   const updateResult = await updateUserProfile({
     name,
     displayId: profile.displayId,
+    avatarUrl,
   });
 
   if (!updateResult.success) {

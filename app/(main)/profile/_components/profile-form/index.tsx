@@ -10,14 +10,15 @@ import {
   TextField,
   toast,
 } from "@heroui/react";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import { AvatarInput } from "@/components/avatar-input";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
 import { NAME_MAX_LENGTH } from "@/lib/config";
 import type { Profile } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
-import { updateName } from "./actions";
-import { updateNameSchema } from "./schema";
+import { updateProfile } from "./actions";
+import { profileUpdateSchema } from "./schema";
 
 export function ProfileForm({
   className,
@@ -27,16 +28,18 @@ export function ProfileForm({
   profile: Profile;
 }) {
   const [lastResult, formAction, isPending] = useActionState(
-    withCallbacks(updateName, {
+    withCallbacks(updateProfile, {
       onSuccess() {
         toast.success("プロフィールを更新しました");
       },
     }),
     null,
   );
-  const { form, fields } = useForm(updateNameSchema, {
+  const [isAvatarUploading, setIsAvatarUploading] = useState(false);
+
+  const { form, fields } = useForm(profileUpdateSchema, {
     lastResult,
-    defaultValue: { name: profile.name ?? "" },
+    defaultValue: { name: profile.name ?? "", avatarUrl: profile.avatarUrl },
     onSubmit: createSubmitHandler(formAction),
   });
 
@@ -46,6 +49,13 @@ export function ProfileForm({
       validationErrors={form.fieldErrors}
       {...form.props}
     >
+      <div className="flex justify-center">
+        <AvatarInput
+          name={fields.avatarUrl.name}
+          defaultValue={fields.avatarUrl.defaultValue}
+          onUploadingChange={setIsAvatarUploading}
+        />
+      </div>
       <div className="space-y-4">
         <TextField name="displayId" isReadOnly isDisabled>
           <Label>ユーザーID</Label>
@@ -64,7 +74,12 @@ export function ProfileForm({
         </TextField>
       </div>
       <div className="flex justify-end">
-        <Button variant="primary" type="submit" isPending={isPending}>
+        <Button
+          variant="primary"
+          type="submit"
+          isPending={isPending}
+          isDisabled={isAvatarUploading}
+        >
           保存
         </Button>
       </div>
