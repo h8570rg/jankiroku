@@ -48,10 +48,12 @@ export function AvatarInput({
       )
     ) {
       toast.danger("jpg、png、webp形式の画像を選択してください");
+      e.currentTarget.value = "";
       return;
     }
     if (file.size > AVATAR_MAX_SIZE) {
       toast.danger("画像のサイズは2MB以内にしてください");
+      e.currentTarget.value = "";
       return;
     }
 
