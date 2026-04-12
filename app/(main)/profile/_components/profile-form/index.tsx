@@ -39,7 +39,10 @@ export function ProfileForm({
 
   const { form, fields } = useForm(profileUpdateSchema, {
     lastResult,
-    defaultValue: { name: profile.name ?? "", avatarUrl: profile.avatarUrl },
+    defaultValue: {
+      name: profile.name ?? "",
+      avatarUrl: profile.avatarUrl ?? undefined,
+    },
     onSubmit: createSubmitHandler(formAction),
   });
 
