@@ -10,9 +10,10 @@ import {
   ScrollShadow,
   SearchField,
 } from "@heroui/react";
-import { Check, PlusIcon, User as UserIcon } from "lucide-react";
+import { Check, PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { UserAvatar } from "@/components/user-avatar";
 import type { Profile } from "@/lib/type";
 
 function PlayerListBoxItem({
@@ -24,11 +25,7 @@ function PlayerListBoxItem({
 }) {
   return (
     <ListBox.Item id={player.id}>
-      <Avatar size="sm">
-        <Avatar.Fallback>
-          <UserIcon />
-        </Avatar.Fallback>
-      </Avatar>
+      <UserAvatar avatarUrl={player.avatarUrl} name={player.name} size="sm" />
       <div className="flex flex-col">
         <div className="flex items-center gap-1">
           <Label>{player.name}</Label>
@@ -116,11 +113,11 @@ export function PlayerSelector({
                   "
                 >
                   <div className="relative w-fit">
-                    <Avatar size="md">
-                      <Avatar.Fallback>
-                        <UserIcon />
-                      </Avatar.Fallback>
-                    </Avatar>
+                    <UserAvatar
+                      avatarUrl={player.avatarUrl}
+                      name={player.name}
+                      size="md"
+                    />
                     {!disabledPlayerIds.includes(player.id) && (
                       <CloseButton
                         className="
