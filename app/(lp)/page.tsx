@@ -3,6 +3,7 @@ import Image from "next/image";
 import Logo from "@/components/logo";
 import { Navbar, NavbarBrand, NavbarContent } from "@/components/navbar";
 import { SERVICE_NAME } from "@/lib/config";
+import { getURL } from "@/lib/utils/url";
 import match from "./_assets/match.png";
 import { Faq } from "./_components/Faq";
 import { HeroCtaLinks } from "./_components/HeroCtaLinks";
@@ -70,16 +71,86 @@ const faqs = [
   },
 ];
 
+const siteUrl = getURL();
+
 export const metadata = {
+  title: { absolute: "麻雀成績表・記録アプリ | 雀鬼録" },
+  description:
+    "麻雀の成績を自動計算・記録・分析できる無料Webアプリ。対局ごとの成績をウマ・オカ・チップ対応で管理。フレンドと成績表を共有できます。",
+  keywords: [
+    "麻雀",
+    "成績表",
+    "成績管理",
+    "麻雀アプリ",
+    "成績記録",
+    "雀荘",
+    "対局記録",
+    "雀鬼録",
+  ],
+  alternates: {
+    canonical: siteUrl,
+  },
+  openGraph: {
+    title: "麻雀成績表・記録アプリ | 雀鬼録",
+    description:
+      "麻雀の成績を自動計算・記録・分析できる無料Webアプリ。対局ごとの成績をウマ・オカ・チップ対応で管理。フレンドと成績表を共有できます。",
+    url: siteUrl,
+    siteName: "雀鬼録",
+    locale: "ja_JP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "麻雀成績表・記録アプリ | 雀鬼録",
+    description:
+      "麻雀の成績を自動計算・記録・分析できる無料Webアプリ。対局ごとの成績をウマ・オカ・チップ対応で管理。",
+  },
   robots: {
     index: true,
     follow: true,
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: "雀鬼録",
+      url: siteUrl,
+      description:
+        "麻雀の成績を自動計算・記録・分析できる無料Webアプリ。対局ごとの成績をウマ・オカ・チップ対応で管理できます。",
+      applicationCategory: "GameApplication",
+      operatingSystem: "Web",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "JPY",
+      },
+      inLanguage: "ja",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ],
+};
+
 export default function LandingPage() {
   return (
     <div>
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar shouldHideOnScroll>
         <NavbarBrand>
           <Logo className="text-lg" />

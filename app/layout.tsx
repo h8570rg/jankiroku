@@ -1,6 +1,7 @@
 import { cn } from "@heroui/react";
 import type { Metadata } from "next";
 import { SERVICE_NAME } from "@/lib/config";
+import { getURL } from "@/lib/utils/url";
 import { fontClassNames } from "./fonts";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
@@ -8,6 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getURL()),
   title: {
     template: `%s | ${SERVICE_NAME}`,
     default: SERVICE_NAME,
