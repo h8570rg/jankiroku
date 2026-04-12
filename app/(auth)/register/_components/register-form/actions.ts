@@ -7,7 +7,11 @@ import { serverServices } from "@/lib/services/server";
 import { createClient } from "@/lib/supabase/server";
 import { updateProfileSchema } from "./schema";
 
-export async function updateProfile(_prevState: unknown, formData: FormData) {
+export async function updateProfile(
+  avatarUrl: string | undefined,
+  _prevState: unknown,
+  formData: FormData,
+) {
   const submission = parseSubmission(formData);
   const result = updateProfileSchema.safeParse(submission.payload);
 
@@ -32,6 +36,7 @@ export async function updateProfile(_prevState: unknown, formData: FormData) {
   const updateResult = await updateUserProfile({
     name,
     displayId,
+    avatarUrl,
   });
 
   if (!updateResult.success) {
