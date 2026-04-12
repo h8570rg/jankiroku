@@ -154,8 +154,7 @@ export const profileService = (supabase: Supabase) => {
       if (userResponse.error) throw userResponse.error;
       const user = userResponse.data.user;
 
-      const ext = file.name.split(".").pop();
-      const path = `${user.id}/avatar.${ext}`;
+      const path = `${user.id}/avatar`;
 
       const { error: uploadError } = await supabase.storage
         .from("avatars")
