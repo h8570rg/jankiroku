@@ -27,7 +27,6 @@ pre-push:
     "supabase-type":
       run: |
         npm run supabase:type
-        npx biome format --write lib/database.types.ts
         if ! git diff --quiet -- lib/database.types.ts; then
           echo ""
           echo "ERROR: supabase:type で型定義ファイルが更新されました。"
