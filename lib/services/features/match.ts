@@ -114,11 +114,11 @@ export const matchService = (supabase: Supabase) => {
     addMatchPlayers: async ({
       matchId,
       playerIds,
-      startOrder = 0,
+      startOrder,
     }: {
       matchId: string;
       playerIds: string[];
-      startOrder?: number;
+      startOrder: number;
     }): Promise<void> => {
       const addMatchPlayerResponses = await Promise.all(
         playerIds.map((playerId, index) =>

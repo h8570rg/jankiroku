@@ -32,7 +32,11 @@ export async function updateMatchPlayers(
 
   if (newPlayerIds.length > 0) {
     const { addMatchPlayers } = await serverServices();
-    await addMatchPlayers({ matchId, playerIds: newPlayerIds });
+    await addMatchPlayers({
+      matchId,
+      playerIds: newPlayerIds,
+      startOrder: existingPlayerIds.length,
+    });
     revalidatePath(`/matches/${matchId}`);
   }
 
