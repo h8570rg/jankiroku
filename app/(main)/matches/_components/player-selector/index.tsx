@@ -1,5 +1,6 @@
 "use client";
 
+import type { FormError } from "@conform-to/react/future";
 import {
   Avatar,
   CloseButton,
@@ -52,7 +53,7 @@ export function PlayerSelector({
   disabledPlayerIds?: string[];
   onNewPlayerRequest: () => void;
   searchAction: (text: string) => Promise<Profile[]>;
-  error?: string | string[];
+  error?: FormError["fieldErrors"][string];
 }) {
   const [searchedProfiles, setSearchedProfiles] = useState<Profile[] | null>(
     null,
