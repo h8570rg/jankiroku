@@ -1,3 +1,4 @@
+import { coerceFormValue } from "@conform-to/zod/v4/future";
 import { z } from "zod";
 import { schema } from "@/lib/utils/schema";
 
@@ -22,10 +23,12 @@ const threePlayerFields = {
   ...commonFields,
 };
 
-export const ruleSchema = z.discriminatedUnion("playersCount", [
-  z.object(fourPlayerFields),
-  z.object(threePlayerFields),
-]);
+export const ruleSchema = coerceFormValue(
+  z.discriminatedUnion("playersCount", [
+    z.object(fourPlayerFields),
+    z.object(threePlayerFields),
+  ]),
+);
 
 export type RuleInput = z.input<typeof ruleSchema>;
 export type RuleOutput = z.output<typeof ruleSchema>;
