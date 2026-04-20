@@ -16,7 +16,12 @@ export function FriendMenu({ profileId }: { profileId: string }) {
 
   return (
     <Dropdown>
-      <Button size="sm" variant="ghost" isIconOnly>
+      <Button
+        size="sm"
+        variant="ghost"
+        isIconOnly
+        aria-label="フレンドメニュー"
+      >
         <EllipsisVertical />
       </Button>
       <Dropdown.Popover>

@@ -27,6 +27,7 @@ export function MatchHeader({
           <NextLink
             className={buttonVariants({ isIconOnly: true, variant: "ghost" })}
             href="/matches"
+            aria-label="戻る"
           >
             <ChevronLeft />
           </NextLink>
@@ -37,6 +38,7 @@ export function MatchHeader({
           <Button
             isIconOnly
             variant="ghost"
+            aria-label="ルールを確認"
             onClick={ruleModal.open}
             className={buttonVariants({
               isIconOnly: true,
@@ -49,6 +51,7 @@ export function MatchHeader({
           <Button
             isIconOnly
             variant="ghost"
+            aria-label="プレイヤーを追加"
             onClick={playersModal.open}
             className={buttonVariants({
               isIconOnly: true,

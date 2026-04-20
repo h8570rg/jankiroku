@@ -6,7 +6,8 @@ const SUPABASE_LOCAL_PUBLISHABLE_KEY =
 
 export default defineConfig({
   testDir: "./e2e",
-  fullyParallel: true,
+  fullyParallel: false,
+  workers: 1,
   reporter: [["html", { outputFolder: "e2e/playwright-report" }]],
   outputDir: "e2e/test-results",
 
@@ -22,11 +23,22 @@ export default defineConfig({
     },
     {
       name: "chromium",
+      // logout系はセッションを破壊するため cleanup プロジェクトで最後に実行する
+      testIgnore: /logout\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         storageState: "e2e/.auth/user.json",
       },
       dependencies: ["setup"],
+    },
+    {
+      name: "cleanup",
+      testMatch: /logout\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "e2e/.auth/user.json",
+      },
+      dependencies: ["chromium"],
     },
   ],
 
