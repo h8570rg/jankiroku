@@ -19,7 +19,7 @@ export const addChipSchema = coerceFormValue(
       if (total !== 0) {
         ctx.addIssue({
           code: "custom",
-          message: `チップの合計が0枚なるように入力してください\n現在: ${total.toLocaleString()}枚`,
+          message: `チップの合計が0枚になるように入力してください\n現在: ${total.toLocaleString()}枚`,
           path: ["playerChip"],
         });
       }
