@@ -31,7 +31,7 @@
   "dependencies": {
     "@conform-to/react": "1.19.0",
     "@conform-to/zod": "1.19.0",
-    "@heroui/react": "3.0.2",
+    "@heroui/react": "3.0.3",
     "@heroui/styles": "3.0.2",
     "@iconify/react": "6.0.2",
     "@supabase/ssr": "0.10.2",
