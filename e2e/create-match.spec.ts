@@ -1,20 +1,10 @@
-import { expect, type Locator, type Page, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 import { TEST_USERS } from "./helpers";
 
 async function openCreateMatchDrawer(page: Page) {
   await page.goto("/matches");
   await page.getByRole("button", { name: "ゲームを始める" }).click();
   await expect(page.getByRole("dialog", { name: "ゲーム作成" })).toBeVisible();
-}
-
-/**
- * HeroUIのRadioは視覚的に隠されたinput[type=radio]を使うため、
- * 通常のクリックは親要素のlabelに遮られる。
- * inputへのdispatchEventでチェックしたあと、変更イベントも明示的に発火させる。
- */
-async function clickRadio(scope: Locator, name: string | RegExp, nth = 0) {
-  const radio = scope.getByRole("radio", { name }).nth(nth);
-  await radio.dispatchEvent("click");
 }
 
 test.describe("ゲーム作成 - ルール設定", () => {
@@ -30,7 +20,7 @@ test.describe("ゲーム作成 - ルール設定", () => {
     await openCreateMatchDrawer(page);
     const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
 
-    await clickRadio(dialog, "三麻");
+    await dialog.locator("label", { hasText: "三麻" }).click();
     await expect(dialog.getByRole("radio", { name: "三麻" })).toBeChecked();
 
     // 3人用ウマプリセット: ウマ10, ウマ20, ウマ30
@@ -71,7 +61,7 @@ test.describe("ゲーム作成 - ルール設定", () => {
     await openCreateMatchDrawer(page);
     const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
 
-    await clickRadio(dialog, "カスタム", 0);
+    await dialog.locator("label", { hasText: "カスタム" }).nth(0).click();
 
     await dialog.getByRole("spinbutton", { name: "1着" }).fill("10");
     await dialog.getByRole("spinbutton", { name: "2着" }).fill("5");
@@ -88,7 +78,7 @@ test.describe("ゲーム作成 - ルール設定", () => {
     await openCreateMatchDrawer(page);
     const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
 
-    await clickRadio(dialog, "カスタム", 0);
+    await dialog.locator("label", { hasText: "カスタム" }).nth(0).click();
 
     await dialog.getByRole("spinbutton", { name: "1着" }).fill("10");
     await dialog.getByRole("spinbutton", { name: "2着" }).fill("5");
@@ -104,7 +94,7 @@ test.describe("ゲーム作成 - ルール設定", () => {
 
     // "チップ" のラジオグループ内でカスタムを選択
     // オプションカードのカスタムは2箇所（ウマとチップ）あるので2番目
-    await clickRadio(dialog, "カスタム", 1);
+    await dialog.locator("label", { hasText: "カスタム" }).nth(1).click();
 
     await dialog.getByRole("spinbutton", { name: "カスタム" }).fill("-100");
 
@@ -139,7 +129,7 @@ test.describe("ゲーム作成 - ルール設定", () => {
     await openCreateMatchDrawer(page);
     const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
 
-    await clickRadio(dialog, "三麻");
+    await dialog.locator("label", { hasText: "三麻" }).click();
     await dialog.getByRole("button", { name: "詳細設定" }).click();
 
     await expect(
@@ -278,7 +268,7 @@ test.describe("ゲーム作成 - 完了フロー", () => {
     await openCreateMatchDrawer(page);
     const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
 
-    await clickRadio(dialog, "三麻");
+    await dialog.locator("label", { hasText: "三麻" }).click();
     await dialog.getByRole("button", { name: "プレイヤー選択へ" }).click();
 
     for (const user of [TEST_USERS.alice, TEST_USERS.bob]) {
