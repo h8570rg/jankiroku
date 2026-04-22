@@ -1,19 +1,13 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
 import { SEED_MATCH_URL, TEST_USERS } from "./helpers";
 
-async function fillSpinbutton(locator: Locator, value: string) {
-  await locator.scrollIntoViewIfNeeded();
-  // React stateに反映させるためnativeInputValueSetter経由で入力し、input/changeを発火
-  await locator.evaluate((el, v) => {
-    const input = el as HTMLInputElement;
-    const setter = Object.getOwnPropertyDescriptor(
-      window.HTMLInputElement.prototype,
-      "value",
-    )?.set;
-    setter?.call(input, v);
-    input.dispatchEvent(new Event("input", { bubbles: true }));
-    input.dispatchEvent(new Event("change", { bubbles: true }));
-  }, value);
+async function fillSpinbutton(page: Page, locator: Locator, value: string) {
+  await locator.evaluate((el: HTMLInputElement) => {
+    el.focus();
+    el.select();
+  });
+  await page.keyboard.type(value);
+  await page.keyboard.press("Tab");
 }
 
 test.describe("成績詳細ページ", () => {
@@ -91,18 +85,22 @@ test.describe("ゲーム結果入力フォーム", () => {
     await openCreateGameDrawer(page);
 
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.me.name }),
       "500",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.alice.name }),
       "250",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.bob.name }),
       "250",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.carol.name }),
       "100",
     );
@@ -118,18 +116,22 @@ test.describe("ゲーム結果入力フォーム", () => {
     await openCreateGameDrawer(page);
 
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.me.name }),
       "300",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.alice.name }),
       "300",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.bob.name }),
       "250",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.carol.name }),
       "150",
     );
@@ -143,18 +145,22 @@ test.describe("ゲーム結果入力フォーム", () => {
     await openCreateGameDrawer(page);
 
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.me.name }),
       "400",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.alice.name }),
       "300",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.bob.name }),
       "200",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.carol.name }),
       "100",
     );
@@ -185,14 +191,17 @@ test.describe("ゲーム結果入力フォーム", () => {
     await openCreateGameDrawer(page);
 
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.me.name }),
       "500",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.alice.name }),
       "300",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.bob.name }),
       "100",
     );
@@ -235,18 +244,22 @@ test.describe("チップ入力フォーム", () => {
     await openChipDrawer(page);
 
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.me.name }),
       "5",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.alice.name }),
       "3",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.bob.name }),
       "-2",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.carol.name }),
       "-1",
     );
@@ -261,17 +274,23 @@ test.describe("チップ入力フォーム", () => {
     await openChipDrawer(page);
 
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.me.name }),
       "5",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.alice.name }),
       "-2",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.bob.name }),
       "-2",
     );
+    await page
+      .getByRole("spinbutton", { name: TEST_USERS.carol.name })
+      .fill("");
 
     await expect(page.getByRole("button", { name: "残り入力" })).toBeVisible();
   });
@@ -281,18 +300,22 @@ test.describe("チップ入力フォーム", () => {
     await openChipDrawer(page);
 
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.me.name }),
       "5",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.alice.name }),
       "-2",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.bob.name }),
       "-2",
     );
     await fillSpinbutton(
+      page,
       page.getByRole("spinbutton", { name: TEST_USERS.carol.name }),
       "-1",
     );

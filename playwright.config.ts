@@ -45,7 +45,7 @@ export default defineConfig({
   webServer: {
     command: "npm run dev -- -p 3003",
     url: "http://localhost:3003",
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     env: {
       NEXT_PUBLIC_SUPABASE_URL: SUPABASE_LOCAL_URL,
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: SUPABASE_LOCAL_PUBLISHABLE_KEY,

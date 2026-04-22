@@ -1,5 +1,3 @@
-import type { Page } from "@playwright/test";
-
 /**
  * seed.sqlで事前作成されている四麻マッチのID
  * 参加プレイヤー: testuser, alice123, bob123, carol123
@@ -37,20 +35,6 @@ export const TEST_USERS = {
     name: "キャロル",
   },
 } as const;
-
-export async function loginAs(
-  page: Page,
-  user: { email: string; password: string },
-) {
-  await page.goto("/login");
-  await page.getByRole("textbox", { name: "メールアドレス" }).fill(user.email);
-  await page.getByRole("textbox", { name: "パスワード" }).fill(user.password);
-  await page.getByRole("button", { name: "ログイン", exact: true }).click();
-  await page.waitForURL("/matches");
-  await page.evaluate(() => {
-    localStorage.setItem("lastVersion", "999.0.0");
-  });
-}
 
 export function randomEmail() {
   const rand = Math.random().toString(36).slice(2, 10);
