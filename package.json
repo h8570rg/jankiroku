@@ -58,14 +58,14 @@
     "@playwright/test": "1.59.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@typescript-eslint/parser": "8.58.2",
+    "@typescript-eslint/parser": "8.59.0",
     "cspell": "10.0.0",
     "eslint": "10.2.1",
     "eslint-plugin-better-tailwindcss": "4.4.1",
     "lefthook": "2.1.6",
     "supabase": "2.93.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.58.2",
+    "typescript-eslint": "8.59.0",
     "vitest": "4.1.4"
   }
 }
