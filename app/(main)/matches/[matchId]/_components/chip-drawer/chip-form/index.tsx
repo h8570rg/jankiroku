@@ -114,7 +114,7 @@ export function ChipForm({
                           </Button>
                         </InputGroup.Prefix>
                       )}
-                      <InputGroup.Input className="min-w-0 text-right" />
+                      <InputGroup.Input className="min-w-1 text-right" />
                       <InputGroup.Suffix>枚</InputGroup.Suffix>
                     </InputGroup>
                   </div>

@@ -175,3 +175,48 @@ INSERT INTO public.rules (
   10000, 0, 'round', '0_0_0_0',
   '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111'
 );
+
+-- E2E用の事前マッチ（三麻・3人参加・ゲーム/チップ未入力）
+INSERT INTO public.matches (id, created_by, created_at) VALUES
+  (
+    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+    '11111111-1111-1111-1111-111111111111',
+    now()
+  );
+
+INSERT INTO public.match_players (match_id, player_id, "order") VALUES
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '11111111-1111-1111-1111-111111111111', 0),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '22222222-2222-2222-2222-222222222222', 1),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '33333333-3333-3333-3333-333333333333', 2);
+
+INSERT INTO public.rules (
+  match_id, players_count, rate, default_points, default_calc_points,
+  crack_box_bonus, chip_rate, calc_method, incline, created_by, updated_by
+) VALUES (
+  'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 3, 0, 35000, 40000,
+  10000, 0, 'round', '0_0_0',
+  '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111'
+);
+
+-- E2E用の事前マッチ（三麻ルール・4人参加=ルール人数超過・ゲーム/チップ未入力）
+INSERT INTO public.matches (id, created_by, created_at) VALUES
+  (
+    'cccccccc-cccc-cccc-cccc-cccccccccccc',
+    '11111111-1111-1111-1111-111111111111',
+    now()
+  );
+
+INSERT INTO public.match_players (match_id, player_id, "order") VALUES
+  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '11111111-1111-1111-1111-111111111111', 0),
+  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '22222222-2222-2222-2222-222222222222', 1),
+  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '33333333-3333-3333-3333-333333333333', 2),
+  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '44444444-4444-4444-4444-444444444444', 3);
+
+INSERT INTO public.rules (
+  match_id, players_count, rate, default_points, default_calc_points,
+  crack_box_bonus, chip_rate, calc_method, incline, created_by, updated_by
+) VALUES (
+  'cccccccc-cccc-cccc-cccc-cccccccccccc', 3, 0, 35000, 40000,
+  10000, 0, 'round', '0_0_0',
+  '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111'
+);

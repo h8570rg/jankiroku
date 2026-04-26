@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { TEST_USERS } from "./helpers";
+import { fillName, TEST_USERS } from "./helpers";
 
 test.describe("プロフィール編集", () => {
   test("プロフィール情報が表示されている", async ({ page }) => {
@@ -25,7 +25,7 @@ test.describe("プロフィール編集", () => {
   test("名前を空にするとバリデーションエラー", async ({ page }) => {
     await page.goto("/profile");
 
-    await page.getByRole("textbox", { name: "名前" }).fill("");
+    await fillName(page.getByRole("textbox", { name: "名前" }), "");
     await page.getByRole("button", { name: "保存", exact: true }).click();
 
     await expect(page.getByText("名前を入力してください")).toBeVisible();
@@ -34,7 +34,10 @@ test.describe("プロフィール編集", () => {
   test("名前が長すぎるとバリデーションエラー", async ({ page }) => {
     await page.goto("/profile");
 
-    await page.getByRole("textbox", { name: "名前" }).fill("あ".repeat(13));
+    await fillName(
+      page.getByRole("textbox", { name: "名前" }),
+      "あ".repeat(13),
+    );
     await page.getByRole("button", { name: "保存", exact: true }).click();
 
     await expect(
@@ -48,13 +51,14 @@ test.describe("プロフィール編集", () => {
     const originalName = TEST_USERS.me.name;
     const newName = "テストユーザー改";
 
-    await page.getByRole("textbox", { name: "名前" }).fill(newName);
+    await fillName(page.getByRole("textbox", { name: "名前" }), newName);
     await page.getByRole("button", { name: "保存", exact: true }).click();
 
     await expect(page.getByText("プロフィールを更新しました")).toBeVisible();
 
-    // 状態を元に戻す
-    await page.getByRole("textbox", { name: "名前" }).fill(originalName);
+    // ページを再読み込みして Conform の状態をリセットしてから元の名前に戻す
+    await page.goto("/profile");
+    await fillName(page.getByRole("textbox", { name: "名前" }), originalName);
     await page.getByRole("button", { name: "保存", exact: true }).click();
     await expect(page.getByText("プロフィールを更新しました")).toBeVisible();
   });

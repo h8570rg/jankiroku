@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { TEST_USERS } from "./helpers";
+import { fillSearchbox, TEST_USERS } from "./helpers";
 
 test.describe.configure({ mode: "serial" });
 
@@ -18,9 +18,7 @@ test.describe("フレンド管理", () => {
 
   test("ユーザーIDで検索できる", async ({ page }) => {
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill(TEST_USERS.alice.displayId);
+    await fillSearchbox(page, TEST_USERS.alice.displayId);
 
     await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
     await expect(
@@ -30,9 +28,7 @@ test.describe("フレンド管理", () => {
 
   test("名前で検索できる", async ({ page }) => {
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill(TEST_USERS.bob.name);
+    await fillSearchbox(page, TEST_USERS.bob.name);
 
     await expect(page.getByText(TEST_USERS.bob.name)).toBeVisible();
   });
@@ -41,9 +37,7 @@ test.describe("フレンド管理", () => {
     page,
   }) => {
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill("xxxxxxxxxxxxxxxxxxxx");
+    await fillSearchbox(page, "xxxxxxxxxxxxxxxxxxxx");
 
     await expect(page.getByText("見つかりませんでした")).toBeVisible();
   });
@@ -53,9 +47,7 @@ test.describe("フレンド管理", () => {
   }) => {
     // seedでaliceはフレンドとして登録されている
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill(TEST_USERS.alice.displayId);
+    await fillSearchbox(page, TEST_USERS.alice.displayId);
 
     await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
     await expect(page.getByText("追加済み")).toBeVisible();
@@ -79,9 +71,7 @@ test.describe("フレンド管理", () => {
   test("検索結果の「追加」ボタンからフレンド追加できる", async ({ page }) => {
     // 前テストで alice は削除済み
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill(TEST_USERS.alice.displayId);
+    await fillSearchbox(page, TEST_USERS.alice.displayId);
 
     await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
     await page.getByRole("button", { name: "追加", exact: true }).click();

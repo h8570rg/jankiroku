@@ -5,15 +5,22 @@ const SUPABASE_LOCAL_PUBLISHABLE_KEY =
   "sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH";
 
 export default defineConfig({
+  globalSetup: "./e2e/global-setup.ts",
   testDir: "./e2e",
   fullyParallel: false,
   workers: 1,
   reporter: [["html", { outputFolder: "e2e/playwright-report" }]],
   outputDir: "e2e/test-results",
 
+  expect: {
+    timeout: 10000,
+  },
+
   use: {
     baseURL: "http://localhost:3003",
     trace: "on-first-retry",
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
   },
 
   projects: [
@@ -32,13 +39,23 @@ export default defineConfig({
       dependencies: ["setup"],
     },
     {
+      name: "webkit",
+      // logout系はセッションを破壊するため cleanup プロジェクトで最後に実行する
+      testIgnore: /logout\.spec\.ts/,
+      use: {
+        ...devices["Desktop Safari"],
+        storageState: "e2e/.auth/user.json",
+      },
+      dependencies: ["setup"],
+    },
+    {
       name: "cleanup",
       testMatch: /logout\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         storageState: "e2e/.auth/user.json",
       },
-      dependencies: ["chromium"],
+      dependencies: ["webkit"],
     },
   ],
 
