@@ -9,6 +9,7 @@ export function BackButton() {
     <NextLink
       className={buttonVariants({ isIconOnly: true, variant: "ghost" })}
       href="/friends"
+      aria-label="戻る"
     >
       <ChevronLeft />
     </NextLink>

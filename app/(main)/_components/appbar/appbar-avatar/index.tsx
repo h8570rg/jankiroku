@@ -18,7 +18,10 @@ export async function AppbarAvatar() {
 
   return (
     <Dropdown>
-      <Dropdown.Trigger className="rounded-full">
+      <Dropdown.Trigger
+        className="rounded-full"
+        aria-label="プロフィールメニュー"
+      >
         <UserAvatar
           avatarUrl={profile.avatarUrl}
           name={profile.name}

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  parseSubmission,
-  useForm,
-  useFormData,
-} from "@conform-to/react/future";
+import { getFieldValue, useForm, useFormData } from "@conform-to/react/future";
 import {
   Drawer,
   FieldError,
@@ -12,7 +8,7 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
-import { useActionState, useRef } from "react";
+import { useActionState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
 import type { Match } from "@/lib/type";
@@ -27,10 +23,7 @@ export function ChipForm({
   match: Match;
   onOpenChange: (isOpen: boolean) => void;
 }) {
-  const formRef = useRef<HTMLFormElement>(null);
   const { players, rule } = match;
-
-  console.log(players);
 
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(addChip, {
@@ -51,20 +44,16 @@ export function ChipForm({
     },
   });
 
-  const payload = useFormData(
-    formRef,
-    (fd) => (fd ? parseSubmission(fd).payload : null),
-    { fallback: null },
-  );
-  const playerChipList = Array.isArray(payload?.playerChip)
-    ? payload.playerChip
-    : payload?.playerChip && typeof payload.playerChip === "object"
-      ? Object.keys(payload.playerChip)
-          .sort((a, b) => Number(a) - Number(b))
-          .map((i) => (payload.playerChip as Record<string, unknown>)[i])
-      : [];
-  const chipCounts = playerChipList.map((item: unknown) =>
-    String((item as Record<string, unknown>)?.chipCount ?? ""),
+  const playerChips =
+    useFormData(form.id, (formData) =>
+      getFieldValue(formData, fields.playerChip.name, {
+        type: "object",
+        array: true,
+      }),
+    ) ?? [];
+
+  const chipCounts = playerChips.map((p) =>
+    String((p as { chipCount?: string })?.chipCount ?? ""),
   );
   const totalChipCount = chipCounts.reduce((sum, v) => sum + Number(v) || 0, 0);
   const filledCount = chipCounts.filter((v) => v !== "").length;
@@ -74,7 +63,6 @@ export function ChipForm({
 
   return (
     <Form
-      ref={formRef}
       className="contents"
       validationErrors={form.fieldErrors}
       {...form.props}
@@ -126,7 +114,7 @@ export function ChipForm({
                           </Button>
                         </InputGroup.Prefix>
                       )}
-                      <InputGroup.Input className="min-w-0 text-right" />
+                      <InputGroup.Input className="min-w-1 text-right" />
                       <InputGroup.Suffix>枚</InputGroup.Suffix>
                     </InputGroup>
                   </div>
