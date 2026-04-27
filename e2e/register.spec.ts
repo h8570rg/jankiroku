@@ -1,15 +1,12 @@
 import { expect, type Page, test } from "@playwright/test";
-import {
-  fillDisplayId,
-  fillEmail,
-  fillName,
-  randomDisplayId,
-  randomEmail,
-} from "./helpers";
+import { fillInput, randomDisplayId, randomEmail } from "./helpers";
 
 async function createFreshSignedUpUser(page: Page) {
   await page.goto("/sign-up");
-  await fillEmail(page, randomEmail());
+  await fillInput(
+    page.getByRole("textbox", { name: "メールアドレス" }),
+    randomEmail(),
+  );
   await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
   await page.getByRole("button", { name: "新規登録", exact: true }).click();
   await page.waitForURL(/\/register/);
@@ -30,20 +27,23 @@ test.describe("ユーザー情報登録 - バリデーション", () => {
   test("ユーザーIDを入力せずに送信するとバリデーションエラー", async ({
     page,
   }) => {
-    await fillName(page.getByRole("textbox", { name: "名前" }), "テスト");
+    await fillInput(page.getByRole("textbox", { name: "名前" }), "テスト");
     await page.getByRole("button", { name: "決定", exact: true }).click();
     await expect(page.getByText("ユーザーIDを入力してください")).toBeVisible();
   });
 
   test("名前を入力せずに送信するとバリデーションエラー", async ({ page }) => {
-    await fillDisplayId(page, randomDisplayId());
+    await fillInput(
+      page.getByRole("textbox", { name: "ユーザーID" }),
+      randomDisplayId(),
+    );
     await page.getByRole("button", { name: "決定", exact: true }).click();
     await expect(page.getByText("名前を入力してください")).toBeVisible();
   });
 
   test("ユーザーIDが短いとバリデーションエラー", async ({ page }) => {
-    await fillDisplayId(page, "abc");
-    await fillName(page.getByRole("textbox", { name: "名前" }), "テスト");
+    await fillInput(page.getByRole("textbox", { name: "ユーザーID" }), "abc");
+    await fillInput(page.getByRole("textbox", { name: "名前" }), "テスト");
     await page.getByRole("button", { name: "決定", exact: true }).click();
     await expect(
       page.getByText("ユーザーIDは4文字以上で入力してください"),
@@ -51,8 +51,11 @@ test.describe("ユーザー情報登録 - バリデーション", () => {
   });
 
   test("ユーザーIDが長すぎるとバリデーションエラー", async ({ page }) => {
-    await fillDisplayId(page, "a".repeat(13));
-    await fillName(page.getByRole("textbox", { name: "名前" }), "テスト");
+    await fillInput(
+      page.getByRole("textbox", { name: "ユーザーID" }),
+      "a".repeat(13),
+    );
+    await fillInput(page.getByRole("textbox", { name: "名前" }), "テスト");
     await page.getByRole("button", { name: "決定", exact: true }).click();
     await expect(
       page.getByText("ユーザーIDは12文字以内で入力してください"),
@@ -62,8 +65,11 @@ test.describe("ユーザー情報登録 - バリデーション", () => {
   test("ユーザーIDに半角英数字以外を含むとバリデーションエラー", async ({
     page,
   }) => {
-    await fillDisplayId(page, "ユーザー");
-    await fillName(page.getByRole("textbox", { name: "名前" }), "テスト");
+    await fillInput(
+      page.getByRole("textbox", { name: "ユーザーID" }),
+      "ユーザー",
+    );
+    await fillInput(page.getByRole("textbox", { name: "名前" }), "テスト");
     await page.getByRole("button", { name: "決定", exact: true }).click();
     await expect(
       page.getByText("ユーザーIDは半角英数字のみで入力してください"),
@@ -71,15 +77,21 @@ test.describe("ユーザー情報登録 - バリデーション", () => {
   });
 
   test("すでに使われているユーザーIDを指定するとエラー", async ({ page }) => {
-    await fillDisplayId(page, "testuser");
-    await fillName(page.getByRole("textbox", { name: "名前" }), "別ユーザー");
+    await fillInput(
+      page.getByRole("textbox", { name: "ユーザーID" }),
+      "testuser",
+    );
+    await fillInput(page.getByRole("textbox", { name: "名前" }), "別ユーザー");
     await page.getByRole("button", { name: "決定", exact: true }).click();
     await expect(page.getByText("このIDは既に使用されています")).toBeVisible();
   });
 
   test("名前が長すぎるとバリデーションエラー", async ({ page }) => {
-    await fillDisplayId(page, randomDisplayId());
-    await fillName(
+    await fillInput(
+      page.getByRole("textbox", { name: "ユーザーID" }),
+      randomDisplayId(),
+    );
+    await fillInput(
       page.getByRole("textbox", { name: "名前" }),
       "あ".repeat(13),
     );
@@ -100,8 +112,14 @@ test.describe("ユーザー情報登録 - 副作用を伴うフロー", () => {
   test("正しい情報で登録すると /matches に遷移する", async ({ page }) => {
     await createFreshSignedUpUser(page);
 
-    await fillDisplayId(page, randomDisplayId());
-    await fillName(page.getByRole("textbox", { name: "名前" }), "新規ユーザー");
+    await fillInput(
+      page.getByRole("textbox", { name: "ユーザーID" }),
+      randomDisplayId(),
+    );
+    await fillInput(
+      page.getByRole("textbox", { name: "名前" }),
+      "新規ユーザー",
+    );
     await page.getByRole("button", { name: "決定", exact: true }).click();
 
     await expect(page).toHaveURL("/matches");

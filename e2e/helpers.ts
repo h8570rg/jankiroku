@@ -1,4 +1,4 @@
-import type { Locator, Page } from "@playwright/test";
+import type { Locator } from "@playwright/test";
 
 /**
  * seed.sqlで事前作成されている四麻マッチのID
@@ -67,40 +67,29 @@ export function randomDisplayId() {
 
 /**
  * WebKit では React Aria の controlled input に対して fill() が不安定なため、
- * pressSequentially() を使ってキーボードイベント経由で値を入力するヘルパー群。
+ * pressSequentially() を使ってキーボードイベント経由で値を入力するヘルパー。
  *
  * 原因: Playwright の fill() はプログラマティックに input イベントを発火するが、
  * WebKit では isTrusted:false のイベントを React が確実に処理しない場合がある。
  * pressSequentially() は実際のキーボードイベント連鎖を発生させるため安定して動作する。
+ *
+ * 既存値のクリアはこのヘルパーでは扱わない。テストは冪等であるべきで、
+ * 既存値がある前提のテストは呼び出し側で明示的に clearInput を呼ぶ。
  */
-
-export async function fillEmail(page: Page, email: string) {
-  const input = page.getByRole("textbox", { name: "メールアドレス" });
-  await input.click();
-  await input.pressSequentially(email);
-}
-
-export async function fillSearchbox(page: Page, value: string) {
-  const input = page.getByRole("searchbox", { name: /検索|ユーザーID/ });
-  await input.click();
-  await input.pressSequentially(value);
-}
-
-export async function fillDisplayId(page: Page, value: string) {
-  const input = page.getByRole("textbox", { name: "ユーザーID" });
-  await input.click();
-  await input.pressSequentially(value);
+export async function fillInput(locator: Locator, value: string) {
+  await locator.click();
+  await locator.pressSequentially(value);
 }
 
 /**
- * 既存値がある場合も考慮して triple-click で全選択してから上書きする。
- * value が空文字の場合は Backspace で全削除する。
+ * 入力欄の既存値を全選択して削除する。
+ *
+ * fillInput は pressSequentially でキーを順次入力するため、既存値があると
+ * 上書きではなく末尾に追記されてしまう。seed データやプロフィール初期値が
+ * 入っているフォームを操作するテストでは、入力前にこの関数で明示的に
+ * クリアしてから fillInput を呼ぶ必要がある。
  */
-export async function fillName(locator: Locator, value: string) {
+export async function clearInput(locator: Locator) {
   await locator.click({ clickCount: 3 });
-  if (value === "") {
-    await locator.press("Backspace");
-  } else {
-    await locator.pressSequentially(value);
-  }
+  await locator.press("Backspace");
 }

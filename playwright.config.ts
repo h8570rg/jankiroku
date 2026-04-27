@@ -7,20 +7,16 @@ const SUPABASE_LOCAL_PUBLISHABLE_KEY =
 export default defineConfig({
   globalSetup: "./e2e/global-setup.ts",
   testDir: "./e2e",
+  // global-setup で投入した Supabase の seed を全テストで共有しているため、
+  // 並列化すると同一レコードへの書き込みが競合する。よって 1 ワーカーで順次実行する。
   fullyParallel: false,
   workers: 1,
   reporter: [["html", { outputFolder: "e2e/playwright-report" }]],
   outputDir: "e2e/test-results",
 
-  expect: {
-    timeout: 10000,
-  },
-
   use: {
     baseURL: "http://localhost:3003",
     trace: "on-first-retry",
-    actionTimeout: 15000,
-    navigationTimeout: 30000,
   },
 
   projects: [
@@ -62,7 +58,6 @@ export default defineConfig({
   webServer: {
     command: "npm run dev -- -p 3003",
     url: "http://localhost:3003",
-    reuseExistingServer: !process.env.CI,
     env: {
       NEXT_PUBLIC_SUPABASE_URL: SUPABASE_LOCAL_URL,
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: SUPABASE_LOCAL_PUBLISHABLE_KEY,

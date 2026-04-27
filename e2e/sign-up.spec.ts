@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { fillEmail, randomEmail } from "./helpers";
+import { fillInput, randomEmail } from "./helpers";
 
 test.describe("新規登録", () => {
   test.use({ storageState: { cookies: [], origins: [] } });
@@ -9,7 +9,10 @@ test.describe("新規登録", () => {
   }) => {
     await page.goto("/sign-up");
 
-    await fillEmail(page, randomEmail());
+    await fillInput(
+      page.getByRole("textbox", { name: "メールアドレス" }),
+      randomEmail(),
+    );
     await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
     await page.getByRole("button", { name: "新規登録", exact: true }).click();
 
@@ -21,7 +24,10 @@ test.describe("新規登録", () => {
   }) => {
     await page.goto("/sign-up");
 
-    await fillEmail(page, "test@example.com");
+    await fillInput(
+      page.getByRole("textbox", { name: "メールアドレス" }),
+      "test@example.com",
+    );
     await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
     await page.getByRole("button", { name: "新規登録", exact: true }).click();
 
@@ -34,7 +40,10 @@ test.describe("新規登録", () => {
   test("メールアドレス形式が不正ならバリデーションエラー", async ({ page }) => {
     await page.goto("/sign-up");
 
-    await fillEmail(page, "not-an-email");
+    await fillInput(
+      page.getByRole("textbox", { name: "メールアドレス" }),
+      "not-an-email",
+    );
     await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
     await page.getByRole("button", { name: "新規登録", exact: true }).click();
 
@@ -59,7 +68,10 @@ test.describe("新規登録", () => {
   test("パスワード未入力ならバリデーションエラー", async ({ page }) => {
     await page.goto("/sign-up");
 
-    await fillEmail(page, randomEmail());
+    await fillInput(
+      page.getByRole("textbox", { name: "メールアドレス" }),
+      randomEmail(),
+    );
     await page.getByRole("button", { name: "新規登録", exact: true }).click();
 
     await expect(page.getByText("パスワードを入力してください")).toBeVisible();
@@ -69,7 +81,10 @@ test.describe("新規登録", () => {
   test("パスワードが短い場合はバリデーションエラー", async ({ page }) => {
     await page.goto("/sign-up");
 
-    await fillEmail(page, randomEmail());
+    await fillInput(
+      page.getByRole("textbox", { name: "メールアドレス" }),
+      randomEmail(),
+    );
     await page.getByRole("textbox", { name: "パスワード" }).fill("12345");
     await page.getByRole("button", { name: "新規登録", exact: true }).click();
 
