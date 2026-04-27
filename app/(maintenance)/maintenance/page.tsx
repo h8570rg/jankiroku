@@ -4,37 +4,32 @@ import { Alert } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/button";
+import Logo from "@/components/logo";
+import { Navbar, NavbarBrand } from "@/components/navbar";
 
 export default function MaintenancePage() {
   const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
   return (
     <main className="relative flex min-h-dvh flex-col">
-      {/* <Navbar position="static" className="absolute inset-x-0 top-0">
-        <NavbarContent>
-          <NavbarBrand>
-            <Link color="foreground" href="/">
-              <Logo className="text-lg" />
-            </Link>
-          </NavbarBrand>
-        </NavbarContent>
-      </Navbar> */}
+      <Navbar>
+        <NavbarBrand>
+          <Logo className="text-lg" />
+        </NavbarBrand>
+      </Navbar>
       <div className="flex grow items-center justify-center px-4">
         <div className="flex flex-col items-center gap-4">
           <h1 className="text-center text-lg">メンテナンス中</h1>
-          <Alert
-            color="warning"
-            title="申し訳ありませんが、現在メンテナンス中です。しばらくしてから再度お試しください。"
-            // endContent={
-            //   <div className="flex items-center justify-center self-stretch"></div>
-            // }
-            // description
-          />
+          <Alert status="warning">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title>
+                申し訳ありませんが、現在メンテナンス中です。しばらくしてから再度お試しください。
+              </Alert.Title>
+            </Alert.Content>
+          </Alert>
           <Button
             variant="secondary"
-            // startContent={
-            //   !isRefreshing && <Icon className="size-5" name="refresh" />
-            // }
             onPress={() => {
               router.refresh();
               setIsRefreshing(true);
