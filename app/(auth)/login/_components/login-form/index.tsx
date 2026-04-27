@@ -33,7 +33,8 @@ export function LoginForm({ className }: { className?: string }) {
     >
       <div className="space-y-4">
         <TextField
-          type="email"
+          type="text"
+          inputMode="email"
           name={fields.email.name}
           autoComplete="username"
         >

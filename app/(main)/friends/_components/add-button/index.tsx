@@ -9,6 +9,7 @@ export function AddButton() {
     <NextLink
       className={buttonVariants({ isIconOnly: true, variant: "ghost" })}
       href="/friends/add"
+      aria-label="フレンド追加"
     >
       <UserPlus />
     </NextLink>

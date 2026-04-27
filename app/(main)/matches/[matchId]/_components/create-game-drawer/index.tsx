@@ -166,7 +166,7 @@ export function CreateGameDrawer({
                                   </Button>
                                 </InputGroup.Prefix>
                               )}
-                              <InputGroup.Input className="min-w-0 text-right" />
+                              <InputGroup.Input className="min-w-1 text-right" />
                               <InputGroup.Suffix className="pl-1">
                                 <span
                                   className={cn("mt-0.5 mr-1 text-xs", {
