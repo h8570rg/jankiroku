@@ -29,8 +29,8 @@
     "supabase:type": "supabase gen types typescript --linked > lib/database.types.ts"
   },
   "dependencies": {
-    "@conform-to/react": "1.19.0",
-    "@conform-to/zod": "1.19.0",
+    "@conform-to/react": "1.19.1",
+    "@conform-to/zod": "1.19.1",
     "@heroui/react": "3.0.3",
     "@heroui/styles": "3.0.3",
     "@iconify/react": "6.0.2",
