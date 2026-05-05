@@ -76,7 +76,7 @@ export const schema = {
   playersCount: z.union([z.literal("4"), z.literal("3")]).transform(Number),
   points: z
     .string("点数を入力してください")
-    .transform((v) => (v === "0" || !!v ? Number(v) * 100 : undefined)),
+    .transform((v) => (v === "0" || v ? Number(v) * 100 : undefined)),
   rate: z.string().transform(Number),
   inclineFor4Players: z
     .object({
