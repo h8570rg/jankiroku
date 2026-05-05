@@ -37,7 +37,7 @@ export function CreateGameDrawer({
   const { rule } = match;
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(createGame.bind(null, match.id, rule), {
-      onSuccess: () => onOpenChange(false),
+      onSuccess: () => handleOpenChange(false),
     }),
     null,
   );
