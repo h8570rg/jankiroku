@@ -46,5 +46,5 @@ export async function createGame(
 
   revalidatePath(`/matches/${matchId}`);
 
-  return report(submission, {});
+  return report(submission, { reset: true });
 }
