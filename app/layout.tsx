@@ -31,6 +31,7 @@ export default function RootLayout({
     <html
       lang="ja"
       className={cn(fontClassNames, "scroll-smooth")}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <body className="bg-background font-rocknroll text-foreground">

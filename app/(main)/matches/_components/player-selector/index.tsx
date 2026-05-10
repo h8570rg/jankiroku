@@ -25,7 +25,7 @@ function PlayerListBoxItem({
   isSelected: boolean;
 }) {
   return (
-    <ListBox.Item id={player.id}>
+    <ListBox.Item id={player.id} textValue={player.name ?? ""}>
       <UserAvatar avatarUrl={player.avatarUrl} name={player.name} size="sm" />
       <div className="flex flex-col">
         <div className="flex items-center gap-1">
@@ -153,6 +153,7 @@ export function PlayerSelector({
         variant="secondary"
         className="mx-1 mt-4 mb-1"
         onChange={handleSearch}
+        aria-label="検索"
       >
         <SearchField.Group>
           <SearchField.SearchIcon />
@@ -166,7 +167,11 @@ export function PlayerSelector({
           onAction={(key) => handleListBoxAction(key, friends)}
           className="px-0"
         >
-          <ListBox.Item id="new" className="flex w-full items-center">
+          <ListBox.Item
+            id="new"
+            className="flex w-full items-center"
+            aria-label="新規プレイヤー作成"
+          >
             <Avatar size="sm" variant="soft" color="accent">
               <Avatar.Fallback>
                 <PlusIcon />

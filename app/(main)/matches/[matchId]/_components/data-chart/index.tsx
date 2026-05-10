@@ -50,7 +50,12 @@ export function DataChart({
 
   return (
     <Surface className={cn("h-[300px] rounded-3xl p-2", className)}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer
+        width="100%"
+        height="100%"
+        // https://github.com/recharts/recharts/issues/6716
+        initialDimension={{ width: 800, height: 300 }}
+      >
         <LineChart data={data}>
           <XAxis
             type="number"
