@@ -57,6 +57,7 @@ export function CreatePlayerModal({
                 variant="secondary"
                 name={fields.name.name}
                 maxLength={NAME_MAX_LENGTH}
+                aria-label="プレイヤー名"
               >
                 <Input placeholder="プレイヤー名を入力" />
                 <Description>{`${NAME_MAX_LENGTH}文字以内で入力してください`}</Description>

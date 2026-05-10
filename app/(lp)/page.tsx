@@ -176,6 +176,7 @@ export default function LandingPage() {
               alt="アプリのインターフェース"
               sizes="80vw"
               className="size-full object-cover object-top"
+              preload
             />
           </div>
         </div>
