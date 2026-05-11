@@ -10,6 +10,7 @@ import {
   ListBox,
   ScrollShadow,
   SearchField,
+  Text,
 } from "@heroui/react";
 import { Check, PlusIcon } from "lucide-react";
 import { useState } from "react";
@@ -102,7 +103,9 @@ export function PlayerSelector({
     <>
       {selectedPlayers.length > 0 && (
         <div className="flex items-center gap-3">
-          <p className="mb-2 shrink-0 pl-1 text-xs text-muted">選択中</p>
+          <Text type="body-xs" color="muted" className="mb-2 shrink-0 pl-1">
+            選択中
+          </Text>
           <ScrollShadow orientation="horizontal" className="grow">
             <div className="flex gap-2 pt-2">
               {selectedPlayers.map((player) => (
@@ -130,14 +133,13 @@ export function PlayerSelector({
                       />
                     )}
                   </div>
-                  <p
-                    className="
-                      line-clamp-2 w-full text-center text-xs break-all
-                      text-foreground
-                    "
+                  <Text
+                    type="body-xs"
+                    align="center"
+                    className="line-clamp-2 w-full break-all text-foreground"
                   >
                     {player.name}
-                  </p>
+                  </Text>
                 </div>
               ))}
             </div>
@@ -145,9 +147,9 @@ export function PlayerSelector({
         </div>
       )}
       {error && (
-        <p className="mt-2 text-sm text-danger">
+        <Text type="body-sm" className="mt-2 text-danger">
           {Array.isArray(error) ? error[0] : error}
-        </p>
+        </Text>
       )}
       <SearchField
         variant="secondary"

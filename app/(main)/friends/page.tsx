@@ -1,3 +1,4 @@
+import { Text } from "@heroui/react";
 import { User } from "@/components/user";
 import { serverServices } from "@/lib/services/server";
 import { AddButton } from "./_components/add-button";
@@ -11,7 +12,9 @@ export default async function FriendsPage() {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="heading-1">フレンド</h1>
+        <Text type="h1" className="heading-1">
+          フレンド
+        </Text>
         <AddButton />
       </div>
       <ul className="space-y-1">

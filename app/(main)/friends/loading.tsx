@@ -1,10 +1,13 @@
+import { Text } from "@heroui/react";
 import { UserSkeleton } from "@/components/user";
 
 export default function FriendsLoading() {
   return (
     <div>
       <div className="mb-4 flex h-10 items-center justify-between">
-        <h1 className="heading-1">フレンド</h1>
+        <Text type="h1" className="heading-1">
+          フレンド
+        </Text>
       </div>
       <ul className="space-y-1">
         {Array.from({ length: 3 }, (_, i) => `skeleton-${i}`).map((id) => (

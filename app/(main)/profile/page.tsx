@@ -1,3 +1,4 @@
+import { Text } from "@heroui/react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { serverServices } from "@/lib/services/server";
@@ -17,7 +18,9 @@ export default async function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-md">
-      <h1 className="mx-auto mb-4 w-fit text-lg">プロフィール編集</h1>
+      <Text type="h1" className="mx-auto mb-4 w-fit text-lg">
+        プロフィール編集
+      </Text>
       <ProfileForm profile={profile} />
     </div>
   );

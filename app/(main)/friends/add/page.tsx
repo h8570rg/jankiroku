@@ -1,3 +1,4 @@
+import { Text } from "@heroui/react";
 import { Suspense } from "react";
 import { User } from "@/components/user";
 import { serverServices } from "@/lib/services/server";
@@ -19,16 +20,18 @@ export default async function AddFriendPage({
     <div>
       <div className="mb-4 flex items-center gap-1">
         <BackButton />
-        <h1 className="heading-1">フレンド追加</h1>
+        <Text type="h1" className="heading-1">
+          フレンド追加
+        </Text>
       </div>
       <Suspense>
         <FriendSearch defaultValue={query ?? ""} />
       </Suspense>
       <ul className="mt-1">
         {!!query && profiles.length === 0 && (
-          <p className="mt-10 text-center text-sm text-muted">
+          <Text type="body-sm" color="muted" align="center" className="mt-10">
             見つかりませんでした
-          </p>
+          </Text>
         )}
         {profiles.map(({ id, name, displayId, avatarUrl, isFriend }) => (
           <li key={id} className="flex items-center justify-between py-2">
