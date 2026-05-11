@@ -1,4 +1,4 @@
-import { linkVariants } from "@heroui/react";
+import { linkVariants, Text } from "@heroui/react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { serverServices } from "@/lib/services/server";
@@ -19,12 +19,14 @@ export default async function RegisterPage() {
 
   return (
     <div className="mx-auto max-w-md">
-      <h1 className="mx-auto mb-4 w-fit text-lg">ユーザー情報登録</h1>
-      <p className="mb-6 text-sm text-muted">
+      <Text type="h1" className="mx-auto mb-4 w-fit text-lg">
+        ユーザー情報登録
+      </Text>
+      <Text type="body-sm" color="muted" className="mb-6">
         ユーザーIDと名前を決めてください。
         <br />
         ユーザーIDはユーザー検索に、名前は成績表に使用されます。
-      </p>
+      </Text>
       <RegisterForm userId={user.id} />
       <div className="mt-10 flex justify-center">
         <button

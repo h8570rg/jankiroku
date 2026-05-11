@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert } from "@heroui/react";
+import { Alert, Text } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/button";
@@ -19,7 +19,9 @@ export default function MaintenancePage() {
       </Navbar>
       <div className="flex grow items-center justify-center px-4">
         <div className="flex flex-col items-center gap-4">
-          <h1 className="text-center text-lg">メンテナンス中</h1>
+          <Text type="h1" align="center" className="text-lg">
+            メンテナンス中
+          </Text>
           <Alert status="warning">
             <Alert.Indicator />
             <Alert.Content>

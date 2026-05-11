@@ -1,4 +1,4 @@
-import { cn, Separator, Surface } from "@heroui/react";
+import { cn, Separator, Surface, Text } from "@heroui/react";
 import type { CSSProperties } from "react";
 import { serverServices } from "@/lib/services/server";
 import type { MatchPlayer } from "@/lib/type";
@@ -94,9 +94,9 @@ export async function MatchTable({
         {/* ボディ */}
         <div className="grow">
           {gameRows.length === 0 && (
-            <p className="my-10 text-center text-sm text-muted">
+            <Text type="body-sm" color="muted" align="center" className="my-10">
               まだデータはありません
-            </p>
+            </Text>
           )}
           {gameRows.length > 0 &&
             gameRows.map((item, index) => (

@@ -21,6 +21,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Text,
   TextField,
   tv,
 } from "@heroui/react";
@@ -254,9 +255,9 @@ export function RuleForm({
                 </TextField>
               </FieldGroup>
               {fields.incline.errors && (
-                <p className="mt-2 text-sm text-danger">
+                <Text type="body-sm" className="mt-2 text-danger">
                   {fields.incline.errors}
-                </p>
+                </Text>
               )}
             </Fieldset>
           </div>
