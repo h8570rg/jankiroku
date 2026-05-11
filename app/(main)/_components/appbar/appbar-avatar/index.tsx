@@ -1,4 +1,4 @@
-import { Dropdown } from "@heroui/react";
+import { Dropdown, Text } from "@heroui/react";
 import { redirect } from "next/navigation";
 import { UserAvatar } from "@/components/user-avatar";
 import { serverServices } from "@/lib/services/server";
@@ -33,10 +33,12 @@ export async function AppbarAvatar() {
           <div className="flex items-center gap-2">
             <UserAvatar avatarUrl={profile.avatarUrl} name={profile.name} />
             <div className="flex flex-col gap-0">
-              <p className="text-sm/5 font-medium">{profile.name}</p>
-              <p className="text-xs leading-none text-muted">
+              <Text type="body-sm" className="leading-5 font-medium">
+                {profile.name}
+              </Text>
+              <Text type="body-xs" color="muted" className="leading-none">
                 @{profile.displayId}
-              </p>
+              </Text>
             </div>
           </div>
         </div>
