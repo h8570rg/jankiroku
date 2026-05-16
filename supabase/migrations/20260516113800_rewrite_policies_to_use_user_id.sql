@@ -89,7 +89,7 @@ create policy "Users can update their own match's score"
 
 drop policy "Users can delete thier own game." on public.games;
 
-create policy "Users can delete thier own game."
+create policy "Users can delete their own game."
   on public.games
   as permissive
   for delete
@@ -104,7 +104,7 @@ create policy "Users can delete thier own game."
 
 drop policy "Users can insert thier own game." on public.games;
 
-create policy "Users can insert thier own game."
+create policy "Users can insert their own game."
   on public.games
   as permissive
   for insert
@@ -119,7 +119,7 @@ create policy "Users can insert thier own game."
 
 drop policy "Users can update thier own game." on public.games;
 
-create policy "Users can update thier own game."
+create policy "Users can update their own game."
   on public.games
   as permissive
   for update
@@ -137,7 +137,7 @@ create policy "Users can update thier own game."
 
 drop policy "Users can delete own thier match's player" on public.match_players;
 
-create policy "Users can delete own thier match's player"
+create policy "Users can delete their own match's player"
   on public.match_players
   as permissive
   for delete
@@ -152,7 +152,7 @@ create policy "Users can delete own thier match's player"
 
 drop policy "Users can insert own thier match's player" on public.match_players;
 
-create policy "Users can insert own thier match's player"
+create policy "Users can insert their own match's player"
   on public.match_players
   as permissive
   for insert
@@ -177,7 +177,7 @@ create policy "Users can insert own thier match's player"
 
 drop policy "Users can update own thier match's player" on public.match_players;
 
-create policy "Users can update own thier match's player"
+create policy "Users can update their own match's player"
   on public.match_players
   as permissive
   for update
