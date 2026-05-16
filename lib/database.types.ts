@@ -212,18 +212,21 @@ export type Database = {
           display_id: string | null
           id: string
           name: string | null
+          user_id: string | null
         }
         Insert: {
           avatar_url?: string | null
           display_id?: string | null
           id?: string
           name?: string | null
+          user_id?: string | null
         }
         Update: {
           avatar_url?: string | null
           display_id?: string | null
           id?: string
           name?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
