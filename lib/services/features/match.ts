@@ -6,6 +6,7 @@ import type {
   Rate,
 } from "@/lib/type";
 import type { Supabase } from ".";
+import { getCurrentProfileId } from "./internal";
 
 export const matchService = (supabase: Supabase) => {
   return {
@@ -32,17 +33,7 @@ export const matchService = (supabase: Supabase) => {
     }): Promise<{
       id: string;
     }> => {
-      const userResponse = await supabase.auth.getUser();
-      if (userResponse.error) throw userResponse.error;
-      const user = userResponse.data.user;
-
-      const currentProfileResponse = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("user_id", user.id)
-        .single();
-      if (currentProfileResponse.error) throw currentProfileResponse.error;
-      const currentProfileId = currentProfileResponse.data.id;
+      const currentProfileId = await getCurrentProfileId(supabase);
 
       const createMatchResponse = await supabase
         .from("matches")
@@ -186,17 +177,7 @@ export const matchService = (supabase: Supabase) => {
       gamePlayers: GamePlayer[];
       matchId: string;
     }): Promise<void> => {
-      const userResponse = await supabase.auth.getUser();
-      if (userResponse.error) throw userResponse.error;
-      const user = userResponse.data.user;
-
-      const currentProfileResponse = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("user_id", user.id)
-        .single();
-      if (currentProfileResponse.error) throw currentProfileResponse.error;
-      const currentProfileId = currentProfileResponse.data.id;
+      const currentProfileId = await getCurrentProfileId(supabase);
 
       const createGameResponse = await supabase
         .from("games")

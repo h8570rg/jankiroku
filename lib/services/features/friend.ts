@@ -1,19 +1,6 @@
 import type { Profile } from "@/lib/type";
 import type { Supabase } from ".";
-
-const getCurrentProfileId = async (supabase: Supabase): Promise<string> => {
-  const userResponse = await supabase.auth.getUser();
-  if (userResponse.error) throw userResponse.error;
-  const user = userResponse.data.user;
-
-  const profileResponse = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("user_id", user.id)
-    .single();
-  if (profileResponse.error) throw profileResponse.error;
-  return profileResponse.data.id;
-};
+import { getCurrentProfileId } from "./internal";
 
 export const friendService = (supabase: Supabase) => {
   return {
