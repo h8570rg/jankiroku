@@ -6,6 +6,7 @@ import type {
   Rate,
 } from "@/lib/type";
 import type { Supabase } from ".";
+import { getCurrentProfileId } from "./internal";
 
 export const matchService = (supabase: Supabase) => {
   return {
@@ -32,9 +33,11 @@ export const matchService = (supabase: Supabase) => {
     }): Promise<{
       id: string;
     }> => {
+      const currentProfileId = await getCurrentProfileId(supabase);
+
       const createMatchResponse = await supabase
         .from("matches")
-        .insert({})
+        .insert({ created_by: currentProfileId })
         .select()
         .single();
       if (createMatchResponse.error) throw createMatchResponse.error;
@@ -47,7 +50,13 @@ export const matchService = (supabase: Supabase) => {
               player_id: playerId,
               order: index,
             }))
-          : [{ match_id: match.id, order: 0 }];
+          : [
+              {
+                match_id: match.id,
+                player_id: currentProfileId,
+                order: 0,
+              },
+            ];
 
       const [createRuleResponse, createMatchPlayerResponse] = await Promise.all(
         [
@@ -61,6 +70,8 @@ export const matchService = (supabase: Supabase) => {
             players_count: playersCount,
             rate,
             incline,
+            created_by: currentProfileId,
+            updated_by: currentProfileId,
           }),
           supabase.from("match_players").insert(matchPlayerRows),
         ],
@@ -166,10 +177,13 @@ export const matchService = (supabase: Supabase) => {
       gamePlayers: GamePlayer[];
       matchId: string;
     }): Promise<void> => {
+      const currentProfileId = await getCurrentProfileId(supabase);
+
       const createGameResponse = await supabase
         .from("games")
         .insert({
           match_id: matchId,
+          created_by: currentProfileId,
         })
         .select()
         .single();

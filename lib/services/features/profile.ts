@@ -1,6 +1,7 @@
 import type { PostgrestError } from "@supabase/supabase-js";
 import type { Profile, User } from "@/lib/type";
 import type { Supabase } from ".";
+import { getCurrentProfileId } from "./internal";
 
 export const profileService = (supabase: Supabase) => {
   return {
@@ -19,20 +20,10 @@ export const profileService = (supabase: Supabase) => {
       const userProfileResponse = await supabase
         .from("profiles")
         .select()
-        .eq("id", user.id);
+        .eq("user_id", user.id)
+        .single();
       if (userProfileResponse.error) throw userProfileResponse.error;
-      const userProfile = userProfileResponse.data[0];
-
-      if (!userProfile) {
-        return {
-          id: user.id,
-          name: null,
-          displayId: null,
-          avatarUrl: null,
-          isUnregistered: true,
-          isAnonymous: !!user.is_anonymous,
-        };
-      }
+      const userProfile = userProfileResponse.data;
 
       return {
         id: userProfile.id,
@@ -74,7 +65,7 @@ export const profileService = (supabase: Supabase) => {
           display_id: displayId,
           avatar_url: avatarUrl,
         })
-        .eq("id", user.id)
+        .eq("user_id", user.id)
         .select()
         .single();
       if (updatedUserProfileResponse.error)
@@ -100,9 +91,7 @@ export const profileService = (supabase: Supabase) => {
       if (text === "") {
         return [];
       }
-      const userResponse = await supabase.auth.getUser();
-      if (userResponse.error) throw userResponse.error;
-      const user = userResponse.data.user;
+      const currentProfileId = await getCurrentProfileId(supabase);
 
       /**
        * @see https://supabase.com/docs/guides/database/full-text-search?queryGroups=language&language=js#search-multiple-columns
@@ -114,8 +103,11 @@ export const profileService = (supabase: Supabase) => {
           .or(`name.ilike.%${text}%,display_id.ilike.%${text}%`)
           .neq("display_id", null)
           .neq("name", null)
-          .neq("id", user.id),
-        supabase.from("friends").select("friend_id").eq("profile_id", user.id),
+          .neq("id", currentProfileId),
+        supabase
+          .from("friends")
+          .select("friend_id")
+          .eq("profile_id", currentProfileId),
       ]);
 
       if (profilesResponse.error) throw profilesResponse.error;
