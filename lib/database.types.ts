@@ -48,7 +48,7 @@ export type Database = {
         Insert: {
           created_at?: string
           friend_id: string
-          profile_id?: string
+          profile_id: string
         }
         Update: {
           created_at?: string
@@ -81,7 +81,7 @@ export type Database = {
         }
         Insert: {
           game_id: string
-          player_id?: string
+          player_id: string
           rank: number
           score: number
         }
@@ -117,7 +117,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          created_by?: string
+          created_by: string
           id?: string
           match_id: string
         }
@@ -155,7 +155,7 @@ export type Database = {
           chip_count?: number | null
           match_id: string
           order?: number
-          player_id?: string
+          player_id: string
         }
         Update: {
           chip_count?: number | null
@@ -188,7 +188,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          created_by?: string
+          created_by: string
           id?: string
         }
         Update: {
@@ -252,7 +252,7 @@ export type Database = {
           chip_rate: number
           crack_box_bonus: number
           created_at?: string
-          created_by?: string
+          created_by: string
           default_calc_points: number
           default_points: number
           id?: string
@@ -261,7 +261,7 @@ export type Database = {
           players_count: number
           rate: number
           updated_at?: string
-          updated_by?: string
+          updated_by: string
         }
         Update: {
           calc_method?: string
