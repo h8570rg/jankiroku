@@ -1,17 +1,29 @@
 import type { Profile } from "@/lib/type";
 import type { Supabase } from ".";
 
+const getCurrentProfileId = async (supabase: Supabase): Promise<string> => {
+  const userResponse = await supabase.auth.getUser();
+  if (userResponse.error) throw userResponse.error;
+  const user = userResponse.data.user;
+
+  const profileResponse = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("user_id", user.id)
+    .single();
+  if (profileResponse.error) throw profileResponse.error;
+  return profileResponse.data.id;
+};
+
 export const friendService = (supabase: Supabase) => {
   return {
     getFriends: async (): Promise<Profile[]> => {
-      const userResponse = await supabase.auth.getUser();
-      if (userResponse.error) throw userResponse.error;
-      const user = userResponse.data.user;
+      const currentProfileId = await getCurrentProfileId(supabase);
 
       const friendsResponse = await supabase
         .from("friends")
         .select("*, profiles!public_friends_friend_id_fkey!inner(*)")
-        .eq("profile_id", user.id);
+        .eq("profile_id", currentProfileId);
       if (friendsResponse.error) throw friendsResponse.error;
       const friends = friendsResponse.data;
 
@@ -25,14 +37,12 @@ export const friendService = (supabase: Supabase) => {
     },
 
     addFriends: async ({ profileId }: { profileId: string }) => {
-      const userResponse = await supabase.auth.getUser();
-      if (userResponse.error) throw userResponse.error;
-      const user = userResponse.data.user;
+      const currentProfileId = await getCurrentProfileId(supabase);
 
       const friendExist1Response = await supabase
         .from("friends")
         .select("*")
-        .eq("profile_id", user.id)
+        .eq("profile_id", currentProfileId)
         .eq("friend_id", profileId)
         .maybeSingle();
       if (friendExist1Response.error) throw friendExist1Response.error;
@@ -42,14 +52,14 @@ export const friendService = (supabase: Supabase) => {
         .from("friends")
         .select("*")
         .eq("profile_id", profileId)
-        .eq("friend_id", user.id)
+        .eq("friend_id", currentProfileId)
         .maybeSingle();
       if (friendExist2Response.error) throw friendExist2Response.error;
       const friendExist2 = !!friendExist2Response.data;
 
       const createFriend1 = async () => {
         return await supabase.from("friends").insert({
-          profile_id: user.id,
+          profile_id: currentProfileId,
           friend_id: profileId,
         });
       };
@@ -57,14 +67,14 @@ export const friendService = (supabase: Supabase) => {
         return await supabase
           .from("friends")
           .delete()
-          .eq("profile_id", user.id)
+          .eq("profile_id", currentProfileId)
           .eq("friend_id", profileId);
       };
 
       const createFriend2 = async () => {
         return supabase.from("friends").insert({
           profile_id: profileId,
-          friend_id: user.id,
+          friend_id: currentProfileId,
         });
       };
 
@@ -97,20 +107,18 @@ export const friendService = (supabase: Supabase) => {
     }: {
       profileId: string;
     }): Promise<void> => {
-      const userResponse = await supabase.auth.getUser();
-      if (userResponse.error) throw userResponse.error;
-      const user = userResponse.data.user;
+      const currentProfileId = await getCurrentProfileId(supabase);
 
       const [userFriendResponse, friendUserResponse] = await Promise.all([
         supabase
           .from("friends")
           .delete()
           .eq("friend_id", profileId)
-          .eq("profile_id", user.id),
+          .eq("profile_id", currentProfileId),
         supabase
           .from("friends")
           .delete()
-          .eq("friend_id", user.id)
+          .eq("friend_id", currentProfileId)
           .eq("profile_id", profileId),
       ]);
       if (userFriendResponse.error) throw userFriendResponse.error;

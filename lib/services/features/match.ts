@@ -32,9 +32,21 @@ export const matchService = (supabase: Supabase) => {
     }): Promise<{
       id: string;
     }> => {
+      const userResponse = await supabase.auth.getUser();
+      if (userResponse.error) throw userResponse.error;
+      const user = userResponse.data.user;
+
+      const currentProfileResponse = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+      if (currentProfileResponse.error) throw currentProfileResponse.error;
+      const currentProfileId = currentProfileResponse.data.id;
+
       const createMatchResponse = await supabase
         .from("matches")
-        .insert({})
+        .insert({ created_by: currentProfileId })
         .select()
         .single();
       if (createMatchResponse.error) throw createMatchResponse.error;
@@ -47,7 +59,13 @@ export const matchService = (supabase: Supabase) => {
               player_id: playerId,
               order: index,
             }))
-          : [{ match_id: match.id, order: 0 }];
+          : [
+              {
+                match_id: match.id,
+                player_id: currentProfileId,
+                order: 0,
+              },
+            ];
 
       const [createRuleResponse, createMatchPlayerResponse] = await Promise.all(
         [
@@ -61,6 +79,8 @@ export const matchService = (supabase: Supabase) => {
             players_count: playersCount,
             rate,
             incline,
+            created_by: currentProfileId,
+            updated_by: currentProfileId,
           }),
           supabase.from("match_players").insert(matchPlayerRows),
         ],
@@ -166,10 +186,23 @@ export const matchService = (supabase: Supabase) => {
       gamePlayers: GamePlayer[];
       matchId: string;
     }): Promise<void> => {
+      const userResponse = await supabase.auth.getUser();
+      if (userResponse.error) throw userResponse.error;
+      const user = userResponse.data.user;
+
+      const currentProfileResponse = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+      if (currentProfileResponse.error) throw currentProfileResponse.error;
+      const currentProfileId = currentProfileResponse.data.id;
+
       const createGameResponse = await supabase
         .from("games")
         .insert({
           match_id: matchId,
+          created_by: currentProfileId,
         })
         .select()
         .single();

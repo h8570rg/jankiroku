@@ -19,7 +19,7 @@ export const profileService = (supabase: Supabase) => {
       const userProfileResponse = await supabase
         .from("profiles")
         .select()
-        .eq("id", user.id);
+        .eq("user_id", user.id);
       if (userProfileResponse.error) throw userProfileResponse.error;
       const userProfile = userProfileResponse.data[0];
 
@@ -74,7 +74,7 @@ export const profileService = (supabase: Supabase) => {
           display_id: displayId,
           avatar_url: avatarUrl,
         })
-        .eq("id", user.id)
+        .eq("user_id", user.id)
         .select()
         .single();
       if (updatedUserProfileResponse.error)
@@ -107,6 +107,14 @@ export const profileService = (supabase: Supabase) => {
       /**
        * @see https://supabase.com/docs/guides/database/full-text-search?queryGroups=language&language=js#search-multiple-columns
        */
+      const currentProfileResponse = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+      if (currentProfileResponse.error) throw currentProfileResponse.error;
+      const currentProfileId = currentProfileResponse.data.id;
+
       const [profilesResponse, friendsResponse] = await Promise.all([
         supabase
           .from("profiles")
@@ -114,8 +122,11 @@ export const profileService = (supabase: Supabase) => {
           .or(`name.ilike.%${text}%,display_id.ilike.%${text}%`)
           .neq("display_id", null)
           .neq("name", null)
-          .neq("id", user.id),
-        supabase.from("friends").select("friend_id").eq("profile_id", user.id),
+          .neq("id", currentProfileId),
+        supabase
+          .from("friends")
+          .select("friend_id")
+          .eq("profile_id", currentProfileId),
       ]);
 
       if (profilesResponse.error) throw profilesResponse.error;
