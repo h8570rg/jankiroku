@@ -16,7 +16,7 @@ export const friendService = (supabase: Supabase) => {
 
       return friends.map((friend) => ({
         id: friend.profiles.id,
-        // biome-ignore lint/style/noNonNullAssertion: name IS NULL を query で除外
+        // biome-ignore lint/style/noNonNullAssertion: 未登録ユーザーは layout で redirect 済みで friends に現れない
         name: friend.profiles.name!,
         displayId: friend.profiles.display_id,
         avatarUrl: friend.profiles.avatar_url,
