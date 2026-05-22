@@ -63,7 +63,7 @@
     "cspell": "10.0.0",
     "eslint": "10.4.0",
     "eslint-plugin-better-tailwindcss": "4.5.0",
-    "lefthook": "2.1.6",
+    "lefthook": "2.1.8",
     "supabase": "2.100.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.59.4",
