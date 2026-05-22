@@ -4,13 +4,13 @@ import { Drawer, useOverlayState } from "@heroui/react";
 import { useActionState, useState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import type { Profile } from "@/lib/type";
+import type { Player, UserProfile } from "@/lib/type";
 import { createSubmitHandler } from "@/lib/utils/form";
 import { PlayerSelector } from "../../player-selector";
 import { CreatePlayerModal } from "../../player-selector/create-player-modal";
 import type { RuleOutput } from "../rule-form/schema";
 import { createMatch } from "./actions";
-import { searchProfiles } from "./search-profiles";
+import { searchPlayers } from "./search-players";
 
 export function PlayerForm({
   ruleData,
@@ -19,14 +19,14 @@ export function PlayerForm({
   onBack,
 }: {
   ruleData: RuleOutput;
-  userProfile: Profile;
-  friends: Profile[];
+  userProfile: UserProfile;
+  friends: Player[];
   onBack: () => void;
 }) {
-  const [selectedPlayers, setSelectedPlayers] = useState<Profile[]>([
+  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([
     userProfile,
   ]);
-  const profileCreateModal = useOverlayState({ defaultOpen: false });
+  const playerCreateModal = useOverlayState({ defaultOpen: false });
 
   const [lastResult, formAction, isPending] = useActionState(
     createMatch.bind(null, ruleData),
@@ -45,8 +45,8 @@ export function PlayerForm({
             selectedPlayers={selectedPlayers}
             onSelectedPlayersChange={setSelectedPlayers}
             disabledPlayerIds={[userProfile.id]}
-            onNewPlayerRequest={profileCreateModal.open}
-            searchAction={searchProfiles}
+            onNewPlayerRequest={playerCreateModal.open}
+            searchAction={searchPlayers}
             error={lastResult?.error?.fieldErrors?.playerIds}
           />
         </Drawer.Body>
@@ -60,9 +60,9 @@ export function PlayerForm({
         </Drawer.Footer>
       </Form>
       <CreatePlayerModal
-        isOpen={profileCreateModal.isOpen}
-        onOpenChange={profileCreateModal.setOpen}
-        onProfileCreate={(profile: Profile) => {
+        isOpen={playerCreateModal.isOpen}
+        onOpenChange={playerCreateModal.setOpen}
+        onPlayerCreate={(profile: Player) => {
           setSelectedPlayers([...selectedPlayers, profile]);
         }}
       />

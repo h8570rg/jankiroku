@@ -7,12 +7,9 @@ import { CreateGameButton } from "./create-game-button";
 import { EditChipButton } from "./edit-chip-button";
 import { GameRow } from "./game-row";
 
-type Column = {
-  id: string;
-  displayId: string | null;
-  name: string | null;
-  type: "index" | "player" | "empty";
-} & MatchPlayer;
+type Column = MatchPlayer & {
+  type: "player" | "empty";
+};
 
 type Row = {
   gameId: string;
@@ -36,26 +33,24 @@ export async function MatchTable({
 
   const columns: Column[] = [
     ...players.map(
-      (player) =>
-        ({
-          ...player,
-          type: "player",
-        }) as const,
+      (player): Column => ({
+        ...player,
+        type: "player",
+      }),
     ),
     ...Array.from({ length: playersShortCount }).map(
-      (_, i) =>
-        ({
-          id: `player-${i}`,
-          displayId: "",
-          name: "",
-          avatarUrl: null,
-          type: "empty",
-          rankCounts: [0] as number[],
-          averageRank: null,
-          totalScore: 0,
-          chipCount: null,
-          result: 0,
-        }) as const,
+      (_, i): Column => ({
+        type: "empty",
+        id: `player-${i}`,
+        name: "",
+        displayId: null,
+        avatarUrl: null,
+        rankCounts: [0],
+        averageRank: null,
+        totalScore: 0,
+        chipCount: null,
+        result: 0,
+      }),
     ),
   ];
 

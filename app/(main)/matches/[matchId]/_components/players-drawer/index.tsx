@@ -4,18 +4,18 @@ import { Drawer, useOverlayState } from "@heroui/react";
 import { useActionState, useState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import type { Profile } from "@/lib/type";
+import type { Player } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { PlayerSelector } from "../../../_components/player-selector";
 import { CreatePlayerModal } from "../../../_components/player-selector/create-player-modal";
-import { searchProfiles, updateMatchPlayers } from "./actions";
+import { searchPlayers, updateMatchPlayers } from "./actions";
 
 export type PlayersDrawerProps = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   matchId: string;
-  friends: Profile[];
-  players: Profile[];
+  friends: Player[];
+  players: Player[];
 };
 
 export function PlayersDrawer({
@@ -25,8 +25,8 @@ export function PlayersDrawer({
   friends,
   players,
 }: PlayersDrawerProps) {
-  const [selectedPlayers, setSelectedPlayers] = useState<Profile[]>(players);
-  const profileCreateModal = useOverlayState({ defaultOpen: false });
+  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>(players);
+  const playerCreateModal = useOverlayState({ defaultOpen: false });
 
   const existingPlayerIds = players.map((p) => p.id);
 
@@ -56,8 +56,8 @@ export function PlayersDrawer({
                 selectedPlayers={selectedPlayers}
                 onSelectedPlayersChange={setSelectedPlayers}
                 disabledPlayerIds={existingPlayerIds}
-                onNewPlayerRequest={profileCreateModal.open}
-                searchAction={searchProfiles}
+                onNewPlayerRequest={playerCreateModal.open}
+                searchAction={searchPlayers}
                 error={lastResult?.error?.fieldErrors?.playerIds}
               />
             </Drawer.Body>
@@ -70,9 +70,9 @@ export function PlayersDrawer({
         </Drawer.Dialog>
       </Drawer.Content>
       <CreatePlayerModal
-        isOpen={profileCreateModal.isOpen}
-        onOpenChange={profileCreateModal.setOpen}
-        onProfileCreate={(profile: Profile) => {
+        isOpen={playerCreateModal.isOpen}
+        onOpenChange={playerCreateModal.setOpen}
+        onPlayerCreate={(profile: Player) => {
           setSelectedPlayers((prev) => [...prev, profile]);
         }}
       />

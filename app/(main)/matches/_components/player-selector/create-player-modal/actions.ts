@@ -6,11 +6,11 @@ import {
   type SubmissionResult,
 } from "@conform-to/react/future";
 import { serverServices } from "@/lib/services/server";
-import type { Profile } from "@/lib/type";
+import type { Player } from "@/lib/type";
 import { createPlayerSchema } from "./schema";
 
 export type CreatePlayerResult = SubmissionResult & {
-  profile?: Profile;
+  profile?: Player;
 };
 
 export async function createPlayer(
@@ -29,10 +29,8 @@ export async function createPlayer(
   }
   const { name } = result.data;
 
-  const { createProfile: createProfileService } = await serverServices();
-  const profile = await createProfileService({
-    name,
-  });
+  const { createGuestPlayer } = await serverServices();
+  const profile = await createGuestPlayer({ name });
 
   return { ...report(submission, {}), profile };
 }

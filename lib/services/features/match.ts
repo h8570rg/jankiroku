@@ -217,6 +217,7 @@ const formatMatch = (match: {
       name: string | null;
       display_id: string | null;
       avatar_url: string | null;
+      user_id: string | null;
     };
     chip_count: number | null;
   }[];
@@ -246,7 +247,8 @@ const formatMatch = (match: {
   const players: MatchPlayer[] = match.match_players.map(
     ({ profiles, chip_count }) => ({
       id: profiles.id,
-      name: profiles.name,
+      // TODO: fallbackをどうするか考える
+      name: profiles.name ?? "",
       displayId: profiles.display_id,
       avatarUrl: profiles.avatar_url,
       rankCounts: new Array(rule.players_count).fill(0),

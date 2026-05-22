@@ -16,23 +16,23 @@ import { Check, PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { UserAvatar } from "@/components/user-avatar";
-import type { Profile } from "@/lib/type";
+import type { Player } from "@/lib/type";
 
 function PlayerListBoxItem({
   player,
   isSelected,
 }: {
-  player: Profile;
+  player: Player;
   isSelected: boolean;
 }) {
   return (
-    <ListBox.Item id={player.id} textValue={player.name ?? ""}>
+    <ListBox.Item id={player.id} textValue={player.name}>
       <UserAvatar avatarUrl={player.avatarUrl} name={player.name} size="sm" />
       <div className="flex flex-col">
         <div className="flex items-center gap-1">
           <Label>{player.name}</Label>
         </div>
-        <Description>@{player.displayId}</Description>
+        {player.displayId && <Description>@{player.displayId}</Description>}
       </div>
       <ListBox.ItemIndicator>{isSelected && <Check />}</ListBox.ItemIndicator>
     </ListBox.Item>
@@ -48,31 +48,29 @@ export function PlayerSelector({
   searchAction,
   error,
 }: {
-  friends: Profile[];
-  selectedPlayers: Profile[];
-  onSelectedPlayersChange: (players: Profile[]) => void;
+  friends: Player[];
+  selectedPlayers: Player[];
+  onSelectedPlayersChange: (players: Player[]) => void;
   disabledPlayerIds?: string[];
   onNewPlayerRequest: () => void;
-  searchAction: (text: string) => Promise<Profile[]>;
+  searchAction: (text: string) => Promise<Player[]>;
   error?: FormError["fieldErrors"][string];
 }) {
-  const [searchedProfiles, setSearchedProfiles] = useState<Profile[] | null>(
-    null,
-  );
+  const [searchedPlayers, setSearchedPlayers] = useState<Player[] | null>(null);
 
   const handleSearch = useDebouncedCallback((text: string) => {
     if (!text) {
-      setSearchedProfiles(null);
+      setSearchedPlayers(null);
       return;
     }
     searchAction(text)
-      .then(setSearchedProfiles)
+      .then(setSearchedPlayers)
       .catch((e) => {
         throw e;
       });
   }, 300);
 
-  function insertSelectedPlayer(player: Profile) {
+  function insertSelectedPlayer(player: Player) {
     onSelectedPlayersChange([...selectedPlayers, player]);
   }
 
@@ -84,7 +82,7 @@ export function PlayerSelector({
     onSelectedPlayersChange(selectedPlayers.filter((p) => p.id !== playerId));
   }
 
-  function handleListBoxAction(key: string | number, source: Profile[] | null) {
+  function handleListBoxAction(key: string | number, source: Player[] | null) {
     if (key === "new") {
       onNewPlayerRequest();
       return;
@@ -163,7 +161,7 @@ export function PlayerSelector({
           <SearchField.ClearButton />
         </SearchField.Group>
       </SearchField>
-      {searchedProfiles === null && (
+      {searchedPlayers === null && (
         <ListBox
           aria-label="フレンド選択"
           onAction={(key) => handleListBoxAction(key, friends)}
@@ -190,20 +188,20 @@ export function PlayerSelector({
           ))}
         </ListBox>
       )}
-      {searchedProfiles !== null && (
+      {searchedPlayers !== null && (
         <>
-          {searchedProfiles.length === 0 && (
+          {searchedPlayers.length === 0 && (
             <EmptyState className="mt-10 text-center">
               ユーザーが見つかりませんでした
             </EmptyState>
           )}
-          {searchedProfiles.length > 0 && (
+          {searchedPlayers.length > 0 && (
             <ListBox
               aria-label="検索結果"
-              onAction={(key) => handleListBoxAction(key, searchedProfiles)}
+              onAction={(key) => handleListBoxAction(key, searchedPlayers)}
               className="px-0"
             >
-              {searchedProfiles.map((item) => (
+              {searchedPlayers.map((item) => (
                 <PlayerListBoxItem
                   key={item.id}
                   player={item}

@@ -2,7 +2,7 @@
 
 import { useOverlayState } from "@heroui/react";
 import { Button } from "@/components/button";
-import type { Profile } from "@/lib/type";
+import type { Player, UserProfile } from "@/lib/type";
 import { CreateMatchDrawer } from "../create-match-drawer";
 
 export function CreateMatchButton({
@@ -11,8 +11,8 @@ export function CreateMatchButton({
   userProfile,
 }: {
   className?: string;
-  friends: Profile[];
-  userProfile: Profile;
+  friends: Player[];
+  userProfile: UserProfile;
 }) {
   const createMatchDrawer = useOverlayState();
 

@@ -3,7 +3,7 @@
 import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
 import { serverServices } from "@/lib/services/server";
-import type { Profile } from "@/lib/type";
+import type { Player } from "@/lib/type";
 import { updatePlayersSchema } from "./schema";
 
 export async function updateMatchPlayers(
@@ -43,12 +43,11 @@ export async function updateMatchPlayers(
   return report(submission, {});
 }
 
-export async function searchProfiles(text: string): Promise<Profile[]> {
+export async function searchPlayers(text: string): Promise<Player[]> {
   if (!text) {
     return [];
   }
 
-  const { searchProfiles } = await serverServices();
-  const profiles = await searchProfiles({ text });
-  return profiles;
+  const { searchPlayers } = await serverServices();
+  return searchPlayers({ text });
 }

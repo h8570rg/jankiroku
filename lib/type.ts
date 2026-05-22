@@ -3,14 +3,34 @@ import type { calcMethods, rates } from "./config";
 
 export type User = SupabaseUser;
 
-export type Profile = {
+/**
+ * マッチ参加者・フレンド・検索結果として登場するプレイヤー。
+ * 登録済みユーザーとゲストの両方を含む。
+ *
+ * - `displayId`: 登録済みなら値あり、ゲストは `null`
+ * - `avatarUrl`: 登録済みでアップロード有りなら値あり、未アップロードまたはゲストは `null`
+ *
+ * 「値なし」は一貫して `null` で表現する (DB NULL と整合)。
+ * `UserProfile` は構造的サブタイプとしてここに渡せる。
+ */
+export type Player = {
   id: string;
-  name: string | null;
+  name: string;
   displayId: string | null;
   avatarUrl: string | null;
-  isUnregistered?: boolean;
-  isAnonymous?: boolean;
-  isFriend?: boolean;
+};
+
+/**
+ * 自分のアカウント情報。
+ * layout で未登録ユーザーは `/register` に redirect されるため、
+ * (main) 配下では必ず登録済みとして扱える。
+ */
+export type UserProfile = {
+  id: string;
+  name: string;
+  displayId: string;
+  avatarUrl: string | null;
+  userId: string;
 };
 
 export type Match = {
@@ -21,7 +41,10 @@ export type Match = {
   games: Game[];
 };
 
-export type MatchPlayer = Profile & {
+/**
+ * マッチ参加者個別の試合成績を伴うプレイヤー。
+ */
+export type MatchPlayer = Player & {
   rankCounts: number[];
   averageRank: string | null;
   totalScore: number;

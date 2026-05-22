@@ -4,7 +4,7 @@ import { useOverlayState } from "@heroui/react";
 import { ChevronLeft, FileText, UserPlus } from "lucide-react";
 import NextLink from "next/link";
 import { Button, buttonVariants } from "@/components/button";
-import type { Match, Profile } from "@/lib/type";
+import type { Match, Player } from "@/lib/type";
 import { PlayersDrawer } from "../players-drawer";
 import { RuleModal } from "../rule-modal";
 
@@ -14,7 +14,7 @@ export function MatchHeader({
   matchId,
 }: {
   match: Match;
-  friends: Profile[];
+  friends: Player[];
   matchId: string;
 }) {
   const ruleModal = useOverlayState();

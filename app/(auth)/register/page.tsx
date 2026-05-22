@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 };
 
 export default async function RegisterPage() {
-  const { getUserProfile } = await serverServices();
-  const user = await getUserProfile();
+  const { getNullableUserProfile } = await serverServices();
+  const profile = await getNullableUserProfile();
 
-  if (user.name && user.displayId) {
+  if (profile) {
     redirect("/matches");
   }
 
@@ -27,7 +27,7 @@ export default async function RegisterPage() {
         <br />
         ユーザーIDはユーザー検索に、名前は成績表に使用されます。
       </Text>
-      <RegisterForm userId={user.id} />
+      <RegisterForm />
       <div className="mt-10 flex justify-center">
         <button
           className={linkVariants().base()}

@@ -1,5 +1,4 @@
 import { Dropdown, Text } from "@heroui/react";
-import { redirect } from "next/navigation";
 import { UserAvatar } from "@/components/user-avatar";
 import { serverServices } from "@/lib/services/server";
 import { AppbarAvatarMenu } from "./appbar-avatar-menu";
@@ -9,12 +8,7 @@ import { AppbarAvatarMenu } from "./appbar-avatar-menu";
  */
 export async function AppbarAvatar() {
   const { getUserProfile } = await serverServices();
-  const [profile] = await Promise.all([getUserProfile()]);
-
-  // TODO: isUnregisteredで扱う。ts制御
-  if (!profile.displayId || !profile.name) {
-    redirect("/register");
-  }
+  const profile = await getUserProfile();
 
   return (
     <Dropdown>
