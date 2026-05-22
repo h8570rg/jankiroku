@@ -16,6 +16,10 @@
     @apply text-base text-muted;
   }
 
+  .avatar {
+    border-radius: calc(infinity * 1px);
+  }
+
   .avatar__fallback svg {
     @apply size-5;
   }
