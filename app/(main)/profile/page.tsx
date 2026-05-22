@@ -1,4 +1,4 @@
-import { Text } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import type { Metadata } from "next";
 import { serverServices } from "@/lib/services/server";
 import { ProfileForm } from "./_components/profile-form";
@@ -13,9 +13,9 @@ export default async function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-md">
-      <Text type="h1" className="mx-auto mb-4 w-fit text-lg">
+      <Typography type="h1" className="mx-auto mb-4 w-fit text-lg">
         プロフィール編集
-      </Text>
+      </Typography>
       <ProfileForm profile={profile} />
     </div>
   );

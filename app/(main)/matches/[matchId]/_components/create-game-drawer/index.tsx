@@ -11,8 +11,8 @@ import {
   ListBox,
   Select,
   Separator,
-  Text,
   TextField,
+  Typography,
 } from "@heroui/react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useActionState } from "react";
@@ -227,12 +227,12 @@ export function CreateGameDrawer({
                   })}
                 </ul>
                 {form.fieldErrors?.players?.[0] && (
-                  <Text
+                  <Typography
                     type="body-xs"
                     className="mt-1 whitespace-pre-wrap text-danger"
                   >
                     {form.fieldErrors.players[0]}
-                  </Text>
+                  </Typography>
                 )}
               </div>
               <Separator />

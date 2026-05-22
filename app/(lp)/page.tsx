@@ -1,4 +1,4 @@
-import { Card, Text } from "@heroui/react";
+import { Card, Typography } from "@heroui/react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Logo from "@/components/logo";
@@ -164,11 +164,11 @@ export default function LandingPage() {
       {/* ヒーローセクション */}
       <section className="bg-linear-to-b from-background to-accent/10">
         <div className="z-20 container mx-auto px-4 pt-20">
-          <Text align="center" className="mb-8 text-lg">
+          <Typography align="center" className="mb-8 text-lg">
             麻雀の成績を簡単に記録・分析
             <br />
             あなたの麻雀ライフを快適に
-          </Text>
+          </Typography>
           <HeroCtaLinks />
           <div className="mx-auto mt-12 h-[480px] w-4/5 max-w-[500px]">
             <Image
@@ -185,9 +185,9 @@ export default function LandingPage() {
       <div className="container mx-auto space-y-24 px-5 py-16">
         {/* 機能紹介 */}
         <section id="features" className="">
-          <Text type="h2" align="center" className="mb-12 text-lg">
+          <Typography type="h2" align="center" className="mb-12 text-lg">
             主な機能
-          </Text>
+          </Typography>
           <div
             className="
               grid grid-cols-1 gap-8
@@ -209,9 +209,9 @@ export default function LandingPage() {
         {/* 使用方法 */}
         <section className="">
           <div className="container mx-auto">
-            <Text type="h2" align="center" className="mb-12 text-lg">
+            <Typography type="h2" align="center" className="mb-12 text-lg">
               使い方
-            </Text>
+            </Typography>
             <div
               className="
                 grid grid-cols-1 gap-8
@@ -229,10 +229,10 @@ export default function LandingPage() {
                   >
                     {step.number}
                   </div>
-                  <Text type="h3" className="mb-2 text-base">
+                  <Typography type="h3" className="mb-2 text-base">
                     {step.title}
-                  </Text>
-                  <Text>{step.description}</Text>
+                  </Typography>
+                  <Typography>{step.description}</Typography>
                 </div>
               ))}
             </div>
@@ -242,9 +242,9 @@ export default function LandingPage() {
         {/* FAQ */}
         <section className="">
           <div className="container mx-auto">
-            <Text type="h2" align="center" className="mb-12 text-lg">
+            <Typography type="h2" align="center" className="mb-12 text-lg">
               よくある質問
-            </Text>
+            </Typography>
             <Faq faqs={faqs} />
           </div>
         </section>
@@ -252,7 +252,7 @@ export default function LandingPage() {
 
       {/* フッター */}
       <footer className="bg-accent py-8 text-center text-accent-foreground">
-        <Text>&copy; 2024 Jankiroku. All rights reserved.</Text>
+        <Typography>&copy; 2024 Jankiroku. All rights reserved.</Typography>
       </footer>
     </div>
   );

@@ -6,8 +6,8 @@ import {
   FieldError,
   InputGroup,
   Label,
-  Text,
   TextField,
+  Typography,
 } from "@heroui/react";
 import { useActionState } from "react";
 import { Button } from "@/components/button";
@@ -126,9 +126,12 @@ export function ChipForm({
           })}
         </ul>
         {form.errors && (
-          <Text type="body-xs" className="whitespace-pre-wrap text-danger">
+          <Typography
+            type="body-xs"
+            className="whitespace-pre-wrap text-danger"
+          >
             {form.errors}
-          </Text>
+          </Typography>
         )}
       </Drawer.Body>
       <Drawer.Footer>
