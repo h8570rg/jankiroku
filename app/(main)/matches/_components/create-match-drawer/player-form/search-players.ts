@@ -9,5 +9,5 @@ export async function searchPlayers(text: string): Promise<Player[]> {
   }
 
   const { searchPlayers } = await serverServices();
-  return await searchPlayers({ text });
+  return searchPlayers({ text });
 }

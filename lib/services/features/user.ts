@@ -28,10 +28,10 @@ export const userService = (supabase: Supabase) => {
       const row = profileResponse.data;
       return {
         id: row.id,
-        // biome-ignore lint/style/noNonNullAssertion: 未登録ユーザーは layout で redirect 済み
-        name: row.name!,
-        // biome-ignore lint/style/noNonNullAssertion: 未登録ユーザーは layout で redirect 済み
-        displayId: row.display_id!,
+        // TODO: fallbackをどうするか考える
+        name: row.name ?? "",
+        // TODO: fallbackをどうするか考える
+        displayId: row.display_id ?? "",
         avatarUrl: row.avatar_url,
         userId: user.id,
       };
@@ -105,10 +105,10 @@ export const userService = (supabase: Supabase) => {
         success: true,
         data: {
           id: row.id,
-          // biome-ignore lint/style/noNonNullAssertion: UPDATE で name を設定済み
-          name: row.name!,
-          // biome-ignore lint/style/noNonNullAssertion: UPDATE で display_id を設定済み
-          displayId: row.display_id!,
+          // TODO: fallbackをどうするか考える
+          name: row.name ?? "",
+          // TODO: fallbackをどうするか考える
+          displayId: row.display_id ?? "",
           avatarUrl: row.avatar_url,
           userId: user.id,
         },

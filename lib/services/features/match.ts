@@ -247,8 +247,8 @@ const formatMatch = (match: {
   const players: MatchPlayer[] = match.match_players.map(
     ({ profiles, chip_count }) => ({
       id: profiles.id,
-      // biome-ignore lint/style/noNonNullAssertion: 未登録ユーザーは layout で redirect 済みで match_players に現れない
-      name: profiles.name!,
+      // TODO: fallbackをどうするか考える
+      name: profiles.name ?? "",
       displayId: profiles.display_id,
       avatarUrl: profiles.avatar_url,
       rankCounts: new Array(rule.players_count).fill(0),
