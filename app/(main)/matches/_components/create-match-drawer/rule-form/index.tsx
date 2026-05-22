@@ -21,8 +21,8 @@ import {
   Radio,
   RadioGroup,
   Select,
-  Text,
   TextField,
+  Typography,
   tv,
 } from "@heroui/react";
 import { useRef } from "react";
@@ -255,9 +255,9 @@ export function RuleForm({
                 </TextField>
               </FieldGroup>
               {fields.incline.errors && (
-                <Text type="body-sm" className="mt-2 text-danger">
+                <Typography type="body-sm" className="mt-2 text-danger">
                   {fields.incline.errors}
-                </Text>
+                </Typography>
               )}
             </Fieldset>
           </div>

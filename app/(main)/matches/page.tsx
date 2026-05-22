@@ -1,4 +1,4 @@
-import { Text } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import { serverServices } from "@/lib/services/server";
 import { CreateMatchButton } from "./_components/create-match-button";
 import { MatchCard } from "./_components/match-card";
@@ -14,13 +14,18 @@ export default async function Matches() {
   ]);
   return (
     <div>
-      <Text type="h1" className="heading-1 mb-1">
+      <Typography type="h1" className="heading-1 mb-1">
         成績表
-      </Text>
+      </Typography>
       {matches.length === 0 && (
-        <Text type="body-sm" color="muted" align="center" className="my-10">
+        <Typography
+          type="body-sm"
+          color="muted"
+          align="center"
+          className="my-10"
+        >
           まだ成績表がありません。
-        </Text>
+        </Typography>
       )}
       <ul className="space-y-4">
         {matches?.map((match) => (

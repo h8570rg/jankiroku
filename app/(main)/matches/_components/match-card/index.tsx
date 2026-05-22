@@ -1,4 +1,4 @@
-import { Card, cardVariants, Separator, Text } from "@heroui/react";
+import { Card, cardVariants, Separator, Typography } from "@heroui/react";
 import NextLink from "next/link";
 import { UserAvatar } from "@/components/user-avatar";
 import type { Match } from "@/lib/type";
@@ -21,7 +21,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
     <NextLink href={`/matches/${match.id}`} className={cardVariants().base()}>
       <Card.Header>
         <div className="flex w-full items-center justify-between">
-          <Text>{displayDate}</Text>
+          <Typography>{displayDate}</Typography>
           <div
             className="
               flex -space-x-2

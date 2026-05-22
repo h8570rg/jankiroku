@@ -1,4 +1,4 @@
-import { linkVariants, Text } from "@heroui/react";
+import { linkVariants, Typography } from "@heroui/react";
 import type { Metadata } from "next";
 import NextLink from "next/link";
 import { SignUpForm } from "./_components/sign-up-form";
@@ -10,16 +10,16 @@ export const metadata: Metadata = {
 export default function SignUpPage() {
   return (
     <div className="mx-auto max-w-md">
-      <Text type="h1" className="mx-auto mb-2 w-fit text-lg">
+      <Typography type="h1" className="mx-auto mb-2 w-fit text-lg">
         新規登録
-      </Text>
+      </Typography>
       <SignUpForm />
-      <Text type="body-sm" align="center">
+      <Typography type="body-sm" align="center">
         既にアカウントをお持ちの方は
         <NextLink className={linkVariants().base()} href="/login">
           ログイン
         </NextLink>
-      </Text>
+      </Typography>
     </div>
   );
 }

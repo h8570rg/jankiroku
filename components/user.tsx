@@ -1,4 +1,4 @@
-import { cn, Skeleton, Text } from "@heroui/react";
+import { cn, Skeleton, Typography } from "@heroui/react";
 import type { ComponentPropsWithoutRef } from "react";
 import { UserAvatar } from "./user-avatar";
 
@@ -18,13 +18,13 @@ export function User({ name, displayId, avatarUrl, className }: UserProps) {
     >
       <UserAvatar avatarUrl={avatarUrl} name={name} />
       <div className="flex flex-col items-start">
-        <Text type="body-sm" className="text-inherit">
+        <Typography type="body-sm" className="text-inherit">
           {name}
-        </Text>
+        </Typography>
         {displayId && (
-          <Text type="body-xs" color="muted">
+          <Typography type="body-xs" color="muted">
             @{displayId}
-          </Text>
+          </Typography>
         )}
       </div>
     </div>
