@@ -3,7 +3,7 @@
 import { Drawer } from "@heroui/react";
 import { useState } from "react";
 import { Stepper } from "@/components/stepper";
-import type { Profile } from "@/lib/type";
+import type { Player, UserProfile } from "@/lib/type";
 import { PlayerForm } from "./player-form";
 import { RuleForm } from "./rule-form";
 import type { RuleOutput } from "./rule-form/schema";
@@ -18,8 +18,8 @@ export function CreateMatchDrawer({
 }: {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  userProfile: Profile;
-  friends: Profile[];
+  userProfile: UserProfile;
+  friends: Player[];
 }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [ruleData, setRuleData] = useState<RuleOutput | null>(null);

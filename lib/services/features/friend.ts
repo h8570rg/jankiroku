@@ -1,10 +1,10 @@
-import type { Profile } from "@/lib/type";
+import type { Player } from "@/lib/type";
 import type { Supabase } from ".";
 import { getCurrentProfileId } from "./internal";
 
 export const friendService = (supabase: Supabase) => {
   return {
-    getFriends: async (): Promise<Profile[]> => {
+    getFriends: async (): Promise<Player[]> => {
       const currentProfileId = await getCurrentProfileId(supabase);
 
       const friendsResponse = await supabase
@@ -16,10 +16,10 @@ export const friendService = (supabase: Supabase) => {
 
       return friends.map((friend) => ({
         id: friend.profiles.id,
-        name: friend.profiles.name,
+        // biome-ignore lint/style/noNonNullAssertion: name IS NULL を query で除外
+        name: friend.profiles.name!,
         displayId: friend.profiles.display_id,
         avatarUrl: friend.profiles.avatar_url,
-        isFriend: true,
       }));
     },
 

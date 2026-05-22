@@ -13,8 +13,11 @@ export default async function AddFriendPage({
 }) {
   const { query } = await searchParams;
 
-  const { searchProfiles } = await serverServices();
-  const profiles = query ? await searchProfiles({ text: query }) : [];
+  const { searchPlayers, getFriends } = await serverServices();
+  const [players, friends] = query
+    ? await Promise.all([searchPlayers({ text: query }), getFriends()])
+    : [[], []];
+  const friendIds = new Set(friends.map((f) => f.id));
 
   return (
     <div>
@@ -28,15 +31,15 @@ export default async function AddFriendPage({
         <FriendSearch defaultValue={query ?? ""} />
       </Suspense>
       <ul className="mt-1">
-        {!!query && profiles.length === 0 && (
+        {!!query && players.length === 0 && (
           <Text type="body-sm" color="muted" align="center" className="mt-10">
             見つかりませんでした
           </Text>
         )}
-        {profiles.map(({ id, name, displayId, avatarUrl, isFriend }) => (
+        {players.map(({ id, name, displayId, avatarUrl }) => (
           <li key={id} className="flex items-center justify-between py-2">
             <User name={name} displayId={displayId} avatarUrl={avatarUrl} />
-            {isFriend ? (
+            {friendIds.has(id) ? (
               <div className="w-16 text-center text-xs text-muted">
                 追加済み
               </div>

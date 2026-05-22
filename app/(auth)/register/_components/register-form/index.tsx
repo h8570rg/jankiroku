@@ -23,13 +23,7 @@ import { createSubmitHandler } from "@/lib/utils/form";
 import { updateProfile } from "./actions";
 import { updateProfileSchema } from "./schema";
 
-export function RegisterForm({
-  className,
-  userId,
-}: {
-  className?: string;
-  userId: string;
-}) {
+export function RegisterForm({ className }: { className?: string }) {
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
   const [isAvatarUploading, setIsAvatarUploading] = useState(false);
 
@@ -48,7 +42,6 @@ export function RegisterForm({
       validationErrors={form.fieldErrors}
       {...form.props}
     >
-      <input type="hidden" name="userId" value={userId} />
       <div className="flex justify-center">
         <AvatarInput
           onUpload={setAvatarUrl}

@@ -254,7 +254,7 @@ export function CreateGameDrawer({
                       { key: "", label: "なし" },
                       ...match.players.map((player) => ({
                         key: player.id,
-                        label: player.name ?? "",
+                        label: player.name,
                       })),
                     ].map((item) => (
                       <ListBox.Item

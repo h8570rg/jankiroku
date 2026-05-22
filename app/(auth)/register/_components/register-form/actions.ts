@@ -24,13 +24,6 @@ export async function updateProfile(
   }
   const { name, displayId } = result.data;
 
-  const userId = submission.payload.userId;
-  if (typeof userId !== "string") {
-    return report(submission, {
-      error: { formErrors: ["無効なリクエストです。"] },
-    });
-  }
-
   const { updateUserProfile } = await serverServices();
 
   const updateResult = await updateUserProfile({

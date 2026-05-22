@@ -13,22 +13,22 @@ import { useActionState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
 import { NAME_MAX_LENGTH } from "@/lib/config";
-import type { Profile } from "@/lib/type";
+import type { Player } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { createPlayer } from "./actions";
 import { createPlayerSchema } from "./schema";
 
 export function CreatePlayerModal({
-  onProfileCreate,
+  onPlayerCreate,
   ...props
 }: {
-  onProfileCreate: (profile: Profile) => void;
+  onPlayerCreate: (profile: Player) => void;
 } & ModalBackdropProps) {
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(createPlayer, {
       onSuccess(result) {
         if (result.profile) {
-          onProfileCreate(result.profile);
+          onPlayerCreate(result.profile);
         }
         props.onOpenChange?.(false);
       },

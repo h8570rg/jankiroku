@@ -15,7 +15,7 @@ import { AvatarInput } from "@/components/avatar-input";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
 import { NAME_MAX_LENGTH } from "@/lib/config";
-import type { Profile } from "@/lib/type";
+import type { UserProfile } from "@/lib/type";
 import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { updateProfile } from "./actions";
 import { profileUpdateSchema } from "./schema";
@@ -25,7 +25,7 @@ export function ProfileForm({
   profile,
 }: {
   className?: string;
-  profile: Profile;
+  profile: UserProfile;
 }) {
   // avatarUrlはformDataに含めず.bind()でserver actionに渡す。
   // Next.jsはbind引数をサーバー側で暗号化するため、クライアントからの改ざんが不可能。
@@ -45,7 +45,7 @@ export function ProfileForm({
 
   const { form, fields } = useForm(profileUpdateSchema, {
     lastResult,
-    defaultValue: { name: profile.name ?? "" },
+    defaultValue: { name: profile.name },
     onSubmit: createSubmitHandler(formAction),
   });
 
@@ -65,7 +65,7 @@ export function ProfileForm({
       <div className="space-y-4">
         <TextField name="displayId" isReadOnly isDisabled>
           <Label>ユーザーID</Label>
-          <Input value={profile.displayId ?? ""} />
+          <Input value={profile.displayId} />
           <Description>ユーザーIDは変更できません</Description>
         </TextField>
         <TextField
