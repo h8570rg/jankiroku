@@ -125,12 +125,12 @@ export function ChipForm({
             );
           })}
         </ul>
-        {form.errors && (
+        {fields.playerChip.errors && (
           <Typography
             type="body-xs"
             className="whitespace-pre-wrap text-danger"
           >
-            {form.errors}
+            {fields.playerChip.errors}
           </Typography>
         )}
       </Drawer.Body>

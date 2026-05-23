@@ -392,7 +392,9 @@ test.describe("チップ入力フォーム (4人)", () => {
     }
   });
 
-  test("チップ合計が0以外だとドロワーが閉じない", async ({ page }) => {
+  test("チップ合計が0以外だとエラーメッセージが表示される", async ({
+    page,
+  }) => {
     await openDrawer(page);
 
     await page.getByRole("spinbutton", { name: TEST_USERS.me.name }).fill("5");
@@ -411,6 +413,9 @@ test.describe("チップ入力フォーム (4人)", () => {
     // 合計5 ≠ 0 のためエラー、ドロワーは閉じない
     await expect(
       page.getByRole("dialog", { name: "チップ入力" }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/チップの合計が0枚になるように入力してください/),
     ).toBeVisible();
   });
 
