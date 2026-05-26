@@ -14,7 +14,7 @@
 ```shell
 git clone https://github.com/h8570rg/jankiroku.git
 cd jankiroku
-npm install
+pnpm install
 ```
 
 ## Supabaseプロジェクトへの接続
@@ -22,13 +22,13 @@ npm install
 Supabase CLIにログインします。
 
 ```shell
-npm run supabase:login
+pnpm run supabase:login
 ```
 
 開発用のSupabaseプロジェクトにリンクします。
 
 ```shell
-npm run supabase:link
+pnpm run supabase:link
 ```
 
 ## 環境変数の作成
@@ -54,23 +54,23 @@ npx vercel env pull .env.local
 
 ```shell
 # マイグレーションファイルを生成
-npm run supabase:diff
+pnpm run supabase:diff
 
 # 型定義を更新
-npm run supabase:type
+pnpm run supabase:type
 ```
 
 ### 方法2: ローカルでマイグレーションファイルを作成
 
 ```shell
 # 空のマイグレーションファイルを作成
-npm run supabase:diff -- new_feature
+pnpm run supabase:diff -- new_feature
 
 # 生成されたファイルを編集
 # supabase/migrations/YYYYMMDDHHMMSS_new_feature.sql
 
 # 型定義を更新
-npm run supabase:type
+pnpm run supabase:type
 ```
 
 ### マイグレーションの適用
@@ -83,7 +83,7 @@ npm run supabase:type
 ## アプリケーションの起動
 
 ```shell
-npm run dev
+pnpm run dev
 ```
 
 アプリケーションURL: http://localhost:3001
@@ -119,13 +119,13 @@ npx supabase start
 ### 2. テストを実行する
 
 ```shell
-npm run test:e2e
+pnpm run test:e2e
 ```
 
 UI モードで実行する場合：
 
 ```shell
-npm run test:e2e:ui
+pnpm run test:e2e:ui
 ```
 
 ### 3. ローカル Supabase を停止する（任意）

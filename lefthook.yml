@@ -2,20 +2,20 @@ pre-commit:
   parallel: true
   commands:
     "check":
-      run: "npm run check && npm run eslint:fix"
+      run: "pnpm run check && pnpm run eslint:fix"
       stage_fixed: true
     "typecheck":
-      run: "npm run type"
+      run: "pnpm run type"
     "test":
-      run: "npm run test"
+      run: "pnpm run test"
     "spell":
-      run: "npm run spell"
+      run: "pnpm run spell"
 
 pre-push:
   commands:
     "supabase-diff":
       run: |
-        npm run supabase:diff
+        pnpm run supabase:diff
         if ! git diff --quiet -- supabase/migrations; then
           echo ""
           echo "ERROR: supabase:diff で新しいマイグレーションファイルが生成されました。"
@@ -26,7 +26,7 @@ pre-push:
         fi
     "supabase-type":
       run: |
-        npm run supabase:type
+        pnpm run supabase:type
         if ! git diff --quiet -- lib/database.types.ts; then
           echo ""
           echo "ERROR: supabase:type で型定義ファイルが更新されました。"
