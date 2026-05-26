@@ -5,7 +5,9 @@
     "supabase/config.toml",
     "supabase/migrations",
     "lib/database.types.ts",
-    "package.json"
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml"
   ],
   "words": [
     "appbar",
