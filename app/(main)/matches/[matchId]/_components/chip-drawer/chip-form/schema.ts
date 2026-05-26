@@ -8,7 +8,7 @@ export const addChipSchema = coerceFormValue(
       playerChip: z.array(
         z.object({
           profileId: schema.profileId,
-          chipCount: z.string("チップ枚数を入力してください").transform(Number),
+          chipCount: schema.chipCount,
         }),
       ),
     })

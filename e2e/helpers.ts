@@ -27,6 +27,25 @@ export const SEED_OVERCAPACITY_MATCH_ID =
 export const SEED_OVERCAPACITY_MATCH_URL = `/matches/${SEED_OVERCAPACITY_MATCH_ID}`;
 
 /**
+ * seed.sqlで事前作成されているゲスト追加テスト専用マッチのID
+ * 参加プレイヤー: testuser, alice123, bob123 (3人)
+ * ルール: 3人・持ち点35000・ゲーム/チップ未登録
+ * guest-player.spec.ts のみが書き込む（他の E2E テストと分離）
+ */
+export const SEED_GUEST_ADD_MATCH_ID = "dddddddd-dddd-dddd-dddd-dddddddddddd";
+export const SEED_GUEST_ADD_MATCH_URL = `/matches/${SEED_GUEST_ADD_MATCH_ID}`;
+
+/**
+ * seed.sqlで事前作成されている四麻ルール・5人参加マッチのID
+ * 参加プレイヤー: testuser, alice123, bob123, carol123, デイブ(ゲスト) (5人)
+ * ルール: 4人・持ち点25000 (参加者5人 > ルール4人)
+ * ゲーム/チップ未登録
+ */
+export const SEED_4RULE_5PLAYER_MATCH_ID =
+  "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee";
+export const SEED_4RULE_5PLAYER_MATCH_URL = `/matches/${SEED_4RULE_5PLAYER_MATCH_ID}`;
+
+/**
  * seed.sqlで用意されているテスト用ユーザー
  */
 export const TEST_USERS = {
@@ -53,6 +72,10 @@ export const TEST_USERS = {
     password: "password123",
     displayId: "carol123",
     name: "キャロル",
+  },
+  /** seed.sql に事前投入されているゲストプレイヤー */
+  dave: {
+    name: "デイブ",
   },
 } as const;
 

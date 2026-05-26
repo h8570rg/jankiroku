@@ -229,3 +229,53 @@ INSERT INTO public.rules (
   10000, 0, 'round', '0_0_0',
   '00000000-1111-1111-1111-111111111111', '00000000-1111-1111-1111-111111111111'
 );
+
+-- E2E用の事前マッチ（ゲストプレイヤー追加テスト専用・三麻・3人・ゲーム/チップ未入力）
+INSERT INTO public.matches (id, created_by, created_at) VALUES
+  (
+    'dddddddd-dddd-dddd-dddd-dddddddddddd',
+    '00000000-1111-1111-1111-111111111111',
+    now()
+  );
+
+INSERT INTO public.match_players (match_id, player_id, "order") VALUES
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', '00000000-1111-1111-1111-111111111111', 0),
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', '00000000-2222-2222-2222-222222222222', 1),
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', '00000000-3333-3333-3333-333333333333', 2);
+
+INSERT INTO public.rules (
+  match_id, players_count, rate, default_points, default_calc_points,
+  crack_box_bonus, chip_rate, calc_method, incline, created_by, updated_by
+) VALUES (
+  'dddddddd-dddd-dddd-dddd-dddddddddddd', 3, 0, 35000, 40000,
+  10000, 0, 'round', '0_0_0',
+  '00000000-1111-1111-1111-111111111111', '00000000-1111-1111-1111-111111111111'
+);
+
+-- E2E用ゲストプレイヤー（auth 未登録・5人超過テストの5人目として使用）
+INSERT INTO public.profiles (id, name, user_id) VALUES
+  ('00000000-6666-6666-6666-666666666666', 'デイブ', NULL);
+
+-- E2E用の事前マッチ（四麻ルール・5人参加=ルール人数超過・ゲーム/チップ未入力）
+INSERT INTO public.matches (id, created_by, created_at) VALUES
+  (
+    'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
+    '00000000-1111-1111-1111-111111111111',
+    now()
+  );
+
+INSERT INTO public.match_players (match_id, player_id, "order") VALUES
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '00000000-1111-1111-1111-111111111111', 0),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '00000000-2222-2222-2222-222222222222', 1),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '00000000-3333-3333-3333-333333333333', 2),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '00000000-4444-4444-4444-444444444444', 3),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '00000000-6666-6666-6666-666666666666', 4);
+
+INSERT INTO public.rules (
+  match_id, players_count, rate, default_points, default_calc_points,
+  crack_box_bonus, chip_rate, calc_method, incline, created_by, updated_by
+) VALUES (
+  'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 4, 0, 25000, 30000,
+  10000, 0, 'round', '0_0_0_0',
+  '00000000-1111-1111-1111-111111111111', '00000000-1111-1111-1111-111111111111'
+);

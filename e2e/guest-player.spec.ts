@@ -1,5 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
-import { fillInput, SEED_3PLAYER_MATCH_URL, TEST_USERS } from "./helpers";
+import { fillInput, SEED_GUEST_ADD_MATCH_URL, TEST_USERS } from "./helpers";
 
 async function openCreateMatchPlayerStep(page: Page) {
   await page.goto("/matches");
@@ -50,7 +50,7 @@ test.describe("ゲストプレイヤー", () => {
   test("プレイヤー追加ドロワーからゲストを追加 → 再読み込み後も残っている", async ({
     page,
   }) => {
-    await page.goto(SEED_3PLAYER_MATCH_URL);
+    await page.goto(SEED_GUEST_ADD_MATCH_URL);
     await page.getByRole("button", { name: "プレイヤーを追加" }).click();
 
     const drawer = page.getByRole("dialog", { name: "プレイヤー選択" });

@@ -77,6 +77,10 @@ export const schema = {
   points: z
     .string("点数を入力してください")
     .transform((v) => (v === "0" || v ? Number(v) * 100 : undefined)),
+  chipCount: z
+    .string()
+    .optional()
+    .transform((v) => (v === undefined || v === "" ? null : Number(v))),
   rate: z.string().transform(Number),
   inclineFor4Players: z
     .object({
