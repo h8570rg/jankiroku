@@ -9,6 +9,8 @@ export default defineConfig({
   testDir: "./e2e",
   // global-setup で投入した Supabase の seed を全テストで共有しているため、
   // 並列化すると同一レコードへの書き込みが競合する。よって 1 ワーカーで順次実行する。
+  // さらに chromium / webkit プロジェクト間でも DB を共有するため、
+  // webkit は chromium 完了後に実行する（dependencies 参照）。
   fullyParallel: false,
   workers: 1,
   reporter: [["html", { outputFolder: "e2e/playwright-report" }]],
@@ -42,7 +44,7 @@ export default defineConfig({
         ...devices["Desktop Safari"],
         storageState: "e2e/.auth/user.json",
       },
-      dependencies: ["setup"],
+      dependencies: ["chromium"],
     },
     {
       name: "cleanup",

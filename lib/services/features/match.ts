@@ -153,7 +153,7 @@ export const matchService = (supabase: Supabase) => {
     }: {
       matchId: string;
       playerId: string;
-      chipCount: number;
+      chipCount: number | null;
     }): Promise<void> => {
       const updateMatchPlayerResponse = await supabase
         .from("match_players")

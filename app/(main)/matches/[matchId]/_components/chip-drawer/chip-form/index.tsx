@@ -24,7 +24,7 @@ export function ChipForm({
   match: Match;
   onOpenChange: (isOpen: boolean) => void;
 }) {
-  const { players, rule } = match;
+  const { players } = match;
 
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(addChip, {
@@ -58,7 +58,7 @@ export function ChipForm({
   );
   const totalChipCount = chipCounts.reduce((sum, v) => sum + Number(v) || 0, 0);
   const filledCount = chipCounts.filter((v) => v !== "").length;
-  const isAutoFillAvailable = filledCount === rule.playersCount - 1;
+  const isAutoFillAvailable = filledCount === players.length - 1;
 
   const playerChipListFields = fields.playerChip.getFieldList();
 
