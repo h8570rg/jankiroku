@@ -62,7 +62,7 @@
     "@types/react-dom": "19.2.3",
     "@typescript-eslint/parser": "8.62.0",
     "cspell": "10.0.1",
-    "eslint": "10.5.0",
+    "eslint": "10.6.0",
     "eslint-plugin-better-tailwindcss": "4.6.0",
     "lefthook": "2.1.9",
     "supabase": "2.108.0",
