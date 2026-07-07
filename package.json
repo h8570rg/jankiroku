@@ -48,7 +48,7 @@
     "postcss": "8.5.16",
     "react": "19.2.7",
     "react-dom": "19.2.7",
-    "recharts": "3.9.1",
+    "recharts": "3.9.2",
     "sharp": "0.35.3",
     "tailwindcss": "4.3.2",
     "use-debounce": "10.1.1",
