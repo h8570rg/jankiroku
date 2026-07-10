@@ -65,7 +65,7 @@
     "eslint": "10.6.0",
     "eslint-plugin-better-tailwindcss": "4.6.1",
     "lefthook": "2.1.9",
-    "supabase": "2.109.0",
+    "supabase": "2.109.1",
     "typescript": "6.0.3",
     "typescript-eslint": "8.63.0",
     "vitest": "4.1.10"
