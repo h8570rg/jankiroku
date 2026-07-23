@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@conform-to/react':
-        specifier: 1.19.4
-        version: 1.19.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        specifier: 1.20.0
+        version: 1.20.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@conform-to/zod':
-        specifier: 1.19.4
-        version: 1.19.4(zod@4.4.3)
+        specifier: 1.20.0
+        version: 1.20.0(zod@4.4.3)
       '@heroui/react':
         specifier: 3.2.2
         version: 3.2.2(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(tailwindcss@4.3.3)
@@ -206,17 +206,17 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@conform-to/dom@1.19.4':
-    resolution: {integrity: sha512-P/mBdVRl946iE74TXmF5YLY9+1IDrQzxKdj9A7qv7Cd4l/O02EvJskg3X7cHwhmFFIXXgNzSmf/y4B597SS4gg==}
+  '@conform-to/dom@1.20.0':
+    resolution: {integrity: sha512-8BdYAycBTCy2erDmEdpOtS75fBUrf1XTiUc53IHEd565Da/dNY85lUAshtNM26WTfvqvUBpROk9J7+fm6HQG6Q==}
 
-  '@conform-to/react@1.19.4':
-    resolution: {integrity: sha512-Xyw4hbD9467q8PTWW+Nvmf523y814w70eeABRJzVvfnpghGOAWAGt1lpOboAs6sqaKG/eouqifibz/r+PDFZLg==}
+  '@conform-to/react@1.20.0':
+    resolution: {integrity: sha512-zjK+f3GTWAHdHfTMtN6iJ7ImPnuuRsAl9/KfcEYA4e76TLgdDmkRLSoq7xnoROsokfhyWP3/Zi5kZmUpsiBJqw==}
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
 
-  '@conform-to/zod@1.19.4':
-    resolution: {integrity: sha512-g80QtotXLcXWCF86Xou/VpI6i+NBOQxYgLS9YCQYrgV27yilZFJYpgWWBsA8YwodmJVBIYm9RawJba7WnUoddA==}
+  '@conform-to/zod@1.20.0':
+    resolution: {integrity: sha512-tA6uhlALqXoU51la7ifl2bJq36ka9K04ikWduLF/qOEDpbruEekbOpbjOp5qknRL+CRFKSfrHsRLBL+gCKomNw==}
     peerDependencies:
       zod: ^3.21.0 || ^4.0.0
 
@@ -2843,17 +2843,17 @@ snapshots:
   '@biomejs/cli-win32-x64@2.5.4':
     optional: true
 
-  '@conform-to/dom@1.19.4': {}
+  '@conform-to/dom@1.20.0': {}
 
-  '@conform-to/react@1.19.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+  '@conform-to/react@1.20.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
-      '@conform-to/dom': 1.19.4
+      '@conform-to/dom': 1.20.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
 
-  '@conform-to/zod@1.19.4(zod@4.4.3)':
+  '@conform-to/zod@1.20.0(zod@4.4.3)':
     dependencies:
-      '@conform-to/dom': 1.19.4
+      '@conform-to/dom': 1.20.0
       zod: 4.4.3
 
   '@cspell/cspell-bundled-dicts@10.0.1':
