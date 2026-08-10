@@ -7,7 +7,7 @@
   },
   "linter": {
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "correctness": {
         "noUnusedImports": { "level": "error", "fix": "safe" },
         "noUnusedFunctionParameters": { "level": "error", "fix": "safe" }

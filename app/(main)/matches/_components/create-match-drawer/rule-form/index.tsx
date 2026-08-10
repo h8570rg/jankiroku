@@ -385,10 +385,12 @@ function OptionCard({
 }) {
   return (
     <Radio value={value} className="m-0">
-      <Radio.Content className="
-        h-12 w-full rounded-xl border px-2
-        data-[selected=true]:border-accent data-[selected=true]:bg-accent/10
-      ">
+      <Radio.Content
+        className="
+          h-12 w-full rounded-xl border px-2
+          data-[selected=true]:border-accent data-[selected=true]:bg-accent/10
+        "
+      >
         <Radio.Control>
           <Radio.Indicator />
         </Radio.Control>
