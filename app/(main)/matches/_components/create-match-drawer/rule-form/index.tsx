@@ -23,7 +23,6 @@ import {
   Select,
   TextField,
   Typography,
-  tv,
 } from "@heroui/react";
 import { useRef } from "react";
 import { Button } from "@/components/button";
@@ -50,15 +49,6 @@ import {
   type RuleOutput,
   ruleSchema,
 } from "./schema";
-
-const optionCard = tv({
-  base: [
-    "m-0 flex h-12 items-center rounded-xl border",
-    "border-border bg-surface px-2 transition-all",
-    "data-[selected=true]:border-accent",
-    "data-[selected=true]:bg-accent/10",
-  ],
-});
 
 export function RuleForm({
   onSubmit,
@@ -137,11 +127,11 @@ export function RuleForm({
               { value: "3", label: "三麻" },
             ].map(({ value, label }) => (
               <Radio key={value} value={value}>
-                <Radio.Control>
-                  <Radio.Indicator />
-                </Radio.Control>
                 <Radio.Content>
-                  <Label>{label}</Label>
+                  <Radio.Control>
+                    <Radio.Indicator />
+                  </Radio.Control>
+                  {label}
                 </Radio.Content>
               </Radio>
             ))}
@@ -155,19 +145,12 @@ export function RuleForm({
             <Label className="mb-3">レート</Label>
             <div className="grid grid-cols-2 gap-2">
               {rates.map((rate) => (
-                <Radio key={rate} value={String(rate)} className={optionCard()}>
-                  <Radio.Control>
-                    <Radio.Indicator />
-                  </Radio.Control>
-                  <Radio.Content>
-                    <Label>{rateLabel[rate]}</Label>
-                    {rateDescription[rate] && (
-                      <Description className="text-[10px]">
-                        {rateDescription[rate]}
-                      </Description>
-                    )}
-                  </Radio.Content>
-                </Radio>
+                <OptionCard
+                  key={rate}
+                  value={String(rate)}
+                  label={rateLabel[rate]}
+                  description={rateDescription[rate] ?? undefined}
+                />
               ))}
             </div>
           </RadioGroup>
@@ -181,23 +164,16 @@ export function RuleForm({
               <Label className="mb-3">ウマ</Label>
               <div className="grid grid-cols-2 gap-2">
                 {inclinePresetOptions.map((opt) => (
-                  <Radio
+                  <OptionCard
                     key={opt.value}
                     value={opt.value}
-                    className={optionCard()}
-                  >
-                    <Radio.Control>
-                      <Radio.Indicator />
-                    </Radio.Control>
-                    <Radio.Content>
-                      <Label>{opt.label}</Label>
-                      {opt.inclineValues && (
-                        <Description className="text-[10px]">
-                          {opt.inclineValues.join(", ")}
-                        </Description>
-                      )}
-                    </Radio.Content>
-                  </Radio>
+                    label={opt.label}
+                    description={
+                      opt.inclineValues
+                        ? opt.inclineValues.join(", ")
+                        : undefined
+                    }
+                  />
                 ))}
               </div>
             </RadioGroup>
@@ -271,18 +247,11 @@ export function RuleForm({
               <Label className="mb-3">チップ</Label>
               <div className="grid grid-cols-2 gap-2">
                 {chipRatePresetOptions.map((opt) => (
-                  <Radio
+                  <OptionCard
                     key={opt.value}
                     value={opt.value}
-                    className={optionCard()}
-                  >
-                    <Radio.Control>
-                      <Radio.Indicator />
-                    </Radio.Control>
-                    <Radio.Content>
-                      <Label>{opt.label}</Label>
-                    </Radio.Content>
-                  </Radio>
+                    label={opt.label}
+                  />
                 ))}
               </div>
             </RadioGroup>
@@ -402,5 +371,34 @@ export function RuleForm({
         </Button>
       </Drawer.Footer>
     </Form>
+  );
+}
+
+function OptionCard({
+  value,
+  label,
+  description,
+}: {
+  value: string;
+  label: string;
+  description?: string;
+}) {
+  return (
+    <Radio value={value} className="m-0">
+      <Radio.Content className="
+        h-12 w-full rounded-xl border px-2
+        data-[selected=true]:border-accent data-[selected=true]:bg-accent/10
+      ">
+        <Radio.Control>
+          <Radio.Indicator />
+        </Radio.Control>
+        <div className="flex flex-col gap-0.5">
+          <span>{label}</span>
+          {description && (
+            <Description className="text-[10px]">{description}</Description>
+          )}
+        </div>
+      </Radio.Content>
+    </Radio>
   );
 }
