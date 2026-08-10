@@ -20,11 +20,6 @@ const STANDARD_4_PLAYERS = [
   TEST_USERS.bob,
   TEST_USERS.carol,
 ] as const;
-const STANDARD_3_PLAYERS = [
-  TEST_USERS.me,
-  TEST_USERS.alice,
-  TEST_USERS.bob,
-] as const;
 const OVERCAPACITY_5_PLAYERS = [
   ...STANDARD_4_PLAYERS,
   TEST_USERS.dave,
