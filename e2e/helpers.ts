@@ -1,5 +1,3 @@
-import type { Locator } from "@playwright/test";
-
 /**
  * seed.sqlで事前作成されている四麻マッチのID
  * 参加プレイヤー: testuser, alice123, bob123, carol123 (4人)
@@ -86,33 +84,4 @@ export function randomEmail() {
 
 export function randomDisplayId() {
   return `u${Math.random().toString(36).slice(2, 10)}`;
-}
-
-/**
- * WebKit では React Aria の controlled input に対して fill() が不安定なため、
- * pressSequentially() を使ってキーボードイベント経由で値を入力するヘルパー。
- *
- * 原因: Playwright の fill() はプログラマティックに input イベントを発火するが、
- * WebKit では isTrusted:false のイベントを React が確実に処理しない場合がある。
- * pressSequentially() は実際のキーボードイベント連鎖を発生させるため安定して動作する。
- *
- * 既存値のクリアはこのヘルパーでは扱わない。テストは冪等であるべきで、
- * 既存値がある前提のテストは呼び出し側で明示的に clearInput を呼ぶ。
- */
-export async function fillInput(locator: Locator, value: string) {
-  await locator.click();
-  await locator.pressSequentially(value);
-}
-
-/**
- * 入力欄の既存値を全選択して削除する。
- *
- * fillInput は pressSequentially でキーを順次入力するため、既存値があると
- * 上書きではなく末尾に追記されてしまう。seed データやプロフィール初期値が
- * 入っているフォームを操作するテストでは、入力前にこの関数で明示的に
- * クリアしてから fillInput を呼ぶ必要がある。
- */
-export async function clearInput(locator: Locator) {
-  await locator.click({ clickCount: 3 });
-  await locator.press("Backspace");
 }
