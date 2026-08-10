@@ -26,7 +26,11 @@
     "eslint:fix": "eslint . --fix",
     "supabase:login": "supabase login",
     "supabase:link": "supabase link --project-ref $npm_package_config_supabase_project_ref",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
     "supabase:diff": "supabase db diff --linked -f local",
+    "supabase:push": "supabase db push",
     "supabase:type": "supabase gen types typescript --linked > lib/database.types.ts"
   },
   "dependencies": {

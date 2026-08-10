@@ -45,7 +45,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "npm run dev -- -p 3003",
+    command: "pnpm exec next dev -p 3003",
     url: "http://localhost:3003",
     env: {
       NEXT_PUBLIC_SUPABASE_URL: SUPABASE_LOCAL_URL,

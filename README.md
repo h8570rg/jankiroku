@@ -36,8 +36,8 @@ pnpm run supabase:link
 Vercel CLIを使用して環境変数を取得します。
 
 ```shell
-npx vercel login
-npx vercel env pull .env.local
+pnpm dlx vercel login
+pnpm dlx vercel env pull .env.local
 ```
 
 これにより、Supabaseの接続情報を含むすべての環境変数が自動的に`.env.local`に設定されます。
@@ -103,7 +103,7 @@ E2Eテストには [Playwright](https://playwright.dev/) を使用し、ロー�
 Playwright のブラウザをインストールします（初回のみ）。
 
 ```shell
-npx playwright install chromium
+pnpm exec playwright install chromium
 ```
 
 ## テストの実行
@@ -111,7 +111,7 @@ npx playwright install chromium
 ### 1. ローカル Supabase を起動する
 
 ```shell
-npx supabase start
+pnpm run supabase:start
 ```
 
 初回はイメージのダウンロードに数分かかります。`supabase start` はマイグレーションの適用とシードデータ（テストユーザー）の投入を自動で行います。
@@ -133,7 +133,7 @@ pnpm run test:e2e:ui
 テストが終わったら停止できます。次回のテストまで起動したままでも問題ありません。
 
 ```shell
-npx supabase stop
+pnpm run supabase:stop
 ```
 
 ## データのリセット
@@ -141,7 +141,7 @@ npx supabase stop
 テストデータを初期状態に戻したい場合：
 
 ```shell
-npx supabase db reset
+pnpm run supabase:reset
 ```
 
 マイグレーションの再適用とシードデータの再投入が行われます。
