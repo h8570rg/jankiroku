@@ -17,7 +17,7 @@
   }
 
   .avatar {
-    border-radius: calc(infinity * 1px);
+    --radius: 9999px;
   }
 
   .avatar__fallback svg {
