@@ -1,6 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
 import {
-  clearInput,
   SEED_3PLAYER_MATCH_URL,
   SEED_4RULE_5PLAYER_MATCH_URL,
   SEED_MATCH_URL,
@@ -32,7 +31,7 @@ const OVERCAPACITY_5_PLAYERS = [
 
 async function clearChipFields(page: Page, users: readonly { name: string }[]) {
   for (const user of users) {
-    await clearInput(page.getByRole("spinbutton", { name: user.name }));
+    await page.getByRole("spinbutton", { name: user.name }).fill("");
   }
 }
 

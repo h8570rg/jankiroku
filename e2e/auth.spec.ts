@@ -1,5 +1,4 @@
 import { expect, test } from "@playwright/test";
-import { fillInput } from "./helpers";
 
 test.describe("ログイン", () => {
   test.use({ storageState: { cookies: [], origins: [] } });
@@ -7,10 +6,9 @@ test.describe("ログイン", () => {
   test("正しい認証情報でログインできる", async ({ page }) => {
     await page.goto("/login");
 
-    await fillInput(
-      page.getByRole("textbox", { name: "メールアドレス" }),
-      "test@example.com",
-    );
+    await page
+      .getByRole("textbox", { name: "メールアドレス" })
+      .fill("test@example.com");
     await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
     await page.getByRole("button", { name: "ログイン", exact: true }).click();
 
@@ -20,10 +18,9 @@ test.describe("ログイン", () => {
   test("誤ったパスワードではログインできない", async ({ page }) => {
     await page.goto("/login");
 
-    await fillInput(
-      page.getByRole("textbox", { name: "メールアドレス" }),
-      "test@example.com",
-    );
+    await page
+      .getByRole("textbox", { name: "メールアドレス" })
+      .fill("test@example.com");
     await page
       .getByRole("textbox", { name: "パスワード" })
       .fill("wrongpassword");
@@ -38,10 +35,9 @@ test.describe("ログイン", () => {
   test("未登録のメールアドレスではログインできない", async ({ page }) => {
     await page.goto("/login");
 
-    await fillInput(
-      page.getByRole("textbox", { name: "メールアドレス" }),
-      "nobody@example.com",
-    );
+    await page
+      .getByRole("textbox", { name: "メールアドレス" })
+      .fill("nobody@example.com");
     await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
     await page.getByRole("button", { name: "ログイン", exact: true }).click();
 
@@ -66,10 +62,9 @@ test.describe("ログイン", () => {
   test("メールアドレス形式が不正ならバリデーションエラー", async ({ page }) => {
     await page.goto("/login");
 
-    await fillInput(
-      page.getByRole("textbox", { name: "メールアドレス" }),
-      "not-an-email",
-    );
+    await page
+      .getByRole("textbox", { name: "メールアドレス" })
+      .fill("not-an-email");
     await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
     await page.getByRole("button", { name: "ログイン", exact: true }).click();
 
@@ -82,10 +77,9 @@ test.describe("ログイン", () => {
   test("パスワード未入力ではバリデーションエラー", async ({ page }) => {
     await page.goto("/login");
 
-    await fillInput(
-      page.getByRole("textbox", { name: "メールアドレス" }),
-      "test@example.com",
-    );
+    await page
+      .getByRole("textbox", { name: "メールアドレス" })
+      .fill("test@example.com");
     await page.getByRole("button", { name: "ログイン", exact: true }).click();
 
     await expect(page.getByText("パスワードを入力してください")).toBeVisible();
@@ -95,10 +89,9 @@ test.describe("ログイン", () => {
   test("パスワードが短いとバリデーションエラー", async ({ page }) => {
     await page.goto("/login");
 
-    await fillInput(
-      page.getByRole("textbox", { name: "メールアドレス" }),
-      "test@example.com",
-    );
+    await page
+      .getByRole("textbox", { name: "メールアドレス" })
+      .fill("test@example.com");
     await page.getByRole("textbox", { name: "パスワード" }).fill("12345");
     await page.getByRole("button", { name: "ログイン", exact: true }).click();
 
