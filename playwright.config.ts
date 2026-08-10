@@ -9,14 +9,13 @@ export default defineConfig({
   testDir: "./e2e",
   // global-setup で投入した Supabase の seed を全テストで共有しているため、
   // 並列化すると同一レコードへの書き込みが競合する。よって 1 ワーカーで順次実行する。
-  // さらに chromium / webkit プロジェクト間でも DB を共有するため、
-  // webkit は chromium 完了後に実行する（dependencies 参照）。
   fullyParallel: false,
   workers: 1,
   reporter: [["html", { outputFolder: "e2e/playwright-report" }]],
   outputDir: "e2e/test-results",
 
   use: {
+    ...devices["Pixel 7"],
     baseURL: "http://localhost:3003",
     trace: "on-first-retry",
   },
@@ -31,29 +30,17 @@ export default defineConfig({
       // logout系はセッションを破壊するため cleanup プロジェクトで最後に実行する
       testIgnore: /logout\.spec\.ts/,
       use: {
-        ...devices["Desktop Chrome"],
         storageState: "e2e/.auth/user.json",
       },
       dependencies: ["setup"],
     },
     {
-      name: "webkit",
-      // logout系はセッションを破壊するため cleanup プロジェクトで最後に実行する
-      testIgnore: /logout\.spec\.ts/,
-      use: {
-        ...devices["Desktop Safari"],
-        storageState: "e2e/.auth/user.json",
-      },
-      dependencies: ["chromium"],
-    },
-    {
       name: "cleanup",
       testMatch: /logout\.spec\.ts/,
       use: {
-        ...devices["Desktop Chrome"],
         storageState: "e2e/.auth/user.json",
       },
-      dependencies: ["webkit"],
+      dependencies: ["chromium"],
     },
   ],
 

@@ -1,5 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
-import { fillInput, SEED_GUEST_ADD_MATCH_URL, TEST_USERS } from "./helpers";
+import { SEED_GUEST_ADD_MATCH_URL, TEST_USERS } from "./helpers";
 
 async function openCreateMatchPlayerStep(page: Page) {
   await page.goto("/matches");
@@ -87,10 +87,9 @@ test.describe("ゲストプレイヤー", () => {
 
     // フレンド追加画面に移動して検索
     await page.goto("/friends/add");
-    await fillInput(
-      page.getByRole("searchbox", { name: /検索|ユーザーID/ }),
-      guestName,
-    );
+    await page
+      .getByRole("searchbox", { name: /検索|ユーザーID/ })
+      .fill(guestName);
 
     await expect(page.getByText("見つかりませんでした")).toBeVisible();
   });

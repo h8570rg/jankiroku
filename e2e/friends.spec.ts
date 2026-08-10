@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { fillInput, TEST_USERS } from "./helpers";
+import { TEST_USERS } from "./helpers";
 
 // 後半のテストは「削除 → 再追加で元に戻す」と順序依存になっているため、
 // 前段が失敗したら後段をスキップして DB を壊れた状態で進めないように serial を指定する。
@@ -21,10 +21,9 @@ test.describe("フレンド管理", () => {
 
   test("ユーザーIDで検索できる", async ({ page }) => {
     await page.goto("/friends/add");
-    await fillInput(
-      page.getByRole("searchbox", { name: /検索|ユーザーID/ }),
-      TEST_USERS.alice.displayId,
-    );
+    await page
+      .getByRole("searchbox", { name: /検索|ユーザーID/ })
+      .fill(TEST_USERS.alice.displayId);
 
     await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
     await expect(
@@ -34,10 +33,9 @@ test.describe("フレンド管理", () => {
 
   test("名前で検索できる", async ({ page }) => {
     await page.goto("/friends/add");
-    await fillInput(
-      page.getByRole("searchbox", { name: /検索|ユーザーID/ }),
-      TEST_USERS.bob.name,
-    );
+    await page
+      .getByRole("searchbox", { name: /検索|ユーザーID/ })
+      .fill(TEST_USERS.bob.name);
 
     await expect(page.getByText(TEST_USERS.bob.name)).toBeVisible();
   });
@@ -46,10 +44,9 @@ test.describe("フレンド管理", () => {
     page,
   }) => {
     await page.goto("/friends/add");
-    await fillInput(
-      page.getByRole("searchbox", { name: /検索|ユーザーID/ }),
-      "xxxxxxxxxxxxxxxxxxxx",
-    );
+    await page
+      .getByRole("searchbox", { name: /検索|ユーザーID/ })
+      .fill("xxxxxxxxxxxxxxxxxxxx");
 
     await expect(page.getByText("見つかりませんでした")).toBeVisible();
   });
@@ -59,10 +56,9 @@ test.describe("フレンド管理", () => {
   }) => {
     // seedでaliceはフレンドとして登録されている
     await page.goto("/friends/add");
-    await fillInput(
-      page.getByRole("searchbox", { name: /検索|ユーザーID/ }),
-      TEST_USERS.alice.displayId,
-    );
+    await page
+      .getByRole("searchbox", { name: /検索|ユーザーID/ })
+      .fill(TEST_USERS.alice.displayId);
 
     await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
     await expect(page.getByText("追加済み")).toBeVisible();
@@ -86,10 +82,9 @@ test.describe("フレンド管理", () => {
   test("検索結果の「追加」ボタンからフレンド追加できる", async ({ page }) => {
     // 前テストで alice は削除済み
     await page.goto("/friends/add");
-    await fillInput(
-      page.getByRole("searchbox", { name: /検索|ユーザーID/ }),
-      TEST_USERS.alice.displayId,
-    );
+    await page
+      .getByRole("searchbox", { name: /検索|ユーザーID/ })
+      .fill(TEST_USERS.alice.displayId);
 
     await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
     await page.getByRole("button", { name: "追加", exact: true }).click();
