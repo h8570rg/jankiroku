@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@conform-to/react':
-        specifier: 1.20.2
-        version: 1.20.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 1.21.0
+        version: 1.21.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@conform-to/zod':
-        specifier: 1.20.2
-        version: 1.20.2(zod@4.4.3)
+        specifier: 1.21.0
+        version: 1.21.0(zod@4.4.3)
       '@heroui/react':
         specifier: 3.2.4
         version: 3.2.4(@react-aria/i18n@3.13.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@react-aria/ssr@3.10.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@react-aria/utils@3.34.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-aria-components@1.20.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-aria@3.51.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(tailwindcss@4.3.3)
@@ -206,17 +206,17 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@conform-to/dom@1.20.2':
-    resolution: {integrity: sha512-HfVb0XCHZijXODupqdV7+DrlZgJAYRQsXm/FpfFjKZO1P1S8LhlS7yMBTH2K5zkMyhk6fV/BvfUZi88Kp1EslA==}
+  '@conform-to/dom@1.21.0':
+    resolution: {integrity: sha512-Z4mZkWfFpKjD7/yDOPu/NFp2UEW3+Cc62Ox3WCyJI2kUcUILYrXfwwm9l0n+/+xBtMbDHatAPKMLaFMpJ0ajEQ==}
 
-  '@conform-to/react@1.20.2':
-    resolution: {integrity: sha512-UTsPZQwfIAXSbs3Q+h/xpHMWMlhJRNj1tG0VwXNua+uYQ2b2eL6MSTKtiE41tUnUWdjIWsvPWbQNk2dMvSQHDQ==}
+  '@conform-to/react@1.21.0':
+    resolution: {integrity: sha512-DIjEHrxzwhzIORvU+/7VLXZn6V6LdDThzgDb+1MlPZPVdMJqaHVwQxH6LJ1zeAb40LnSitqBR6s0xxmsaghULg==}
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
 
-  '@conform-to/zod@1.20.2':
-    resolution: {integrity: sha512-NMMmj1ND00s+AM9aFbNl15JI6VxNlvORYy4X7UbVM0kFsKIOP7pqU4TVKSVGTGKhOn1k2tnEieA0srVdgMe/CA==}
+  '@conform-to/zod@1.21.0':
+    resolution: {integrity: sha512-TN0tDFC+A5AXpkGXV43J3aTjGIwvidHzlPgpfJxcyZzJwWdsh5K0hBSuGA7ZfK/i7x/yAAC8zY/FVoO8VKIaJA==}
     peerDependencies:
       zod: ^3.21.0 || ^4.0.0
 
@@ -2742,17 +2742,17 @@ snapshots:
   '@biomejs/cli-win32-x64@2.5.7':
     optional: true
 
-  '@conform-to/dom@1.20.2': {}
+  '@conform-to/dom@1.21.0': {}
 
-  '@conform-to/react@1.20.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@conform-to/react@1.21.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@conform-to/dom': 1.20.2
+      '@conform-to/dom': 1.21.0
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  '@conform-to/zod@1.20.2(zod@4.4.3)':
+  '@conform-to/zod@1.21.0(zod@4.4.3)':
     dependencies:
-      '@conform-to/dom': 1.20.2
+      '@conform-to/dom': 1.21.0
       zod: 4.4.3
 
   '@cspell/cspell-bundled-dicts@10.0.1':
