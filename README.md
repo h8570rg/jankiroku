@@ -7,7 +7,7 @@
 ## 前提条件
 
 - Node.js（バージョンは[package.json](package.json)を参照）
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)（Supabase CLIが内部的に使用）
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)（DB 変更作業・E2E で使用）
 
 ## リポジトリのクローン
 
@@ -17,68 +17,42 @@ cd jankiroku
 pnpm install
 ```
 
-## Supabaseプロジェクトへの接続
+## 環境変数（remote / local の切り替え）
 
-Supabase CLIにログインします。
+接続先は `.env.local` の `NEXT_PUBLIC_SUPABASE_*` で切り替えます。起動コマンドはどちらも `pnpm run dev` です。
 
-```shell
-pnpm run supabase:login
-```
-
-開発用のSupabaseプロジェクトにリンクします。
+### 開発用 remote に繋ぐ（基本）
 
 ```shell
-pnpm run supabase:link
+pnpm dlx vercel login
+pnpm dlx vercel env pull .env.local
 ```
 
-## 環境変数の作成
-
-Vercel CLIを使用して環境変数を取得します。
+### ローカル Supabase に繋ぐ（DB 変更時）
 
 ```shell
-npx vercel login
-npx vercel env pull .env.local
+pnpm run supabase:start
 ```
 
-これにより、Supabaseの接続情報を含むすべての環境変数が自動的に`.env.local`に設定されます。
+起動ログ（または `pnpm exec supabase status`）に出る **API URL** と **Publishable key**（表記が `anon key` の場合もある）を `.env.local` に設定します。
 
-## データベーススキーマの変更
-
-### 方法1: Supabase Studioで直接変更（推奨）
-
-開発環境のSupabase Studioで直接スキーマを変更します。
-
-1. [Supabase Studio](https://supabase.com/dashboard/project/ggkmppnjhrwzdsamzqbp)にアクセス
-2. Table EditorやSQL Editorでスキーマを変更
-3. 変更後、以下のコマンドを手動で実行：
-
-```shell
-# マイグレーションファイルを生成
-pnpm run supabase:diff
-
-# 型定義を更新
-pnpm run supabase:type
+```env
+NEXT_PUBLIC_SUPABASE_URL=<API URL>
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<Publishable key>
 ```
 
-### 方法2: ローカルでマイグレーションファイルを作成
+remote に戻すときは、再度 `pnpm dlx vercel env pull .env.local` を実行します。
 
-```shell
-# 空のマイグレーションファイルを作成
-pnpm run supabase:diff -- new_feature
+## 基本方針
 
-# 生成されたファイルを編集
-# supabase/migrations/YYYYMMDDHHMMSS_new_feature.sql
+| 作業 | 使うもの |
+| --- | --- |
+| 普段のアプリ開発 | remote（開発用 Supabase）← **こちらが基本** |
+| DB（スキーマ）変更 | **ローカル Supabase のみ** |
+| E2E | ローカル Supabase（実行のたび DB reset） |
 
-# 型定義を更新
-pnpm run supabase:type
-```
-
-### マイグレーションの適用
-
-**開発環境・本番環境へのマイグレーション適用は、すべてGitHub Actions経由で自動実行されます。**
-
-- `main`ブランチへのpush → 本番環境に自動適用
-- PRマージ → 開発環境に自動適用（設定済みの場合）
+**remote の Studio / SQL Editor ではスキーマを変更しないでください。**  
+変更は必ず local → migration → コミット → CI で remote へ適用します。
 
 ## アプリケーションの起動
 
@@ -86,65 +60,136 @@ pnpm run supabase:type
 pnpm run dev
 ```
 
-アプリケーションURL: http://localhost:3001
+アプリ: http://localhost:3001  
+（接続先は上記の `.env.local` の内容に従います）
 
-Supabase Studio（リモート）: https://supabase.com/dashboard/project/ggkmppnjhrwzdsamzqbp
+# データベーススキーマの変更
+
+## 流れ
+
+```text
+1. ローカル Supabase を起動し、.env.local を local 向けに編集
+2. ローカルでスキーマを変更（ローカル Studio または SQL）
+3. migration を作成（diff または手書き）
+4. reset で再現確認 + 型更新
+5. コミット
+6. main への merge / push で CI が remote に db push
+7. （任意）vercel env pull で .env.local を remote 向けに戻す
+```
+
+## 手順
+
+### 1. ローカルを起動し、アプリを local に繋ぐ
+
+```shell
+pnpm run supabase:start
+```
+
+`.env.local` をローカル向けに編集してから:
+
+```shell
+pnpm run dev
+```
+
+ローカル Studio の URL は次で確認します。
+
+```shell
+pnpm exec supabase status
+```
+
+### 2. スキーマを変更する
+
+- **ローカル Studio** の Table Editor / SQL Editor で変更する  
+  または
+- SQL を手書きする:
+
+```shell
+pnpm run supabase:migration -- <descriptive_name>
+# → supabase/migrations/<timestamp>_<descriptive_name>.sql を編集
+```
+
+### 3. マイグレーションファイルを作る（Studio で変えた場合）
+
+```shell
+pnpm run supabase:diff -- -f <descriptive_name>
+```
+
+ローカル DB と既存 migrations の差が `supabase/migrations/` に保存されます。
+
+### 4. 再現確認と型更新
+
+```shell
+pnpm run supabase:reset
+pnpm run supabase:type
+```
+
+### 5. コミット
+
+少なくとも次をコミットします。
+
+- `supabase/migrations/`
+- 更新していれば `lib/database.types.ts`
+
+### 6. remote への適用
+
+**GitHub Actions が行います。** `main` への push で本番へ `db push` されます。
+
+手元から linked プロジェクトへ当てる必要があるときだけ:
+
+```shell
+pnpm run supabase:login
+pnpm run supabase:link
+pnpm run supabase:push
+```
+
+## よく使うコマンド
+
+| コマンド | 用途 |
+| --- | --- |
+| `pnpm run supabase:start` | ローカル Supabase 起動 |
+| `pnpm run supabase:stop` | 停止 |
+| `pnpm run supabase:reset` | migrations + seed で作り直し |
+| `pnpm run supabase:migration -- <name>` | 空の migration を作成 |
+| `pnpm run supabase:diff -- -f <name>` | ローカル DB の差分から migration 作成 |
+| `pnpm run supabase:type` | ローカル DB から型生成 |
+| `pnpm run supabase:push` | linked remote へ migration 適用 |
+| `pnpm run dev` | アプリ起動（接続先は `.env.local`） |
 
 # E2Eテスト
 
-E2Eテストには [Playwright](https://playwright.dev/) を使用し、ローカルの Supabase 環境に対して実行します。
+ローカル Supabase に対して実行します。  
+**実行のたびに DB が reset され、ローカルのデータは seed 初期状態に戻ります。**
 
 ## 前提条件
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) が起動していること
+- Docker Desktop が起動していること
 
 ## セットアップ
 
-Playwright のブラウザをインストールします（初回のみ）。
-
 ```shell
-npx playwright install chromium
+pnpm exec playwright install chromium   # 初回のみ
+pnpm run supabase:start
 ```
 
 ## テストの実行
 
-### 1. ローカル Supabase を起動する
-
-```shell
-npx supabase start
-```
-
-初回はイメージのダウンロードに数分かかります。`supabase start` はマイグレーションの適用とシードデータ（テストユーザー）の投入を自動で行います。
-
-### 2. テストを実行する
-
 ```shell
 pnpm run test:e2e
-```
-
-UI モードで実行する場合：
-
-```shell
+# または
 pnpm run test:e2e:ui
 ```
 
-### 3. ローカル Supabase を停止する（任意）
-
-テストが終わったら停止できます。次回のテストまで起動したままでも問題ありません。
+停止（任意）:
 
 ```shell
-npx supabase stop
+pnpm run supabase:stop
 ```
 
-## データのリセット
-
-テストデータを初期状態に戻したい場合：
+手動で seed に戻す:
 
 ```shell
-npx supabase db reset
+pnpm run supabase:reset
 ```
-
-マイグレーションの再適用とシードデータの再投入が行われます。
 
 ## テストユーザー
 
@@ -169,13 +214,14 @@ playwright.config.ts  # Playwright設定
 
 ## 仕組み
 
-- Playwright の `webServer` 設定により、テスト実行時に Next.js 開発サーバーが自動起動します
-- 開発サーバーはローカル Supabase に接続するよう環境変数が設定されます（`.env.local` の値は上書きされます）
-- `auth.setup.ts` がテスト用ユーザーでログインし、セッション情報を保存します
-- 各テストは保存されたセッションを再利用するため、毎回ログインする必要がありません
+- Playwright の `webServer` が Next.js を 3003 で起動し、ローカル Supabase 向け env を渡します（`.env.local` は上書き）
+- `global-setup` で毎回 DB を reset します
+- `auth.setup.ts` がテスト用ユーザーでログインし、セッションを保存します
 
 # リンク
 
+- [Local development workflow](https://supabase.com/docs/guides/local-development/cli-workflows)
+- [Database migrations](https://supabase.com/docs/guides/deployment/database-migrations)
 - [supabase](https://supabase.com/docs)
 
 # 用語
