@@ -29,9 +29,10 @@
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
     "supabase:reset": "supabase db reset",
-    "supabase:diff": "supabase db diff --linked -f local",
+    "supabase:migration": "supabase migration new",
+    "supabase:diff": "supabase db diff --local --schema public",
     "supabase:push": "supabase db push",
-    "supabase:type": "supabase gen types typescript --linked > lib/database.types.ts"
+    "supabase:type": "supabase gen types typescript --local > lib/database.types.ts"
   },
   "dependencies": {
     "@conform-to/react": "1.20.2",
