@@ -43,7 +43,7 @@ export function DataChart({ match, className }: { match: Match; className?: stri
   );
 
   return (
-    <Surface className={cn("h-[300px] rounded-3xl p-2", className)}>
+    <Surface className={cn("h-75 rounded-3xl p-2", className)}>
       <ResponsiveContainer
         width="100%"
         height="100%"

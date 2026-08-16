@@ -155,7 +155,7 @@ export default function LandingPage() {
             あなたの麻雀ライフを快適に
           </Typography>
           <HeroCtaLinks />
-          <div className="mx-auto mt-12 h-[480px] w-4/5 max-w-[500px]">
+          <div className="mx-auto mt-12 h-120 w-4/5 max-w-125">
             <Image
               src={match}
               alt="アプリのインターフェース"

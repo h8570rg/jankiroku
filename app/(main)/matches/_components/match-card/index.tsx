@@ -41,7 +41,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
             <div className="mb-2 text-xs text-muted">平均着順</div>
             <div className="text-lg">{data.averageRank ?? "なし"}</div>
           </div>
-          <div className="flex basis-[224px] justify-center">
+          <div className="flex basis-56 justify-center">
             <table className="[&_td]:text-center [&_th]:w-10 [&_th]:text-center">
               <thead className="text-xs text-muted">
                 <tr>
