@@ -23,9 +23,7 @@ export function PlayerForm({
   friends: Player[];
   onBack: () => void;
 }) {
-  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([
-    userProfile,
-  ]);
+  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([userProfile]);
   const playerCreateModal = useOverlayState({ defaultOpen: false });
 
   const [lastResult, formAction, isPending] = useActionState(

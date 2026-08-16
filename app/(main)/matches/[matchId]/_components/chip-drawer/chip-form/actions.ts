@@ -19,10 +19,7 @@ function ensurePlayerChipArray(
     return Object.keys(raw)
       .sort((a, b) => Number(a) - Number(b))
       .map((i) => {
-        const item = (raw as Record<string, unknown>)[i] as Record<
-          string,
-          unknown
-        >;
+        const item = (raw as Record<string, unknown>)[i] as Record<string, unknown>;
         return {
           profileId: String(item?.profileId ?? ""),
           chipCount: String(item?.chipCount ?? ""),

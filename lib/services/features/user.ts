@@ -97,8 +97,7 @@ export const userService = (supabase: Supabase) => {
         .eq("user_id", user.id)
         .select()
         .single();
-      if (updatedResponse.error)
-        return { success: false, error: updatedResponse.error };
+      if (updatedResponse.error) return { success: false, error: updatedResponse.error };
       const row = updatedResponse.data;
 
       return {

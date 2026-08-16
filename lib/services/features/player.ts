@@ -31,7 +31,7 @@ export const playerService = (supabase: Supabase) => {
       if (profilesResponse.error) throw profilesResponse.error;
       return profilesResponse.data.map((row) => ({
         id: row.id,
-        // biome-ignore lint/style/noNonNullAssertion: name IS NULL を query で除外
+        // oxlint-disable-next-line typescript/no-non-null-assertion -- name IS NULL を query で除外
         name: row.name!,
         displayId: row.display_id,
         avatarUrl: row.avatar_url,
@@ -42,11 +42,7 @@ export const playerService = (supabase: Supabase) => {
      * ゲストプレイヤーを新規作成する。auth.users には紐づかない。
      */
     createGuestPlayer: async ({ name }: { name: string }): Promise<Player> => {
-      const response = await supabase
-        .from("profiles")
-        .insert({ name })
-        .select()
-        .single();
+      const response = await supabase.from("profiles").insert({ name }).select().single();
       if (response.error) throw response.error;
       return {
         id: response.data.id,

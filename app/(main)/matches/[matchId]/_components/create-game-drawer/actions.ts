@@ -32,9 +32,10 @@ export async function createGame(
   const { createGame } = await serverServices();
 
   const playerScores = calcPlayerScores({
-    players: validatedFields.data.players.filter(
-      (p) => p.points !== undefined,
-    ) as { id: string; points: number }[],
+    players: validatedFields.data.players.filter((p) => p.points !== undefined) as {
+      id: string;
+      points: number;
+    }[],
     rule,
     crackBoxPlayerId: validatedFields.data.crackBoxPlayerId,
   });

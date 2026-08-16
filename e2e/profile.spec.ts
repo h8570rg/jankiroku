@@ -9,9 +9,7 @@ test.describe("プロフィール編集", () => {
     await expect(page.getByRole("textbox", { name: "ユーザーID" })).toHaveValue(
       TEST_USERS.me.displayId,
     );
-    await expect(page.getByRole("textbox", { name: "名前" })).toHaveValue(
-      TEST_USERS.me.name,
-    );
+    await expect(page.getByRole("textbox", { name: "名前" })).toHaveValue(TEST_USERS.me.name);
   });
 
   test("ユーザーIDは変更できない（readonly）", async ({ page }) => {
@@ -37,9 +35,7 @@ test.describe("プロフィール編集", () => {
     await page.getByRole("textbox", { name: "名前" }).fill("あ".repeat(13));
     await page.getByRole("button", { name: "保存", exact: true }).click();
 
-    await expect(
-      page.getByText("名前は12文字以内で入力してください"),
-    ).toBeVisible();
+    await expect(page.getByText("名前は12文字以内で入力してください")).toBeVisible();
   });
 
   test("名前を変更して保存するとトーストが表示される", async ({ page }) => {

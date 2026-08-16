@@ -89,11 +89,7 @@ export const friendService = (supabase: Supabase) => {
       }
     },
 
-    deleteFriends: async ({
-      profileId,
-    }: {
-      profileId: string;
-    }): Promise<void> => {
+    deleteFriends: async ({ profileId }: { profileId: string }): Promise<void> => {
       const currentProfileId = await getCurrentProfileId(supabase);
 
       const [userFriendResponse, friendUserResponse] = await Promise.all([

@@ -3,11 +3,7 @@ import { serverServices } from "@/lib/services/server";
 import Appbar from "./_components/appbar";
 import { ReleaseNotes } from "./_components/release-notes";
 
-export default async function AppLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const { getNullableUserProfile } = await serverServices();
   const profile = await getNullableUserProfile();
   if (!profile) {

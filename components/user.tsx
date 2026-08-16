@@ -10,12 +10,7 @@ export type UserProps = ComponentPropsWithoutRef<"div"> & {
 
 export function User({ name, displayId, avatarUrl, className }: UserProps) {
   return (
-    <div
-      className={cn(
-        "flex items-center justify-center gap-2 rounded-sm",
-        className,
-      )}
-    >
+    <div className={cn("flex items-center justify-center gap-2 rounded-sm", className)}>
       <UserAvatar avatarUrl={avatarUrl} name={name} />
       <div className="flex flex-col items-start">
         <Typography type="body-sm" className="text-inherit">

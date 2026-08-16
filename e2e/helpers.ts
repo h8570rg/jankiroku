@@ -20,8 +20,7 @@ export const SEED_3PLAYER_MATCH_URL = `/matches/${SEED_3PLAYER_MATCH_ID}`;
  * ルール: 3人・持ち点35000 (参加者4人 > ルール3人)
  * ゲーム/チップ未登録
  */
-export const SEED_OVERCAPACITY_MATCH_ID =
-  "cccccccc-cccc-cccc-cccc-cccccccccccc";
+export const SEED_OVERCAPACITY_MATCH_ID = "cccccccc-cccc-cccc-cccc-cccccccccccc";
 export const SEED_OVERCAPACITY_MATCH_URL = `/matches/${SEED_OVERCAPACITY_MATCH_ID}`;
 
 /**
@@ -39,8 +38,7 @@ export const SEED_GUEST_ADD_MATCH_URL = `/matches/${SEED_GUEST_ADD_MATCH_ID}`;
  * ルール: 4人・持ち点25000 (参加者5人 > ルール4人)
  * ゲーム/チップ未登録
  */
-export const SEED_4RULE_5PLAYER_MATCH_ID =
-  "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee";
+export const SEED_4RULE_5PLAYER_MATCH_ID = "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee";
 export const SEED_4RULE_5PLAYER_MATCH_URL = `/matches/${SEED_4RULE_5PLAYER_MATCH_ID}`;
 
 /**

@@ -2,11 +2,7 @@ export const SERVICE_NAME = "雀鬼録";
 export const PASSWORD_MIN_LENGTH = 6;
 export const NAME_MAX_LENGTH = 12;
 export const AVATAR_MAX_SIZE = 2 * 1024 * 1024;
-export const AVATAR_ALLOWED_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-] as const;
+export const AVATAR_ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
 export const DISPLAY_ID_MIN_LENGTH = 4;
 export const DISPLAY_ID_MAX_LENGTH = 12;
 
@@ -28,18 +24,8 @@ export const rateDescription: Record<(typeof rates)[number], string | null> = {
   20: "1000点200円",
 };
 
-export const chipRatePresets = [
-  "0",
-  "50",
-  "100",
-  "200",
-  "500",
-  "custom",
-] as const;
-export const chipRatePresetLabel: Record<
-  (typeof chipRatePresets)[number],
-  string
-> = {
+export const chipRatePresets = ["0", "50", "100", "200", "500", "custom"] as const;
+export const chipRatePresetLabel: Record<(typeof chipRatePresets)[number], string> = {
   0: "なし",
   50: "50円",
   100: "100円",
@@ -47,10 +33,7 @@ export const chipRatePresetLabel: Record<
   500: "500円",
   custom: "カスタム",
 };
-export const chipRatePresetValue: Record<
-  (typeof chipRatePresets)[number],
-  number | null
-> = {
+export const chipRatePresetValue: Record<(typeof chipRatePresets)[number], number | null> = {
   0: 0,
   50: 50,
   100: 100,
@@ -59,12 +42,7 @@ export const chipRatePresetValue: Record<
   custom: null,
 };
 
-export const calcMethods = [
-  "round",
-  "roundOff",
-  "roundDown",
-  "roundUp",
-] as const;
+export const calcMethods = ["round", "roundOff", "roundDown", "roundUp"] as const;
 export const calcMethodLabel: Record<(typeof calcMethods)[number], string> = {
   round: "五捨六入",
   roundOff: "四捨五入",

@@ -45,11 +45,11 @@ remote に戻すときは、再度 `pnpm dlx vercel env pull .env.local` を実�
 
 ## 基本方針
 
-| 作業 | 使うもの |
-| --- | --- |
-| 普段のアプリ開発 | remote（開発用 Supabase）← **こちらが基本** |
-| DB（スキーマ）変更 | **ローカル Supabase のみ** |
-| E2E | ローカル Supabase（実行のたび DB reset） |
+| 作業               | 使うもの                                    |
+| ------------------ | ------------------------------------------- |
+| 普段のアプリ開発   | remote（開発用 Supabase）← **こちらが基本** |
+| DB（スキーマ）変更 | **ローカル Supabase のみ**                  |
+| E2E                | ローカル Supabase（実行のたび DB reset）    |
 
 **remote の Studio / SQL Editor ではスキーマを変更しないでください。**  
 変更は必ず local → migration → コミット → CI で remote へ適用します。
@@ -144,16 +144,16 @@ pnpm run supabase:push
 
 ## よく使うコマンド
 
-| コマンド | 用途 |
-| --- | --- |
-| `pnpm run supabase:start` | ローカル Supabase 起動 |
-| `pnpm run supabase:stop` | 停止 |
-| `pnpm run supabase:reset` | migrations + seed で作り直し |
-| `pnpm run supabase:migration -- <name>` | 空の migration を作成 |
-| `pnpm run supabase:diff -- -f <name>` | ローカル DB の差分から migration 作成 |
-| `pnpm run supabase:type` | ローカル DB から型生成 |
-| `pnpm run supabase:push` | linked remote へ migration 適用 |
-| `pnpm run dev` | アプリ起動（接続先は `.env.local`） |
+| コマンド                                | 用途                                  |
+| --------------------------------------- | ------------------------------------- |
+| `pnpm run supabase:start`               | ローカル Supabase 起動                |
+| `pnpm run supabase:stop`                | 停止                                  |
+| `pnpm run supabase:reset`               | migrations + seed で作り直し          |
+| `pnpm run supabase:migration -- <name>` | 空の migration を作成                 |
+| `pnpm run supabase:diff -- -f <name>`   | ローカル DB の差分から migration 作成 |
+| `pnpm run supabase:type`                | ローカル DB から型生成                |
+| `pnpm run supabase:push`                | linked remote へ migration 適用       |
+| `pnpm run dev`                          | アプリ起動（接続先は `.env.local`）   |
 
 # E2Eテスト
 
@@ -193,12 +193,12 @@ pnpm run supabase:reset
 
 ## テストユーザー
 
-| 項目 | 値 |
-| --- | --- |
+| 項目           | 値                 |
+| -------------- | ------------------ |
 | メールアドレス | `test@example.com` |
-| パスワード | `password123` |
-| 表示名 | テストユーザー |
-| 表示ID | testuser |
+| パスワード     | `password123`      |
+| 表示名         | テストユーザー     |
+| 表示ID         | testuser           |
 
 テストユーザーは `supabase/seed.sql` で定義されています。
 

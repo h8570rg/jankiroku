@@ -2,11 +2,7 @@
 
 import { Accordion } from "@heroui/react";
 
-export function Faq({
-  faqs,
-}: {
-  faqs: { key: string; question: string; answer: string }[];
-}) {
+export function Faq({ faqs }: { faqs: { key: string; question: string; answer: string }[] }) {
   return (
     <Accordion>
       {faqs.map((faq, index) => (

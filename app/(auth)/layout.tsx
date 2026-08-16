@@ -2,19 +2,11 @@ import Image from "next/image";
 import MahJong1Image from "@/assets/images/mahjong1.jpeg";
 import Logo from "@/components/logo";
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="fixed inset-0 overflow-hidden">
-        <Image
-          src={MahJong1Image}
-          className="size-full object-cover"
-          alt="mahjong"
-        />
+        <Image src={MahJong1Image} className="size-full object-cover" alt="mahjong" />
         <div className="absolute inset-0 backdrop-blur-xs" />
         <div className="absolute inset-0 bg-background opacity-[0.98]" />
       </div>

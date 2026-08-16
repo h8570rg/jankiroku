@@ -1,15 +1,7 @@
 "use client";
 
 import { useForm } from "@conform-to/react/future";
-import {
-  cn,
-  Description,
-  FieldError,
-  Input,
-  Label,
-  TextField,
-  toast,
-} from "@heroui/react";
+import { cn, Description, FieldError, Input, Label, TextField, toast } from "@heroui/react";
 import { useActionState, useState } from "react";
 import { AvatarInput } from "@/components/avatar-input";
 import { Button } from "@/components/button";
@@ -20,18 +12,10 @@ import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { updateProfile } from "./actions";
 import { profileUpdateSchema } from "./schema";
 
-export function ProfileForm({
-  className,
-  profile,
-}: {
-  className?: string;
-  profile: UserProfile;
-}) {
+export function ProfileForm({ className, profile }: { className?: string; profile: UserProfile }) {
   // avatarUrlはformDataに含めず.bind()でserver actionに渡す。
   // Next.jsはbind引数をサーバー側で暗号化するため、クライアントからの改ざんが不可能。
-  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
-    profile.avatarUrl ?? undefined,
-  );
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(profile.avatarUrl ?? undefined);
   const [isAvatarUploading, setIsAvatarUploading] = useState(false);
 
   const [lastResult, formAction, isPending] = useActionState(

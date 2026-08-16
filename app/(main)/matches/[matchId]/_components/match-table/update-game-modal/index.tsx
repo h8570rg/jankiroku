@@ -2,10 +2,7 @@
 
 import { Modal, useOverlayState } from "@heroui/react";
 import { Button } from "@/components/button";
-import {
-  DeleteGameConfirmDialog,
-  useDeleteGameConfirmDialog,
-} from "./delete-game-confirm-dialog";
+import { DeleteGameConfirmDialog, useDeleteGameConfirmDialog } from "./delete-game-confirm-dialog";
 
 export function UpdateGameModal({
   matchId,
@@ -30,21 +27,13 @@ export function UpdateGameModal({
               <Modal.Heading>{index + 1}ゲーム目</Modal.Heading>
             </Modal.Header>
             <Modal.Footer>
-              <Button
-                className="mr-auto"
-                variant="danger"
-                onPress={deleteGameConfirmDialog.open}
-              >
+              <Button className="mr-auto" variant="danger" onPress={deleteGameConfirmDialog.open}>
                 削除
               </Button>
               <Button variant="ghost" onPress={() => onOpenChange?.(false)}>
                 キャンセル
               </Button>
-              <Button
-                type="submit"
-                variant="primary"
-                onPress={() => onOpenChange?.(false)}
-              >
+              <Button type="submit" variant="primary" onPress={() => onOpenChange?.(false)}>
                 OK
               </Button>
             </Modal.Footer>

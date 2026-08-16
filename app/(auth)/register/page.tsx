@@ -29,11 +29,7 @@ export default async function RegisterPage() {
       </Typography>
       <RegisterForm />
       <div className="mt-10 flex justify-center">
-        <button
-          className={linkVariants().base()}
-          type="button"
-          onClick={signOut}
-        >
+        <button className={linkVariants().base()} type="button" onClick={signOut}>
           ログアウト
         </button>
       </div>

@@ -19,15 +19,8 @@ export default async function FriendsPage() {
       </div>
       <ul className="space-y-1">
         {friends?.map((friend) => (
-          <li
-            className="flex items-center justify-between py-1"
-            key={friend.id}
-          >
-            <User
-              name={friend.name}
-              displayId={friend.displayId}
-              avatarUrl={friend.avatarUrl}
-            />
+          <li className="flex items-center justify-between py-1" key={friend.id}>
+            <User name={friend.name} displayId={friend.displayId} avatarUrl={friend.avatarUrl} />
             <FriendMenu profileId={friend.id} />
           </li>
         ))}

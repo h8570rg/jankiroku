@@ -20,6 +20,8 @@
     "ilike",
     "Inbucket",
     "jankiroku",
+    "oxfmt",
+    "oxlint",
     "Postgrest",
     "pressable",
     "reauthentication",

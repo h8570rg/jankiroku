@@ -22,12 +22,7 @@ export function AddFriendButton({ profileId, onSuccess }: Props) {
   };
 
   return (
-    <Button
-      variant="primary"
-      size="sm"
-      onPress={handlePress}
-      isPending={isPending}
-    >
+    <Button variant="primary" size="sm" onPress={handlePress} isPending={isPending}>
       追加
     </Button>
   );

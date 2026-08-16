@@ -21,11 +21,7 @@ type AvatarInputProps = {
  * 保存せずにページを離脱しても孤立ファイルは最大 1 ファイル/ユーザーに留まり、
  * 次回アップロード時に自動的に上書きされる。
  */
-export function AvatarInput({
-  defaultValue,
-  onUpload,
-  onUploadingChange,
-}: AvatarInputProps) {
+export function AvatarInput({ defaultValue, onUpload, onUploadingChange }: AvatarInputProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
   const displayUrl = previewUrl ?? defaultValue;
@@ -42,11 +38,7 @@ export function AvatarInput({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (
-      !AVATAR_ALLOWED_TYPES.includes(
-        file.type as (typeof AVATAR_ALLOWED_TYPES)[number],
-      )
-    ) {
+    if (!AVATAR_ALLOWED_TYPES.includes(file.type as (typeof AVATAR_ALLOWED_TYPES)[number])) {
       toast.danger("jpg、png、webp形式の画像を選択してください");
       e.currentTarget.value = "";
       return;

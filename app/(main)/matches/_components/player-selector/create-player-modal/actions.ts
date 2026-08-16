@@ -1,10 +1,6 @@
 "use server";
 
-import {
-  parseSubmission,
-  report,
-  type SubmissionResult,
-} from "@conform-to/react/future";
+import { parseSubmission, report, type SubmissionResult } from "@conform-to/react/future";
 import { serverServices } from "@/lib/services/server";
 import type { Player } from "@/lib/type";
 import { createPlayerSchema } from "./schema";

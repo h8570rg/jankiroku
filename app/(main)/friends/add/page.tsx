@@ -32,12 +32,7 @@ export default async function AddFriendPage({
       </Suspense>
       <ul className="mt-1">
         {!!query && players.length === 0 && (
-          <Typography
-            type="body-sm"
-            color="muted"
-            align="center"
-            className="mt-10"
-          >
+          <Typography type="body-sm" color="muted" align="center" className="mt-10">
             見つかりませんでした
           </Typography>
         )}
@@ -45,9 +40,7 @@ export default async function AddFriendPage({
           <li key={id} className="flex items-center justify-between py-2">
             <User name={name} displayId={displayId} avatarUrl={avatarUrl} />
             {friendIds.has(id) ? (
-              <div className="w-16 text-center text-xs text-muted">
-                追加済み
-              </div>
+              <div className="w-16 text-center text-xs text-muted">追加済み</div>
             ) : (
               <AddFriendButton profileId={id} />
             )}

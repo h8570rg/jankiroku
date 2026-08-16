@@ -1,14 +1,7 @@
 "use client";
 
 import { getFieldValue, useForm, useFormData } from "@conform-to/react/future";
-import {
-  Drawer,
-  FieldError,
-  InputGroup,
-  Label,
-  TextField,
-  Typography,
-} from "@heroui/react";
+import { Drawer, FieldError, InputGroup, Label, TextField, Typography } from "@heroui/react";
 import { useActionState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
@@ -53,9 +46,7 @@ export function ChipForm({
       }),
     ) ?? [];
 
-  const chipCounts = playerChips.map((p) =>
-    String((p as { chipCount?: string })?.chipCount ?? ""),
-  );
+  const chipCounts = playerChips.map((p) => String((p as { chipCount?: string })?.chipCount ?? ""));
   const totalChipCount = chipCounts.reduce((sum, v) => sum + Number(v) || 0, 0);
   const filledCount = chipCounts.filter((v) => v !== "").length;
   const isAutoFillAvailable = filledCount === players.length - 1;
@@ -63,11 +54,7 @@ export function ChipForm({
   const playerChipListFields = fields.playerChip.getFieldList();
 
   return (
-    <Form
-      className="contents"
-      validationErrors={form.fieldErrors}
-      {...form.props}
-    >
+    <Form className="contents" validationErrors={form.fieldErrors} {...form.props}>
       <input type="hidden" name="matchId" value={match.id} />
       <Drawer.Body className="space-y-3 p-1">
         <ul className="space-y-2">
@@ -75,11 +62,7 @@ export function ChipForm({
             const fieldset = item.getFieldset();
             return (
               <li key={item.key}>
-                <input
-                  type="hidden"
-                  name={fieldset.profileId.name}
-                  value={players[index].id}
-                />
+                <input type="hidden" name={fieldset.profileId.name} value={players[index].id} />
                 <TextField
                   variant="secondary"
                   type="number"
@@ -87,18 +70,14 @@ export function ChipForm({
                   defaultValue={fieldset.chipCount.defaultValue}
                 >
                   <div className="flex flex-row items-center gap-2">
-                    <Label className="grow text-sm text-foreground">
-                      {players[index].name}
-                    </Label>
+                    <Label className="grow text-sm text-foreground">{players[index].name}</Label>
                     <InputGroup className="min-w-0 shrink-0 basis-32">
                       {isAutoFillAvailable && chipCounts[index] === "" && (
                         <InputGroup.Prefix>
                           <Button
                             variant="secondary"
                             size="sm"
-                            className="
-                              h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]
-                            "
+                            className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
                             type="button"
                             onPress={() => {
                               intent.update({
@@ -126,10 +105,7 @@ export function ChipForm({
           })}
         </ul>
         {fields.playerChip.errors && (
-          <Typography
-            type="body-xs"
-            className="whitespace-pre-wrap text-danger"
-          >
+          <Typography type="body-xs" className="whitespace-pre-wrap text-danger">
             {fields.playerChip.errors}
           </Typography>
         )}
@@ -138,12 +114,7 @@ export function ChipForm({
         <Button variant="ghost" slot="close">
           キャンセル
         </Button>
-        <Button
-          form={form.props.id}
-          type="submit"
-          variant="primary"
-          isPending={isPending}
-        >
+        <Button form={form.props.id} type="submit" variant="primary" isPending={isPending}>
           保存
         </Button>
       </Drawer.Footer>

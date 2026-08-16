@@ -32,9 +32,7 @@ function setLastVersion() {
 
 function ReleaseNotesModal() {
   const lastVersion =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("lastVersion")
-      : undefined;
+    typeof window !== "undefined" ? window.localStorage.getItem("lastVersion") : undefined;
 
   const newVersions = Object.entries(versionComponents).filter(([v]) =>
     lastVersion ? isVersionGreater(v, lastVersion) : v === "0.1.0",

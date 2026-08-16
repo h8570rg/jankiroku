@@ -25,11 +25,7 @@ export function Stepper({ steps, currentStep, className }: StepperProps) {
             <div className="flex shrink-0 items-center gap-1.5">
               <div
                 className={cn(
-                  `
-                    flex size-7 shrink-0 items-center justify-center
-                    rounded-full border-2 border-default text-xs font-semibold
-                    transition-colors
-                  `,
+                  `flex size-7 shrink-0 items-center justify-center rounded-full border-2 border-default text-xs font-semibold transition-colors`,
                   {
                     "bg-default-foreground text-default": isCurrent,
                     "bg-default text-muted": isCompleted,
@@ -50,12 +46,7 @@ export function Stepper({ steps, currentStep, className }: StepperProps) {
             </div>
             {index < steps.length - 1 && (
               <div
-                className={cn(
-                  `
-                    h-0.5 shrink-0 basis-10 rounded-full bg-default
-                    transition-colors
-                  `,
-                )}
+                className={cn(`h-0.5 shrink-0 basis-10 rounded-full bg-default transition-colors`)}
               />
             )}
           </div>

@@ -1,14 +1,7 @@
 "use client";
 
 import { useForm } from "@conform-to/react/future";
-import {
-  cn,
-  ErrorMessage,
-  FieldError,
-  Input,
-  Label,
-  TextField,
-} from "@heroui/react";
+import { cn, ErrorMessage, FieldError, Input, Label, TextField } from "@heroui/react";
 import { useActionState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
@@ -34,21 +27,12 @@ export function SignUpForm({ className }: { className?: string }) {
     >
       <div>
         <div className="space-y-4">
-          <TextField
-            type="text"
-            inputMode="email"
-            name={fields.email.name}
-            autoComplete="username"
-          >
+          <TextField type="text" inputMode="email" name={fields.email.name} autoComplete="username">
             <Label>メールアドレス</Label>
             <Input />
             <FieldError />
           </TextField>
-          <TextField
-            type="password"
-            name={fields.password.name}
-            autoComplete="current-password"
-          >
+          <TextField type="password" name={fields.password.name} autoComplete="current-password">
             <Label>パスワード</Label>
             <Input />
             <FieldError />

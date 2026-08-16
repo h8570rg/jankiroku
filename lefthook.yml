@@ -2,7 +2,7 @@ pre-commit:
   parallel: true
   commands:
     "check":
-      run: "pnpm run check && pnpm run eslint:fix"
+      run: "pnpm run check"
       stage_fixed: true
     "typecheck":
       run: "pnpm run type"
