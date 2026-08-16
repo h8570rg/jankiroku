@@ -7,10 +7,7 @@ import { NavbarItem } from "@/components/navbar";
 export function NavbarActions() {
   return (
     <NavbarItem>
-      <NextLink
-        className={buttonVariants({ size: "sm", variant: "tertiary" })}
-        href="/login"
-      >
+      <NextLink className={buttonVariants({ size: "sm", variant: "tertiary" })} href="/login">
         ログイン
       </NextLink>
     </NavbarItem>

@@ -6,10 +6,7 @@ import { buttonVariants } from "@/components/button";
 export function HeroCtaLinks() {
   return (
     <div className="flex justify-center gap-4">
-      <NextLink
-        className={buttonVariants({ size: "lg", variant: "primary" })}
-        href="/login"
-      >
+      <NextLink className={buttonVariants({ size: "lg", variant: "primary" })} href="/login">
         今すぐ始める
       </NextLink>
       <a

@@ -14,51 +14,35 @@ test.describe("フレンド管理", () => {
     const addLink = page.locator('a[href="/friends/add"]').first();
     await addLink.click();
     await expect(page).toHaveURL(/\/friends\/add/);
-    await expect(
-      page.getByRole("heading", { name: "フレンド追加" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "フレンド追加" })).toBeVisible();
   });
 
   test("ユーザーIDで検索できる", async ({ page }) => {
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill(TEST_USERS.alice.displayId);
+    await page.getByRole("searchbox", { name: /検索|ユーザーID/ }).fill(TEST_USERS.alice.displayId);
 
     await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
-    await expect(
-      page.getByText(`@${TEST_USERS.alice.displayId}`),
-    ).toBeVisible();
+    await expect(page.getByText(`@${TEST_USERS.alice.displayId}`)).toBeVisible();
   });
 
   test("名前で検索できる", async ({ page }) => {
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill(TEST_USERS.bob.name);
+    await page.getByRole("searchbox", { name: /検索|ユーザーID/ }).fill(TEST_USERS.bob.name);
 
     await expect(page.getByText(TEST_USERS.bob.name)).toBeVisible();
   });
 
-  test("存在しないユーザーを検索すると見つかりませんと表示", async ({
-    page,
-  }) => {
+  test("存在しないユーザーを検索すると見つかりませんと表示", async ({ page }) => {
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill("xxxxxxxxxxxxxxxxxxxx");
+    await page.getByRole("searchbox", { name: /検索|ユーザーID/ }).fill("xxxxxxxxxxxxxxxxxxxx");
 
     await expect(page.getByText("見つかりませんでした")).toBeVisible();
   });
 
-  test("フレンドとして追加済みのユーザーは「追加済み」と表示される", async ({
-    page,
-  }) => {
+  test("フレンドとして追加済みのユーザーは「追加済み」と表示される", async ({ page }) => {
     // seedでaliceはフレンドとして登録されている
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill(TEST_USERS.alice.displayId);
+    await page.getByRole("searchbox", { name: /検索|ユーザーID/ }).fill(TEST_USERS.alice.displayId);
 
     await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
     await expect(page.getByText("追加済み")).toBeVisible();
@@ -70,9 +54,7 @@ test.describe("フレンド管理", () => {
     await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
 
     // alice の行のメニューから削除
-    const aliceRow = page
-      .getByRole("listitem")
-      .filter({ hasText: TEST_USERS.alice.name });
+    const aliceRow = page.getByRole("listitem").filter({ hasText: TEST_USERS.alice.name });
     await aliceRow.getByRole("button", { name: "フレンドメニュー" }).click();
     await page.getByRole("menuitem", { name: "削除" }).click();
 
@@ -82,9 +64,7 @@ test.describe("フレンド管理", () => {
   test("検索結果の「追加」ボタンからフレンド追加できる", async ({ page }) => {
     // 前テストで alice は削除済み
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill(TEST_USERS.alice.displayId);
+    await page.getByRole("searchbox", { name: /検索|ユーザーID/ }).fill(TEST_USERS.alice.displayId);
 
     await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
     await page.getByRole("button", { name: "追加", exact: true }).click();

@@ -30,11 +30,7 @@ export type CreateGameDrawerProps = {
   match: Match;
 };
 
-export function CreateGameDrawer({
-  isOpen,
-  onOpenChange,
-  match,
-}: CreateGameDrawerProps) {
+export function CreateGameDrawer({ isOpen, onOpenChange, match }: CreateGameDrawerProps) {
   const { rule } = match;
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(createGame.bind(null, match.id, rule), {
@@ -71,10 +67,7 @@ export function CreateGameDrawer({
       }),
     ) ?? [];
 
-  const totalPoints = players.reduce(
-    (sum, p) => sum + (Number(p.points) || 0),
-    0,
-  );
+  const totalPoints = players.reduce((sum, p) => sum + (Number(p.points) || 0), 0);
   const totalPointsToBe = (rule.defaultPoints / 100) * rule.playersCount;
   const filledCount = players.filter((p) => p.points !== "").length;
   const isAutoFillAvailable = filledCount === rule.playersCount - 1;
@@ -101,11 +94,7 @@ export function CreateGameDrawer({
           </Drawer.Header>
           <Drawer.Body className="space-y-3 p-1">
             {hasTiedPlayers && <TiedPlayersAlert />}
-            <Form
-              validationErrors={form.fieldErrors}
-              className="space-y-3"
-              {...form.props}
-            >
+            <Form validationErrors={form.fieldErrors} className="space-y-3" {...form.props}>
               <div>
                 <ul className="space-y-2">
                   {playersFieldList.map((player, index) => {
@@ -138,15 +127,11 @@ export function CreateGameDrawer({
                                 <InputGroup.Prefix>
                                   <Button
                                     size="sm"
-                                    className="
-                                      h-6 w-max min-w-0 shrink-0 gap-1 px-2
-                                      text-[10px]
-                                    "
+                                    className="h-6 w-max min-w-0 shrink-0 gap-1 px-2 text-[10px]"
                                     type="button"
                                     variant="secondary"
                                     onPress={() => {
-                                      const remainder =
-                                        totalPointsToBe - totalPoints;
+                                      const remainder = totalPointsToBe - totalPoints;
                                       intent.update({
                                         name: fields.players.name,
                                         index,
@@ -180,11 +165,7 @@ export function CreateGameDrawer({
                               </InputGroup.Suffix>
                             </InputGroup>
                             {hasTiedPlayers && (
-                              <ButtonGroup
-                                orientation="vertical"
-                                size="sm"
-                                variant="secondary"
-                              >
+                              <ButtonGroup orientation="vertical" size="sm" variant="secondary">
                                 <Button
                                   className="h-1/2"
                                   isIconOnly
@@ -203,9 +184,7 @@ export function CreateGameDrawer({
                                   size="sm"
                                   className="h-1/2"
                                   isIconOnly
-                                  isDisabled={
-                                    index === playersFieldList.length - 1
-                                  }
+                                  isDisabled={index === playersFieldList.length - 1}
                                   onPress={() => {
                                     intent.reorder({
                                       name: fields.players.name,
@@ -227,10 +206,7 @@ export function CreateGameDrawer({
                   })}
                 </ul>
                 {form.fieldErrors?.players?.[0] && (
-                  <Typography
-                    type="body-xs"
-                    className="mt-1 whitespace-pre-wrap text-danger"
-                  >
+                  <Typography type="body-xs" className="mt-1 whitespace-pre-wrap text-danger">
                     {form.fieldErrors.players[0]}
                   </Typography>
                 )}
@@ -257,11 +233,7 @@ export function CreateGameDrawer({
                         label: player.name,
                       })),
                     ].map((item) => (
-                      <ListBox.Item
-                        key={item.key}
-                        id={item.key}
-                        textValue={item.label}
-                      >
+                      <ListBox.Item key={item.key} id={item.key} textValue={item.label}>
                         {item.label}
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
@@ -276,12 +248,7 @@ export function CreateGameDrawer({
             <Button variant="ghost" slot="close">
               キャンセル
             </Button>
-            <Button
-              form={form.props.id}
-              type="submit"
-              variant="primary"
-              isPending={isPending}
-            >
+            <Button form={form.props.id} type="submit" variant="primary" isPending={isPending}>
               保存
             </Button>
           </Drawer.Footer>

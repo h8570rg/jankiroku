@@ -1,0 +1,43 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "nextjs"],
+  "jsPlugins": ["oxlint-tailwindcss"],
+  "settings": {
+    "tailwindcss": {
+      "entryPoint": "app/globals.css"
+    }
+  },
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "@heroui/react",
+            "importNames": ["Form"],
+            "message": "Formは@/components/formからimportしてください"
+          }
+        ]
+      }
+    ],
+    "tailwindcss/no-conflicting-classes": "error",
+    "tailwindcss/no-deprecated-classes": "error",
+    "tailwindcss/no-duplicate-classes": "warn",
+    "tailwindcss/no-unknown-classes": "error",
+    "tailwindcss/enforce-canonical": "warn",
+    "tailwindcss/no-unnecessary-arbitrary-value": "warn",
+    "tailwindcss/enforce-sort-order": "warn",
+    "tailwindcss/consistent-variant-order": "warn",
+    "tailwindcss/enforce-consistent-important-position": "warn",
+    "tailwindcss/no-unnecessary-whitespace": "warn"
+  },
+  "ignorePatterns": ["lib/database.types.ts"],
+  "overrides": [
+    {
+      "files": ["lib/utils/form.ts", "components/form.tsx"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ]
+}

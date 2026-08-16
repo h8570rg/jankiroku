@@ -18,13 +18,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { UserAvatar } from "@/components/user-avatar";
 import type { Player } from "@/lib/type";
 
-function PlayerListBoxItem({
-  player,
-  isSelected,
-}: {
-  player: Player;
-  isSelected: boolean;
-}) {
+function PlayerListBoxItem({ player, isSelected }: { player: Player; isSelected: boolean }) {
   return (
     <ListBox.Item id={player.id} textValue={player.name}>
       <UserAvatar avatarUrl={player.avatarUrl} name={player.name} size="sm" />
@@ -101,11 +95,7 @@ export function PlayerSelector({
     <>
       {selectedPlayers.length > 0 && (
         <div className="flex items-center gap-3">
-          <Typography
-            type="body-xs"
-            color="muted"
-            className="mb-2 shrink-0 pl-1"
-          >
+          <Typography type="body-xs" color="muted" className="mb-2 shrink-0 pl-1">
             選択中
           </Typography>
           <ScrollShadow orientation="horizontal" className="grow">
@@ -113,24 +103,13 @@ export function PlayerSelector({
               {selectedPlayers.map((player) => (
                 <div
                   key={player.id}
-                  className="
-                    flex w-12 shrink-0 animate-in flex-col items-center gap-0.5
-                    fade-in
-                  "
+                  className="flex w-12 shrink-0 animate-in flex-col items-center gap-0.5 fade-in"
                 >
                   <div className="relative w-fit">
-                    <UserAvatar
-                      avatarUrl={player.avatarUrl}
-                      name={player.name}
-                      size="md"
-                    />
+                    <UserAvatar avatarUrl={player.avatarUrl} name={player.name} size="md" />
                     {!disabledPlayerIds.includes(player.id) && (
                       <CloseButton
-                        className="
-                          absolute -top-1 -right-1 size-4 rounded-full ring
-                          ring-segment
-                          *:size-3
-                        "
+                        className="absolute -top-1 -right-1 size-4 rounded-full ring ring-segment *:size-3"
                         onPress={() => removeSelectedPlayer(player.id)}
                       />
                     )}
@@ -195,9 +174,7 @@ export function PlayerSelector({
       {searchedPlayers !== null && (
         <>
           {searchedPlayers.length === 0 && (
-            <EmptyState className="mt-10 text-center">
-              ユーザーが見つかりませんでした
-            </EmptyState>
+            <EmptyState className="mt-10 text-center">ユーザーが見つかりませんでした</EmptyState>
           )}
           {searchedPlayers.length > 0 && (
             <ListBox

@@ -24,10 +24,7 @@ const threePlayerFields = {
 };
 
 export const ruleSchema = coerceFormValue(
-  z.discriminatedUnion("playersCount", [
-    z.object(fourPlayerFields),
-    z.object(threePlayerFields),
-  ]),
+  z.discriminatedUnion("playersCount", [z.object(fourPlayerFields), z.object(threePlayerFields)]),
 );
 
 export type RuleInput = z.input<typeof ruleSchema>;

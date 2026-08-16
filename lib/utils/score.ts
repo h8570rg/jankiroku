@@ -16,12 +16,8 @@ export function calcPlayerScores({
     throw new Error("Invalid players count");
   }
   const sortedPlayers = players.sort((a, b) => b.points - a.points);
-  const crackedBoxPlayersCount = sortedPlayers.filter(
-    ({ points }) => points < 0,
-  ).length;
-  const totalCrackBoxBonus = crackBoxPlayerId
-    ? rule.crackBoxBonus * crackedBoxPlayersCount
-    : 0;
+  const crackedBoxPlayersCount = sortedPlayers.filter(({ points }) => points < 0).length;
+  const totalCrackBoxBonus = crackBoxPlayerId ? rule.crackBoxBonus * crackedBoxPlayersCount : 0;
   const scores = sortedPlayers.map(({ id, points }, index) => {
     // 飛ばしたプレイヤーかどうか
     const isCrackBoxPlayer = id === crackBoxPlayerId;
@@ -42,9 +38,7 @@ export function calcPlayerScores({
   });
 
   // scoresの先頭以外のscoreの合計
-  const totalScoreWithoutFirstPlace = scores
-    .slice(1)
-    .reduce((acc, { score }) => acc + score, 0);
+  const totalScoreWithoutFirstPlace = scores.slice(1).reduce((acc, { score }) => acc + score, 0);
 
   scores[0].score = -1 * totalScoreWithoutFirstPlace;
 
@@ -70,20 +64,13 @@ export function calcScore({
   const roundedPoints = calcRound({ points, calcMethod });
 
   // オカ、飛び賞計算
-  const substantialPoints =
-    roundedPoints - defaultCalcPoints + crackBoxBonusPoints;
+  const substantialPoints = roundedPoints - defaultCalcPoints + crackBoxBonusPoints;
 
   const score = substantialPoints / 1000 + _incline;
   return score;
 }
 
-export function calcRound({
-  points,
-  calcMethod,
-}: {
-  points: number;
-  calcMethod: CalcMethod;
-}) {
+export function calcRound({ points, calcMethod }: { points: number; calcMethod: CalcMethod }) {
   switch (calcMethod) {
     case "round":
       return round(points);

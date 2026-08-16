@@ -47,11 +47,7 @@ export function CreatePlayerModal({
           <Modal.Header>
             <Modal.Heading>新規プレイヤー作成</Modal.Heading>
           </Modal.Header>
-          <Form
-            className="contents"
-            validationErrors={form.fieldErrors}
-            {...form.props}
-          >
+          <Form className="contents" validationErrors={form.fieldErrors} {...form.props}>
             <Modal.Body className="px-1 py-4">
               <TextField
                 variant="secondary"

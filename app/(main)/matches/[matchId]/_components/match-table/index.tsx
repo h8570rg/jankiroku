@@ -16,13 +16,7 @@ type Row = {
   players: { [playerId: Column["id"]]: number };
 };
 
-export async function MatchTable({
-  matchId,
-  className,
-}: {
-  matchId: string;
-  className?: string;
-}) {
+export async function MatchTable({ matchId, className }: { matchId: string; className?: string }) {
   const { getMatch } = await serverServices();
   const match = await getMatch({ matchId });
   const { rule, players } = match;
@@ -32,34 +26,28 @@ export async function MatchTable({
   const isPlayersShort = playersShortCount > 0;
 
   const columns: Column[] = [
-    ...players.map(
-      (player): Column => ({
-        ...player,
-        type: "player",
-      }),
-    ),
-    ...Array.from({ length: playersShortCount }).map(
-      (_, i): Column => ({
-        type: "empty",
-        id: `player-${i}`,
-        name: "",
-        displayId: null,
-        avatarUrl: null,
-        rankCounts: [0],
-        averageRank: null,
-        totalScore: 0,
-        chipCount: null,
-        result: 0,
-      }),
-    ),
+    ...players.map((player): Column => ({
+      ...player,
+      type: "player",
+    })),
+    ...Array.from({ length: playersShortCount }).map((_, i): Column => ({
+      type: "empty",
+      id: `player-${i}`,
+      name: "",
+      displayId: null,
+      avatarUrl: null,
+      rankCounts: [0],
+      averageRank: null,
+      totalScore: 0,
+      chipCount: null,
+      result: 0,
+    })),
   ];
 
   const gameRows: Row[] =
     match.games?.map((game) => ({
       gameId: game.id,
-      players: Object.fromEntries(
-        game.players.map((player) => [player.id, player.score]),
-      ),
+      players: Object.fromEntries(game.players.map((player) => [player.id, player.score])),
     })) ?? [];
 
   const rowStyle: CSSProperties = {
@@ -72,16 +60,10 @@ export async function MatchTable({
     <div className={cn(className, "overflow-x-auto pb-6")}>
       <div className="flex h-full min-w-fit flex-col">
         {/* ヘッダー */}
-        <div
-          style={rowStyle}
-          className="mb-1 rounded-3xl bg-surface text-muted"
-        >
+        <div style={rowStyle} className="mb-1 rounded-3xl bg-surface text-muted">
           <div />
           {columns.map((column) => (
-            <div
-              key={column?.id}
-              className="truncate px-1 py-3 text-center text-xs"
-            >
+            <div key={column?.id} className="truncate px-1 py-3 text-center text-xs">
               {column.name}
             </div>
           ))}
@@ -89,12 +71,7 @@ export async function MatchTable({
         {/* ボディ */}
         <div className="grow">
           {gameRows.length === 0 && (
-            <Typography
-              type="body-sm"
-              color="muted"
-              align="center"
-              className="my-10"
-            >
+            <Typography type="body-sm" color="muted" align="center" className="my-10">
               まだデータはありません
             </Typography>
           )}
@@ -107,22 +84,14 @@ export async function MatchTable({
                 gameId={item.gameId}
                 style={rowStyle}
               >
-                <div
-                  className="
-                    flex h-full items-center justify-center px-1 py-2 text-xs
-                    break-all text-muted
-                  "
-                >
+                <div className="flex h-full items-center justify-center px-1 py-2 text-xs break-all text-muted">
                   {index + 1}
                 </div>
                 {columns.map((column) => (
                   <div
                     key={column.id}
                     className={cn(
-                      `
-                        flex h-full items-center justify-center px-1 py-2
-                        text-center text-sm break-all
-                      `,
+                      `flex h-full items-center justify-center px-1 py-2 text-center text-sm break-all`,
                       {
                         "text-danger": item.players[column.id] < 0,
                       },
@@ -146,25 +115,14 @@ export async function MatchTable({
         {/* フッター */}
         <Surface className="mt-6 rounded-3xl">
           <div className="min-h-10" style={rowStyle}>
-            <div
-              className="
-                flex h-full items-center justify-center truncate px-1 text-xs
-                break-all text-muted
-              "
-            >
+            <div className="flex h-full items-center justify-center truncate px-1 text-xs break-all text-muted">
               合計
             </div>
             {columns.map((column) => (
               <div
-                className={cn(
-                  `
-                    flex h-full items-center justify-center px-1 text-center
-                    text-xs
-                  `,
-                  {
-                    "text-danger": column.totalScore < 0,
-                  },
-                )}
+                className={cn(`flex h-full items-center justify-center px-1 text-center text-xs`, {
+                  "text-danger": column.totalScore < 0,
+                })}
                 key={column.id}
               >
                 {column.totalScore}
@@ -172,44 +130,26 @@ export async function MatchTable({
             ))}
           </div>
           <div className="min-h-10" style={rowStyle}>
-            <div
-              className="
-                flex h-full items-center justify-center truncate px-1 text-xs
-                text-muted
-              "
-            >
+            <div className="flex h-full items-center justify-center truncate px-1 text-xs text-muted">
               チップ
             </div>
             {columns.map((column) => (
               <div
-                className="
-                  flex h-full items-center justify-center px-1 text-center
-                  text-xs break-all
-                "
+                className="flex h-full items-center justify-center px-1 text-center text-xs break-all"
                 key={column.id}
               >
                 {column.chipCount}
-                {column.chipCount !== null && (
-                  <span className="text-[10px]">枚</span>
-                )}
+                {column.chipCount !== null && <span className="text-[10px]">枚</span>}
               </div>
             ))}
           </div>
           <div className="min-h-10" style={rowStyle}>
-            <div
-              className="
-                flex h-full items-center justify-center truncate px-1 text-xs
-                text-muted
-              "
-            >
+            <div className="flex h-full items-center justify-center truncate px-1 text-xs text-muted">
               収支
             </div>
             {columns.map((column) => (
               <div
-                className="
-                  flex h-full items-center justify-center px-1 text-center
-                  text-xs break-all
-                "
+                className="flex h-full items-center justify-center px-1 text-center text-xs break-all"
                 key={column.id}
               >
                 {column.result}
@@ -219,20 +159,12 @@ export async function MatchTable({
           </div>
           <Separator />
           <div className="min-h-10" style={rowStyle}>
-            <div
-              className="
-                flex h-full items-center justify-center truncate px-1 text-xs
-                text-muted
-              "
-            >
+            <div className="flex h-full items-center justify-center truncate px-1 text-xs text-muted">
               平着
             </div>
             {columns.map((column) => (
               <div
-                className="
-                  flex h-full items-center justify-center px-1 text-center
-                  text-xs break-all text-muted
-                "
+                className="flex h-full items-center justify-center px-1 text-center text-xs break-all text-muted"
                 key={column.id}
               >
                 {column.averageRank}
@@ -240,20 +172,12 @@ export async function MatchTable({
             ))}
           </div>
           <div className="min-h-10" style={rowStyle}>
-            <div
-              className="
-                flex h-full items-center justify-center truncate px-1 text-xs
-                text-muted
-              "
-            >
+            <div className="flex h-full items-center justify-center truncate px-1 text-xs text-muted">
               着順
             </div>
             {columns.map((column) => (
               <div
-                className="
-                  flex h-full items-center justify-center px-1 text-center
-                  text-xs break-all text-muted
-                "
+                className="flex h-full items-center justify-center px-1 text-center text-xs break-all text-muted"
                 key={column.id}
               >
                 {column.rankCounts.join("-")}

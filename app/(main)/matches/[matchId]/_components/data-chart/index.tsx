@@ -14,13 +14,7 @@ import type { Match } from "@/lib/type";
 
 const colors = ["#F871A0", "#66AAF9", "#74DFA2", "#AE7EDE", "#F9C97C"]; // TODO: light dark 切替
 
-export function DataChart({
-  match,
-  className,
-}: {
-  match: Match;
-  className?: string;
-}) {
+export function DataChart({ match, className }: { match: Match; className?: string }) {
   const data = match.games.reduce(
     (acc, game, index) => {
       acc.push({
@@ -66,26 +60,15 @@ export function DataChart({
             tick={{ fontSize: 10 }}
             allowDecimals={false}
           />
-          <YAxis
-            type="number"
-            tickLine={false}
-            tick={{ fontSize: 10 }}
-            width={30}
-          />
+          <YAxis type="number" tickLine={false} tick={{ fontSize: 10 }} width={30} />
           <ReferenceLine y={0} strokeDasharray="4 4" />
           <Legend
             content={({ payload }) => (
               <ul className="flex justify-center gap-3">
                 {payload?.map((entry) => (
                   <li key={entry.value} className="flex items-center gap-1">
-                    <span
-                      className="size-1.5 rounded-full"
-                      style={{ background: entry.color }}
-                    />
-                    <span
-                      className="text-[10px]"
-                      style={{ color: entry.color }}
-                    >
+                    <span className="size-1.5 rounded-full" style={{ background: entry.color }} />
+                    <span className="text-[10px]" style={{ color: entry.color }}>
                       {match.players.find((p) => p.id === entry.value)?.name}
                     </span>
                   </li>

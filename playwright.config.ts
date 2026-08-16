@@ -1,8 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const SUPABASE_LOCAL_URL = "http://127.0.0.1:54321";
-const SUPABASE_LOCAL_PUBLISHABLE_KEY =
-  "sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH";
+const SUPABASE_LOCAL_PUBLISHABLE_KEY = "sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH";
 
 export default defineConfig({
   globalSetup: "./e2e/global-setup.ts",

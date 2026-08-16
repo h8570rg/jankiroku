@@ -63,11 +63,7 @@ export function MatchHeader({
         </div>
       </div>
 
-      <RuleModal
-        isOpen={ruleModal.isOpen}
-        onOpenChange={ruleModal.setOpen}
-        rule={match.rule}
-      />
+      <RuleModal isOpen={ruleModal.isOpen} onOpenChange={ruleModal.setOpen} rule={match.rule} />
       <PlayersDrawer
         isOpen={playersModal.isOpen}
         onOpenChange={playersModal.setOpen}

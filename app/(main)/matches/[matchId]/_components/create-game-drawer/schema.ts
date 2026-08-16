@@ -22,9 +22,7 @@ export const createCreateGameSchema = ({
         crackBoxPlayerId: schema.profileId.optional(),
       })
       .superRefine(({ players }, ctx) => {
-        const filledCount = players.filter(
-          ({ points }) => points !== undefined,
-        ).length;
+        const filledCount = players.filter(({ points }) => points !== undefined).length;
         if (filledCount !== playersCount) {
           ctx.addIssue({
             code: "custom",

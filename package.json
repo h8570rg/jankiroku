@@ -3,27 +3,18 @@
   "version": "0.2.0",
   "description": "麻雀成績管理アプリケーション",
   "type": "module",
-  "config": {
-    "supabase_project_ref": "ggkmppnjhrwzdsamzqbp"
-  },
-  "engines": {
-    "node": "24.x"
-  },
-  "packageManager": "pnpm@11.21.0",
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start -p 3002",
-    "lint": "biome lint --write",
-    "format": "biome format --write",
-    "check": "biome check --write",
+    "lint": "oxlint --fix",
+    "format": "oxfmt",
+    "check": "oxlint --fix && oxfmt",
     "type": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "spell": "cspell . --gitignore",
-    "eslint": "eslint .",
-    "eslint:fix": "eslint . --fix",
     "supabase:login": "supabase login",
     "supabase:link": "supabase link --project-ref $npm_package_config_supabase_project_ref",
     "supabase:start": "supabase start",
@@ -60,19 +51,24 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.8",
     "@playwright/test": "1.62.1",
     "@types/node": "25.9.5",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
-    "@typescript-eslint/parser": "8.67.0",
     "cspell": "10.0.1",
-    "eslint": "10.8.1",
-    "eslint-plugin-better-tailwindcss": "4.7.0",
     "lefthook": "2.1.10",
+    "oxfmt": "0.63.0",
+    "oxlint": "1.78.0",
+    "oxlint-tailwindcss": "1.9.0",
     "supabase": "2.114.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.67.0",
     "vitest": "4.1.10"
-  }
+  },
+  "config": {
+    "supabase_project_ref": "ggkmppnjhrwzdsamzqbp"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "packageManager": "pnpm@11.21.0"
 }

@@ -13,18 +13,15 @@ import { NavbarActions } from "./_components/NavbarActions";
 const features = [
   {
     title: "成績を自動計算",
-    description:
-      "対局ごとの成績を持ち点数から自動で計算し、簡単に記録できます。",
+    description: "対局ごとの成績を持ち点数から自動で計算し、簡単に記録できます。",
   },
   {
     title: "対戦相手との同期",
-    description:
-      "一人が記録すれば、対戦相手のアプリ上でも記録が自動的に更新されます。",
+    description: "一人が記録すれば、対戦相手のアプリ上でも記録が自動的に更新されます。",
   },
   {
     title: "フレンド機能",
-    description:
-      "よく対局する相手をフレンド登録し、簡単に成績表を作成できます。",
+    description: "よく対局する相手をフレンド登録し、簡単に成績表を作成できます。",
   },
   {
     title: "詳細なルール設定",
@@ -36,14 +33,12 @@ const steps = [
   {
     number: 1,
     title: "ウェブサイトにアクセス",
-    description:
-      "ブラウザからアクセスするだけで、アプリのインストールは不要です。",
+    description: "ブラウザからアクセスするだけで、アプリのインストールは不要です。",
   },
   {
     number: 2,
     title: "アカウントを作成",
-    description:
-      "Googleアカウント、もしくはメールアドレスで簡単に登録できます。",
+    description: "Googleアカウント、もしくはメールアドレスで簡単に登録できます。",
   },
   {
     number: 3,
@@ -53,8 +48,7 @@ const steps = [
   {
     number: 4,
     title: "分析と改善",
-    description:
-      "蓄積されたデータを基に、自分の強みと弱みを分析し、技術向上に役立てます。",
+    description: "蓄積されたデータを基に、自分の強みと弱みを分析し、技術向上に役立てます。",
   },
 ];
 
@@ -78,16 +72,7 @@ export const metadata: Metadata = {
   title: { absolute: "麻雀成績表・記録アプリ | 雀鬼録" },
   description:
     "麻雀の成績を自動計算・記録・分析できる無料Webアプリ。対局ごとの成績をウマ・オカ・チップ対応で管理。フレンドと成績表を共有できます。",
-  keywords: [
-    "麻雀",
-    "成績表",
-    "成績管理",
-    "麻雀アプリ",
-    "成績記録",
-    "雀荘",
-    "対局記録",
-    "雀鬼録",
-  ],
+  keywords: ["麻雀", "成績表", "成績管理", "麻雀アプリ", "成績記録", "雀荘", "対局記録", "雀鬼録"],
   alternates: {
     canonical: siteUrl,
   },
@@ -149,7 +134,7 @@ export default function LandingPage() {
     <div>
       <script
         type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
+        // oxlint-disable-next-line react/no-danger -- JSON-LD structured data
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar shouldHideOnScroll>
@@ -188,13 +173,7 @@ export default function LandingPage() {
           <Typography type="h2" align="center" className="mb-12 text-lg">
             主な機能
           </Typography>
-          <div
-            className="
-              grid grid-cols-1 gap-8
-              md:grid-cols-2
-              lg:grid-cols-4
-            "
-          >
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {features.map((feature) => (
               <Card key={feature.title}>
                 <Card.Header>
@@ -212,21 +191,10 @@ export default function LandingPage() {
             <Typography type="h2" align="center" className="mb-12 text-lg">
               使い方
             </Typography>
-            <div
-              className="
-                grid grid-cols-1 gap-8
-                md:grid-cols-2
-                lg:grid-cols-4
-              "
-            >
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
               {steps.map((step) => (
                 <div key={step.number} className="text-center">
-                  <div
-                    className="
-                      mx-auto mb-4 flex size-16 items-center justify-center
-                      rounded-full bg-accent text-lg text-accent-foreground
-                    "
-                  >
+                  <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-accent text-lg text-accent-foreground">
                     {step.number}
                   </div>
                   <Typography type="h3" className="mb-2 text-base">

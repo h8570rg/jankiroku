@@ -10,23 +10,16 @@ async function openCreateMatchPlayerStep(page: Page) {
   return dialog;
 }
 
-async function createGuestInDialog(
-  dialog: ReturnType<Page["getByRole"]>,
-  name: string,
-) {
+async function createGuestInDialog(dialog: ReturnType<Page["getByRole"]>, name: string) {
   await dialog.getByRole("option", { name: "新規プレイヤー作成" }).click();
-  const modal = dialog
-    .page()
-    .getByRole("dialog", { name: "新規プレイヤー作成" });
+  const modal = dialog.page().getByRole("dialog", { name: "新規プレイヤー作成" });
   await modal.getByRole("textbox").fill(name);
   await modal.getByRole("button", { name: "決定" }).click();
   await expect(modal).not.toBeVisible();
 }
 
 test.describe("ゲストプレイヤー", () => {
-  test("ゲスト含む4人でマッチを作成すると詳細ページにゲストが表示される", async ({
-    page,
-  }) => {
+  test("ゲスト含む4人でマッチを作成すると詳細ページにゲストが表示される", async ({ page }) => {
     const dialog = await openCreateMatchPlayerStep(page);
 
     const guestName = `g${Date.now().toString().slice(-8)}`;
@@ -47,9 +40,7 @@ test.describe("ゲストプレイヤー", () => {
     await expect(page.getByText(guestName).first()).toBeVisible();
   });
 
-  test("プレイヤー追加ドロワーからゲストを追加 → 再読み込み後も残っている", async ({
-    page,
-  }) => {
+  test("プレイヤー追加ドロワーからゲストを追加 → 再読み込み後も残っている", async ({ page }) => {
     await page.goto(SEED_GUEST_ADD_MATCH_URL);
     await page.getByRole("button", { name: "プレイヤーを追加" }).click();
 
@@ -74,9 +65,7 @@ test.describe("ゲストプレイヤー", () => {
 
     // 同じドロワー内で検索 (selected には残るが search 結果には出ない)
     await dialog.getByRole("searchbox").fill(guestName);
-    await expect(
-      dialog.getByText("ユーザーが見つかりませんでした"),
-    ).toBeVisible();
+    await expect(dialog.getByText("ユーザーが見つかりませんでした")).toBeVisible();
   });
 
   test("フレンド検索でゲストはヒットしない", async ({ page }) => {
@@ -87,9 +76,7 @@ test.describe("ゲストプレイヤー", () => {
 
     // フレンド追加画面に移動して検索
     await page.goto("/friends/add");
-    await page
-      .getByRole("searchbox", { name: /検索|ユーザーID/ })
-      .fill(guestName);
+    await page.getByRole("searchbox", { name: /検索|ユーザーID/ }).fill(guestName);
 
     await expect(page.getByText("見つかりませんでした")).toBeVisible();
   });

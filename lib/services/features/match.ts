@@ -1,10 +1,4 @@
-import type {
-  CalcMethod,
-  GamePlayer,
-  Match,
-  MatchPlayer,
-  Rate,
-} from "@/lib/type";
+import type { CalcMethod, GamePlayer, Match, MatchPlayer, Rate } from "@/lib/type";
 import type { Supabase } from ".";
 import { getCurrentProfileId } from "./internal";
 
@@ -58,27 +52,24 @@ export const matchService = (supabase: Supabase) => {
               },
             ];
 
-      const [createRuleResponse, createMatchPlayerResponse] = await Promise.all(
-        [
-          supabase.from("rules").insert({
-            calc_method: calcMethod,
-            chip_rate: chipRate,
-            crack_box_bonus: crackBoxBonus,
-            default_calc_points: defaultCalcPoints,
-            default_points: defaultPoints,
-            match_id: match.id,
-            players_count: playersCount,
-            rate,
-            incline,
-            created_by: currentProfileId,
-            updated_by: currentProfileId,
-          }),
-          supabase.from("match_players").insert(matchPlayerRows),
-        ],
-      );
+      const [createRuleResponse, createMatchPlayerResponse] = await Promise.all([
+        supabase.from("rules").insert({
+          calc_method: calcMethod,
+          chip_rate: chipRate,
+          crack_box_bonus: crackBoxBonus,
+          default_calc_points: defaultCalcPoints,
+          default_points: defaultPoints,
+          match_id: match.id,
+          players_count: playersCount,
+          rate,
+          incline,
+          created_by: currentProfileId,
+          updated_by: currentProfileId,
+        }),
+        supabase.from("match_players").insert(matchPlayerRows),
+      ]);
       if (createRuleResponse.error) throw createRuleResponse.error;
-      if (createMatchPlayerResponse.error)
-        throw createMatchPlayerResponse.error;
+      if (createMatchPlayerResponse.error) throw createMatchPlayerResponse.error;
       return {
         id: match.id,
       };
@@ -87,9 +78,7 @@ export const matchService = (supabase: Supabase) => {
     getMatch: async ({ matchId }: { matchId: string }): Promise<Match> => {
       const matchResult = await supabase
         .from("matches")
-        .select(
-          "*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))",
-        )
+        .select("*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))")
         .eq("id", matchId)
         .order("order", { referencedTable: "match_players", ascending: true })
         .single();
@@ -108,10 +97,9 @@ export const matchService = (supabase: Supabase) => {
     }): Promise<Match[]> => {
       const matchesResponse = await supabase
         .from("matches")
-        .select(
-          "*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))",
-          { count: "exact" },
-        )
+        .select("*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))", {
+          count: "exact",
+        })
         .range((page - 1) * size, page * size - 1)
         .order("created_at", { ascending: false })
         .order("order", { referencedTable: "match_players", ascending: true });
@@ -164,8 +152,7 @@ export const matchService = (supabase: Supabase) => {
         })
         .eq("match_id", matchId)
         .eq("player_id", playerId);
-      if (updateMatchPlayerResponse.error)
-        throw updateMatchPlayerResponse.error;
+      if (updateMatchPlayerResponse.error) throw updateMatchPlayerResponse.error;
 
       return;
     },
@@ -192,14 +179,12 @@ export const matchService = (supabase: Supabase) => {
 
       await Promise.all(
         gamePlayers.map(async ({ id, score, rank }) => {
-          const addGamePlayersResponse = await supabase
-            .from("game_players")
-            .insert({
-              game_id: game.id,
-              player_id: id,
-              score,
-              rank,
-            });
+          const addGamePlayersResponse = await supabase.from("game_players").insert({
+            game_id: game.id,
+            player_id: id,
+            score,
+            rank,
+          });
           if (addGamePlayersResponse.error) throw addGamePlayersResponse.error;
         }),
       );
@@ -244,20 +229,18 @@ const formatMatch = (match: {
   const incline = rule.incline.split("_").map((incline) => Number(incline));
   const [incline1, incline2, incline3, incline4] = incline;
 
-  const players: MatchPlayer[] = match.match_players.map(
-    ({ profiles, chip_count }) => ({
-      id: profiles.id,
-      // TODO: fallbackをどうするか考える
-      name: profiles.name ?? "",
-      displayId: profiles.display_id,
-      avatarUrl: profiles.avatar_url,
-      rankCounts: new Array(rule.players_count).fill(0),
-      averageRank: null,
-      totalScore: 0,
-      chipCount: chip_count,
-      result: 0,
-    }),
-  );
+  const players: MatchPlayer[] = match.match_players.map(({ profiles, chip_count }) => ({
+    id: profiles.id,
+    // TODO: fallbackをどうするか考える
+    name: profiles.name ?? "",
+    displayId: profiles.display_id,
+    avatarUrl: profiles.avatar_url,
+    rankCounts: Array.from({ length: rule.players_count }, () => 0),
+    averageRank: null,
+    totalScore: 0,
+    chipCount: chip_count,
+    result: 0,
+  }));
 
   match.games.forEach(({ game_players }) => {
     game_players.forEach(({ player_id, score, rank }) => {
@@ -271,15 +254,11 @@ const formatMatch = (match: {
   players.forEach((player) => {
     if (player.rankCounts.reduce((acc, cur) => acc + cur, 0) > 0) {
       player.averageRank = (
-        player.rankCounts.reduce(
-          (acc, cur, index) => acc + cur * (index + 1),
-          0,
-        ) / player.rankCounts.reduce((acc, cur) => acc + cur, 0)
+        player.rankCounts.reduce((acc, cur, index) => acc + cur * (index + 1), 0) /
+        player.rankCounts.reduce((acc, cur) => acc + cur, 0)
       ).toFixed(2);
     }
-    player.result =
-      (player.chipCount ?? 0) * rule.chip_rate +
-      player.totalScore * rule.rate * 10;
+    player.result = (player.chipCount ?? 0) * rule.chip_rate + player.totalScore * rule.rate * 10;
   });
 
   return {

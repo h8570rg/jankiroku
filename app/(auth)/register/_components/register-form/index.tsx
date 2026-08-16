@@ -1,24 +1,12 @@
 "use client";
 
 import { useForm } from "@conform-to/react/future";
-import {
-  cn,
-  Description,
-  ErrorMessage,
-  FieldError,
-  Input,
-  Label,
-  TextField,
-} from "@heroui/react";
+import { cn, Description, ErrorMessage, FieldError, Input, Label, TextField } from "@heroui/react";
 import { useActionState, useState } from "react";
 import { AvatarInput } from "@/components/avatar-input";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
-import {
-  DISPLAY_ID_MAX_LENGTH,
-  DISPLAY_ID_MIN_LENGTH,
-  NAME_MAX_LENGTH,
-} from "@/lib/config";
+import { DISPLAY_ID_MAX_LENGTH, DISPLAY_ID_MIN_LENGTH, NAME_MAX_LENGTH } from "@/lib/config";
 import { createSubmitHandler } from "@/lib/utils/form";
 import { updateProfile } from "./actions";
 import { updateProfileSchema } from "./schema";
@@ -43,10 +31,7 @@ export function RegisterForm({ className }: { className?: string }) {
       {...form.props}
     >
       <div className="flex justify-center">
-        <AvatarInput
-          onUpload={setAvatarUrl}
-          onUploadingChange={setIsAvatarUploading}
-        />
+        <AvatarInput onUpload={setAvatarUrl} onUploadingChange={setIsAvatarUploading} />
       </div>
       <div className="space-y-4">
         <TextField name={fields.displayId.name}>

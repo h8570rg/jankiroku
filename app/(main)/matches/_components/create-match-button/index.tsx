@@ -18,12 +18,7 @@ export function CreateMatchButton({
 
   return (
     <>
-      <Button
-        className={className}
-        size="lg"
-        variant="primary"
-        onPress={createMatchDrawer.open}
-      >
+      <Button className={className} size="lg" variant="primary" onPress={createMatchDrawer.open}>
         ゲームを始める
       </Button>
       <CreateMatchDrawer

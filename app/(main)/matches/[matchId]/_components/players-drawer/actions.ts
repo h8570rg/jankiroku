@@ -26,9 +26,7 @@ export async function updateMatchPlayers(
   }
 
   const { playerIds } = result.data;
-  const newPlayerIds = playerIds.filter(
-    (id) => !existingPlayerIds.includes(id),
-  );
+  const newPlayerIds = playerIds.filter((id) => !existingPlayerIds.includes(id));
 
   if (newPlayerIds.length > 0) {
     const { addMatchPlayers } = await serverServices();

@@ -13,16 +13,11 @@
     },
     {
       "groupName": "react",
-      "matchPackageNames": [
-        "react",
-        "react-dom",
-        "@types/react",
-        "@types/react-dom"
-      ]
+      "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"]
     },
     {
-      "groupName": "typescript-eslint",
-      "matchPackageNames": ["@typescript-eslint/parser", "typescript-eslint"]
+      "groupName": "oxc",
+      "matchPackageNames": ["oxlint", "oxfmt", "oxlint-tailwindcss"]
     }
   ]
 }

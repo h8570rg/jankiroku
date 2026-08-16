@@ -8,11 +8,7 @@ type Callbacks<T, R = unknown> = {
   onError?: (result: T) => void;
 };
 
-export const withCallbacks = <
-  Args extends unknown[],
-  T extends SubmissionResult,
-  R = unknown,
->(
+export const withCallbacks = <Args extends unknown[], T extends SubmissionResult, R = unknown>(
   fn: (...args: Args) => Promise<T>,
   callbacks?: Callbacks<T, R>,
 ): ((...args: Args) => Promise<T>) => {
@@ -39,9 +35,7 @@ export const withCallbacks = <
  * Conform useFormのonSubmitで使用する共通ハンドラー。
  * preventDefault、formData取得、startTransitionでformActionを実行する。
  */
-export const createSubmitHandler = (
-  formAction: (formData: FormData) => void,
-) => {
+export const createSubmitHandler = (formAction: (formData: FormData) => void) => {
   return (
     event: React.SyntheticEvent,
     context?: {
@@ -49,8 +43,7 @@ export const createSubmitHandler = (
     },
   ): void => {
     event.preventDefault();
-    const formData =
-      context?.formData ?? new FormData(event.target as HTMLFormElement);
+    const formData = context?.formData ?? new FormData(event.target as HTMLFormElement);
     startTransition(() => {
       formAction(formData);
     });

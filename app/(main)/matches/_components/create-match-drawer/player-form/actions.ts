@@ -7,11 +7,7 @@ import { serverServices } from "@/lib/services/server";
 import type { RuleOutput } from "../rule-form/schema";
 import { createPlayerStepSchema } from "./schema";
 
-export async function createMatch(
-  ruleData: RuleOutput,
-  _prevState: unknown,
-  formData: FormData,
-) {
+export async function createMatch(ruleData: RuleOutput, _prevState: unknown, formData: FormData) {
   const submission = parseSubmission(formData);
   const playerStepSchema = createPlayerStepSchema(ruleData.playersCount);
   const result = playerStepSchema.safeParse({

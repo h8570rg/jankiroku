@@ -35,22 +35,14 @@ test.describe("ゲーム作成 - ルール設定", () => {
 
     await expect(dialog.getByRole("radio", { name: "ゴットー" })).toBeVisible();
     await expect(dialog.getByRole("radio", { name: "ワンツー" })).toBeVisible();
-    await expect(
-      dialog.getByRole("radio", { name: "ワンスリー" }),
-    ).toBeVisible();
+    await expect(dialog.getByRole("radio", { name: "ワンスリー" })).toBeVisible();
   });
 
   test("レート選択肢が表示される", async ({ page }) => {
     await openCreateMatchDrawer(page);
     const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
 
-    for (const label of [
-      "テンイチ",
-      "テンサン",
-      "テンゴ",
-      "テンピン",
-      "リャンピン",
-    ]) {
+    for (const label of ["テンイチ", "テンサン", "テンゴ", "テンピン", "リャンピン"]) {
       await expect(dialog.getByRole("radio", { name: label })).toBeVisible();
     }
     // "なし" はレート以外にもウマ/チップで3箇所あるので件数のみ確認
@@ -69,9 +61,7 @@ test.describe("ゲーム作成 - ルール設定", () => {
     await dialog.getByRole("spinbutton", { name: "4着" }).fill("-5");
 
     await dialog.getByRole("button", { name: "プレイヤー選択へ" }).click();
-    await expect(
-      dialog.getByText("ウマの合計が0になるように入力してください"),
-    ).toBeVisible();
+    await expect(dialog.getByText("ウマの合計が0になるように入力してください")).toBeVisible();
   });
 
   test("ウマ カスタム: 4着が空欄ならエラー", async ({ page }) => {
@@ -99,45 +89,29 @@ test.describe("ゲーム作成 - ルール設定", () => {
     await dialog.getByRole("spinbutton", { name: "カスタム" }).fill("-100");
 
     await dialog.getByRole("button", { name: "プレイヤー選択へ" }).click();
-    await expect(
-      dialog.getByText("チップレートは0以上で入力してください"),
-    ).toBeVisible();
+    await expect(dialog.getByText("チップレートは0以上で入力してください")).toBeVisible();
   });
 
-  test("詳細設定を展開すると飛び賞・持ち点・オカ・計算が表示される", async ({
-    page,
-  }) => {
+  test("詳細設定を展開すると飛び賞・持ち点・オカ・計算が表示される", async ({ page }) => {
     await openCreateMatchDrawer(page);
     const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
 
     await dialog.getByRole("button", { name: "詳細設定" }).click();
 
-    await expect(
-      dialog.getByRole("spinbutton", { name: "飛び賞" }),
-    ).toHaveValue("10000");
-    await expect(
-      dialog.getByRole("spinbutton", { name: "持ち点" }),
-    ).toHaveValue("25000");
-    await expect(dialog.getByRole("spinbutton", { name: "オカ" })).toHaveValue(
-      "30000",
-    );
+    await expect(dialog.getByRole("spinbutton", { name: "飛び賞" })).toHaveValue("10000");
+    await expect(dialog.getByRole("spinbutton", { name: "持ち点" })).toHaveValue("25000");
+    await expect(dialog.getByRole("spinbutton", { name: "オカ" })).toHaveValue("30000");
   });
 
-  test("三麻に切り替えると持ち点のデフォルトが35000になる", async ({
-    page,
-  }) => {
+  test("三麻に切り替えると持ち点のデフォルトが35000になる", async ({ page }) => {
     await openCreateMatchDrawer(page);
     const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
 
     await dialog.locator("label", { hasText: "三麻" }).click();
     await dialog.getByRole("button", { name: "詳細設定" }).click();
 
-    await expect(
-      dialog.getByRole("spinbutton", { name: "持ち点" }),
-    ).toHaveValue("35000");
-    await expect(dialog.getByRole("spinbutton", { name: "オカ" })).toHaveValue(
-      "40000",
-    );
+    await expect(dialog.getByRole("spinbutton", { name: "持ち点" })).toHaveValue("35000");
+    await expect(dialog.getByRole("spinbutton", { name: "オカ" })).toHaveValue("40000");
   });
 });
 
@@ -146,9 +120,7 @@ test.describe("ゲーム作成 - プレイヤー選択", () => {
     await openCreateMatchDrawer(page);
     await page.getByRole("button", { name: "プレイヤー選択へ" }).click();
     // ステップ2に到達
-    await expect(
-      page.getByRole("button", { name: "ゲーム開始" }),
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: "ゲーム開始" })).toBeVisible();
   }
 
   test("自分は最初から選択済みで削除できない", async ({ page }) => {
@@ -165,9 +137,7 @@ test.describe("ゲーム作成 - プレイヤー選択", () => {
     const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
     await dialog.getByRole("button", { name: "ゲーム開始" }).click();
 
-    await expect(
-      dialog.getByText("プレイヤーを4人以上選択してください"),
-    ).toBeVisible();
+    await expect(dialog.getByText("プレイヤーを4人以上選択してください")).toBeVisible();
   });
 
   test("ユーザー検索結果から追加・削除できる", async ({ page }) => {
@@ -176,9 +146,7 @@ test.describe("ゲーム作成 - プレイヤー選択", () => {
 
     await dialog.getByRole("searchbox").fill(TEST_USERS.alice.displayId);
 
-    const option = dialog
-      .getByRole("option", { name: new RegExp(TEST_USERS.alice.name) })
-      .first();
+    const option = dialog.getByRole("option", { name: new RegExp(TEST_USERS.alice.name) }).first();
     await expect(option).toBeVisible();
 
     await option.click();
@@ -194,9 +162,7 @@ test.describe("ゲーム作成 - プレイヤー選択", () => {
     const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
 
     await dialog.getByRole("button", { name: "戻る" }).click();
-    await expect(
-      dialog.getByRole("button", { name: "プレイヤー選択へ" }),
-    ).toBeVisible();
+    await expect(dialog.getByRole("button", { name: "プレイヤー選択へ" })).toBeVisible();
   });
 
   test("新規プレイヤー作成モーダル: 空だとエラー", async ({ page }) => {

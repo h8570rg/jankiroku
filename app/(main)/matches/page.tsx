@@ -18,12 +18,7 @@ export default async function Matches() {
         成績表
       </Typography>
       {matches.length === 0 && (
-        <Typography
-          type="body-sm"
-          color="muted"
-          align="center"
-          className="my-10"
-        >
+        <Typography type="body-sm" color="muted" align="center" className="my-10">
           まだ成績表がありません。
         </Typography>
       )}
@@ -34,16 +29,8 @@ export default async function Matches() {
           </li>
         ))}
       </ul>
-      <div
-        className="
-          sticky inset-x-0 bottom-0 z-10 bg-linear-to-t from-background p-4
-        "
-      >
-        <CreateMatchButton
-          className="w-full"
-          friends={friends}
-          userProfile={userProfile}
-        />
+      <div className="sticky inset-x-0 bottom-0 z-10 bg-linear-to-t from-background p-4">
+        <CreateMatchButton className="w-full" friends={friends} userProfile={userProfile} />
       </div>
     </div>
   );

@@ -2,12 +2,7 @@
 
 import { cn } from "@heroui/react";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  useRef,
-  useState,
-} from "react";
+import { type ComponentPropsWithoutRef, forwardRef, useRef, useState } from "react";
 
 const hideOnScrollVariants = {
   visible: {
@@ -48,11 +43,11 @@ export const Navbar = forwardRef<
 
   // Extract only HTML attributes, excluding event handlers that conflict with motion
   const {
-    onDrag,
-    onDragEnd,
-    onDragStart,
-    onAnimationStart,
-    onAnimationEnd,
+    onDrag: _onDrag,
+    onDragEnd: _onDragEnd,
+    onDragStart: _onDragStart,
+    onAnimationStart: _onAnimationStart,
+    onAnimationEnd: _onAnimationEnd,
     ...htmlProps
   } = restProps as Record<string, unknown>;
 
@@ -68,11 +63,7 @@ export const Navbar = forwardRef<
           }
         }}
         className={cn(
-          `
-            sticky top-0 z-40 flex h-auto w-full items-center justify-center
-            bg-background/70 backdrop-blur-lg backdrop-saturate-150
-            data-[menu-open=true]:border-none
-          `,
+          `sticky top-0 z-40 flex h-auto w-full items-center justify-center bg-background/70 backdrop-blur-lg backdrop-saturate-150 data-[menu-open=true]:border-none`,
           className,
         )}
         animate={isHidden ? "hidden" : "visible"}
@@ -80,12 +71,7 @@ export const Navbar = forwardRef<
         variants={hideOnScrollVariants}
         {...(htmlProps as Record<string, unknown>)}
       >
-        <nav
-          className="
-            relative z-40 flex h-16 w-full flex-row flex-nowrap items-center
-            justify-between gap-4 px-6
-          "
-        >
+        <nav className="relative z-40 flex h-16 w-full flex-row flex-nowrap items-center justify-between gap-4 px-6">
           {children}
         </nav>
       </motion.header>
@@ -96,21 +82,12 @@ export const Navbar = forwardRef<
     <header
       ref={ref}
       className={cn(
-        `
-          sticky top-0 z-40 flex h-auto w-full items-center justify-center
-          bg-background/70 backdrop-blur-lg backdrop-saturate-150
-          data-[menu-open=true]:border-none
-        `,
+        `sticky top-0 z-40 flex h-auto w-full items-center justify-center bg-background/70 backdrop-blur-lg backdrop-saturate-150 data-[menu-open=true]:border-none`,
         className,
       )}
       {...restProps}
     >
-      <nav
-        className="
-          relative z-40 flex h-16 w-full flex-row flex-nowrap items-center
-          justify-between gap-4 px-6
-        "
-      >
+      <nav className="relative z-40 flex h-16 w-full flex-row flex-nowrap items-center justify-between gap-4 px-6">
         {children}
       </nav>
     </header>
@@ -118,26 +95,22 @@ export const Navbar = forwardRef<
 });
 Navbar.displayName = "Navbar";
 
-export const NavbarBrand = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ className, children, ...props }, ref) => {
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        `
-          box-border flex grow basis-0 flex-row flex-nowrap items-center
-          justify-start bg-transparent text-base whitespace-nowrap no-underline
-        `,
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-});
+export const NavbarBrand = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          `box-border flex grow basis-0 flex-row flex-nowrap items-center justify-start bg-transparent text-base whitespace-nowrap no-underline`,
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
 NavbarBrand.displayName = "NavbarBrand";
 
 export function NavbarContent({
@@ -185,24 +158,20 @@ export function NavbarContent({
   );
 }
 
-export const NavbarItem = forwardRef<
-  HTMLLIElement,
-  ComponentPropsWithoutRef<"li">
->(({ className, children, ...props }, ref) => {
-  return (
-    <li
-      ref={ref}
-      className={cn(
-        `
-          box-border list-none text-base whitespace-nowrap
-          data-[active=true]:font-semibold
-        `,
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </li>
-  );
-});
+export const NavbarItem = forwardRef<HTMLLIElement, ComponentPropsWithoutRef<"li">>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <li
+        ref={ref}
+        className={cn(
+          `box-border list-none text-base whitespace-nowrap data-[active=true]:font-semibold`,
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </li>
+    );
+  },
+);
 NavbarItem.displayName = "NavbarItem";

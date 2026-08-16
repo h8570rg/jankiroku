@@ -22,12 +22,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
       <Card.Header>
         <div className="flex w-full items-center justify-between">
           <Typography>{displayDate}</Typography>
-          <div
-            className="
-              flex -space-x-2
-              *:ring-2 *:ring-segment
-            "
-          >
+          <div className="flex -space-x-2 *:ring-2 *:ring-segment">
             {match.players.map((player) => (
               <UserAvatar
                 key={player.id}
@@ -47,12 +42,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
             <div className="text-lg">{data.averageRank ?? "なし"}</div>
           </div>
           <div className="flex basis-[224px] justify-center">
-            <table
-              className="
-                [&_td]:text-center
-                [&_th]:w-10 [&_th]:text-center
-              "
-            >
+            <table className="[&_td]:text-center [&_th]:w-10 [&_th]:text-center">
               <thead className="text-xs text-muted">
                 <tr>
                   <th>1位</th>
@@ -66,9 +56,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
                   <td>{data.rankCounts[0]}</td>
                   <td>{data.rankCounts[1]}</td>
                   <td>{data.rankCounts[2]}</td>
-                  {match.rule.playersCount === 4 && (
-                    <td>{data.rankCounts[3]}</td>
-                  )}
+                  {match.rule.playersCount === 4 && <td>{data.rankCounts[3]}</td>}
                 </tr>
               </tbody>
             </table>

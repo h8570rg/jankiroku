@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  getFieldValue,
-  parseSubmission,
-  useForm,
-  useFormData,
-} from "@conform-to/react/future";
+import { getFieldValue, parseSubmission, useForm, useFormData } from "@conform-to/react/future";
 import {
   cn,
   Description,
@@ -50,11 +45,7 @@ import {
   ruleSchema,
 } from "./schema";
 
-export function RuleForm({
-  onSubmit,
-}: {
-  onSubmit: (ruleData: RuleOutput) => void;
-}) {
+export function RuleForm({ onSubmit }: { onSubmit: (ruleData: RuleOutput) => void }) {
   const { form, fields, intent } = useForm(ruleSchema, {
     defaultValue: playersCount4DefaultValues,
     onSubmit: createSubmitHandler((formData) => {
@@ -101,17 +92,12 @@ export function RuleForm({
 
   function handlePlayersCountChange(value: string) {
     intent.reset({
-      defaultValue:
-        value === "4" ? playersCount4DefaultValues : playersCount3DefaultValues,
+      defaultValue: value === "4" ? playersCount4DefaultValues : playersCount3DefaultValues,
     });
   }
 
   return (
-    <Form
-      className="contents"
-      validationErrors={form.fieldErrors}
-      {...form.props}
-    >
+    <Form className="contents" validationErrors={form.fieldErrors} {...form.props}>
       <Drawer.Body className="pt-2">
         <div className="space-y-4">
           <RadioGroup
@@ -168,11 +154,7 @@ export function RuleForm({
                     key={opt.value}
                     value={opt.value}
                     label={opt.label}
-                    description={
-                      opt.inclineValues
-                        ? opt.inclineValues.join(", ")
-                        : undefined
-                    }
+                    description={opt.inclineValues ? opt.inclineValues.join(", ") : undefined}
                   />
                 ))}
               </div>
@@ -182,12 +164,7 @@ export function RuleForm({
                 hidden: !isCustomIncline,
               })}
             >
-              <FieldGroup
-                className="
-                  flex gap-1
-                  *:mb-0 *:min-w-0 *:flex-1
-                "
-              >
+              <FieldGroup className="flex gap-1 *:mb-0 *:min-w-0 *:flex-1">
                 <TextField
                   type="number"
                   variant="secondary"
@@ -247,11 +224,7 @@ export function RuleForm({
               <Label className="mb-3">チップ</Label>
               <div className="grid grid-cols-2 gap-2">
                 {chipRatePresetOptions.map((opt) => (
-                  <OptionCard
-                    key={opt.value}
-                    value={opt.value}
-                    label={opt.label}
-                  />
+                  <OptionCard key={opt.value} value={opt.value} label={opt.label} />
                 ))}
               </div>
             </RadioGroup>
@@ -385,20 +358,13 @@ function OptionCard({
 }) {
   return (
     <Radio value={value} className="m-0">
-      <Radio.Content
-        className="
-          h-12 w-full rounded-xl border px-2
-          data-[selected=true]:border-accent data-[selected=true]:bg-accent/10
-        "
-      >
+      <Radio.Content className="h-12 w-full rounded-xl border px-2 data-[selected=true]:border-accent data-[selected=true]:bg-accent/10">
         <Radio.Control>
           <Radio.Indicator />
         </Radio.Control>
         <div className="flex flex-col gap-0.5">
           <span>{label}</span>
-          {description && (
-            <Description className="text-[10px]">{description}</Description>
-          )}
+          {description && <Description className="text-[10px]">{description}</Description>}
         </div>
       </Radio.Content>
     </Radio>
