@@ -1,16 +1,15 @@
 name: Supabase維持
 
-# 3日ごとに実行、または手動実行可能
 on:
   schedule:
-    # 3日ごとに実行
-    - cron: "0 0 */3 * *"
+    - cron: "0 8 * * *"
   workflow_dispatch:
 
 jobs:
   ping-supabase:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         environment: [production, development]
     environment: ${{ matrix.environment }}
