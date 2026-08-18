@@ -1,6 +1,6 @@
 "use server";
 
-import { serverServices } from "@/lib/services/server";
+import { searchPlayers as searchPlayersData } from "@/lib/data/player";
 import type { Player } from "@/lib/type";
 
 export async function searchPlayers(text: string): Promise<Player[]> {
@@ -8,6 +8,5 @@ export async function searchPlayers(text: string): Promise<Player[]> {
     return [];
   }
 
-  const { searchPlayers } = await serverServices();
-  return searchPlayers({ text });
+  return searchPlayersData({ text });
 }

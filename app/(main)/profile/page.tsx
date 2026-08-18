@@ -1,6 +1,6 @@
 import { Typography } from "@heroui/react";
 import type { Metadata } from "next";
-import { serverServices } from "@/lib/services/server";
+import { getUserProfile } from "@/lib/data/user";
 import { ProfileForm } from "./_components/profile-form";
 
 export const metadata: Metadata = {
@@ -8,7 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default async function ProfilePage() {
-  const { getUserProfile } = await serverServices();
   const profile = await getUserProfile();
 
   return (

@@ -2,7 +2,7 @@
 
 import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
-import { serverServices } from "@/lib/services/server";
+import { getUserProfile, updateUserProfile } from "@/lib/data/user";
 import { profileUpdateSchema } from "./schema";
 
 export async function updateProfile(
@@ -24,8 +24,6 @@ export async function updateProfile(
     });
   }
   const { name } = result.data;
-
-  const { getUserProfile, updateUserProfile } = await serverServices();
 
   const profile = await getUserProfile();
   if (!profile.displayId) {
