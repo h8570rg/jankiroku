@@ -45,6 +45,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "recharts": "3.10.1",
+    "server-only": "^0.0.1",
     "sharp": "0.35.3",
     "tailwindcss": "4.3.3",
     "use-debounce": "10.1.1",
@@ -61,7 +62,7 @@
     "oxlint": "1.78.0",
     "oxlint-tailwindcss": "1.9.0",
     "supabase": "2.114.0",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vitest": "4.1.10"
   },
   "config": {
@@ -70,5 +71,5 @@
   "engines": {
     "node": "24.x"
   },
-  "packageManager": "pnpm@11.21.0"
+  "packageManager": "pnpm@11.22.0"
 }

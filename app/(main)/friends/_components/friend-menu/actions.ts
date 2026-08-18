@@ -1,12 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { serverServices } from "@/lib/services/server";
+import { deleteFriends as deleteFriendsData } from "@/lib/data/friend";
 
 export async function deleteFriends(profileId: string) {
-  const { deleteFriends } = await serverServices();
-
-  await deleteFriends({ profileId });
+  await deleteFriendsData({ profileId });
 
   revalidatePath("/friends");
 }

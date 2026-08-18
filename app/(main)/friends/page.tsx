@@ -1,12 +1,10 @@
 import { Typography } from "@heroui/react";
 import { User } from "@/components/user";
-import { serverServices } from "@/lib/services/server";
+import { getFriends } from "@/lib/data/friend";
 import { AddButton } from "./_components/add-button";
 import { FriendMenu } from "./_components/friend-menu";
 
 export default async function FriendsPage() {
-  const { getFriends } = await serverServices();
-
   const friends = await getFriends();
 
   return (

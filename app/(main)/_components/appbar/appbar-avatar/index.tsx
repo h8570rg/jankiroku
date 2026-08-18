@@ -1,13 +1,12 @@
 import { Dropdown, Typography } from "@heroui/react";
 import { UserAvatar } from "@/components/user-avatar";
-import { serverServices } from "@/lib/services/server";
+import { getUserProfile } from "@/lib/data/user";
 import { AppbarAvatarMenu } from "./appbar-avatar-menu";
 
 /**
  * @see https://heroui.com/docs/react/components/dropdown#custom-trigger
  */
 export async function AppbarAvatar() {
-  const { getUserProfile } = await serverServices();
   const profile = await getUserProfile();
 
   return (

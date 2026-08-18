@@ -1,10 +1,9 @@
 import { redirect } from "next/navigation";
-import { serverServices } from "@/lib/services/server";
+import { getNullableUserProfile } from "@/lib/data/user";
 import Appbar from "./_components/appbar";
 import { ReleaseNotes } from "./_components/release-notes";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const { getNullableUserProfile } = await serverServices();
   const profile = await getNullableUserProfile();
   if (!profile) {
     redirect("/register");

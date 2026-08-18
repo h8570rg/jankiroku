@@ -1,4 +1,8 @@
-import type { Supabase } from ".";
+import "server-only";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/database.types";
+
+export type Supabase = SupabaseClient<Database>;
 
 /**
  * 認証中ユーザーに紐づく profiles.id を返す。

@@ -3,7 +3,7 @@
 import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { serverServices } from "@/lib/services/server";
+import { createMatch as createMatchData } from "@/lib/data/match";
 import type { RuleOutput } from "../rule-form/schema";
 import { createPlayerStepSchema } from "./schema";
 
@@ -24,8 +24,7 @@ export async function createMatch(ruleData: RuleOutput, _prevState: unknown, for
 
   const { playerIds } = result.data;
 
-  const { createMatch } = await serverServices();
-  const { id } = await createMatch({
+  const { id } = await createMatchData({
     ...ruleData,
     playerIds,
   });
