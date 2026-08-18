@@ -2,7 +2,8 @@
 
 import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
-import { serverServices } from "@/lib/services/server";
+import { addMatchPlayers } from "@/lib/data/match";
+import { searchPlayers as searchPlayersData } from "@/lib/data/player";
 import type { Player } from "@/lib/type";
 import { updatePlayersSchema } from "./schema";
 
@@ -29,7 +30,6 @@ export async function updateMatchPlayers(
   const newPlayerIds = playerIds.filter((id) => !existingPlayerIds.includes(id));
 
   if (newPlayerIds.length > 0) {
-    const { addMatchPlayers } = await serverServices();
     await addMatchPlayers({
       matchId,
       playerIds: newPlayerIds,
@@ -46,6 +46,5 @@ export async function searchPlayers(text: string): Promise<Player[]> {
     return [];
   }
 
-  const { searchPlayers } = await serverServices();
-  return searchPlayers({ text });
+  return searchPlayersData({ text });
 }

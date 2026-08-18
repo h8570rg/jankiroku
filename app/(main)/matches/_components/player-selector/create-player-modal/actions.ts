@@ -1,7 +1,7 @@
 "use server";
 
 import { parseSubmission, report, type SubmissionResult } from "@conform-to/react/future";
-import { serverServices } from "@/lib/services/server";
+import { createGuestPlayer } from "@/lib/data/player";
 import type { Player } from "@/lib/type";
 import { createPlayerSchema } from "./schema";
 
@@ -25,7 +25,6 @@ export async function createPlayer(
   }
   const { name } = result.data;
 
-  const { createGuestPlayer } = await serverServices();
   const profile = await createGuestPlayer({ name });
 
   return { ...report(submission, {}), profile };

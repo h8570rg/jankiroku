@@ -1,7 +1,7 @@
 import { linkVariants, Typography } from "@heroui/react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { serverServices } from "@/lib/services/server";
+import { getNullableUserProfile } from "@/lib/data/user";
 import { RegisterForm } from "./_components/register-form";
 import { signOut } from "./_components/register-form/actions";
 
@@ -10,7 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RegisterPage() {
-  const { getNullableUserProfile } = await serverServices();
   const profile = await getNullableUserProfile();
 
   if (profile) {

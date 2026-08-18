@@ -1,7 +1,8 @@
 import { Typography } from "@heroui/react";
 import { Suspense } from "react";
 import { User } from "@/components/user";
-import { serverServices } from "@/lib/services/server";
+import { getFriends } from "@/lib/data/friend";
+import { searchPlayers } from "@/lib/data/player";
 import { AddFriendButton } from "./_components/add-friend-button";
 import { BackButton } from "./_components/back-button";
 import { FriendSearch } from "./_components/friend-search";
@@ -13,7 +14,6 @@ export default async function AddFriendPage({
 }) {
   const { query } = await searchParams;
 
-  const { searchPlayers, getFriends } = await serverServices();
   const [players, friends] = query
     ? await Promise.all([searchPlayers({ text: query }), getFriends()])
     : [[], []];

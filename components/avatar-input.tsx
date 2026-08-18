@@ -4,7 +4,7 @@ import { Avatar, toast } from "@heroui/react";
 import { CameraIcon, EditIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { AVATAR_ALLOWED_TYPES, AVATAR_MAX_SIZE } from "@/lib/config";
-import { browserServices } from "@/lib/services/browser";
+import { uploadAvatar } from "@/lib/data/user.client";
 
 type AvatarInputProps = {
   defaultValue?: string;
@@ -53,7 +53,6 @@ export function AvatarInput({ defaultValue, onUpload, onUploadingChange }: Avata
     setIsUploading(true);
     onUploadingChange?.(true);
     try {
-      const { uploadAvatar } = browserServices();
       const avatarUrl = await uploadAvatar(file);
       onUpload?.(avatarUrl);
     } catch {
