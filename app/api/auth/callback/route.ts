@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { serverServices } from "@/lib/services/server";
+import { getNullableUserProfile } from "@/lib/data/user";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -15,7 +15,6 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      const { getNullableUserProfile } = await serverServices();
       const profile = await getNullableUserProfile();
       if (!profile) {
         return NextResponse.redirect(`${origin}/register`);

@@ -2,7 +2,7 @@
 
 import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
-import { serverServices } from "@/lib/services/server";
+import { updateMatchPlayer } from "@/lib/data/match";
 import { addChipSchema } from "./schema";
 
 function ensurePlayerChipArray(
@@ -46,8 +46,6 @@ export async function addChip(_prevState: unknown, formData: FormData) {
       error: { issues: result.error.issues },
     });
   }
-
-  const { updateMatchPlayer } = await serverServices();
 
   await Promise.all(
     result.data.playerChip.map((row) =>

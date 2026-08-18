@@ -2,7 +2,7 @@
 
 import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
-import { serverServices } from "@/lib/services/server";
+import { createGame as createGameData } from "@/lib/data/match";
 import type { Rule } from "@/lib/type";
 import { calcPlayerScores } from "@/lib/utils/score";
 import { createCreateGameSchema } from "./schema";
@@ -29,8 +29,6 @@ export async function createGame(
     });
   }
 
-  const { createGame } = await serverServices();
-
   const playerScores = calcPlayerScores({
     players: validatedFields.data.players.filter((p) => p.points !== undefined) as {
       id: string;
@@ -40,7 +38,7 @@ export async function createGame(
     crackBoxPlayerId: validatedFields.data.crackBoxPlayerId,
   });
 
-  await createGame({
+  await createGameData({
     matchId,
     gamePlayers: playerScores,
   });

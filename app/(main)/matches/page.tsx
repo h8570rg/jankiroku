@@ -1,11 +1,11 @@
 import { Typography } from "@heroui/react";
-import { serverServices } from "@/lib/services/server";
+import { getFriends } from "@/lib/data/friend";
+import { getMatches } from "@/lib/data/match";
+import { getUserProfile } from "@/lib/data/user";
 import { CreateMatchButton } from "./_components/create-match-button";
 import { MatchCard } from "./_components/match-card";
 
 export default async function Matches() {
-  const { getMatches, getUserProfile, getFriends } = await serverServices();
-
   // TODO: infinite scroll
   const [matches, userProfile, friends] = await Promise.all([
     getMatches({}),
