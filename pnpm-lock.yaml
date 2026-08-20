@@ -39,8 +39,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(next@16.3.1(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
       dayjs:
-        specifier: 1.11.22
-        version: 1.11.22
+        specifier: 1.11.23
+        version: 1.11.23
       lucide-react:
         specifier: 1.31.0
         version: 1.31.0(react@19.2.8)
@@ -1792,8 +1792,8 @@ packages:
     resolution: {integrity: sha512-ndfJ/JxxMd3nw31uyKoY2naivF+r29V+Lc0svZxe1JvvIRmi8hUsrMvdOwgS1o6uBHmiz91geQ0ylPP0aj1VUA==}
     engines: {node: '>=12'}
 
-  dayjs@1.11.22:
-    resolution: {integrity: sha512-1YRnxzt/AabP3GHxnaB9/b+ZScCKu5TeF+co+BWG+lnWVIwEcTFc1FVE0WLNmNO3sA6GGXL40i5qkHfbLzpwrg==}
+  dayjs@1.11.23:
+    resolution: {integrity: sha512-QDTCU0M0MxR3hQfnlDJfwekQiaanm1ubOD231u73WBckQ/fsamwRLiE2GBz6D3a/xF1NgfiDLJjXBa1hYOYTtQ==}
 
   decimal.js-light@2.5.1:
     resolution: {integrity: sha512-qIMFpTMZmny+MMIitAB6D7iVPEorVw6YQRWkvarTkT4tBeSLLiHzcwj6q0MmYSFCiVpiqPJTJEYIrpcPzVEIvg==}
@@ -3884,7 +3884,7 @@ snapshots:
 
   d3-timer@3.0.1: {}
 
-  dayjs@1.11.22: {}
+  dayjs@1.11.23: {}
 
   decimal.js-light@2.5.1: {}
 
