@@ -1,7 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { CalcMethod, GamePlayer, Match, MatchPlayer, Rate } from "@/lib/type";
-import { getCurrentProfileId } from "./internal";
+import { getUserProfileId } from "./internal";
 
 export async function createMatch({
   calcMethod,
@@ -27,11 +27,11 @@ export async function createMatch({
   id: string;
 }> {
   const supabase = await createClient();
-  const currentProfileId = await getCurrentProfileId(supabase);
+  const userProfileId = await getUserProfileId(supabase);
 
   const createMatchResponse = await supabase
     .from("matches")
-    .insert({ created_by: currentProfileId })
+    .insert({ created_by: userProfileId })
     .select()
     .single();
   if (createMatchResponse.error) throw createMatchResponse.error;
@@ -47,7 +47,7 @@ export async function createMatch({
       : [
           {
             match_id: match.id,
-            player_id: currentProfileId,
+            player_id: userProfileId,
             order: 0,
           },
         ];
@@ -63,8 +63,8 @@ export async function createMatch({
       players_count: playersCount,
       rate,
       incline,
-      created_by: currentProfileId,
-      updated_by: currentProfileId,
+      created_by: userProfileId,
+      updated_by: userProfileId,
     }),
     supabase.from("match_players").insert(matchPlayerRows),
   ]);
@@ -97,7 +97,7 @@ export async function getMatches({
   size?: number;
 } = {}): Promise<Match[]> {
   const supabase = await createClient();
-  const currentProfileId = await getCurrentProfileId(supabase);
+  const userProfileId = await getUserProfileId(supabase);
 
   const matchesResponse = await supabase
     .from("match_players")
@@ -105,7 +105,7 @@ export async function getMatches({
       "matches!inner(*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*)))",
       { count: "exact" },
     )
-    .eq("player_id", currentProfileId)
+    .eq("player_id", userProfileId)
     .range((page - 1) * size, page * size - 1)
     .order("created_at", { referencedTable: "matches", ascending: false })
     .order("order", { referencedTable: "matches.match_players", ascending: true });
@@ -172,13 +172,13 @@ export async function createGame({
   matchId: string;
 }): Promise<void> {
   const supabase = await createClient();
-  const currentProfileId = await getCurrentProfileId(supabase);
+  const userProfileId = await getUserProfileId(supabase);
 
   const createGameResponse = await supabase
     .from("games")
     .insert({
       match_id: matchId,
-      created_by: currentProfileId,
+      created_by: userProfileId,
     })
     .select()
     .single();

@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default async function RegisterPage() {
-  const profile = await getNullableUserProfile();
+  const userProfile = await getNullableUserProfile();
 
-  if (profile) {
+  if (userProfile) {
     redirect("/matches");
   }
 

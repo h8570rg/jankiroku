@@ -32,7 +32,7 @@ export function ChipForm({
     onSubmit: createSubmitHandler(formAction),
     defaultValue: {
       playerChip: players.map((p) => ({
-        profileId: p.id,
+        playerId: p.id,
         chipCount: p.chipCount != null ? String(p.chipCount) : "",
       })),
     },
@@ -62,7 +62,7 @@ export function ChipForm({
             const fieldset = item.getFieldset();
             return (
               <li key={item.key}>
-                <input type="hidden" name={fieldset.profileId.name} value={players[index].id} />
+                <input type="hidden" name={fieldset.playerId.name} value={players[index].id} />
                 <TextField
                   variant="secondary"
                   type="number"
@@ -84,7 +84,7 @@ export function ChipForm({
                                 name: fields.playerChip.name,
                                 index,
                                 value: {
-                                  profileId: players[index].id,
+                                  playerId: players[index].id,
                                   chipCount: String(-1 * totalChipCount),
                                 },
                               });

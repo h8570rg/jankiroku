@@ -4,9 +4,10 @@ import type { calcMethods, rates } from "./config";
 export type User = SupabaseUser;
 
 /**
- * マッチ参加者・フレンド・検索結果として登場するプレイヤー。
- * 登録済みユーザーとゲストの両方を含む。
+ * 画面に出せる人（マッチ・フレンド・検索・ゲスト）。
+ * マッチ専用の別名ではなく、実体は `profiles` 行。
  *
+ * - `id`: `profiles.id`
  * - `displayId`: 登録済みなら値あり、ゲストは `null`
  * - `avatarUrl`: 登録済みでアップロード有りなら値あり、未アップロードまたはゲストは `null`
  *
@@ -21,9 +22,12 @@ export type Player = {
 };
 
 /**
- * 自分のアカウント情報。
+ * ログインしている自分。登録済みの profile。
  * layout で未登録ユーザーは `/register` に redirect されるため、
  * (main) 配下では必ず登録済みとして扱える。
+ *
+ * - `id`: `profiles.id`（`userProfileId`）
+ * - `userId`: `auth.users.id`
  */
 export type UserProfile = {
   id: string;

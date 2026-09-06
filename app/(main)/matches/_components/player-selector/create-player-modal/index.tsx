@@ -22,13 +22,13 @@ export function CreatePlayerModal({
   onPlayerCreate,
   ...props
 }: {
-  onPlayerCreate: (profile: Player) => void;
+  onPlayerCreate: (player: Player) => void;
 } & ModalBackdropProps) {
   const [lastResult, formAction, isPending] = useActionState(
     withCallbacks(createPlayer, {
       onSuccess(result) {
-        if (result.profile) {
-          onPlayerCreate(result.profile);
+        if (result.player) {
+          onPlayerCreate(result.player);
         }
         props.onOpenChange?.(false);
       },

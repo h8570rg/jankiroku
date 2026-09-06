@@ -72,8 +72,8 @@ export function PlayersDrawer({
       <CreatePlayerModal
         isOpen={playerCreateModal.isOpen}
         onOpenChange={playerCreateModal.setOpen}
-        onPlayerCreate={(profile: Player) => {
-          setSelectedPlayers((prev) => [...prev, profile]);
+        onPlayerCreate={(player: Player) => {
+          setSelectedPlayers((prev) => [...prev, player]);
         }}
       />
     </Drawer.Backdrop>

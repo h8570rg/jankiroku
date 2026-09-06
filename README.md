@@ -230,18 +230,50 @@ playwright.config.ts  # Playwright設定
 
 「プレイヤー」「自分」「認証ユーザー」を、コード上で明確に使い分ける。
 
-| コード         | 意味                                                                                                                                          | 主な型                                   |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| `User`         | Supabase の認証ユーザー（`auth.users` の 1 行）。メアド・パスワード・OAuth など認証情報を持つ主体                                             | `User` (`SupabaseUser` の再エクスポート) |
-| `UserProfile`  | アプリにログインしている「自分」のアカウント情報。`(main)` 配下の layout で未登録時は `/register` へ redirect されるため必ず登録済み          | `UserProfile`                            |
-| `Player`       | マッチ参加者・フレンド・検索結果として登場するプレイヤー。登録済みユーザーとゲストの両方を含み、ゲストは `displayId` / `avatarUrl` を持たない | `Player`                                 |
-| `MatchPlayer`  | マッチの参加者個別の試合成績を伴うプレイヤー                                                                                                  | `Player & MatchStats`                    |
-| `Guest`        | `profiles.user_id IS NULL` のプレイヤー。`auth.users` とは紐付かない非ログインユーザー                                                        | （`Player` のうちゲスト相当）            |
-| `Profile` (DB) | `public.profiles` テーブルの行。`Player` も `UserProfile` もこのテーブルから派生する                                                          | DB レイヤーの語彙                        |
+| コード         | 意味                                                                                                                         | ID                                      | 主な型                                   |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ---------------------------------------- |
+| `User`         | Supabase の認証ユーザー（`auth.users` の 1 行）。メアド・パスワード・OAuth など認証情報を持つ主体                            | `userId`（`auth.users.id` 専用）        | `User` (`SupabaseUser` の再エクスポート) |
+| `UserProfile`  | ログインしている自分。登録済みの profile。`(main)` 配下の layout で未登録時は `/register` へ redirect されるため必ず登録済み | `userProfile.id` / `userProfileId`      | `UserProfile`                            |
+| `Player`       | 画面に出せる人（マッチ・フレンド・検索・ゲスト）。マッチ専用の別名ではない。実体は profile                                   | 文脈に合わせて `playerId` / `profileId` | `Player`                                 |
+| `MatchPlayer`  | マッチの参加者個別の試合成績を伴うプレイヤー                                                                                 | `player.id`（`profiles.id`）            | `Player & MatchStats`                    |
+| `Guest`        | `profiles.user_id IS NULL` のプレイヤー。`auth.users` とは紐付かない非ログインユーザー                                       | `playerId` / `profileId`                | （`Player` のうちゲスト相当）            |
+| `Profile` (DB) | `public.profiles` の行。未登録で `name` が null のこともある。`Player` も `UserProfile` もここから派生する                   | `profileId`                             | DB レイヤーの語彙                        |
+
+`playerId` と `profileId` はどちらも `profiles.id`。フレンド・アカウント文脈では `profileId`、マッチ文脈では `playerId` を使う。`userId` を `profiles.id` に使わない。
+
+### `user` と `current`
+
+`user` は「人」の総称ではなく、認証された自分。接頭語として使うなら、自分が持っているものにだけ付ける。
+
+- 使う: `user`, `userId`, `userProfile`, `userProfileId`
+- 使わない: `userPlayer`（所有が成立しない）
+
+`current` は「ログインしている自分」ではない。目の前に対比があるときだけ使う。SQL の `current_profile_id()` はセッションスコープの Postgres 慣用なので、DB 側はそのままにする。
+
+自分をリストから探すときは新しい名前を作らない。同一性で引き、結果はただの `player` とする。
+
+```ts
+const player = match.players.find((p) => p.id === userProfile.id);
+```
+
+id だけ渡すなら props 名は `userProfileId`。
+
+### 関数
+
+| 関数                       | 返すもの                                  |
+| -------------------------- | ----------------------------------------- |
+| `getUser()`                | 認証ユーザー（`auth.getUser` に合わせる） |
+| `getUserProfile()`         | 自分の `UserProfile`                      |
+| `getUserProfileId()`       | 自分の `profiles.id`                      |
+| `getNullableUserProfile()` | 未登録の可能性がある自分。なければ `null` |
+| `updateUserProfile()`      | 自分のプロフィール更新                    |
+
+相手を取る関数の引数は、フレンドなら `profileId`、マッチなら `playerId`。
 
 ### 使い分けの原則
 
-- 「自分」を扱う画面・処理では `UserProfile` を使う（必ず登録済み、全フィールド non-nullable）
+- 自分のオブジェクトは `userProfile`、自分の profile id は `userProfileId` / `userProfile.id`
+- リストの要素は `player` / `friend`。任意の profiles 行（DB 寄りの話）は `profile`
 - 「他のプレイヤー」「マッチ参加者」「フレンド」「検索結果」を扱うところでは `Player` を使う（ゲストを含むので `displayId` / `avatarUrl` は optional）
 - `UserProfile` は `Player` の structural subtype なので、自分を「プレイヤー」として渡すときは変換不要
 - `User` は認証関係 (`getUser`, `auth.uid()`, OAuth フローなど) でのみ使用する

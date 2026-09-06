@@ -7,7 +7,7 @@ export const addChipSchema = coerceFormValue(
     .object({
       playerChip: z.array(
         z.object({
-          profileId: schema.profileId,
+          playerId: schema.playerId,
           chipCount: schema.chipCount,
         }),
       ),
