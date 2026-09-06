@@ -268,19 +268,18 @@ id だけ渡すなら props 名は `userProfileId`。
 
 ### 関数
 
-| 関数                       | 返すもの                                  |
-| -------------------------- | ----------------------------------------- |
-| `getUser()`                | 認証ユーザー（`auth.getUser` に合わせる） |
-| `getUserProfile()`         | 自分の `UserProfile`                      |
-| `getUserProfileId()`       | 自分の `profiles.id`                      |
-| `getNullableUserProfile()` | 未登録の可能性がある自分。なければ `null` |
-| `updateUserProfile()`      | 自分のプロフィール更新                    |
+| 関数                       | 返すもの                                                                             |
+| -------------------------- | ------------------------------------------------------------------------------------ |
+| `getUser()`                | 認証ユーザー（`auth.getUser` に合わせる）。登録ユーザーの `profiles.id` も `user.id` |
+| `getUserProfile()`         | 自分の `UserProfile`                                                                 |
+| `getNullableUserProfile()` | 未登録の可能性がある自分。なければ `null`                                            |
+| `updateUserProfile()`      | 自分のプロフィール更新                                                               |
 
 相手を取る関数の引数は、フレンドなら `profileId`、マッチなら `playerId`。
 
 ### 使い分けの原則
 
-- 自分のオブジェクトは `userProfile`、自分の profile id は `userProfileId` / `userProfile.id`
+- 自分のオブジェクトは `userProfile`。自分の id は `user.id`（`userProfile.id` と同じ）。props で渡すなら `userProfileId`
 - リストの要素は `player` / `friend`。任意の profiles 行（DB 寄りの話）は `profile`
 - 「他のプレイヤー」「マッチ参加者」「フレンド」「検索結果」を扱うところでは `Player` を使う（ゲストを含むので `displayId` / `avatarUrl` は optional）
 - `UserProfile` は `Player` の structural subtype なので、自分を「プレイヤー」として渡すときは変換不要

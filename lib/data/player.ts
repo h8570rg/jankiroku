@@ -1,7 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { Player } from "@/lib/type";
-import { getUserProfileId } from "./internal";
+import { getUser } from "./user";
 
 /**
  * 登録済みプレイヤーのみを検索する。ゲストは含まれない。
@@ -14,7 +14,7 @@ export async function searchPlayers({ text }: { text: string }): Promise<Player[
   }
 
   const supabase = await createClient();
-  const userProfileId = await getUserProfileId(supabase);
+  const user = await getUser();
 
   /**
    * @see https://supabase.com/docs/guides/database/full-text-search?queryGroups=language&language=js#search-multiple-columns
@@ -26,7 +26,7 @@ export async function searchPlayers({ text }: { text: string }): Promise<Player[
     .not("display_id", "is", null)
     .not("name", "is", null)
     .not("user_id", "is", null)
-    .neq("id", userProfileId);
+    .neq("id", user.id);
 
   if (profilesResponse.error) throw profilesResponse.error;
   return profilesResponse.data.map((row) => ({
