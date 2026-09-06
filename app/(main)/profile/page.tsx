@@ -8,14 +8,14 @@ export const metadata: Metadata = {
 };
 
 export default async function ProfilePage() {
-  const profile = await getUserProfile();
+  const userProfile = await getUserProfile();
 
   return (
     <div className="mx-auto max-w-md">
       <Typography type="h1" className="mx-auto mb-4 w-fit text-lg">
         プロフィール編集
       </Typography>
-      <ProfileForm profile={profile} />
+      <ProfileForm userProfile={userProfile} />
     </div>
   );
 }

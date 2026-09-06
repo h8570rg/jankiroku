@@ -6,7 +6,7 @@ import type { Player } from "@/lib/type";
 import { createPlayerSchema } from "./schema";
 
 export type CreatePlayerResult = SubmissionResult & {
-  profile?: Player;
+  player?: Player;
 };
 
 export async function createPlayer(
@@ -25,7 +25,7 @@ export async function createPlayer(
   }
   const { name } = result.data;
 
-  const profile = await createGuestPlayer({ name });
+  const player = await createGuestPlayer({ name });
 
-  return { ...report(submission, {}), profile };
+  return { ...report(submission, {}), player };
 }
