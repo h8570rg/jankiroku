@@ -1,8 +1,8 @@
 "use client";
 
-import { Tabs } from "@heroui/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Tabs } from "@/components/tabs";
 
 const TABS = [
   { id: "matches", href: "/matches", label: "成績表" },
@@ -20,8 +20,8 @@ export function HomeTabs() {
           {TABS.map((tab) => (
             <Tabs.Tab
               key={tab.id}
-              id={tab.id}
               href={tab.href}
+              id={tab.id}
               render={(domProps) => <Link {...(domProps as React.ComponentProps<typeof Link>)} />}
             >
               {tab.label}
