@@ -12,10 +12,6 @@ export function AppbarAvatarMenu() {
       case "editProfile":
         router.push("/profile");
         break;
-      case "friends":
-        // prefetchしたほうが早いかも
-        router.push("/friends");
-        break;
       case "signOut":
         signOut().catch((e) => {
           throw e;
@@ -32,9 +28,6 @@ export function AppbarAvatarMenu() {
     >
       <Dropdown.Item id="editProfile">
         <Label>プロフィール編集</Label>
-      </Dropdown.Item>
-      <Dropdown.Item id="friends">
-        <Label>フレンド</Label>
       </Dropdown.Item>
       <Dropdown.Item id="signOut" variant="danger">
         <Label>ログアウト</Label>
