@@ -4,18 +4,16 @@ import { UserAvatar } from "@/components/user-avatar";
 import type { Match } from "@/lib/type";
 import { dayjs } from "@/lib/utils/date";
 
-export function MatchCard({ match, userId }: { match: Match; userId: string }) {
+export function MatchCard({ match, currentProfileId }: { match: Match; currentProfileId: string }) {
   const { createdAt } = match;
+  const currentPlayer = match.players.find((player) => player.id === currentProfileId);
+  if (!currentPlayer) return null;
   const today = dayjs();
   const targetDate = dayjs(createdAt);
   const isSameYear = today.isSame(targetDate, "year");
   const displayDate = isSameYear
     ? dayjs(createdAt).format("M/D")
     : dayjs(createdAt).format("YYYY/M/D");
-
-  const data = match.players.find((player) => player.id === userId);
-
-  if (!data) return null;
 
   return (
     <NextLink href={`/matches/${match.id}`} className={cardVariants().base()}>
@@ -39,7 +37,7 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
         <div className="flex items-center">
           <div className="flex shrink-0 grow flex-col items-center px-8">
             <div className="mb-2 text-xs text-muted">平均着順</div>
-            <div className="text-lg">{data.averageRank ?? "なし"}</div>
+            <div className="text-lg">{currentPlayer.averageRank ?? "なし"}</div>
           </div>
           <div className="flex basis-56 justify-center">
             <table className="[&_td]:text-center [&_th]:w-10 [&_th]:text-center">
@@ -53,10 +51,10 @@ export function MatchCard({ match, userId }: { match: Match; userId: string }) {
               </thead>
               <tbody className="text-sm">
                 <tr>
-                  <td>{data.rankCounts[0]}</td>
-                  <td>{data.rankCounts[1]}</td>
-                  <td>{data.rankCounts[2]}</td>
-                  {match.rule.playersCount === 4 && <td>{data.rankCounts[3]}</td>}
+                  <td>{currentPlayer.rankCounts[0]}</td>
+                  <td>{currentPlayer.rankCounts[1]}</td>
+                  <td>{currentPlayer.rankCounts[2]}</td>
+                  {match.rule.playersCount === 4 && <td>{currentPlayer.rankCounts[3]}</td>}
                 </tr>
               </tbody>
             </table>
