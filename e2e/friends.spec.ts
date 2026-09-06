@@ -9,12 +9,23 @@ test.describe.configure({ mode: "serial" });
 test.describe("フレンド管理", () => {
   test("フレンド検索ページが開ける", async ({ page }) => {
     await page.goto("/friends");
-    await expect(page.getByRole("heading", { name: "フレンド" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: "フレンド" })).toBeVisible();
 
     const addLink = page.locator('a[href="/friends/add"]').first();
     await addLink.click();
     await expect(page).toHaveURL(/\/friends\/add/);
     await expect(page.getByRole("heading", { name: "フレンド追加" })).toBeVisible();
+  });
+
+  test("一覧を名前で絞り込める", async ({ page }) => {
+    await page.goto("/friends");
+    await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
+    await expect(page.getByText(TEST_USERS.bob.name)).toBeVisible();
+
+    await page.getByRole("searchbox", { name: /検索|ユーザーID/ }).fill(TEST_USERS.alice.name);
+
+    await expect(page.getByText(TEST_USERS.alice.name)).toBeVisible();
+    await expect(page.getByText(TEST_USERS.bob.name)).not.toBeVisible();
   });
 
   test("ユーザーIDで検索できる", async ({ page }) => {
