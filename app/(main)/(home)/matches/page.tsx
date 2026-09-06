@@ -2,8 +2,8 @@ import { Typography } from "@heroui/react";
 import { getFriends } from "@/lib/data/friend";
 import { getMatches } from "@/lib/data/match";
 import { getUserProfile } from "@/lib/data/user";
-import { CreateMatchButton } from "./_components/create-match-button";
-import { MatchCard } from "./_components/match-card";
+import { CreateMatchButton } from "../../matches/_components/create-match-button";
+import { MatchCard } from "../../matches/_components/match-card";
 
 export default async function Matches() {
   // TODO: infinite scroll
@@ -14,9 +14,6 @@ export default async function Matches() {
   ]);
   return (
     <div>
-      <Typography type="h1" className="heading-1 mb-1">
-        成績表
-      </Typography>
       {matches.length === 0 && (
         <Typography type="body-sm" color="muted" align="center" className="my-10">
           まだ成績表がありません。
