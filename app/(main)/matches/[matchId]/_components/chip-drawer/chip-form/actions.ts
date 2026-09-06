@@ -7,11 +7,11 @@ import { addChipSchema } from "./schema";
 
 function ensurePlayerChipArray(
   payload: Record<string, unknown>,
-): { profileId: string; chipCount: string }[] {
+): { playerId: string; chipCount: string }[] {
   const raw = payload.playerChip;
   if (Array.isArray(raw)) {
     return raw.map((item) => ({
-      profileId: String((item as Record<string, unknown>)?.profileId ?? ""),
+      playerId: String((item as Record<string, unknown>)?.playerId ?? ""),
       chipCount: String((item as Record<string, unknown>)?.chipCount ?? ""),
     }));
   }
@@ -21,7 +21,7 @@ function ensurePlayerChipArray(
       .map((i) => {
         const item = (raw as Record<string, unknown>)[i] as Record<string, unknown>;
         return {
-          profileId: String(item?.profileId ?? ""),
+          playerId: String(item?.playerId ?? ""),
           chipCount: String(item?.chipCount ?? ""),
         };
       });
@@ -51,7 +51,7 @@ export async function addChip(_prevState: unknown, formData: FormData) {
     result.data.playerChip.map((row) =>
       updateMatchPlayer({
         matchId,
-        playerId: row.profileId,
+        playerId: row.playerId,
         chipCount: row.chipCount,
       }),
     ),

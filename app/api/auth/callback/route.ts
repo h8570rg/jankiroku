@@ -15,8 +15,8 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      const profile = await getNullableUserProfile();
-      if (!profile) {
+      const userProfile = await getNullableUserProfile();
+      if (!userProfile) {
         return NextResponse.redirect(`${origin}/register`);
       }
       return NextResponse.redirect(`${origin}${next}/matches`);

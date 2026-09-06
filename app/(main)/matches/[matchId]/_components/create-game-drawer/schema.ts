@@ -14,12 +14,12 @@ export const createCreateGameSchema = ({
       .object({
         players: z.array(
           z.object({
-            id: schema.profileId,
+            id: schema.playerId,
             points: schema.points.optional(),
             name: schema.name,
           }),
         ),
-        crackBoxPlayerId: schema.profileId.optional(),
+        crackBoxPlayerId: schema.playerId.optional(),
       })
       .superRefine(({ players }, ctx) => {
         const filledCount = players.filter(({ points }) => points !== undefined).length;

@@ -60,8 +60,8 @@ export function PlayerForm({
       <CreatePlayerModal
         isOpen={playerCreateModal.isOpen}
         onOpenChange={playerCreateModal.setOpen}
-        onPlayerCreate={(profile: Player) => {
-          setSelectedPlayers([...selectedPlayers, profile]);
+        onPlayerCreate={(player: Player) => {
+          setSelectedPlayers([...selectedPlayers, player]);
         }}
       />
     </>

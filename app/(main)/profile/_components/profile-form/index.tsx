@@ -12,10 +12,18 @@ import { createSubmitHandler, withCallbacks } from "@/lib/utils/form";
 import { updateProfile } from "./actions";
 import { profileUpdateSchema } from "./schema";
 
-export function ProfileForm({ className, profile }: { className?: string; profile: UserProfile }) {
+export function ProfileForm({
+  className,
+  userProfile,
+}: {
+  className?: string;
+  userProfile: UserProfile;
+}) {
   // avatarUrlはformDataに含めず.bind()でserver actionに渡す。
   // Next.jsはbind引数をサーバー側で暗号化するため、クライアントからの改ざんが不可能。
-  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(profile.avatarUrl ?? undefined);
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
+    userProfile.avatarUrl ?? undefined,
+  );
   const [isAvatarUploading, setIsAvatarUploading] = useState(false);
 
   const [lastResult, formAction, isPending] = useActionState(
@@ -29,7 +37,7 @@ export function ProfileForm({ className, profile }: { className?: string; profil
 
   const { form, fields } = useForm(profileUpdateSchema, {
     lastResult,
-    defaultValue: { name: profile.name },
+    defaultValue: { name: userProfile.name },
     onSubmit: createSubmitHandler(formAction),
   });
 
@@ -41,7 +49,7 @@ export function ProfileForm({ className, profile }: { className?: string; profil
     >
       <div className="flex justify-center">
         <AvatarInput
-          defaultValue={profile.avatarUrl ?? undefined}
+          defaultValue={userProfile.avatarUrl ?? undefined}
           onUpload={setAvatarUrl}
           onUploadingChange={setIsAvatarUploading}
         />
@@ -49,7 +57,7 @@ export function ProfileForm({ className, profile }: { className?: string; profil
       <div className="space-y-4">
         <TextField name="displayId" isReadOnly isDisabled>
           <Label>ユーザーID</Label>
-          <Input value={profile.displayId} />
+          <Input value={userProfile.displayId} />
           <Description>ユーザーIDは変更できません</Description>
         </TextField>
         <TextField

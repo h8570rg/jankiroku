@@ -4,10 +4,10 @@ import { UserAvatar } from "@/components/user-avatar";
 import type { Match } from "@/lib/type";
 import { dayjs } from "@/lib/utils/date";
 
-export function MatchCard({ match, currentProfileId }: { match: Match; currentProfileId: string }) {
+export function MatchCard({ match, userProfileId }: { match: Match; userProfileId: string }) {
   const { createdAt } = match;
-  const currentPlayer = match.players.find((player) => player.id === currentProfileId);
-  if (!currentPlayer) return null;
+  const player = match.players.find((p) => p.id === userProfileId);
+  if (!player) return null;
   const today = dayjs();
   const targetDate = dayjs(createdAt);
   const isSameYear = today.isSame(targetDate, "year");
@@ -37,7 +37,7 @@ export function MatchCard({ match, currentProfileId }: { match: Match; currentPr
         <div className="flex items-center">
           <div className="flex shrink-0 grow flex-col items-center px-8">
             <div className="mb-2 text-xs text-muted">平均着順</div>
-            <div className="text-lg">{currentPlayer.averageRank ?? "なし"}</div>
+            <div className="text-lg">{player.averageRank ?? "なし"}</div>
           </div>
           <div className="flex basis-56 justify-center">
             <table className="[&_td]:text-center [&_th]:w-10 [&_th]:text-center">
@@ -51,10 +51,10 @@ export function MatchCard({ match, currentProfileId }: { match: Match; currentPr
               </thead>
               <tbody className="text-sm">
                 <tr>
-                  <td>{currentPlayer.rankCounts[0]}</td>
-                  <td>{currentPlayer.rankCounts[1]}</td>
-                  <td>{currentPlayer.rankCounts[2]}</td>
-                  {match.rule.playersCount === 4 && <td>{currentPlayer.rankCounts[3]}</td>}
+                  <td>{player.rankCounts[0]}</td>
+                  <td>{player.rankCounts[1]}</td>
+                  <td>{player.rankCounts[2]}</td>
+                  {match.rule.playersCount === 4 && <td>{player.rankCounts[3]}</td>}
                 </tr>
               </tbody>
             </table>

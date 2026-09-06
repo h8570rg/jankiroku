@@ -4,8 +4,8 @@ import Appbar from "./_components/appbar";
 import { ReleaseNotes } from "./_components/release-notes";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const profile = await getNullableUserProfile();
-  if (!profile) {
+  const userProfile = await getNullableUserProfile();
+  if (!userProfile) {
     redirect("/register");
   }
 

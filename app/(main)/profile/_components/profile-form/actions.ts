@@ -25,8 +25,8 @@ export async function updateProfile(
   }
   const { name } = result.data;
 
-  const profile = await getUserProfile();
-  if (!profile.displayId) {
+  const userProfile = await getUserProfile();
+  if (!userProfile.displayId) {
     return report(submission, {
       error: { formErrors: ["プロフィールが見つかりません。"] },
     });
@@ -34,7 +34,7 @@ export async function updateProfile(
 
   const updateResult = await updateUserProfile({
     name,
-    displayId: profile.displayId,
+    displayId: userProfile.displayId,
     avatarUrl,
   });
 

@@ -64,6 +64,7 @@ export const schema = {
   defaultPoints: z.string("持ち点を入力してください").transform(Number),
   matchId: z.string(),
   profileId: z.string(),
+  playerId: z.string(),
   playersCount: z.union([z.literal("4"), z.literal("3")]).transform(Number),
   points: z
     .string("点数を入力してください")
