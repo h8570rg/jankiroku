@@ -135,46 +135,42 @@ INSERT INTO auth.identities (
   now(), now(), now()
 );
 
--- handle_new_user トリガーで自動作成されたプロフィールに、
--- E2E から参照できる固定 UUID とユーザー情報を設定する。
--- profiles.id と auth.users.id は別物なので、ここで明示的に別の値を割り当てる。
+-- handle_new_user が profiles.id = auth.users.id で作成する。
+-- ここでは表示用フィールドだけ埋める。
 UPDATE public.profiles
-  SET id = '00000000-1111-1111-1111-111111111111', display_id = 'testuser', name = 'テストユーザー'
+  SET display_id = 'testuser', name = 'テストユーザー'
 WHERE user_id = '11111111-1111-1111-1111-111111111111';
 UPDATE public.profiles
-  SET id = '00000000-2222-2222-2222-222222222222', display_id = 'alice123', name = 'アリス'
+  SET display_id = 'alice123', name = 'アリス'
 WHERE user_id = '22222222-2222-2222-2222-222222222222';
 UPDATE public.profiles
-  SET id = '00000000-3333-3333-3333-333333333333', display_id = 'bob123', name = 'ボブ'
+  SET display_id = 'bob123', name = 'ボブ'
 WHERE user_id = '33333333-3333-3333-3333-333333333333';
 UPDATE public.profiles
-  SET id = '00000000-4444-4444-4444-444444444444', display_id = 'carol123', name = 'キャロル'
+  SET display_id = 'carol123', name = 'キャロル'
 WHERE user_id = '44444444-4444-4444-4444-444444444444';
-UPDATE public.profiles
-  SET id = '00000000-5555-5555-5555-555555555555'
-WHERE user_id = '55555555-5555-5555-5555-555555555555';
 
 -- testuser のフレンドとして alice, bob, carol を登録
 -- （検索不要でデフォルトフレンド一覧から選択できるようにするため）
 INSERT INTO public.friends (profile_id, friend_id) VALUES
-  ('00000000-1111-1111-1111-111111111111', '00000000-2222-2222-2222-222222222222'),
-  ('00000000-1111-1111-1111-111111111111', '00000000-3333-3333-3333-333333333333'),
-  ('00000000-1111-1111-1111-111111111111', '00000000-4444-4444-4444-444444444444');
+  ('11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222'),
+  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333'),
+  ('11111111-1111-1111-1111-111111111111', '44444444-4444-4444-4444-444444444444');
 
 -- E2E用の事前マッチ（四麻・4人参加・ゲーム/チップ未入力）
 -- match-detail.spec.ts から直接この id に遷移して使う
 INSERT INTO public.matches (id, created_by, created_at) VALUES
   (
     'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-    '00000000-1111-1111-1111-111111111111',
+    '11111111-1111-1111-1111-111111111111',
     now()
   );
 
 INSERT INTO public.match_players (match_id, player_id, "order") VALUES
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '00000000-1111-1111-1111-111111111111', 0),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '00000000-2222-2222-2222-222222222222', 1),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '00000000-3333-3333-3333-333333333333', 2),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '00000000-4444-4444-4444-444444444444', 3);
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 0),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '22222222-2222-2222-2222-222222222222', 1),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '33333333-3333-3333-3333-333333333333', 2),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '44444444-4444-4444-4444-444444444444', 3);
 
 INSERT INTO public.rules (
   match_id, players_count, rate, default_points, default_calc_points,
@@ -182,21 +178,21 @@ INSERT INTO public.rules (
 ) VALUES (
   'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 4, 0, 25000, 30000,
   10000, 0, 'round', '0_0_0_0',
-  '00000000-1111-1111-1111-111111111111', '00000000-1111-1111-1111-111111111111'
+  '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111'
 );
 
 -- E2E用の事前マッチ（三麻・3人参加・ゲーム/チップ未入力）
 INSERT INTO public.matches (id, created_by, created_at) VALUES
   (
     'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-    '00000000-1111-1111-1111-111111111111',
+    '11111111-1111-1111-1111-111111111111',
     now()
   );
 
 INSERT INTO public.match_players (match_id, player_id, "order") VALUES
-  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '00000000-1111-1111-1111-111111111111', 0),
-  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '00000000-2222-2222-2222-222222222222', 1),
-  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '00000000-3333-3333-3333-333333333333', 2);
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '11111111-1111-1111-1111-111111111111', 0),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '22222222-2222-2222-2222-222222222222', 1),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '33333333-3333-3333-3333-333333333333', 2);
 
 INSERT INTO public.rules (
   match_id, players_count, rate, default_points, default_calc_points,
@@ -204,22 +200,22 @@ INSERT INTO public.rules (
 ) VALUES (
   'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 3, 0, 35000, 40000,
   10000, 0, 'round', '0_0_0',
-  '00000000-1111-1111-1111-111111111111', '00000000-1111-1111-1111-111111111111'
+  '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111'
 );
 
 -- E2E用の事前マッチ（三麻ルール・4人参加=ルール人数超過・ゲーム/チップ未入力）
 INSERT INTO public.matches (id, created_by, created_at) VALUES
   (
     'cccccccc-cccc-cccc-cccc-cccccccccccc',
-    '00000000-1111-1111-1111-111111111111',
+    '11111111-1111-1111-1111-111111111111',
     now()
   );
 
 INSERT INTO public.match_players (match_id, player_id, "order") VALUES
-  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '00000000-1111-1111-1111-111111111111', 0),
-  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '00000000-2222-2222-2222-222222222222', 1),
-  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '00000000-3333-3333-3333-333333333333', 2),
-  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '00000000-4444-4444-4444-444444444444', 3);
+  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '11111111-1111-1111-1111-111111111111', 0),
+  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '22222222-2222-2222-2222-222222222222', 1),
+  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '33333333-3333-3333-3333-333333333333', 2),
+  ('cccccccc-cccc-cccc-cccc-cccccccccccc', '44444444-4444-4444-4444-444444444444', 3);
 
 INSERT INTO public.rules (
   match_id, players_count, rate, default_points, default_calc_points,
@@ -227,21 +223,21 @@ INSERT INTO public.rules (
 ) VALUES (
   'cccccccc-cccc-cccc-cccc-cccccccccccc', 3, 0, 35000, 40000,
   10000, 0, 'round', '0_0_0',
-  '00000000-1111-1111-1111-111111111111', '00000000-1111-1111-1111-111111111111'
+  '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111'
 );
 
 -- E2E用の事前マッチ（ゲストプレイヤー追加テスト専用・三麻・3人・ゲーム/チップ未入力）
 INSERT INTO public.matches (id, created_by, created_at) VALUES
   (
     'dddddddd-dddd-dddd-dddd-dddddddddddd',
-    '00000000-1111-1111-1111-111111111111',
+    '11111111-1111-1111-1111-111111111111',
     now()
   );
 
 INSERT INTO public.match_players (match_id, player_id, "order") VALUES
-  ('dddddddd-dddd-dddd-dddd-dddddddddddd', '00000000-1111-1111-1111-111111111111', 0),
-  ('dddddddd-dddd-dddd-dddd-dddddddddddd', '00000000-2222-2222-2222-222222222222', 1),
-  ('dddddddd-dddd-dddd-dddd-dddddddddddd', '00000000-3333-3333-3333-333333333333', 2);
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', '11111111-1111-1111-1111-111111111111', 0),
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', '22222222-2222-2222-2222-222222222222', 1),
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', '33333333-3333-3333-3333-333333333333', 2);
 
 INSERT INTO public.rules (
   match_id, players_count, rate, default_points, default_calc_points,
@@ -249,7 +245,7 @@ INSERT INTO public.rules (
 ) VALUES (
   'dddddddd-dddd-dddd-dddd-dddddddddddd', 3, 0, 35000, 40000,
   10000, 0, 'round', '0_0_0',
-  '00000000-1111-1111-1111-111111111111', '00000000-1111-1111-1111-111111111111'
+  '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111'
 );
 
 -- E2E用ゲストプレイヤー（auth 未登録・5人超過テストの5人目として使用）
@@ -260,15 +256,15 @@ INSERT INTO public.profiles (id, name, user_id) VALUES
 INSERT INTO public.matches (id, created_by, created_at) VALUES
   (
     'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
-    '00000000-1111-1111-1111-111111111111',
+    '11111111-1111-1111-1111-111111111111',
     now()
   );
 
 INSERT INTO public.match_players (match_id, player_id, "order") VALUES
-  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '00000000-1111-1111-1111-111111111111', 0),
-  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '00000000-2222-2222-2222-222222222222', 1),
-  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '00000000-3333-3333-3333-333333333333', 2),
-  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '00000000-4444-4444-4444-444444444444', 3),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '11111111-1111-1111-1111-111111111111', 0),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '22222222-2222-2222-2222-222222222222', 1),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '33333333-3333-3333-3333-333333333333', 2),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '44444444-4444-4444-4444-444444444444', 3),
   ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '00000000-6666-6666-6666-666666666666', 4);
 
 INSERT INTO public.rules (
@@ -277,5 +273,5 @@ INSERT INTO public.rules (
 ) VALUES (
   'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 4, 0, 25000, 30000,
   10000, 0, 'round', '0_0_0_0',
-  '00000000-1111-1111-1111-111111111111', '00000000-1111-1111-1111-111111111111'
+  '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111'
 );
