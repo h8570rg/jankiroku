@@ -1,16 +1,16 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { Player } from "@/lib/type";
-import { getUserProfileId } from "./internal";
+import { getUser } from "./user";
 
 export async function getFriends(): Promise<Player[]> {
   const supabase = await createClient();
-  const userProfileId = await getUserProfileId(supabase);
+  const user = await getUser();
 
   const friendsResponse = await supabase
     .from("friends")
     .select("*, profiles!public_friends_friend_id_fkey!inner(*)")
-    .eq("profile_id", userProfileId);
+    .eq("profile_id", user.id);
   if (friendsResponse.error) throw friendsResponse.error;
   const friends = friendsResponse.data;
 
@@ -25,12 +25,12 @@ export async function getFriends(): Promise<Player[]> {
 
 export async function addFriends({ profileId }: { profileId: string }) {
   const supabase = await createClient();
-  const userProfileId = await getUserProfileId(supabase);
+  const user = await getUser();
 
   const friendExist1Response = await supabase
     .from("friends")
     .select("*")
-    .eq("profile_id", userProfileId)
+    .eq("profile_id", user.id)
     .eq("friend_id", profileId)
     .maybeSingle();
   if (friendExist1Response.error) throw friendExist1Response.error;
@@ -40,14 +40,14 @@ export async function addFriends({ profileId }: { profileId: string }) {
     .from("friends")
     .select("*")
     .eq("profile_id", profileId)
-    .eq("friend_id", userProfileId)
+    .eq("friend_id", user.id)
     .maybeSingle();
   if (friendExist2Response.error) throw friendExist2Response.error;
   const friendExist2 = !!friendExist2Response.data;
 
   const createFriend1 = async () => {
     return await supabase.from("friends").insert({
-      profile_id: userProfileId,
+      profile_id: user.id,
       friend_id: profileId,
     });
   };
@@ -55,14 +55,14 @@ export async function addFriends({ profileId }: { profileId: string }) {
     return await supabase
       .from("friends")
       .delete()
-      .eq("profile_id", userProfileId)
+      .eq("profile_id", user.id)
       .eq("friend_id", profileId);
   };
 
   const createFriend2 = async () => {
     return supabase.from("friends").insert({
       profile_id: profileId,
-      friend_id: userProfileId,
+      friend_id: user.id,
     });
   };
 
@@ -92,11 +92,11 @@ export async function addFriends({ profileId }: { profileId: string }) {
 
 export async function deleteFriends({ profileId }: { profileId: string }): Promise<void> {
   const supabase = await createClient();
-  const userProfileId = await getUserProfileId(supabase);
+  const user = await getUser();
 
   const [userFriendResponse, friendUserResponse] = await Promise.all([
-    supabase.from("friends").delete().eq("friend_id", profileId).eq("profile_id", userProfileId),
-    supabase.from("friends").delete().eq("friend_id", userProfileId).eq("profile_id", profileId),
+    supabase.from("friends").delete().eq("friend_id", profileId).eq("profile_id", user.id),
+    supabase.from("friends").delete().eq("friend_id", user.id).eq("profile_id", profileId),
   ]);
   if (userFriendResponse.error) throw userFriendResponse.error;
   if (friendUserResponse.error) throw friendUserResponse.error;

@@ -16,11 +16,9 @@ export async function getUser(): Promise<User> {
  */
 export async function getUserProfile(): Promise<UserProfile> {
   const supabase = await createClient();
-  const userResponse = await supabase.auth.getUser();
-  if (userResponse.error) throw userResponse.error;
-  const user = userResponse.data.user;
+  const user = await getUser();
 
-  const profileResponse = await supabase.from("profiles").select().eq("user_id", user.id).single();
+  const profileResponse = await supabase.from("profiles").select().eq("id", user.id).single();
   if (profileResponse.error) throw profileResponse.error;
   const row = profileResponse.data;
   return {
@@ -40,15 +38,9 @@ export async function getUserProfile(): Promise<UserProfile> {
  */
 export async function getNullableUserProfile(): Promise<UserProfile | null> {
   const supabase = await createClient();
-  const userResponse = await supabase.auth.getUser();
-  if (userResponse.error) throw userResponse.error;
-  const user = userResponse.data.user;
+  const user = await getUser();
 
-  const profileResponse = await supabase
-    .from("profiles")
-    .select()
-    .eq("user_id", user.id)
-    .maybeSingle();
+  const profileResponse = await supabase.from("profiles").select().eq("id", user.id).maybeSingle();
   if (profileResponse.error) throw profileResponse.error;
   const row = profileResponse.data;
   if (!row || row.name === null || row.display_id === null) {
@@ -82,9 +74,7 @@ export async function updateUserProfile({
     }
 > {
   const supabase = await createClient();
-  const userResponse = await supabase.auth.getUser();
-  if (userResponse.error) throw userResponse.error;
-  const user = userResponse.data.user;
+  const user = await getUser();
 
   const updatedResponse = await supabase
     .from("profiles")
@@ -93,7 +83,7 @@ export async function updateUserProfile({
       display_id: displayId,
       avatar_url: avatarUrl,
     })
-    .eq("user_id", user.id)
+    .eq("id", user.id)
     .select()
     .single();
   if (updatedResponse.error) return { success: false, error: updatedResponse.error };

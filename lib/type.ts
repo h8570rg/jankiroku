@@ -26,7 +26,7 @@ export type Player = {
  * layout で未登録ユーザーは `/register` に redirect されるため、
  * (main) 配下では必ず登録済みとして扱える。
  *
- * - `id`: `profiles.id`（`userProfileId`）
+ * - `id`: `profiles.id`（`userProfileId`）。登録ユーザーでは `userId` と同じ
  * - `userId`: `auth.users.id`
  */
 export type UserProfile = {
