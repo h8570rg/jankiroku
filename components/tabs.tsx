@@ -87,10 +87,12 @@ function isTabElement(child: React.ReactNode): child is React.ReactElement<{ id:
 
 type TabDomProps = {
   "aria-current"?: "page";
+  "aria-selected": boolean;
   children: React.ReactNode;
   className?: string;
   "data-selected"?: true;
   href: string;
+  role: "tab";
 };
 
 type TabsTabProps = {
@@ -106,6 +108,8 @@ function TabsTab({ children, className, href, id, render }: TabsTabProps) {
   const isSelected = selectedKey === id;
   const domProps: TabDomProps = {
     href,
+    role: "tab",
+    "aria-selected": isSelected,
     className: cn(
       "relative z-1 flex h-8 w-full items-center justify-center px-4 text-center text-sm font-medium outline-none no-highlight",
       "transition-[color,opacity] duration-150 motion-reduce:transition-none",
