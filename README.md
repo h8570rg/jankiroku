@@ -47,12 +47,12 @@ remote に戻すときは、再度 `pnpm dlx vercel env pull .env.local` を実�
 
 | 作業               | 使うもの                                    |
 | ------------------ | ------------------------------------------- |
-| 普段のアプリ開発   | remote（開発用 Supabase）← **こちらが基本** |
+| 普段のアプリ開発   | **dev** Supabase（`vercel env pull`）← 基本 |
 | DB（スキーマ）変更 | **ローカル Supabase のみ**                  |
 | E2E                | ローカル Supabase（実行のたび DB reset）    |
 
-**remote の Studio / SQL Editor ではスキーマを変更しないでください。**  
-変更は必ず local → migration → コミット → CI で remote へ適用します。
+**dev / prd の Studio / SQL Editor ではスキーマを変更しないでください。**  
+変更は必ず local → migration → コミット → 各環境へ `db push` します。
 
 ## アプリケーションの起動
 
@@ -73,8 +73,9 @@ pnpm run dev
 3. migration を作成（diff または手書き）
 4. reset で再現確認 + 型更新
 5. コミット
-6. main への merge / push で CI が remote に db push
-7. （任意）vercel env pull で .env.local を remote 向けに戻す
+6. **dev** へ手元で `db push`（後述）
+7. **prd** は main への merge で CI が `db push`
+8. （任意）vercel env pull で .env.local を dev 向けに戻す
 ```
 
 ## 手順
@@ -130,17 +131,24 @@ pnpm run supabase:type
 - `supabase/migrations/`
 - 更新していれば `lib/database.types.ts`
 
-### 6. remote への適用
+### 6. 各環境への適用
 
-**GitHub Actions が行います。** `main` への push で本番へ `db push` されます。
+スキーマ変更は local で確定した migration だけを当てる。アプリの Vercel promote とは独立している。
 
-手元から linked プロジェクトへ当てる必要があるときだけ:
+#### dev
+
+CI はない。`package.json` の `supabase_project_ref`（jankiroku-dev）へ、手元から push する。
 
 ```shell
 pnpm run supabase:login
 pnpm run supabase:link
 pnpm run supabase:push
 ```
+
+#### prd
+
+`main` への push で GitHub Actions（`.github/workflows/production.yaml`）が本番プロジェクトへ `db push` する。  
+Next.js を Vercel で promote するタイミングとは別で、マージした時点で DB だけ先に更新される。
 
 ## よく使うコマンド
 
@@ -152,7 +160,7 @@ pnpm run supabase:push
 | `pnpm run supabase:migration -- <name>` | 空の migration を作成                 |
 | `pnpm run supabase:diff -- -f <name>`   | ローカル DB の差分から migration 作成 |
 | `pnpm run supabase:type`                | ローカル DB から型生成                |
-| `pnpm run supabase:push`                | linked remote へ migration 適用       |
+| `pnpm run supabase:push`                | linked の **dev** へ migration 適用   |
 | `pnpm run dev`                          | アプリ起動（接続先は `.env.local`）   |
 
 # E2Eテスト
