@@ -97,19 +97,22 @@ export async function getMatches({
   size?: number;
 } = {}): Promise<Match[]> {
   const supabase = await createClient();
+  const currentProfileId = await getCurrentProfileId(supabase);
+
   const matchesResponse = await supabase
-    .from("matches")
-    .select("*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))", {
-      count: "exact",
-    })
+    .from("match_players")
+    .select(
+      "matches!inner(*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*)))",
+      { count: "exact" },
+    )
+    .eq("player_id", currentProfileId)
     .range((page - 1) * size, page * size - 1)
-    .order("created_at", { ascending: false })
-    .order("order", { referencedTable: "match_players", ascending: true });
+    .order("created_at", { referencedTable: "matches", ascending: false })
+    .order("order", { referencedTable: "matches.match_players", ascending: true });
 
   if (matchesResponse.error) throw matchesResponse.error;
-  const matches = matchesResponse.data;
 
-  return matches.map(formatMatch);
+  return matchesResponse.data.map((row) => formatMatch(row.matches));
 }
 
 export async function addMatchPlayers({

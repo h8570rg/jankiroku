@@ -22,7 +22,7 @@ export default async function Matches() {
       <ul className="space-y-4">
         {matches?.map((match) => (
           <li key={match.id}>
-            <MatchCard match={match} userId={userProfile.id} />
+            <MatchCard match={match} currentProfileId={userProfile.id} />
           </li>
         ))}
       </ul>
