@@ -171,7 +171,7 @@ importers:
         version: 1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@conform-to/zod':
         specifier: 1.21.1
-        version: 1.21.1(zod@4.6.4)
+        version: 1.21.1(zod@4.6.5)
       '@heroui/react':
         specifier: 3.2.5
         version: 3.2.5(@react-aria/i18n@3.13.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@react-aria/ssr@3.10.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@react-aria/utils@3.34.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@react-spectrum/provider@3.11.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-aria-components@1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-aria@3.52.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(tailwindcss@4.3.3)
@@ -236,8 +236,8 @@ importers:
         specifier: 10.1.1
         version: 10.1.1(react@19.3.0)
       zod:
-        specifier: 4.6.4
-        version: 4.6.4
+        specifier: 4.6.5
+        version: 4.6.5
     devDependencies:
       '@playwright/test':
         specifier: 1.63.0
@@ -2716,8 +2716,8 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
-  zod@4.6.4:
-    resolution: {integrity: sha512-AXSD6hvGdvRjajG/l1cC+d6IrhH+sjmPKtYeQdJIK8MFJl3LyClzS+o/YsVC+zQZPupAaeH5skwwm8YqYH7BqA==}
+  zod@4.6.5:
+    resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
 
 snapshots:
 
@@ -2760,10 +2760,10 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  '@conform-to/zod@1.21.1(zod@4.6.4)':
+  '@conform-to/zod@1.21.1(zod@4.6.5)':
     dependencies:
       '@conform-to/dom': 1.21.1
-      zod: 4.6.4
+      zod: 4.6.5
 
   '@cspell/cspell-bundled-dicts@10.3.1':
     dependencies:
@@ -4698,4 +4698,4 @@ snapshots:
 
   yaml@2.9.1: {}
 
-  zod@4.6.4: {}
+  zod@4.6.5: {}
