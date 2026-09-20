@@ -73,9 +73,8 @@ pnpm run dev
 3. migration を作成（diff または手書き）
 4. reset で再現確認 + 型更新
 5. コミット
-6. **dev** へ手元で `db push`（後述）
-7. **prd** は main への merge で CI が `db push`
-8. （任意）vercel env pull で .env.local を dev 向けに戻す
+6. **dev / prd** は `main` への merge で CI がそれぞれ `db push`
+7. （任意）vercel env pull で .env.local を dev 向けに戻す
 ```
 
 ## 手順
@@ -137,7 +136,9 @@ pnpm run supabase:type
 
 #### dev
 
-CI はない。`package.json` の `supabase_project_ref`（jankiroku-dev）へ、手元から push する。
+`main` への push で GitHub Actions（`.github/workflows/development.yaml`）が **dev** プロジェクトへ `db push` する。prd と同じタイミング。PR 中のスキーマ検証は local。
+
+緊急時だけ、手元から:
 
 ```shell
 pnpm run supabase:login
