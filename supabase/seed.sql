@@ -249,8 +249,13 @@ INSERT INTO public.rules (
 );
 
 -- E2E用ゲストプレイヤー（auth 未登録・5人超過テストの5人目として使用）
-INSERT INTO public.profiles (id, name, user_id) VALUES
-  ('00000000-6666-6666-6666-666666666666', 'デイブ', NULL);
+INSERT INTO public.profiles (id, name, user_id, created_by) VALUES
+  (
+    '00000000-6666-6666-6666-666666666666',
+    'デイブ',
+    NULL,
+    '11111111-1111-1111-1111-111111111111'
+  );
 
 -- E2E用の事前マッチ（四麻ルール・5人参加=ルール人数超過・ゲーム/チップ未入力）
 INSERT INTO public.matches (id, created_by, created_at) VALUES

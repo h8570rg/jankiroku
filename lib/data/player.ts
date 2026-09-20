@@ -43,7 +43,12 @@ export async function searchPlayers({ text }: { text: string }): Promise<Player[
  */
 export async function createGuestPlayer({ name }: { name: string }): Promise<Player> {
   const supabase = await createClient();
-  const response = await supabase.from("profiles").insert({ name }).select().single();
+  const user = await getUser();
+  const response = await supabase
+    .from("profiles")
+    .insert({ name, created_by: user.id })
+    .select()
+    .single();
   if (response.error) throw response.error;
   return {
     id: response.data.id,
