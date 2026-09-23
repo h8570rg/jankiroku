@@ -59,8 +59,8 @@ export async function getNullableUserProfile(): Promise<UserProfile | null> {
  * それ以外の DB/通信失敗は throw（他の data API と同様）。
  */
 export type UpdateUserProfileResult =
-  | { ok: true; data: UserProfile }
-  | { ok: false; error: { code: "DISPLAY_ID_TAKEN" } };
+  | { success: true; data: UserProfile }
+  | { success: false; error: { code: "DISPLAY_ID_TAKEN" } };
 
 export async function updateUserProfile({
   name,
@@ -86,14 +86,14 @@ export async function updateUserProfile({
     .single();
   if (updatedResponse.error) {
     if (updatedResponse.error.code === "23505") {
-      return { ok: false, error: { code: "DISPLAY_ID_TAKEN" } };
+      return { success: false, error: { code: "DISPLAY_ID_TAKEN" } };
     }
     throw updatedResponse.error;
   }
   const row = updatedResponse.data;
 
   return {
-    ok: true,
+    success: true,
     data: {
       id: row.id,
       // TODO: fallbackをどうするか考える

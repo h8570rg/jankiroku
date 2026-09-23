@@ -30,15 +30,17 @@ export async function updateProfile(
     avatarUrl,
   });
 
-  if (!updateResult.ok) {
-    // 現状 ok:false は DISPLAY_ID_TAKEN のみ
-    return report(submission, {
-      error: {
-        fieldErrors: {
-          displayId: ["このIDは既に使用されています。"],
+  if (!updateResult.success) {
+    if (updateResult.error.code === "DISPLAY_ID_TAKEN") {
+      return report(submission, {
+        error: {
+          fieldErrors: {
+            displayId: ["このIDは既に使用されています。"],
+          },
         },
-      },
-    });
+      });
+    }
+    throw new Error(`Unexpected updateUserProfile error: ${updateResult.error.code}`);
   }
 
   revalidatePath("/", "layout");

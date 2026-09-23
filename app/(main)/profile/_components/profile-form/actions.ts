@@ -39,7 +39,7 @@ export async function updateProfile(
   });
 
   // displayId は変更しないため DISPLAY_ID_TAKEN は想定外
-  if (!updateResult.ok) {
+  if (!updateResult.success) {
     throw new Error(`Unexpected updateUserProfile error: ${updateResult.error.code}`);
   }
 
