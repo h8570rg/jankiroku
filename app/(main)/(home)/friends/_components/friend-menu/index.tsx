@@ -3,12 +3,12 @@
 import { Dropdown, type Key, Label } from "@heroui/react";
 import { EllipsisVertical } from "lucide-react";
 import { Button } from "@/components/button";
-import { deleteFriends } from "./actions";
+import { deleteFriend } from "./actions";
 
 export function FriendMenu({ profileId }: { profileId: string }) {
   function handleAction(key: Key) {
     if (key === "delete") {
-      deleteFriends(profileId).catch((e) => {
+      deleteFriend(profileId).catch((e) => {
         throw e;
       });
     }

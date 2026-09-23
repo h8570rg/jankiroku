@@ -20,12 +20,13 @@ export async function getUserProfile(): Promise<UserProfile> {
   const profileResponse = await supabase.from("profiles").select().eq("id", user.id).single();
   if (profileResponse.error) throw profileResponse.error;
   const row = profileResponse.data;
+  if (row.name === null || row.display_id === null) {
+    throw new Error("Registered user profile is missing name or display_id");
+  }
   return {
     id: row.id,
-    // TODO: fallbackをどうするか考える
-    name: row.name ?? "",
-    // TODO: fallbackをどうするか考える
-    displayId: row.display_id ?? "",
+    name: row.name,
+    displayId: row.display_id,
     avatarUrl: row.avatar_url,
     userId: user.id,
   };
@@ -85,15 +86,16 @@ export async function updateUserProfile({
     throw updatedResponse.error;
   }
   const row = updatedResponse.data;
+  if (row.name === null || row.display_id === null) {
+    throw new Error("Updated user profile is missing name or display_id");
+  }
 
   return {
     success: true,
     data: {
       id: row.id,
-      // TODO: fallbackをどうするか考える
-      name: row.name ?? "",
-      // TODO: fallbackをどうするか考える
-      displayId: row.display_id ?? "",
+      name: row.name,
+      displayId: row.display_id,
       avatarUrl: row.avatar_url,
       userId: user.id,
     },
