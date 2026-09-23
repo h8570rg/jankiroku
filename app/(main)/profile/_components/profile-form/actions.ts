@@ -38,8 +38,9 @@ export async function updateProfile(
     avatarUrl,
   });
 
-  if (!updateResult.success) {
-    throw updateResult.error;
+  // displayId は変更しないため DISPLAY_ID_TAKEN は想定外
+  if (!updateResult.ok) {
+    throw new Error(`Unexpected updateUserProfile error: ${updateResult.error.code}`);
   }
 
   revalidatePath("/", "layout");

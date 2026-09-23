@@ -1,5 +1,4 @@
 import "server-only";
-import type { PostgrestError } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import type { User, UserProfile } from "@/lib/type";
 
@@ -55,6 +54,14 @@ export async function getNullableUserProfile(): Promise<UserProfile | null> {
   };
 }
 
+/**
+ * displayId の unique 違反は呼び出し側が fieldError にするため Result。
+ * それ以外の DB/通信失敗は throw（他の data API と同様）。
+ */
+export type UpdateUserProfileResult =
+  | { ok: true; data: UserProfile }
+  | { ok: false; error: { code: "DISPLAY_ID_TAKEN" } };
+
 export async function updateUserProfile({
   name,
   displayId,
@@ -63,16 +70,7 @@ export async function updateUserProfile({
   name: string;
   displayId: string;
   avatarUrl?: string;
-}): Promise<
-  | {
-      success: true;
-      data: UserProfile;
-    }
-  | {
-      success: false;
-      error: PostgrestError; // TODO: エラーハンドリングの体系化
-    }
-> {
+}): Promise<UpdateUserProfileResult> {
   const supabase = await createClient();
   const user = await getUser();
 
@@ -86,11 +84,16 @@ export async function updateUserProfile({
     .eq("id", user.id)
     .select()
     .single();
-  if (updatedResponse.error) return { success: false, error: updatedResponse.error };
+  if (updatedResponse.error) {
+    if (updatedResponse.error.code === "23505") {
+      return { ok: false, error: { code: "DISPLAY_ID_TAKEN" } };
+    }
+    throw updatedResponse.error;
+  }
   const row = updatedResponse.data;
 
   return {
-    success: true,
+    ok: true,
     data: {
       id: row.id,
       // TODO: fallbackをどうするか考える
