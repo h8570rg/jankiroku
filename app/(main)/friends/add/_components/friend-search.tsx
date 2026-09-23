@@ -24,7 +24,13 @@ export function FriendSearch({ defaultValue }: Props) {
   }, 300);
 
   return (
-    <SearchField variant="secondary" autoFocus onChange={handleSearch} defaultValue={defaultValue}>
+    <SearchField
+      aria-label="ユーザーIDもしくは名前で検索"
+      variant="secondary"
+      autoFocus
+      onChange={handleSearch}
+      defaultValue={defaultValue}
+    >
       <SearchField.Group>
         <SearchField.SearchIcon />
         <SearchField.Input placeholder="ユーザーIDもしくは名前で検索" />
