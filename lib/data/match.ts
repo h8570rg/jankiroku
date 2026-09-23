@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import type { CalcMethod, Match, MatchPlayer, Rate } from "@/lib/type";
+import type { CalcMethod, Match, Rate } from "@/lib/type";
+import { aggregateMatchPlayerStats } from "@/lib/utils/match";
 import { getUser } from "./user";
 
 export async function createMatch({
@@ -193,47 +194,39 @@ const formatMatch = (match: {
       rank: number;
     }[];
   }[];
-}) => {
+}): Match => {
   const rule = match.rules[0];
-  const incline = rule.incline.split("_").map((incline) => Number(incline));
+  const incline = rule.incline.split("_").map((value) => Number(value));
   const [incline1, incline2, incline3, incline4] = incline;
 
-  const players: MatchPlayer[] = match.match_players.map(({ profiles, chip_count }) => ({
-    id: profiles.id,
-    // TODO: fallbackをどうするか考える
-    name: profiles.name ?? "",
-    displayId: profiles.display_id,
-    avatarUrl: profiles.avatar_url,
-    rankCounts: Array.from({ length: rule.players_count }, () => 0),
-    averageRank: null,
-    totalScore: 0,
-    chipCount: chip_count,
-    result: 0,
+  const games = match.games.map((game) => ({
+    id: game.id,
+    players: game.game_players.map((gamePlayer) => ({
+      id: gamePlayer.player_id,
+      score: gamePlayer.score,
+      rank: gamePlayer.rank,
+    })),
   }));
 
-  match.games.forEach(({ game_players }) => {
-    game_players.forEach(({ player_id, score, rank }) => {
-      const player = players.find((player) => player.id === player_id);
-      if (!player) return;
-      player.rankCounts[rank - 1]++;
-      player.totalScore += score;
-    });
-  });
-
-  players.forEach((player) => {
-    if (player.rankCounts.reduce((acc, cur) => acc + cur, 0) > 0) {
-      player.averageRank = (
-        player.rankCounts.reduce((acc, cur, index) => acc + cur * (index + 1), 0) /
-        player.rankCounts.reduce((acc, cur) => acc + cur, 0)
-      ).toFixed(2);
-    }
-    player.result = (player.chipCount ?? 0) * rule.chip_rate + player.totalScore * rule.rate * 10;
+  const players = aggregateMatchPlayerStats({
+    players: match.match_players.map(({ profiles, chip_count }) => ({
+      id: profiles.id,
+      // TODO: fallbackをどうするか考える
+      name: profiles.name ?? "",
+      displayId: profiles.display_id,
+      avatarUrl: profiles.avatar_url,
+      chipCount: chip_count,
+    })),
+    games,
+    playersCount: rule.players_count,
+    chipRate: rule.chip_rate,
+    rate: rule.rate,
   });
 
   return {
     id: match.id,
     createdAt: match.created_at,
-    players: players,
+    players,
     rule: {
       playersCount: rule.players_count,
       defaultPoints: rule.default_points,
@@ -249,13 +242,6 @@ const formatMatch = (match: {
         incline4,
       },
     },
-    games: match.games.map((game) => ({
-      id: game.id,
-      players: game.game_players.map((gamePlayer) => ({
-        id: gamePlayer.player_id,
-        score: gamePlayer.score,
-        rank: gamePlayer.rank,
-      })),
-    })),
+    games,
   };
 };
