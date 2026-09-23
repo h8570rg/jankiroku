@@ -42,6 +42,11 @@ export const SEED_4RULE_5PLAYER_MATCH_ID = "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee
 export const SEED_4RULE_5PLAYER_MATCH_URL = `/matches/${SEED_4RULE_5PLAYER_MATCH_ID}`;
 
 /**
+ * seed.sql の testuser 非参加マッチ。一覧カードは日付 2020/1/15 で識別する
+ */
+export const SEED_ALICE_ONLY_MATCH_DATE_LABEL = "2020/1/15";
+
+/**
  * seed.sqlで用意されているテスト用ユーザー
  */
 export const TEST_USERS = {

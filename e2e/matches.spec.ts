@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { SEED_ALICE_ONLY_MATCH_DATE_LABEL } from "./helpers";
 
 test.describe("成績表 一覧ページ", () => {
   test("ページが表示される", async ({ page }) => {
@@ -6,6 +7,11 @@ test.describe("成績表 一覧ページ", () => {
     await expect(page.getByRole("tab", { name: "成績表" })).toBeVisible();
     await expect(page.getByRole("tab", { name: "フレンド" })).toBeVisible();
     await expect(page.getByRole("button", { name: "ゲームを始める" })).toBeVisible();
+  });
+
+  test("他ユーザー単独の対局は一覧に出ない", async ({ page }) => {
+    await page.goto("/matches");
+    await expect(page.getByText(SEED_ALICE_ONLY_MATCH_DATE_LABEL)).not.toBeVisible();
   });
 
   test("ゲームを始めるボタンでドロワーが開く", async ({ page }) => {
