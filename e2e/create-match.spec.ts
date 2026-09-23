@@ -228,6 +228,15 @@ test.describe("ゲーム作成 - 完了フロー", () => {
     await dialog.getByRole("button", { name: "ゲーム開始" }).click();
 
     await expect(page).toHaveURL(/\/matches\/[a-f0-9-]+/);
+    await expect(page.getByText(TEST_USERS.me.name).first()).toBeVisible();
+    await expect(page.getByText(TEST_USERS.alice.name).first()).toBeVisible();
+    await expect(page.getByText(TEST_USERS.bob.name).first()).toBeVisible();
+    await expect(page.getByText(TEST_USERS.carol.name).first()).toBeVisible();
+
+    await page.getByRole("button", { name: "ルールを確認" }).click();
+    const ruleModal = page.getByRole("dialog", { name: "ルール" });
+    await expect(ruleModal).toBeVisible();
+    await expect(ruleModal.getByText("4人")).toBeVisible();
   });
 
   test("三麻・プレイヤー3人でゲームを開始できる", async ({ page }) => {
