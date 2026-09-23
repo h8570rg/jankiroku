@@ -16,14 +16,14 @@ export async function getFriends(): Promise<Player[]> {
 
   return friends.map((friend) => ({
     id: friend.profiles.id,
-    // TODO: fallbackをどうするか考える
+    // Player.name は string。欠落行は表示用に空文字（登録済み想定では通常非 null）
     name: friend.profiles.name ?? "",
     displayId: friend.profiles.display_id,
     avatarUrl: friend.profiles.avatar_url,
   }));
 }
 
-export async function addFriends({ profileId }: { profileId: string }) {
+export async function addFriend({ profileId }: { profileId: string }): Promise<void> {
   const supabase = await createClient();
   const user = await getUser();
 
@@ -51,7 +51,7 @@ export async function addFriends({ profileId }: { profileId: string }) {
       friend_id: profileId,
     });
   };
-  const deleteFriend1 = async () => {
+  const rollbackFriend1 = async () => {
     return await supabase
       .from("friends")
       .delete()
@@ -75,10 +75,11 @@ export async function addFriends({ profileId }: { profileId: string }) {
     if (error1) throw error1;
     const { error: error2 } = await createFriend2();
     if (error2) {
-      const { error } = await deleteFriend1();
+      const { error } = await rollbackFriend1();
       if (error) throw error;
       throw error2;
     }
+    return;
   }
 
   if (!friendExist1) {
@@ -92,7 +93,7 @@ export async function addFriends({ profileId }: { profileId: string }) {
   }
 }
 
-export async function deleteFriends({ profileId }: { profileId: string }): Promise<void> {
+export async function deleteFriend({ profileId }: { profileId: string }): Promise<void> {
   const supabase = await createClient();
   const user = await getUser();
 
@@ -102,6 +103,4 @@ export async function deleteFriends({ profileId }: { profileId: string }): Promi
   ]);
   if (userFriendResponse.error) throw userFriendResponse.error;
   if (friendUserResponse.error) throw friendUserResponse.error;
-
-  return;
 }

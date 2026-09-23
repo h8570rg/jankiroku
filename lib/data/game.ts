@@ -3,6 +3,11 @@ import { createClient } from "@/lib/supabase/server";
 import type { GamePlayer } from "@/lib/type";
 import { getUser } from "./user";
 
+/**
+ * Game のライフサイクル。
+ * 意図的に未提供: updateGame（UI は削除のみ）。
+ */
+
 export async function createGame({
   matchId,
   gamePlayers,
