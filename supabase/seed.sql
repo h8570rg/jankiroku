@@ -280,3 +280,24 @@ INSERT INTO public.rules (
   10000, 0, 'round', '0_0_0_0',
   '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111'
 );
+
+-- E2E用: testuser 非参加の対局（アリス単独）。RLS で testuser から見えないことを確認する
+-- created_at を 2020-01-15 にして、一覧カードの日付で識別する
+INSERT INTO public.matches (id, created_by, created_at) VALUES
+  (
+    'ffffffff-ffff-ffff-ffff-ffffffffffff',
+    '22222222-2222-2222-2222-222222222222',
+    '2020-01-15 12:00:00+09'
+  );
+
+INSERT INTO public.match_players (match_id, player_id, "order") VALUES
+  ('ffffffff-ffff-ffff-ffff-ffffffffffff', '22222222-2222-2222-2222-222222222222', 0);
+
+INSERT INTO public.rules (
+  match_id, players_count, rate, default_points, default_calc_points,
+  crack_box_bonus, chip_rate, calc_method, incline, created_by, updated_by
+) VALUES (
+  'ffffffff-ffff-ffff-ffff-ffffffffffff', 3, 0, 35000, 40000,
+  10000, 0, 'round', '0_0_0',
+  '22222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-222222222222'
+);

@@ -183,6 +183,7 @@ test.describe("ゲーム結果入力フォーム (4人)", () => {
 
     await page.getByRole("button", { name: "保存", exact: true }).click();
     await expect(page.getByRole("dialog", { name: "結果入力" })).not.toBeVisible();
+    await expect(page.getByText("まだデータはありません")).not.toBeVisible();
   });
 
   test("3人入力後に残り入力ボタンが出て自動補完して保存できる", async ({ page }) => {
