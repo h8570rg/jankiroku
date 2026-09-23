@@ -153,8 +153,6 @@ export async function updateMatchPlayer({
   const updateMatchPlayerResponse = await supabase
     .from("match_players")
     .update({
-      match_id: matchId,
-      player_id: playerId,
       chip_count: chipCount,
     })
     .eq("match_id", matchId)
