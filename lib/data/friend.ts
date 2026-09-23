@@ -82,11 +82,13 @@ export async function addFriends({ profileId }: { profileId: string }) {
   }
 
   if (!friendExist1) {
-    await createFriend1();
+    const { error } = await createFriend1();
+    if (error) throw error;
   }
 
   if (!friendExist2) {
-    await createFriend2();
+    const { error } = await createFriend2();
+    if (error) throw error;
   }
 }
 
