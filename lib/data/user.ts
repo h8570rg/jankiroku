@@ -57,10 +57,17 @@ export async function getNullableUserProfile(): Promise<UserProfile | null> {
 /**
  * displayId の unique 違反は呼び出し側が fieldError にするため Result。
  * それ以外の DB/通信失敗は throw（他の data API と同様）。
+ *
+ * @see https://www.postgresql.org/docs/current/errcodes-appendix.html Class 23 — Integrity Constraint Violation
  */
-export type UpdateUserProfileResult =
-  | { success: true; data: UserProfile }
-  | { success: false; error: { code: "DISPLAY_ID_TAKEN" } };
+const PG_UNIQUE_VIOLATION = "23505";
+
+export const UpdateUserProfileErrorCode = {
+  DISPLAY_ID_TAKEN: "DISPLAY_ID_TAKEN",
+} as const;
+
+type UpdateUserProfileErrorCode =
+  (typeof UpdateUserProfileErrorCode)[keyof typeof UpdateUserProfileErrorCode];
 
 export async function updateUserProfile({
   name,
@@ -70,7 +77,10 @@ export async function updateUserProfile({
   name: string;
   displayId: string;
   avatarUrl?: string;
-}): Promise<UpdateUserProfileResult> {
+}): Promise<
+  | { success: true; data: UserProfile }
+  | { success: false; error: { code: UpdateUserProfileErrorCode } }
+> {
   const supabase = await createClient();
   const user = await getUser();
 
@@ -85,8 +95,11 @@ export async function updateUserProfile({
     .select()
     .single();
   if (updatedResponse.error) {
-    if (updatedResponse.error.code === "23505") {
-      return { success: false, error: { code: "DISPLAY_ID_TAKEN" } };
+    if (updatedResponse.error.code === PG_UNIQUE_VIOLATION) {
+      return {
+        success: false,
+        error: { code: UpdateUserProfileErrorCode.DISPLAY_ID_TAKEN },
+      };
     }
     throw updatedResponse.error;
   }
