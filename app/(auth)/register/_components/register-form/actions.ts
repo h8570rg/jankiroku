@@ -3,7 +3,7 @@
 import { parseSubmission, report } from "@conform-to/react/future";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { updateUserProfile } from "@/lib/data/user";
+import { UpdateUserProfileErrorCode, updateUserProfile } from "@/lib/data/user";
 import { createClient } from "@/lib/supabase/server";
 import { updateProfileSchema } from "./schema";
 
@@ -31,7 +31,7 @@ export async function updateProfile(
   });
 
   if (!updateResult.success) {
-    if (updateResult.error.code === "DISPLAY_ID_TAKEN") {
+    if (updateResult.error.code === UpdateUserProfileErrorCode.DISPLAY_ID_TAKEN) {
       return report(submission, {
         error: {
           fieldErrors: {
