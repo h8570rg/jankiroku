@@ -54,10 +54,6 @@ export async function getNullableUserProfile(): Promise<UserProfile | null> {
   };
 }
 
-/**
- * displayId の unique 違反は呼び出し側が fieldError にするため Result。
- * それ以外の DB/通信失敗は throw（他の data API と同様）。
- */
 export async function updateUserProfile({
   name,
   displayId,
