@@ -31,7 +31,7 @@ export async function updateProfile(
   });
 
   if (!updateResult.success) {
-    if (updateResult.error.code === "23505") {
+    if (updateResult.error.code === "DISPLAY_ID_TAKEN") {
       return report(submission, {
         error: {
           fieldErrors: {
@@ -40,7 +40,7 @@ export async function updateProfile(
         },
       });
     }
-    throw updateResult.error;
+    throw new Error(`Unexpected updateUserProfile error: ${updateResult.error.code}`);
   }
 
   revalidatePath("/", "layout");

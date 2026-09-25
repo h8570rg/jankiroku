@@ -39,7 +39,7 @@ export async function updateProfile(
   });
 
   if (!updateResult.success) {
-    throw updateResult.error;
+    throw new Error(`Unexpected updateUserProfile error: ${updateResult.error.code}`);
   }
 
   revalidatePath("/", "layout");
