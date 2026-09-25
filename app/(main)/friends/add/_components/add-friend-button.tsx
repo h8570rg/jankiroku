@@ -2,7 +2,7 @@
 
 import { startTransition, useActionState } from "react";
 import { Button } from "@/components/button";
-import { addFriends } from "./actions";
+import { addFriend } from "./actions";
 
 type Props = {
   profileId: string;
@@ -11,7 +11,7 @@ type Props = {
 
 export function AddFriendButton({ profileId, onSuccess }: Props) {
   const [_, dispatchAction, isPending] = useActionState(async () => {
-    await addFriends(profileId);
+    await addFriend(profileId);
     onSuccess?.();
   }, null);
 
