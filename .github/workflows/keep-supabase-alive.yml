@@ -8,13 +8,9 @@ on:
 jobs:
   ping-supabase:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        environment: [production, development]
-    environment: ${{ matrix.environment }}
+    environment: production
     steps:
-      - name: Supabaseにpingを送信（${{ matrix.environment }}）
+      - name: Supabaseにpingを送信
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}

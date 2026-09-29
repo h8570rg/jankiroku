@@ -7,7 +7,7 @@
 ## 前提条件
 
 - Node.js（バージョンは[package.json](package.json)を参照）
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)（DB 変更作業・E2E で使用）
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)（ローカル Supabase で使用）
 
 ## リポジトリのクローン
 
@@ -17,18 +17,9 @@ cd jankiroku
 pnpm install
 ```
 
-## 環境変数（remote / local の切り替え）
+## 環境変数
 
-接続先は `.env.local` の `NEXT_PUBLIC_SUPABASE_*` で切り替えます。起動コマンドはどちらも `pnpm run dev` です。
-
-### 開発用 remote に繋ぐ（基本）
-
-```shell
-pnpm dlx vercel login
-pnpm dlx vercel env pull .env.local
-```
-
-### ローカル Supabase に繋ぐ（DB 変更時）
+リモートの Supabase プロジェクトは**本番（prd）のみ**です。開発はすべてローカル Supabase で行います。
 
 ```shell
 pnpm run supabase:start
@@ -41,18 +32,16 @@ NEXT_PUBLIC_SUPABASE_URL=<API URL>
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<Publishable key>
 ```
 
-remote に戻すときは、再度 `pnpm dlx vercel env pull .env.local` を実行します。
-
 ## 基本方針
 
-| 作業               | 使うもの                                    |
-| ------------------ | ------------------------------------------- |
-| 普段のアプリ開発   | **dev** Supabase（`vercel env pull`）← 基本 |
-| DB（スキーマ）変更 | **ローカル Supabase のみ**                  |
-| E2E                | ローカル Supabase（実行のたび DB reset）    |
+| 作業               | 使うもの                                 |
+| ------------------ | ---------------------------------------- |
+| 普段のアプリ開発   | ローカル Supabase                        |
+| DB（スキーマ）変更 | ローカル Supabase                        |
+| E2E                | ローカル Supabase（実行のたび DB reset） |
 
-**dev / prd の Studio / SQL Editor ではスキーマを変更しないでください。**  
-変更は必ず local → migration → コミット → 各環境へ `db push` します。
+**prd の Studio / SQL Editor ではスキーマを変更しないでください。**  
+変更は必ず local → migration → コミット → main へ merge（CI が prd へ `db push`）します。
 
 ## アプリケーションの起動
 
@@ -68,24 +57,21 @@ pnpm run dev
 ## 流れ
 
 ```text
-1. ローカル Supabase を起動し、.env.local を local 向けに編集
+1. ローカル Supabase を起動する
 2. ローカルでスキーマを変更（ローカル Studio または SQL）
 3. migration を作成（diff または手書き）
 4. reset で再現確認 + 型更新
 5. コミット
-6. **dev / prd** は `main` への merge で CI がそれぞれ `db push`
-7. （任意）vercel env pull で .env.local を dev 向けに戻す
+6. `main` への merge で CI が prd へ `db push`
 ```
 
 ## 手順
 
-### 1. ローカルを起動し、アプリを local に繋ぐ
+### 1. ローカルを起動する
 
 ```shell
 pnpm run supabase:start
 ```
-
-`.env.local` をローカル向けに編集してから:
 
 ```shell
 pnpm run dev
@@ -130,26 +116,20 @@ pnpm run supabase:type
 - `supabase/migrations/`
 - 更新していれば `lib/database.types.ts`
 
-### 6. 各環境への適用
+### 6. prd への適用
 
-スキーマ変更は local で確定した migration だけを当てる。アプリの Vercel promote とは独立している。
+スキーマ変更は local で確定した migration だけを当てる。PR 中のスキーマ検証は local で行う。
 
-#### dev
+`main` への push で GitHub Actions（`.github/workflows/production.yaml`）が本番プロジェクトへ `db push` する。  
+Next.js を Vercel で promote するタイミングとは別で、マージした時点で DB だけ先に更新される。
 
-`main` への push で GitHub Actions（`.github/workflows/development.yaml`）が **dev** プロジェクトへ `db push` する。prd と同じタイミング。PR 中のスキーマ検証は local。
-
-緊急時だけ、手元から:
+CI が使えない緊急時だけ、手元から（**本番に直接適用されるので注意**。`supabase:link` では対話的にプロジェクトを選択する）:
 
 ```shell
 pnpm run supabase:login
 pnpm run supabase:link
 pnpm run supabase:push
 ```
-
-#### prd
-
-`main` への push で GitHub Actions（`.github/workflows/production.yaml`）が本番プロジェクトへ `db push` する。  
-Next.js を Vercel で promote するタイミングとは別で、マージした時点で DB だけ先に更新される。
 
 ## よく使うコマンド
 
@@ -161,7 +141,7 @@ Next.js を Vercel で promote するタイミングとは別で、マージし�
 | `pnpm run supabase:migration -- <name>` | 空の migration を作成                 |
 | `pnpm run supabase:diff -- -f <name>`   | ローカル DB の差分から migration 作成 |
 | `pnpm run supabase:type`                | ローカル DB から型生成                |
-| `pnpm run supabase:push`                | linked の **dev** へ migration 適用   |
+| `pnpm run supabase:push`                | linked の **prd** へ migration 適用   |
 | `pnpm run dev`                          | アプリ起動（接続先は `.env.local`）   |
 
 # E2Eテスト

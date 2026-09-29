@@ -16,7 +16,7 @@
     "test:e2e:ui": "playwright test --ui",
     "spell": "cspell . --gitignore",
     "supabase:login": "supabase login",
-    "supabase:link": "supabase link --project-ref $npm_package_config_supabase_project_ref",
+    "supabase:link": "supabase link",
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
     "supabase:reset": "supabase db reset",
@@ -64,9 +64,6 @@
     "supabase": "2.117.0",
     "typescript": "7.0.2",
     "vitest": "5.0.2"
-  },
-  "config": {
-    "supabase_project_ref": "ggkmppnjhrwzdsamzqbp"
   },
   "engines": {
     "node": "24.x"
