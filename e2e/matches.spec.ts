@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { SEED_ALICE_ONLY_MATCH_DATE_LABEL } from "./helpers";
+import { SEED_ALICE_ONLY_MATCH_DATE_LABEL, SEED_PAST_MATCH_IDS_NEWEST_FIRST } from "./helpers";
 
 test.describe("成績表 一覧ページ", () => {
   test("ページが表示される", async ({ page }) => {
@@ -12,6 +12,20 @@ test.describe("成績表 一覧ページ", () => {
   test("他ユーザー単独の対局は一覧に出ない", async ({ page }) => {
     await page.goto("/matches");
     await expect(page.getByText(SEED_ALICE_ONLY_MATCH_DATE_LABEL)).not.toBeVisible();
+  });
+
+  test("成績表が新しい順に並ぶ", async ({ page }) => {
+    await page.goto("/matches");
+    const cards = page.locator('a[href^="/matches/"]');
+    await expect(cards.first()).toBeVisible();
+
+    const paths = await cards.evaluateAll((links) =>
+      links.map((link) => link.getAttribute("href")),
+    );
+    // 過去対局は当日作成の対局より後ろに、新しい順で並ぶ
+    expect(paths.slice(-SEED_PAST_MATCH_IDS_NEWEST_FIRST.length)).toEqual(
+      SEED_PAST_MATCH_IDS_NEWEST_FIRST.map((id) => `/matches/${id}`),
+    );
   });
 
   test("ゲームを始めるボタンでドロワーが開く", async ({ page }) => {

@@ -107,7 +107,8 @@ export async function getMatches({
     )
     .eq("player_id", user.id)
     .range((page - 1) * size, page * size - 1)
-    .order("created_at", { referencedTable: "matches", ascending: false })
+    // referencedTable 指定は埋め込み先の並び替えになるため、親行の並び替えは "matches(created_at)" で指定する
+    .order("matches(created_at)", { ascending: false })
     .order("order", { referencedTable: "matches.match_players", ascending: true });
 
   if (matchesResponse.error) throw matchesResponse.error;
