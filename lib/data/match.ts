@@ -4,12 +4,6 @@ import type { CalcMethod, Match, Rate } from "@/lib/type";
 import { aggregateMatchPlayerStats } from "@/lib/utils/match";
 import { getUser } from "./user";
 
-/**
- * Match aggregate の読み書き。
- * 意図的に未提供: updateMatch / updateRule / deleteMatch / removeMatchPlayer（UI なし）。
- * Game の create/delete は `./game`。
- */
-
 export async function createMatch({
   calcMethod,
   chipRate,
