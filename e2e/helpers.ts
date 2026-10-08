@@ -47,6 +47,16 @@ export const SEED_4RULE_5PLAYER_MATCH_URL = `/matches/${SEED_4RULE_5PLAYER_MATCH
 export const SEED_ALICE_ONLY_MATCH_DATE_LABEL = "2020/1/15";
 
 /**
+ * seed.sql の testuser 参加の過去マッチ。新しい順（2023/5/10 → 2022/8/20 → 2021/3/1）
+ * seed では古い順に INSERT しているため、created_at で並べないと順序が崩れる
+ */
+export const SEED_PAST_MATCH_IDS_NEWEST_FIRST = [
+  "0a000000-0000-0000-0000-000000000003",
+  "0a000000-0000-0000-0000-000000000002",
+  "0a000000-0000-0000-0000-000000000001",
+] as const;
+
+/**
  * seed.sqlで用意されているテスト用ユーザー
  */
 export const TEST_USERS = {
