@@ -1,5 +1,4 @@
 import "server-only";
-import type { PostgrestError } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import type { User, UserProfile } from "@/lib/type";
 
@@ -64,14 +63,7 @@ export async function updateUserProfile({
   displayId: string;
   avatarUrl?: string;
 }): Promise<
-  | {
-      success: true;
-      data: UserProfile;
-    }
-  | {
-      success: false;
-      error: PostgrestError; // TODO: エラーハンドリングの体系化
-    }
+  { success: true; data: UserProfile } | { success: false; error: { code: "DISPLAY_ID_TAKEN" } }
 > {
   const supabase = await createClient();
   const user = await getUser();
@@ -86,7 +78,12 @@ export async function updateUserProfile({
     .eq("id", user.id)
     .select()
     .single();
-  if (updatedResponse.error) return { success: false, error: updatedResponse.error };
+  if (updatedResponse.error) {
+    if (updatedResponse.error.code === "23505") {
+      return { success: false, error: { code: "DISPLAY_ID_TAKEN" } };
+    }
+    throw updatedResponse.error;
+  }
   const row = updatedResponse.data;
 
   return {
