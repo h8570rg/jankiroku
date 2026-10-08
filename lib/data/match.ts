@@ -212,7 +212,7 @@ const formatMatch = (match: {
   const players = aggregateMatchPlayerStats({
     players: match.match_players.map(({ profiles, chip_count }) => ({
       id: profiles.id,
-      // TODO: fallbackをどうするか考える
+      // Player.name は string。欠落行は表示用に空文字
       name: profiles.name ?? "",
       displayId: profiles.display_id,
       avatarUrl: profiles.avatar_url,
