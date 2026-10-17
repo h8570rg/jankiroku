@@ -57,6 +57,11 @@ export const SEED_PAST_MATCH_IDS_NEWEST_FIRST = [
 ] as const;
 
 /**
+ * seed.sql の無限スクロール確認用マッチ（testuser 単独・2015/1/2〜2015/1/26 の25件）のうち最も古いもの
+ */
+export const SEED_OLDEST_MATCH_ID = "0b000000-0000-0000-0000-000000000001";
+
+/**
  * seed.sqlで用意されているテスト用ユーザー
  */
 export const TEST_USERS = {

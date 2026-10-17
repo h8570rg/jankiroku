@@ -90,27 +90,35 @@ export async function getMatch({ matchId }: { matchId: string }): Promise<Match>
   return formatMatch(match);
 }
 
+/**
+ * 自分が参加している成績表を新しい順に取得する。
+ * `before` を渡すと、その created_at より古いものだけを返す。
+ */
 export async function getMatches({
-  page = 1,
-  size = 999, // TODO: 全件取得どうするか
+  before,
+  limit,
 }: {
-  page?: number;
-  size?: number;
-} = {}): Promise<Match[]> {
+  before?: string;
+  limit: number;
+}): Promise<Match[]> {
   const supabase = await createClient();
   const user = await getUser();
 
-  const matchesResponse = await supabase
+  let query = supabase
     .from("match_players")
     .select(
       "matches!inner(*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*)))",
-      { count: "exact" },
     )
-    .eq("player_id", user.id)
-    .range((page - 1) * size, page * size - 1)
+    .eq("player_id", user.id);
+  if (before) {
+    query = query.lt("matches.created_at", before);
+  }
+
+  const matchesResponse = await query
     // referencedTable 指定は埋め込み先の並び替えになるため、親行の並び替えは "matches(created_at)" で指定する
     .order("matches(created_at)", { ascending: false })
-    .order("order", { referencedTable: "matches.match_players", ascending: true });
+    .order("order", { referencedTable: "matches.match_players", ascending: true })
+    .limit(limit);
 
   if (matchesResponse.error) throw matchesResponse.error;
 

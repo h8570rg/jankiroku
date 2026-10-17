@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { SEED_ALICE_ONLY_MATCH_DATE_LABEL, SEED_PAST_MATCH_IDS_NEWEST_FIRST } from "./helpers";
+import {
+  SEED_ALICE_ONLY_MATCH_DATE_LABEL,
+  SEED_OLDEST_MATCH_ID,
+  SEED_PAST_MATCH_IDS_NEWEST_FIRST,
+} from "./helpers";
 
 test.describe("成績表 一覧ページ", () => {
   test("ページが表示される", async ({ page }) => {
@@ -22,10 +26,32 @@ test.describe("成績表 一覧ページ", () => {
     const paths = await cards.evaluateAll((links) =>
       links.map((link) => link.getAttribute("href")),
     );
-    // 過去対局は当日作成の対局より後ろに、新しい順で並ぶ
-    expect(paths.slice(-SEED_PAST_MATCH_IDS_NEWEST_FIRST.length)).toEqual(
-      SEED_PAST_MATCH_IDS_NEWEST_FIRST.map((id) => `/matches/${id}`),
+    // 過去対局は新しい順で並ぶ（1 ページ目に収まる範囲で確認）
+    const pastPaths = SEED_PAST_MATCH_IDS_NEWEST_FIRST.map((id) => `/matches/${id}`);
+    expect(paths.filter((path) => path && pastPaths.includes(path))).toEqual(pastPaths);
+  });
+
+  test("スクロールすると続きの成績表が読み込まれる", async ({ page }) => {
+    await page.goto("/matches");
+    const cards = page.locator('a[href^="/matches/"]');
+    const oldestCard = page.locator(`a[href="/matches/${SEED_OLDEST_MATCH_ID}"]`);
+
+    // 1 ページ目は 20 件で、最も古い対局はまだ表示されない
+    await expect(cards).toHaveCount(20);
+    await expect(oldestCard).toHaveCount(0);
+
+    // 最も古い対局が出るまでスクロールして続きを読み込む
+    await expect(async () => {
+      await cards.last().scrollIntoViewIfNeeded();
+      await expect(oldestCard).toBeVisible({ timeout: 1000 });
+    }).toPass();
+
+    // 重複なく全件が並ぶ
+    const paths = await cards.evaluateAll((links) =>
+      links.map((link) => link.getAttribute("href")),
     );
+    expect(new Set(paths).size).toBe(paths.length);
+    expect(paths.at(-1)).toBe(`/matches/${SEED_OLDEST_MATCH_ID}`);
   });
 
   test("ゲームを始めるボタンでドロワーが開く", async ({ page }) => {
