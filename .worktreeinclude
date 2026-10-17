@@ -1,0 +1,2 @@
+# Claude Code が worktree 作成時に main からコピーする gitignore 済みファイル
+.env.local
