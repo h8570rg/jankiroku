@@ -5,6 +5,8 @@ export const AVATAR_MAX_SIZE = 2 * 1024 * 1024;
 export const AVATAR_ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
 export const DISPLAY_ID_MIN_LENGTH = 4;
 export const DISPLAY_ID_MAX_LENGTH = 12;
+/** 成績表一覧で 1 回に読み込む件数 */
+export const MATCHES_PAGE_SIZE = 20;
 
 export const rates = [0, 1, 3, 5, 10, 20] as const;
 export const rateLabel: Record<(typeof rates)[number], string> = {

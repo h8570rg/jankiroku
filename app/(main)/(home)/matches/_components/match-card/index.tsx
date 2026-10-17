@@ -1,4 +1,4 @@
-import { Card, cardVariants, Separator, Typography } from "@heroui/react";
+import { Card, cardVariants, Separator, Skeleton, Typography } from "@heroui/react";
 import NextLink from "next/link";
 import { UserAvatar } from "@/components/user-avatar";
 import type { Match } from "@/lib/type";
@@ -62,5 +62,17 @@ export function MatchCard({ match, userProfileId }: { match: Match; userProfileI
         </div>
       </Card.Content>
     </NextLink>
+  );
+}
+
+export function MatchCardSkeleton() {
+  return (
+    <div className="rounded-2xl border border-border p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <Skeleton className="h-4 w-16 rounded-lg" />
+        <Skeleton className="h-8 w-20 rounded-full" />
+      </div>
+      <Skeleton className="h-16 w-full rounded-lg" />
+    </div>
   );
 }

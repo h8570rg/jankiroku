@@ -331,3 +331,29 @@ WHERE m.id IN (
   '0a000000-0000-0000-0000-000000000002',
   '0a000000-0000-0000-0000-000000000003'
 );
+
+-- E2E用: 一覧の無限スクロール確認用の古い対局（testuser 単独・25件）
+-- 2015/1/2 〜 2015/1/26。1 ページ（20件）に収まらない件数にして、スクロールで続きが読み込まれることを確認する
+INSERT INTO public.matches (id, created_by, created_at)
+SELECT
+  format('0b000000-0000-0000-0000-%s', lpad(n::text, 12, '0'))::uuid,
+  '11111111-1111-1111-1111-111111111111',
+  '2015-01-01 12:00:00+09'::timestamptz + n * interval '1 day'
+FROM generate_series(1, 25) AS n;
+
+INSERT INTO public.match_players (match_id, player_id, "order")
+SELECT
+  format('0b000000-0000-0000-0000-%s', lpad(n::text, 12, '0'))::uuid,
+  '11111111-1111-1111-1111-111111111111',
+  0
+FROM generate_series(1, 25) AS n;
+
+INSERT INTO public.rules (
+  match_id, players_count, rate, default_points, default_calc_points,
+  crack_box_bonus, chip_rate, calc_method, incline, created_by, updated_by
+)
+SELECT
+  format('0b000000-0000-0000-0000-%s', lpad(n::text, 12, '0'))::uuid, 3, 0, 35000, 40000,
+  10000, 0, 'round', '0_0_0',
+  '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111'
+FROM generate_series(1, 25) AS n;
