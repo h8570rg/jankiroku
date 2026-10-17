@@ -12,9 +12,5 @@ setup("authenticate", async ({ page }) => {
   await page.waitForURL("/matches");
   await expect(page).toHaveURL("/matches");
 
-  await page.evaluate(() => {
-    localStorage.setItem("lastVersion", "999.0.0");
-  });
-
   await page.context().storageState({ path: authFile });
 });
