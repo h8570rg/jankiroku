@@ -1,13 +1,10 @@
 import { expect, test as setup } from "@playwright/test";
+import { loginWithOtp, TEST_USERS } from "./helpers";
 
 const authFile = "e2e/.auth/user.json";
 
 setup("authenticate", async ({ page }) => {
-  await page.goto("/login");
-
-  await page.getByRole("textbox", { name: "メールアドレス" }).fill("test@example.com");
-  await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
-  await page.getByRole("button", { name: "ログイン", exact: true }).click();
+  await loginWithOtp(page, TEST_USERS.me.email);
 
   await page.waitForURL("/matches");
   await expect(page).toHaveURL("/matches");

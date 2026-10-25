@@ -20,6 +20,7 @@
     "ilike",
     "Inbucket",
     "jankiroku",
+    "Mailpit",
     "oxfmt",
     "oxlint",
     "Postgrest",
@@ -29,7 +30,6 @@
     "spinbutton",
     "supabase",
     "testuser",
-    "turbopack",
-    "wrongpassword"
+    "turbopack"
   ]
 }

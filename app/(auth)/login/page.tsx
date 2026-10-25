@@ -1,6 +1,5 @@
-import { linkVariants, Separator, Typography } from "@heroui/react";
+import { Separator, Typography } from "@heroui/react";
 import type { Metadata } from "next";
-import NextLink from "next/link";
 import { LoginForm } from "./_components/login-form";
 import { SocialProviders } from "./_components/social-providers";
 
@@ -21,11 +20,8 @@ export default function LoginPage() {
         <Separator className="shrink" />
       </div>
       <LoginForm />
-      <Typography type="body-sm" align="center" className="mt-4">
-        アカウントをお持ちでない方は
-        <NextLink className={linkVariants().base()} href="/sign-up">
-          新規登録
-        </NextLink>
+      <Typography type="body-sm" align="center" color="muted" className="mt-4">
+        初めての方も、メールアドレスを入力するとそのまま登録できます。
       </Typography>
     </div>
   );

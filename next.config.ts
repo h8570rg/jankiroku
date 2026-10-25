@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async redirects() {
+    return [
+      // 新規登録はログイン画面の OTP フローに統合済み
+      { source: "/sign-up", destination: "/login", permanent: true },
+    ];
+  },
   logging: {
     fetches: {
       fullUrl: true,

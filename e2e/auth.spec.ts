@@ -1,45 +1,63 @@
 import { expect, test } from "@playwright/test";
+import { clearMailbox, getLatestOtp, loginWithOtp, randomEmail, TEST_USERS } from "./helpers";
 
 test.describe("ログイン", () => {
   test.use({ storageState: { cookies: [], origins: [] } });
 
-  test("正しい認証情報でログインできる", async ({ page }) => {
-    await page.goto("/login");
-
-    await page.getByRole("textbox", { name: "メールアドレス" }).fill("test@example.com");
-    await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
-    await page.getByRole("button", { name: "ログイン", exact: true }).click();
+  test("届いたコードを入力するとログインできる", async ({ page }) => {
+    await loginWithOtp(page, TEST_USERS.me.email);
 
     await expect(page).toHaveURL("/matches");
   });
 
-  test("誤ったパスワードではログインできない", async ({ page }) => {
+  test("未登録のメールアドレスでもコードでログインでき、登録ページへ進む", async ({ page }) => {
+    await loginWithOtp(page, randomEmail());
+
+    await expect(page).toHaveURL(/\/register/);
+  });
+
+  // 同一アドレスへの連続送信は Supabase の送信間隔制限にかかるため、ログイン以外のテストは毎回別アドレスを使う
+  test("誤ったコードではログインできない", async ({ page }) => {
+    const email = randomEmail();
+    await clearMailbox(email);
     await page.goto("/login");
 
-    await page.getByRole("textbox", { name: "メールアドレス" }).fill("test@example.com");
-    await page.getByRole("textbox", { name: "パスワード" }).fill("wrongpassword");
+    await page.getByRole("textbox", { name: "メールアドレス" }).fill(email);
+    await page.getByRole("button", { name: "ログインコードを送信", exact: true }).click();
+    const otp = await getLatestOtp(email);
+    const wrongOtp = otp === "000000" ? "111111" : "000000";
+    await page.getByRole("textbox", { name: "ログインコード" }).fill(wrongOtp);
     await page.getByRole("button", { name: "ログイン", exact: true }).click();
 
-    await expect(page.getByText("メールアドレスまたはパスワードが間違っています")).toBeVisible();
+    await expect(page.getByText("コードが正しくないか、有効期限が切れています")).toBeVisible();
     await expect(page).toHaveURL("/login");
   });
 
-  test("未登録のメールアドレスではログインできない", async ({ page }) => {
+  test("コードが未入力ならバリデーションエラー", async ({ page }) => {
     await page.goto("/login");
 
-    await page.getByRole("textbox", { name: "メールアドレス" }).fill("nobody@example.com");
-    await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
+    await page.getByRole("textbox", { name: "メールアドレス" }).fill(randomEmail());
+    await page.getByRole("button", { name: "ログインコードを送信", exact: true }).click();
     await page.getByRole("button", { name: "ログイン", exact: true }).click();
 
-    await expect(page.getByText("メールアドレスまたはパスワードが間違っています")).toBeVisible();
+    await expect(page.getByText("コードを入力してください", { exact: true })).toBeVisible();
     await expect(page).toHaveURL("/login");
+  });
+
+  test("メールアドレスを変更でメールアドレス入力に戻る", async ({ page }) => {
+    await page.goto("/login");
+
+    await page.getByRole("textbox", { name: "メールアドレス" }).fill(randomEmail());
+    await page.getByRole("button", { name: "ログインコードを送信", exact: true }).click();
+    await page.getByRole("button", { name: "メールアドレスを変更" }).click();
+
+    await expect(page.getByRole("textbox", { name: "メールアドレス" })).toBeVisible();
   });
 
   test("メールアドレス未入力ではバリデーションエラー", async ({ page }) => {
     await page.goto("/login");
 
-    await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
-    await page.getByRole("button", { name: "ログイン", exact: true }).click();
+    await page.getByRole("button", { name: "ログインコードを送信", exact: true }).click();
 
     await expect(page.getByText("メールアドレスを入力してください")).toBeVisible();
     await expect(page).toHaveURL("/login");
@@ -49,31 +67,9 @@ test.describe("ログイン", () => {
     await page.goto("/login");
 
     await page.getByRole("textbox", { name: "メールアドレス" }).fill("not-an-email");
-    await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
-    await page.getByRole("button", { name: "ログイン", exact: true }).click();
+    await page.getByRole("button", { name: "ログインコードを送信", exact: true }).click();
 
     await expect(page.getByText("メールアドレスを正しい形式で入力してください")).toBeVisible();
-    await expect(page).toHaveURL("/login");
-  });
-
-  test("パスワード未入力ではバリデーションエラー", async ({ page }) => {
-    await page.goto("/login");
-
-    await page.getByRole("textbox", { name: "メールアドレス" }).fill("test@example.com");
-    await page.getByRole("button", { name: "ログイン", exact: true }).click();
-
-    await expect(page.getByText("パスワードを入力してください")).toBeVisible();
-    await expect(page).toHaveURL("/login");
-  });
-
-  test("パスワードが短いとバリデーションエラー", async ({ page }) => {
-    await page.goto("/login");
-
-    await page.getByRole("textbox", { name: "メールアドレス" }).fill("test@example.com");
-    await page.getByRole("textbox", { name: "パスワード" }).fill("12345");
-    await page.getByRole("button", { name: "ログイン", exact: true }).click();
-
-    await expect(page.getByText("パスワードは6文字以上で入力してください")).toBeVisible();
     await expect(page).toHaveURL("/login");
   });
 
@@ -86,8 +82,8 @@ test.describe("ログイン", () => {
     }
   });
 
-  test("ログインページに新規登録ページへのリンクが存在する", async ({ page }) => {
-    await page.goto("/login");
-    await expect(page.getByRole("link", { name: "新規登録" })).toBeVisible();
+  test("旧新規登録ページはログインページへリダイレクトされる", async ({ page }) => {
+    await page.goto("/sign-up");
+    await expect(page).toHaveURL("/login");
   });
 });
