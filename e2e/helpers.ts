@@ -1,3 +1,5 @@
+import type { Page } from "@playwright/test";
+
 /**
  * seed.sqlで事前作成されている四麻マッチのID
  * 参加プレイヤー: testuser, alice123, bob123, carol123 (4人)
@@ -67,25 +69,21 @@ export const SEED_OLDEST_MATCH_ID = "0b000000-0000-0000-0000-000000000001";
 export const TEST_USERS = {
   me: {
     email: "test@example.com",
-    password: "password123",
     displayId: "testuser",
     name: "テストユーザー",
   },
   alice: {
     email: "alice@example.com",
-    password: "password123",
     displayId: "alice123",
     name: "アリス",
   },
   bob: {
     email: "bob@example.com",
-    password: "password123",
     displayId: "bob123",
     name: "ボブ",
   },
   carol: {
     email: "carol@example.com",
-    password: "password123",
     displayId: "carol123",
     name: "キャロル",
   },
@@ -102,4 +100,53 @@ export function randomEmail() {
 
 export function randomDisplayId() {
   return `u${Math.random().toString(36).slice(2, 10)}`;
+}
+
+/** supabase/config.toml の [local_smtp] で起動する Mailpit */
+const MAILPIT_URL = "http://127.0.0.1:54324";
+
+type MailpitSearchResult = { messages: { ID: string }[] };
+type MailpitMessage = { Text: string };
+
+/** 指定アドレス宛のメールをすべて削除する（古いコードを拾わないため） */
+export async function clearMailbox(email: string) {
+  await fetch(`${MAILPIT_URL}/api/v1/search?query=${encodeURIComponent(`to:"${email}"`)}`, {
+    method: "DELETE",
+  });
+}
+
+/** 指定アドレス宛に届いた最新のログインコードを取得する */
+export async function getLatestOtp(email: string): Promise<string> {
+  const query = encodeURIComponent(`to:"${email}"`);
+  for (let i = 0; i < 50; i++) {
+    const search = (await (
+      await fetch(`${MAILPIT_URL}/api/v1/search?query=${query}&limit=1`)
+    ).json()) as MailpitSearchResult;
+    const id = search.messages[0]?.ID;
+    if (id) {
+      const message = (await (
+        await fetch(`${MAILPIT_URL}/api/v1/message/${id}`)
+      ).json()) as MailpitMessage;
+      const code = message.Text.match(/\b(\d{6})\b/)?.[1];
+      if (code) return code;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  throw new Error(`OTP mail for ${email} not found`);
+}
+
+/** ログイン画面でメールアドレスを送信し、コード入力画面へ進む */
+export async function requestOtpFromLoginPage(page: Page, email: string) {
+  await clearMailbox(email);
+  await page.goto("/login");
+  await page.getByRole("textbox", { name: "メールアドレス" }).fill(email);
+  await page.getByRole("button", { name: "ログインコードを送信", exact: true }).click();
+  await page.waitForURL("/login/verify");
+}
+
+/** メールアドレスを送信し、届いたコードを入力するまでを行う（6 桁そろうと自動送信される） */
+export async function loginWithOtp(page: Page, email: string) {
+  await requestOtpFromLoginPage(page, email);
+  const otp = await getLatestOtp(email);
+  await page.getByRole("textbox", { name: "ログインコード" }).fill(otp);
 }

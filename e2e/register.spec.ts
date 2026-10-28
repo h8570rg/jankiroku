@@ -1,11 +1,8 @@
 import { expect, type Page, test } from "@playwright/test";
-import { randomDisplayId, randomEmail } from "./helpers";
+import { loginWithOtp, randomDisplayId, randomEmail } from "./helpers";
 
 async function createFreshSignedUpUser(page: Page) {
-  await page.goto("/sign-up");
-  await page.getByRole("textbox", { name: "メールアドレス" }).fill(randomEmail());
-  await page.getByRole("textbox", { name: "パスワード" }).fill("password123");
-  await page.getByRole("button", { name: "新規登録", exact: true }).click();
+  await loginWithOtp(page, randomEmail());
   await page.waitForURL(/\/register/);
 }
 

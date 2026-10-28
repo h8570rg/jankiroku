@@ -1,18 +1,18 @@
 "use server";
 
 import { parseSubmission, report } from "@conform-to/react/future";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getURL } from "@/lib/utils/url";
-import { signInEmailSchema } from "./schema";
+import { sendOtp, setPendingEmail } from "../../_lib/otp";
+import { requestOtpSchema } from "./schema";
 
 /**
- * @see https://supabase.com/docs/guides/auth/server-side/nextjs
+ * コードを送信し、送信先を Cookie に残してコード入力画面へ進む。
  */
-export async function signInEmail(_prevState: unknown, formData: FormData) {
+export async function requestOtp(_prevState: unknown, formData: FormData) {
   const submission = parseSubmission(formData);
-  const result = signInEmailSchema.safeParse(submission.payload);
+  const result = requestOtpSchema.safeParse(submission.payload);
 
   if (!result.success) {
     return report(submission, {
@@ -21,25 +21,20 @@ export async function signInEmail(_prevState: unknown, formData: FormData) {
       },
     });
   }
-  const { email, password } = result.data;
+  const { email } = result.data;
 
-  const supabase = await createClient();
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const error = await sendOtp(email);
 
   if (error) {
     return report(submission, {
       error: {
-        formErrors: ["メールアドレスまたはパスワードが間違っています。"],
+        fieldErrors: { email: [error] },
       },
     });
   }
 
-  revalidatePath("/", "layout");
-  redirect("/matches");
+  await setPendingEmail(email);
+  redirect("/login/verify");
 }
 
 /**

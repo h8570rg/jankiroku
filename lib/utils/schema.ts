@@ -8,16 +8,16 @@ import {
   inclinesPresetsFor3Players,
   inclinesPresetsFor4Players,
   NAME_MAX_LENGTH,
-  PASSWORD_MIN_LENGTH,
+  OTP_LENGTH,
 } from "@/lib/config";
 
 export const schema = {
   email: z
     .string("メールアドレスを入力してください")
     .pipe(z.email("メールアドレスを正しい形式で入力してください")),
-  password: z
-    .string("パスワードを入力してください")
-    .min(PASSWORD_MIN_LENGTH, `パスワードは${PASSWORD_MIN_LENGTH}文字以上で入力してください`),
+  otp: z
+    .string("コードを入力してください")
+    .regex(new RegExp(`^\\d{${OTP_LENGTH}}$`), `${OTP_LENGTH}桁のコードを入力してください`),
   name: z
     .string("名前を入力してください")
     .max(NAME_MAX_LENGTH, `名前は${NAME_MAX_LENGTH}文字以内で入力してください`),
