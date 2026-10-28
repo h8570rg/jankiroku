@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@conform-to/react/future";
-import { ErrorMessage, InputOTP, toast } from "@heroui/react";
+import { cn, ErrorMessage, InputOTP, toast } from "@heroui/react";
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
@@ -24,9 +24,14 @@ export function VerifyForm({ className }: { className?: string }) {
   const tokenErrors = form.fieldErrors?.[fields.token.name];
 
   return (
-    <div className={className}>
-      <Form ref={formRef} validationErrors={form.fieldErrors} {...form.props}>
-        <div className="mx-auto w-fit">
+    <div className={cn("flex flex-col items-center", className)}>
+      <Form
+        ref={formRef}
+        className="flex flex-col items-center"
+        validationErrors={form.fieldErrors}
+        {...form.props}
+      >
+        <div>
           <InputOTP
             aria-label="ログインコード"
             name={fields.token.name}
@@ -54,7 +59,7 @@ export function VerifyForm({ className }: { className?: string }) {
             <ErrorMessage id={fields.token.errorId}>{tokenErrors.join(" ")}</ErrorMessage>
           )}
         </div>
-        <Button className="mx-auto mt-6 block w-60" type="submit" isPending={isPending}>
+        <Button className="mt-6 w-60" type="submit" isPending={isPending}>
           ログイン
         </Button>
       </Form>
@@ -90,7 +95,7 @@ function ResendButton() {
 
   return (
     <Button
-      className="mx-auto mt-4 block"
+      className="mt-4"
       variant="outline"
       size="sm"
       onPress={handleResend}
