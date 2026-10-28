@@ -20,9 +20,6 @@ export default function LoginPage() {
         <Separator className="shrink" />
       </div>
       <LoginForm />
-      <Typography type="body-sm" align="center" color="muted" className="mt-4">
-        初めての方も、メールアドレスを入力するとそのまま登録できます。
-      </Typography>
     </div>
   );
 }
