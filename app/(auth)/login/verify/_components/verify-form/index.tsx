@@ -35,7 +35,7 @@ export function VerifyForm({ className }: { className?: string }) {
             autoFocus
             onComplete={() => formRef.current?.requestSubmit()}
             isDisabled={isPending}
-            aria-describedby={tokenErrors ? "code-error" : undefined}
+            aria-describedby={tokenErrors ? fields.token.errorId : undefined}
             isInvalid={!!tokenErrors}
           >
             <InputOTP.Group>
@@ -50,7 +50,9 @@ export function VerifyForm({ className }: { className?: string }) {
               <InputOTP.Slot index={5} />
             </InputOTP.Group>
           </InputOTP>
-          {tokenErrors && <ErrorMessage>{tokenErrors.join(" ")}</ErrorMessage>}
+          {tokenErrors && (
+            <ErrorMessage id={fields.token.errorId}>{tokenErrors.join(" ")}</ErrorMessage>
+          )}
         </div>
         <Button className="mx-auto mt-6 block w-60" type="submit" isPending={isPending}>
           ログイン
