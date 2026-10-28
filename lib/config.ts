@@ -1,5 +1,9 @@
 export const SERVICE_NAME = "雀鬼録";
 export const OTP_LENGTH = 6;
+/** supabase/config.toml の otp_expiry（本番はダッシュボード）と揃える */
+export const OTP_EXPIRY_MINUTES = 10;
+/** 本番 Supabase の同一アドレスへの再送間隔（60 秒）に合わせる */
+export const OTP_RESEND_INTERVAL_SECONDS = 60;
 export const NAME_MAX_LENGTH = 12;
 export const AVATAR_MAX_SIZE = 2 * 1024 * 1024;
 export const AVATAR_ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;

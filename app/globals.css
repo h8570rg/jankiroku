@@ -31,4 +31,8 @@
   .avatar--lg .avatar__fallback svg {
     @apply size-6;
   }
+
+  .input-otp {
+    @apply w-fit;
+  }
 }

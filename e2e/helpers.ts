@@ -135,13 +135,18 @@ export async function getLatestOtp(email: string): Promise<string> {
   throw new Error(`OTP mail for ${email} not found`);
 }
 
-/** ログイン画面でメールアドレスを送信し、届いたコードを入力するまでを行う */
-export async function loginWithOtp(page: Page, email: string) {
+/** ログイン画面でメールアドレスを送信し、コード入力画面へ進む */
+export async function requestOtpFromLoginPage(page: Page, email: string) {
   await clearMailbox(email);
   await page.goto("/login");
   await page.getByRole("textbox", { name: "メールアドレス" }).fill(email);
   await page.getByRole("button", { name: "ログインコードを送信", exact: true }).click();
+  await page.waitForURL("/login/verify");
+}
+
+/** メールアドレスを送信し、届いたコードを入力するまでを行う（6 桁そろうと自動送信される） */
+export async function loginWithOtp(page: Page, email: string) {
+  await requestOtpFromLoginPage(page, email);
   const otp = await getLatestOtp(email);
   await page.getByRole("textbox", { name: "ログインコード" }).fill(otp);
-  await page.getByRole("button", { name: "ログイン", exact: true }).click();
 }

@@ -7,10 +7,3 @@ export const requestOtpSchema = coerceFormValue(
     email: schema.email,
   }),
 );
-
-export const verifyOtpSchema = coerceFormValue(
-  z.object({
-    email: schema.email,
-    token: schema.otp,
-  }),
-);
