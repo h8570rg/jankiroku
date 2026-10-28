@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@conform-to/react/future";
-import { FieldError, InputGroup, Label, TextField } from "@heroui/react";
+import { FieldError, InputGroup, Label, TextField, Typography } from "@heroui/react";
 import { Mail } from "lucide-react";
 import { useActionState } from "react";
 import { Button } from "@/components/button";
@@ -35,6 +35,12 @@ export function LoginForm({ className }: { className?: string }) {
       <Button className="mt-4 w-full" type="submit" isPending={isPending}>
         ログインコードを送信
       </Button>
+      {/* パスワード認証の廃止に伴う既存ユーザー向けの案内。移行が落ち着いたら削除する */}
+      <Typography type="body-xs" align="center" color="muted" className="mt-4">
+        パスワードでのログインは終了しました。
+        <br />
+        メールアドレスを入力すると、6桁のログインコードが届きます。
+      </Typography>
     </Form>
   );
 }
