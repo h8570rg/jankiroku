@@ -18,6 +18,11 @@
     {
       "groupName": "oxc",
       "matchPackageNames": ["oxlint", "oxfmt", "oxlint-tailwindcss"]
+    },
+    {
+      "description": "Supabase CLI v3 は db push 等の挙動が変わるため、移行するまで v2 に留める",
+      "matchPackageNames": ["supabase"],
+      "allowedVersions": "<3"
     }
   ]
 }
