@@ -18,10 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
+      # version を省略すると pnpm-lock.yaml の supabase (devDependency) と同じバージョンが入る
       - uses: supabase/setup-cli@45a513f8c64c0bc8e0e3dfe572b5c95be85f6359 # v3.0.1
-        with:
-          version: latest
 
       - run: |
           supabase link --project-ref $SUPABASE_PROJECT_ID
-          supabase db push
+          supabase db push --linked --yes
