@@ -21,9 +21,9 @@
     "supabase:stop": "supabase stop",
     "supabase:reset": "supabase db reset",
     "supabase:migration": "supabase migration new",
-    "supabase:diff": "supabase db diff --local --schema public",
-    "supabase:push": "supabase db push",
-    "supabase:type": "supabase gen types typescript --local > lib/database.types.ts"
+    "supabase:diff": "supabase db diff --schema public",
+    "supabase:push": "supabase db push --remote",
+    "supabase:type": "supabase gen types typescript > lib/database.types.ts"
   },
   "dependencies": {
     "@conform-to/react": "1.21.3",
@@ -61,7 +61,7 @@
     "oxfmt": "0.75.0",
     "oxlint": "1.90.0",
     "oxlint-tailwindcss": "1.17.1",
-    "supabase": "2.122.0",
+    "supabase": "3.0.0",
     "typescript": "7.0.2",
     "vitest": "5.0.5"
   },
