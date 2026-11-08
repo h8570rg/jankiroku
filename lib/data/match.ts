@@ -83,6 +83,8 @@ export async function getMatch({ matchId }: { matchId: string }): Promise<Match>
     .select("*, match_players(*, profiles!inner(*)), rules(*), games(*, game_players(*))")
     .eq("id", matchId)
     .order("order", { referencedTable: "match_players", ascending: true })
+    // 埋め込みの games は順序保証がないため、作成順で並べる（表示上の「n半荘目」になる）
+    .order("created_at", { referencedTable: "games", ascending: true })
     .single();
   if (matchResult.error) throw matchResult.error;
   const match = matchResult.data;
@@ -118,6 +120,7 @@ export async function getMatches({
     // referencedTable 指定は埋め込み先の並び替えになるため、親行の並び替えは "matches(created_at)" で指定する
     .order("matches(created_at)", { ascending: false })
     .order("order", { referencedTable: "matches.match_players", ascending: true })
+    .order("created_at", { referencedTable: "matches.games", ascending: true })
     .limit(limit);
 
   if (matchesResponse.error) throw matchesResponse.error;
