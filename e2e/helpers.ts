@@ -64,6 +64,16 @@ export const SEED_PAST_MATCH_IDS_NEWEST_FIRST = [
 export const SEED_OLDEST_MATCH_ID = "0b000000-0000-0000-0000-000000000001";
 
 /**
+ * seed.sql の半荘表示順確認用マッチ
+ * 参加プレイヤー: testuser, alice123, bob123 (3人)
+ * ルール: 3人・持ち点35000・3半荘入力済み（created_at と逆の順で INSERT）
+ * 各半荘の testuser の点数: 1半荘目 11, 2半荘目 22, 3半荘目 33
+ * game-order.spec.ts のみが書き込む（他の E2E テストと分離）
+ */
+export const SEED_GAME_ORDER_MATCH_ID = "0c000000-0000-0000-0000-000000000001";
+export const SEED_GAME_ORDER_MATCH_URL = `/matches/${SEED_GAME_ORDER_MATCH_ID}`;
+
+/**
  * seed.sqlで用意されているテスト用ユーザー
  */
 export const TEST_USERS = {
