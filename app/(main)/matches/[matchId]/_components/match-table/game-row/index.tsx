@@ -5,13 +5,11 @@ import { UpdateGameModal, useUpdateGameModal } from "../update-game-modal";
 export function GameRow({
   index,
   children,
-  matchId,
   gameId,
   style,
 }: {
   index: number;
   children: React.ReactNode;
-  matchId: string;
   gameId: string;
   style?: React.CSSProperties;
 }) {
@@ -30,7 +28,6 @@ export function GameRow({
         isOpen={updateGameModal.isOpen}
         onOpenChange={updateGameModal.setOpen}
         index={index}
-        matchId={matchId}
         gameId={gameId}
       />
     </>

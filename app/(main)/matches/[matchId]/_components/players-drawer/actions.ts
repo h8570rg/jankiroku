@@ -1,7 +1,7 @@
 "use server";
 
 import { parseSubmission, report } from "@conform-to/react/future";
-import { revalidatePath } from "next/cache";
+import { refresh } from "next/cache";
 import { addMatchPlayers } from "@/lib/data/match";
 import { searchPlayers as searchPlayersData } from "@/lib/data/player";
 import type { Player } from "@/lib/type";
@@ -35,7 +35,7 @@ export async function updateMatchPlayers(
       playerIds: newPlayerIds,
       startOrder: existingPlayerIds.length,
     });
-    revalidatePath(`/matches/${matchId}`);
+    refresh();
   }
 
   return report(submission, {});

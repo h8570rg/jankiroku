@@ -1,11 +1,13 @@
 "use client";
 
-import { Dropdown, type Key, Label } from "@heroui/react";
+import { Dropdown, type Key, Label, Spinner } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { signOut } from "./actions";
 
 export function AppbarAvatarMenu() {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   function handleProfileMenuAction(key: Key) {
     switch (key) {
@@ -13,8 +15,8 @@ export function AppbarAvatarMenu() {
         router.push("/profile");
         break;
       case "signOut":
-        signOut().catch((e) => {
-          throw e;
+        startTransition(async () => {
+          await signOut();
         });
         break;
     }
@@ -25,12 +27,15 @@ export function AppbarAvatarMenu() {
       className="max-w-[70vw]"
       aria-label="プロフィール"
       onAction={handleProfileMenuAction}
+      disabledKeys={isPending ? ["editProfile", "signOut"] : []}
     >
       <Dropdown.Item id="editProfile">
         <Label>プロフィール編集</Label>
       </Dropdown.Item>
-      <Dropdown.Item id="signOut" variant="danger">
+      {/* ログアウト完了まで閉じずに処理中を見せる */}
+      <Dropdown.Item id="signOut" variant="danger" shouldCloseOnSelect={false}>
         <Label>ログアウト</Label>
+        {isPending && <Spinner color="current" size="sm" className="ml-auto" />}
       </Dropdown.Item>
     </Dropdown.Menu>
   );

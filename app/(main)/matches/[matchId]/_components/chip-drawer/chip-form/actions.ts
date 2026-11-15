@@ -1,7 +1,7 @@
 "use server";
 
 import { parseSubmission, report } from "@conform-to/react/future";
-import { revalidatePath } from "next/cache";
+import { refresh } from "next/cache";
 import { updateMatchPlayer } from "@/lib/data/match";
 import { addChipSchema } from "./schema";
 
@@ -57,7 +57,7 @@ export async function addChip(_prevState: unknown, formData: FormData) {
     ),
   );
 
-  revalidatePath(`/matches/${matchId}`);
+  refresh();
 
   return report(submission, {});
 }

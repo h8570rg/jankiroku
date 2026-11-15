@@ -1,7 +1,6 @@
 "use server";
 
 import { parseSubmission, report } from "@conform-to/react/future";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createMatch as createMatchData } from "@/lib/data/match";
 import type { RuleOutput } from "../rule-form/schema";
@@ -29,6 +28,5 @@ export async function createMatch(ruleData: RuleOutput, _prevState: unknown, for
     playerIds,
   });
 
-  revalidatePath("/matches");
   redirect(`/matches/${id}`);
 }

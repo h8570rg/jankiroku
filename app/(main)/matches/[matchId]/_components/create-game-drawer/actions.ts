@@ -1,7 +1,7 @@
 "use server";
 
 import { parseSubmission, report } from "@conform-to/react/future";
-import { revalidatePath } from "next/cache";
+import { refresh } from "next/cache";
 import { createGame as createGameData } from "@/lib/data/game";
 import type { Rule } from "@/lib/type";
 import { calcPlayerScores } from "@/lib/utils/score";
@@ -43,7 +43,7 @@ export async function createGame(
     gamePlayers: playerScores,
   });
 
-  revalidatePath(`/matches/${matchId}`);
+  refresh();
 
   return report(submission, { reset: true });
 }

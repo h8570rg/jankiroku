@@ -5,13 +5,11 @@ import { Button } from "@/components/button";
 import { DeleteGameConfirmDialog, useDeleteGameConfirmDialog } from "./delete-game-confirm-dialog";
 
 export function UpdateGameModal({
-  matchId,
   gameId,
   index,
   isOpen,
   onOpenChange,
 }: {
-  matchId: string;
   gameId: string;
   index: number;
   isOpen?: boolean;
@@ -49,7 +47,6 @@ export function UpdateGameModal({
             deleteGameConfirmDialog.close();
           }
         }}
-        matchId={matchId}
         gameId={gameId}
       />
     </>

@@ -1,10 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { refresh } from "next/cache";
 import { deleteGame as deleteGameData } from "@/lib/data/game";
 
-export async function deleteGame({ gameId, matchId }: { gameId: string; matchId: string }) {
+export async function deleteGame({ gameId }: { gameId: string }) {
   await deleteGameData({ gameId });
 
-  revalidatePath(`/matches/${matchId}`);
+  refresh();
 }

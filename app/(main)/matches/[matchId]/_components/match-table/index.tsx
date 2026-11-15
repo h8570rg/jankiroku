@@ -76,13 +76,7 @@ export async function MatchTable({ matchId, className }: { matchId: string; clas
           )}
           {gameRows.length > 0 &&
             gameRows.map((item, index) => (
-              <GameRow
-                key={item.gameId}
-                index={index}
-                matchId={matchId}
-                gameId={item.gameId}
-                style={rowStyle}
-              >
+              <GameRow key={item.gameId} index={index} gameId={item.gameId} style={rowStyle}>
                 <div className="flex h-full items-center justify-center px-1 py-2 text-xs break-all text-muted">
                   {index + 1}
                 </div>

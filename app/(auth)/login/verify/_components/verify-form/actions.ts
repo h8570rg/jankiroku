@@ -1,7 +1,6 @@
 "use server";
 
 import { parseSubmission, report } from "@conform-to/react/future";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getNullableUserProfile } from "@/lib/data/user";
 import { createClient } from "@/lib/supabase/server";
@@ -50,7 +49,6 @@ export async function verifyOtp(_prevState: unknown, formData: FormData) {
   await clearPendingEmail();
   const userProfile = await getNullableUserProfile();
 
-  revalidatePath("/", "layout");
   redirect(userProfile ? "/matches" : "/register");
 }
 
