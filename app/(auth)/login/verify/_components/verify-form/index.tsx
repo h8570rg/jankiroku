@@ -73,7 +73,7 @@ export function VerifyForm({ className }: { className?: string }) {
  */
 function ResendButton() {
   const [secondsLeft, setSecondsLeft] = useState(OTP_RESEND_INTERVAL_SECONDS);
-  const [isResending, startResend] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (secondsLeft <= 0) return;
@@ -82,7 +82,7 @@ function ResendButton() {
   }, [secondsLeft]);
 
   const handleResend = () => {
-    startResend(async () => {
+    startTransition(async () => {
       const error = await resendOtp();
       if (error) {
         toast.danger(error);
@@ -100,7 +100,7 @@ function ResendButton() {
       size="sm"
       onPress={handleResend}
       isDisabled={secondsLeft > 0}
-      isPending={isResending}
+      isPending={isPending}
     >
       {secondsLeft > 0 ? `コードを再送（${secondsLeft}秒後）` : "コードを再送"}
     </Button>

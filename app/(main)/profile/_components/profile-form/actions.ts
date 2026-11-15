@@ -1,7 +1,7 @@
 "use server";
 
 import { parseSubmission, report } from "@conform-to/react/future";
-import { revalidatePath } from "next/cache";
+import { refresh } from "next/cache";
 import { getUserProfile, updateUserProfile } from "@/lib/data/user";
 import { profileUpdateSchema } from "./schema";
 
@@ -42,6 +42,6 @@ export async function updateProfile(
     throw new Error(`Unexpected updateUserProfile error: ${updateResult.error.code}`);
   }
 
-  revalidatePath("/", "layout");
+  refresh();
   return report(submission, {});
 }

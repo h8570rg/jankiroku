@@ -1,7 +1,6 @@
 "use server";
 
 import { parseSubmission, report } from "@conform-to/react/future";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { updateUserProfile } from "@/lib/data/user";
 import { createClient } from "@/lib/supabase/server";
@@ -43,7 +42,6 @@ export async function updateProfile(
     throw new Error(`Unexpected updateUserProfile error: ${updateResult.error.code}`);
   }
 
-  revalidatePath("/", "layout");
   redirect("/matches");
 }
 
@@ -52,9 +50,5 @@ export async function signOut() {
 
   await supabase.auth.signOut();
 
-  /**
-   * @see https://nextjs.org/docs/app/api-reference/functions/revalidatePath#revalidating-all-data
-   */
-  revalidatePath("/", "layout");
   redirect("/login");
 }

@@ -1,20 +1,21 @@
 "use client";
 
 import { Modal, useOverlayState } from "@heroui/react";
+import { useTransition } from "react";
 import { Button } from "@/components/button";
 import { deleteGame } from "./actions";
 
 export function DeleteGameConfirmDialog({
-  matchId,
   gameId,
   isOpen,
   onOpenChange,
 }: {
-  matchId: string;
   gameId: string;
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
 }) {
+  const [isPending, startTransition] = useTransition();
+
   return (
     <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
       <Modal.Container placement="center">
@@ -28,12 +29,10 @@ export function DeleteGameConfirmDialog({
             </Button>
             <Button
               variant="danger"
+              isPending={isPending}
               onPress={() => {
-                deleteGame({
-                  gameId,
-                  matchId,
-                }).catch((e) => {
-                  throw e;
+                startTransition(async () => {
+                  await deleteGame({ gameId });
                 });
               }}
             >

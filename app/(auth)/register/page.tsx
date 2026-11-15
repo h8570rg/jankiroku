@@ -1,9 +1,9 @@
-import { linkVariants, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getNullableUserProfile } from "@/lib/data/user";
 import { RegisterForm } from "./_components/register-form";
-import { signOut } from "./_components/register-form/actions";
+import { SignOutButton } from "./_components/sign-out-button";
 
 export const metadata: Metadata = {
   title: "ユーザー情報登録",
@@ -28,9 +28,7 @@ export default async function RegisterPage() {
       </Typography>
       <RegisterForm />
       <div className="mt-10 flex justify-center">
-        <button className={linkVariants().base()} type="button" onClick={signOut}>
-          ログアウト
-        </button>
+        <SignOutButton />
       </div>
     </div>
   );
