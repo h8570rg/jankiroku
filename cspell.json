@@ -23,6 +23,7 @@
     "Mailpit",
     "oxfmt",
     "oxlint",
+    "plpgsql",
     "Postgrest",
     "pressable",
     "reauthentication",

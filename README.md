@@ -7,7 +7,7 @@
 ## 前提条件
 
 - Node.js（バージョンは[package.json](package.json)を参照）
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)（ローカル Supabase で使用）
+- macOS 14 以降（Apple silicon）または Linux（glibc 2.35 以降）
 
 ## リポジトリのクローン
 
@@ -17,7 +17,7 @@ cd jankiroku
 pnpm install
 ```
 
-## 環境変数
+## ローカル Supabase
 
 リモートの Supabase プロジェクトは**本番（prd）のみ**です。開発はすべてローカル Supabase で行います。
 
@@ -25,12 +25,11 @@ pnpm install
 pnpm run supabase:start
 ```
 
-起動ログ（または `pnpm exec supabase status`）に出る **API URL** と **Publishable key**（表記が `anon key` の場合もある）を `.env.local` に設定します。
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=<API URL>
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<Publishable key>
-```
+- worktree（ブランチ）ごとに別の DB が起動します。接続先は `.env.local` に書き出されるので、手で設定する必要はありません
+- 各サービスの URL（Studio・Mailpit など）は `pnpm exec supabase status` で確認します
+- Claude Code のセッションが終わると、その worktree の DB は削除されます。次の作業は `pnpm run supabase:start` から始めます
+- 残っている DB は `pnpm exec supabase stack list` で確認し、`pnpm exec supabase stack destroy --yes --stack-id <id>` で消します
+- 本番のメールテンプレートは、Supabase の管理画面で `supabase/templates/` のファイルを設定します
 
 ## 基本方針
 
@@ -49,8 +48,7 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<Publishable key>
 pnpm run dev
 ```
 
-アプリ: http://localhost:3001  
-（接続先は上記の `.env.local` の内容に従います）
+アプリ: 起動時に表示される URL
 
 # データベーススキーマの変更
 
@@ -77,11 +75,7 @@ pnpm run supabase:start
 pnpm run dev
 ```
 
-ローカル Studio の URL は次で確認します。
-
-```shell
-pnpm exec supabase status
-```
+ローカル Studio の URL は `pnpm exec supabase status` の `STUDIO_URL` で確認します。
 
 ### 2. スキーマを変更する
 
@@ -133,25 +127,22 @@ pnpm run supabase:push
 
 ## よく使うコマンド
 
-| コマンド                                | 用途                                  |
-| --------------------------------------- | ------------------------------------- |
-| `pnpm run supabase:start`               | ローカル Supabase 起動                |
-| `pnpm run supabase:stop`                | 停止                                  |
-| `pnpm run supabase:reset`               | migrations + seed で作り直し          |
-| `pnpm run supabase:migration -- <name>` | 空の migration を作成                 |
-| `pnpm run supabase:diff -- -f <name>`   | ローカル DB の差分から migration 作成 |
-| `pnpm run supabase:type`                | ローカル DB から型生成                |
-| `pnpm run supabase:push`                | linked の **prd** へ migration 適用   |
-| `pnpm run dev`                          | アプリ起動（接続先は `.env.local`）   |
+| コマンド                                | 用途                                             |
+| --------------------------------------- | ------------------------------------------------ |
+| `pnpm run supabase:start`               | ローカル Supabase 起動                           |
+| `pnpm run supabase:stop`                | 停止                                             |
+| `pnpm run supabase:destroy`             | この worktree のスタックを削除（データも消える） |
+| `pnpm run supabase:env`                 | `.env.local` を書き直す                          |
+| `pnpm run supabase:reset`               | migrations + seed で作り直し                     |
+| `pnpm run supabase:migration -- <name>` | 空の migration を作成                            |
+| `pnpm run supabase:diff -- -f <name>`   | ローカル DB の差分から migration 作成            |
+| `pnpm run supabase:type`                | ローカル DB から型生成                           |
+| `pnpm run supabase:push`                | linked の **prd** へ migration 適用              |
 
 # E2Eテスト
 
 ローカル Supabase に対して実行します。  
 **実行のたびに DB が reset され、ローカルのデータは seed 初期状態に戻ります。**
-
-## 前提条件
-
-- Docker Desktop が起動していること
 
 ## セットアップ
 
@@ -203,7 +194,7 @@ playwright.config.ts  # Playwright設定
 
 ## 仕組み
 
-- Playwright の `webServer` が Next.js を 3003 で起動し、ローカル Supabase 向け env を渡します（`.env.local` は上書き）
+- Playwright の `webServer` が Next.js を起動します（同じ worktree で `pnpm run dev` が動いていると起動できません）
 - `global-setup` で毎回 DB を reset します
 - `auth.setup.ts` がテスト用ユーザーでログインし、セッションを保存します
 

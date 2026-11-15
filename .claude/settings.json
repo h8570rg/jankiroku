@@ -1,5 +1,18 @@
 {
   "enabledPlugins": {
     "supabase@claude-plugins-official": true
+  },
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && pnpm run supabase:destroy",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
   }
 }
