@@ -5,11 +5,15 @@
  * @see https://supabase.com/docs/guides/auth/server-side/nextjs
  */
 import { createServerClient } from "@supabase/ssr";
+import { io } from "next/cache";
 import { cookies } from "next/headers";
 import type { Database } from "@/lib/database.types";
 
 export async function createClient() {
   const cookieStore = await cookies();
+  // Supabase Auth はセッションの期限判定で Date.now() を読む。
+  // Cache Components では prerender 中の Date.now() がエラーになるため、ここでリクエスト時まで待つ
+  await io();
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL,

@@ -6,6 +6,10 @@ import { getPendingEmail } from "../_lib/otp";
 import { BackButton } from "./_components/back-button";
 import { VerifyForm } from "./_components/verify-form";
 
+// TODO(#150): Cache Components 移行のため一時的にブロッキングを許可している。
+// Suspense 境界を整理したら外す。https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export const metadata: Metadata = {
   title: "ログインコードの入力",
 };
