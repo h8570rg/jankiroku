@@ -112,8 +112,7 @@ export function randomDisplayId() {
   return `u${Math.random().toString(36).slice(2, 10)}`;
 }
 
-/** supabase/config.toml の [local_smtp] で起動する Mailpit */
-const MAILPIT_URL = "http://127.0.0.1:54324";
+const MAILPIT_URL = process.env.MAILPIT_URL;
 
 type MailpitSearchResult = { messages: { ID: string }[] };
 type MailpitMessage = { Text: string };

@@ -4,7 +4,7 @@
   "description": "麻雀成績管理アプリケーション",
   "type": "module",
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start -p 3002",
     "lint": "oxlint --fix",
@@ -17,9 +17,12 @@
     "spell": "cspell . --gitignore",
     "supabase:login": "supabase login",
     "supabase:link": "supabase link",
-    "supabase:start": "supabase start",
+    "supabase:start": "supabase start --runtime native && pnpm run supabase:env && pnpm run supabase:mailpit",
     "supabase:stop": "supabase stop",
-    "supabase:reset": "supabase db reset",
+    "supabase:destroy": "supabase stack destroy --yes",
+    "supabase:reset": "supabase db reset && pnpm run supabase:mailpit",
+    "supabase:env": "supabase status --env --output-format text --override-name API_URL=NEXT_PUBLIC_SUPABASE_URL --override-name PUBLISHABLE_KEY=NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY > .env.local",
+    "supabase:mailpit": "sh supabase/mailpit.sh",
     "supabase:migration": "supabase migration new",
     "supabase:diff": "supabase db diff --schema public",
     "supabase:push": "supabase db push --remote",
@@ -52,6 +55,7 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@next/env": "16.4.6",
     "@playwright/test": "1.65.0",
     "@types/node": "25.9.9",
     "@types/react": "19.3.0",
