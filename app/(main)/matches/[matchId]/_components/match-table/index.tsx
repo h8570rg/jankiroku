@@ -1,7 +1,6 @@
 import { cn, Separator, Surface, Typography } from "@heroui/react";
 import type { CSSProperties } from "react";
-import { getMatch } from "@/lib/data/match";
-import type { MatchPlayer } from "@/lib/type";
+import type { Match, MatchPlayer } from "@/lib/type";
 import { DataChart } from "../data-chart";
 import { CreateGameButton } from "./create-game-button";
 import { EditChipButton } from "./edit-chip-button";
@@ -16,8 +15,7 @@ type Row = {
   players: { [playerId: Column["id"]]: number };
 };
 
-export async function MatchTable({ matchId, className }: { matchId: string; className?: string }) {
-  const match = await getMatch({ matchId });
+export function MatchTable({ match, className }: { match: Match; className?: string }) {
   const { rule, players } = match;
   const { playersCount } = rule;
 
