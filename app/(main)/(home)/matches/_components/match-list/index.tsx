@@ -23,6 +23,17 @@ export function MatchList({
   // 取得件数が 1 ページ分に満たなければ、それ以上古い成績表はない
   const [hasMore, setHasMore] = useState(initialMatches.length === MATCHES_PAGE_SIZE);
   const [status, setStatus] = useState<Status>("idle");
+
+  // Cache Components では一覧から離れてもアンマウントされず state が残る。
+  // 戻ったときや refresh() で新しい 1 ページ目が届いたら、読み込み済みの続きを捨てて描き直す
+  const [prevInitialMatches, setPrevInitialMatches] = useState(initialMatches);
+  if (initialMatches !== prevInitialMatches) {
+    setPrevInitialMatches(initialMatches);
+    setMatches(initialMatches);
+    setHasMore(initialMatches.length === MATCHES_PAGE_SIZE);
+    setStatus("idle");
+  }
+
   const sentinelRef = useRef<HTMLDivElement>(null);
   // IntersectionObserver のコールバックが連続で発火しても二重に読み込まないためのフラグ
   const isLoadingRef = useRef(false);
