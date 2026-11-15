@@ -4,11 +4,7 @@ import { SearchField } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
-type Props = {
-  defaultValue: string;
-};
-
-export function FriendSearch({ defaultValue }: Props) {
+export function FriendSearch() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -29,7 +25,7 @@ export function FriendSearch({ defaultValue }: Props) {
       variant="secondary"
       autoFocus
       onChange={handleSearch}
-      defaultValue={defaultValue}
+      defaultValue={searchParams.get("query") ?? ""}
     >
       <SearchField.Group>
         <SearchField.SearchIcon />
