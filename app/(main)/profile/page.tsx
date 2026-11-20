@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 import { getUserProfile } from "@/lib/data/user";
 import { ProfileForm } from "./_components/profile-form";
 
+// TODO(#150): Cache Components 移行のため一時的にブロッキングを許可している。
+// Suspense 境界を整理したら外す。https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export const metadata: Metadata = {
   title: "プロフィール編集",
 };

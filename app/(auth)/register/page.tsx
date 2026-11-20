@@ -5,6 +5,10 @@ import { getNullableUserProfile } from "@/lib/data/user";
 import { RegisterForm } from "./_components/register-form";
 import { SignOutButton } from "./_components/sign-out-button";
 
+// TODO(#150): Cache Components 移行のため一時的にブロッキングを許可している。
+// Suspense 境界を整理したら外す。https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export const metadata: Metadata = {
   title: "ユーザー情報登録",
 };
