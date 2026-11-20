@@ -1,42 +1,24 @@
 import "server-only";
+import { redirect } from "next/navigation";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import type { User, UserProfile } from "@/lib/type";
 
-export async function getUser(): Promise<User> {
+/**
+ * 1 回の描画の中では Supabase Auth への問い合わせを 1 回にまとめる。
+ */
+export const getUser = cache(async (): Promise<User> => {
   const supabase = await createClient();
   const userResponse = await supabase.auth.getUser();
   if (userResponse.error) throw userResponse.error;
   return userResponse.data.user;
-}
-
-/**
- * (main) 配下の画面用。layout で未登録ユーザーは `/register` へ
- * リダイレクトされる前提で、必ず `UserProfile` が返る。
- */
-export async function getUserProfile(): Promise<UserProfile> {
-  const supabase = await createClient();
-  const user = await getUser();
-
-  const profileResponse = await supabase.from("profiles").select().eq("id", user.id).single();
-  if (profileResponse.error) throw profileResponse.error;
-  const row = profileResponse.data;
-  if (row.name === null || row.display_id === null) {
-    throw new Error("Registered user profile is missing name or display_id");
-  }
-  return {
-    id: row.id,
-    name: row.name,
-    displayId: row.display_id,
-    avatarUrl: row.avatar_url,
-    userId: user.id,
-  };
-}
+});
 
 /**
  * 未登録の可能性がある経路 (layout・/register・OAuth callback) 用。
  * 行がない、または name/display_id が未設定なら null を返す。
  */
-export async function getNullableUserProfile(): Promise<UserProfile | null> {
+export const getNullableUserProfile = cache(async (): Promise<UserProfile | null> => {
   const supabase = await createClient();
   const user = await getUser();
 
@@ -53,6 +35,18 @@ export async function getNullableUserProfile(): Promise<UserProfile | null> {
     avatarUrl: row.avatar_url,
     userId: user.id,
   };
+});
+
+/**
+ * (main) 配下の画面用。未登録のユーザーは `/register` へリダイレクトするので、
+ * 呼び出し側には必ず `UserProfile` が返る。
+ */
+export async function getUserProfile(): Promise<UserProfile> {
+  const userProfile = await getNullableUserProfile();
+  if (!userProfile) {
+    redirect("/register");
+  }
+  return userProfile;
 }
 
 export async function updateUserProfile({
