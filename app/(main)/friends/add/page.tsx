@@ -7,6 +7,10 @@ import { AddFriendButton } from "./_components/add-friend-button";
 import { BackButton } from "./_components/back-button";
 import { FriendSearch } from "./_components/friend-search";
 
+// TODO(#150): Cache Components 移行のため一時的にブロッキングを許可している。
+// Suspense 境界を整理したら外す。https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export default async function AddFriendPage({
   searchParams,
 }: {

@@ -1,16 +1,11 @@
-"use client";
-
-import { Button, Typography } from "@heroui/react";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { MATCHES_PAGE_SIZE } from "@/lib/config";
 import type { Match } from "@/lib/type";
-import { MatchCard, MatchCardSkeleton } from "../match-card";
-
-type Status = "idle" | "loading" | "error";
+import { MatchCard } from "../match-card";
+import { MoreMatches } from "./more-matches";
 
 /**
- * 成績表一覧。末尾が画面に近づいたら `/api/matches` から続きを読み込む。
- * 1 ページ目は Server Component から `initialMatches` として受け取る。
+ * 成績表一覧。1 ページ目は Server Component から受け取った `initialMatches` をそのまま表示し、
+ * 2 ページ目以降は `MoreMatches` が読み込んで持つ。
  */
 export function MatchList({
   initialMatches,
@@ -19,75 +14,23 @@ export function MatchList({
   initialMatches: Match[];
   userProfileId: string;
 }) {
-  const [matches, setMatches] = useState(initialMatches);
-  // 取得件数が 1 ページ分に満たなければ、それ以上古い成績表はない
-  const [hasMore, setHasMore] = useState(initialMatches.length === MATCHES_PAGE_SIZE);
-  const [status, setStatus] = useState<Status>("idle");
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  // IntersectionObserver のコールバックが連続で発火しても二重に読み込まないためのフラグ
-  const isLoadingRef = useRef(false);
-
+  // 1 ページ分に満たなければ、それ以上古い成績表はない。
   // created_at はマイクロ秒精度のため、Date を経由せず文字列のまま cursor にする
-  const before = matches.at(-1)?.createdAt;
-
-  const loadMore = useCallback(async () => {
-    if (!before || isLoadingRef.current) return;
-    isLoadingRef.current = true;
-    setStatus("loading");
-    try {
-      const response = await fetch(`/api/matches?before=${encodeURIComponent(before)}`);
-      if (!response.ok) throw new Error(`Failed to load matches: ${response.status}`);
-      const nextMatches: Match[] = await response.json();
-      setMatches((prev) => [...prev, ...nextMatches]);
-      setHasMore(nextMatches.length === MATCHES_PAGE_SIZE);
-      setStatus("idle");
-    } catch {
-      setStatus("error");
-    } finally {
-      isLoadingRef.current = false;
-    }
-  }, [before]);
-
-  const isError = status === "error";
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel || !hasMore || isError) return;
-    // observe 直後にも判定されるため、読み込み後に末尾がまだ見えていれば続けて読み込む
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) void loadMore();
-      },
-      { rootMargin: "200px" },
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [hasMore, isError, loadMore]);
+  const cursor =
+    initialMatches.length === MATCHES_PAGE_SIZE ? initialMatches.at(-1)?.createdAt : undefined;
 
   return (
-    <>
-      <ul className="space-y-4">
-        {matches.map((match) => (
-          <li key={match.id}>
-            <MatchCard match={match} userProfileId={userProfileId} />
-          </li>
-        ))}
-        {status === "loading" && (
-          <li>
-            <MatchCardSkeleton />
-          </li>
-        )}
-      </ul>
-      {isError && (
-        <div className="my-6 flex flex-col items-center gap-2">
-          <Typography type="body-sm" color="muted">
-            読み込みに失敗しました。
-          </Typography>
-          <Button size="sm" variant="outline" onPress={() => void loadMore()}>
-            再読み込み
-          </Button>
-        </div>
-      )}
-      {hasMore && <div ref={sentinelRef} aria-hidden className="h-px" />}
-    </>
+    <ul className="space-y-4">
+      {initialMatches.map((match) => (
+        <li key={match.id}>
+          <MatchCard match={match} userProfileId={userProfileId} />
+        </li>
+      ))}
+      {/*
+        Cache Components では一覧から離れてもアンマウントされず、読み込んだ続きが残る。
+        成績表が増えて 1 ページ目の末尾がずれたら、key が変わって続きを捨てる（重複や抜けを防ぐ）
+      */}
+      {cursor && <MoreMatches key={cursor} after={cursor} userProfileId={userProfileId} />}
+    </ul>
   );
 }

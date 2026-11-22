@@ -256,4 +256,30 @@ test.describe("ゲーム作成 - 完了フロー", () => {
     await dialog.getByRole("button", { name: "ゲーム開始" }).click();
     await expect(page).toHaveURL(/\/matches\/[a-f0-9-]+/);
   });
+
+  // Cache Components では一覧ページが Activity で残るため、古い一覧のまま戻らないことを確かめる
+  test("作成後に一覧へ戻ると、作った成績表が先頭に表示される", async ({ page }) => {
+    await openCreateMatchDrawer(page);
+    const dialog = page.getByRole("dialog", { name: "ゲーム作成" });
+
+    await dialog.locator("label", { hasText: "三麻" }).click();
+    await dialog.getByRole("button", { name: "プレイヤー選択へ" }).click();
+    for (const user of [TEST_USERS.alice, TEST_USERS.bob]) {
+      await dialog
+        .getByRole("option", { name: new RegExp(user.name) })
+        .first()
+        .click();
+    }
+    await dialog.getByRole("button", { name: "ゲーム開始" }).click();
+    await expect(page).toHaveURL(/\/matches\/[a-f0-9-]+/);
+    const createdPath = new URL(page.url()).pathname;
+
+    await page.getByRole("link", { name: "戻る" }).click();
+    await expect(page).toHaveURL("/matches");
+    await expect(page.locator('main a[href^="/matches/"]').first()).toHaveAttribute(
+      "href",
+      createdPath,
+    );
+    await expect(page.getByRole("dialog", { name: "ゲーム作成" })).not.toBeVisible();
+  });
 });
