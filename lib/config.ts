@@ -1,4 +1,14 @@
 export const SERVICE_NAME = "雀鬼録";
+/**
+ * HeroUI の --background（@heroui/styles/dist/themes/default/variables.css）を hex にした値。
+ * ブラウザのタイトルバーや PWA の起動画面の色に使う
+ * - light: oklch(0.9702 0 0)
+ * - dark: oklch(12% 0.005 285.823)
+ */
+export const THEME_COLOR = {
+  light: "#f5f5f5",
+  dark: "#060607",
+} as const;
 export const OTP_LENGTH = 6;
 /** supabase/config.toml の otp_expiry（本番はダッシュボード）と揃える */
 export const OTP_EXPIRY_MINUTES = 10;

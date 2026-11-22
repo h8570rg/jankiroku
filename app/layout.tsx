@@ -1,8 +1,8 @@
 import { cn } from "@heroui/react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import type { Metadata } from "next";
-import { SERVICE_NAME } from "@/lib/config";
+import type { Metadata, Viewport } from "next";
+import { SERVICE_NAME, THEME_COLOR } from "@/lib/config";
 import "./globals.css";
 import { getURL } from "@/lib/utils/url";
 import { fontClassNames } from "./fonts";
@@ -20,6 +20,19 @@ export const metadata: Metadata = {
     index: false,
     follow: false,
   },
+  // ホーム画面に追加したときの iOS の表示。ステータスバーはページに重ねない（default）
+  appleWebApp: {
+    title: SERVICE_NAME,
+    statusBarStyle: "default",
+  },
+};
+
+// テーマは OS 設定に従う（next-themes の defaultTheme="system"）ので、タイトルバーの色も OS 設定で出し分ける
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: THEME_COLOR.light },
+    { media: "(prefers-color-scheme: dark)", color: THEME_COLOR.dark },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
