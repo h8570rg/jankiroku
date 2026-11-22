@@ -7,6 +7,7 @@ import { useActionState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
 import { createSubmitHandler } from "@/lib/utils/form";
+import { Captcha } from "../captcha";
 import { requestOtp } from "./actions";
 import { requestOtpSchema } from "./schema";
 
@@ -32,7 +33,12 @@ export function LoginForm({ className }: { className?: string }) {
         </InputGroup>
         <FieldError />
       </TextField>
-      <Button className="mt-4 w-full" type="submit" isPending={isPending}>
+      {/*
+        CAPTCHA は隠れていても高さ 0 の枠が残るので、マージンの相殺で見えているときだけ余白を付ける。
+        Button は inline-flex だとマージンが重ならないので flex にする
+      */}
+      <Captcha className="my-4" />
+      <Button className="mt-4 flex w-full" type="submit" isPending={isPending}>
         ログインコードを送信
       </Button>
       {/* パスワード認証の廃止に伴う既存ユーザー向けの案内。移行が落ち着いたら削除する */}

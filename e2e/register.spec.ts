@@ -100,3 +100,14 @@ test.describe("登録済みユーザーの /register アクセス", () => {
     await expect(page).toHaveURL("/matches");
   });
 });
+
+test.describe("未登録ユーザーのアプリ画面アクセス", () => {
+  test.use({ storageState: "e2e/.auth/unregistered.json" });
+
+  for (const path of ["/matches", "/friends", "/profile", "/friends/add"]) {
+    test(`未登録ユーザーが${path}に直接アクセスすると/registerにリダイレクト`, async ({ page }) => {
+      await page.goto(path);
+      await expect(page).toHaveURL("/register");
+    });
+  }
+});

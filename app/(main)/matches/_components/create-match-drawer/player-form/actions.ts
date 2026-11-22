@@ -1,6 +1,7 @@
 "use server";
 
 import { parseSubmission, report } from "@conform-to/react/future";
+import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { createMatch as createMatchData } from "@/lib/data/match";
 import type { RuleOutput } from "../rule-form/schema";
@@ -28,5 +29,7 @@ export async function createMatch(ruleData: RuleOutput, _prevState: unknown, for
     playerIds,
   });
 
+  // 一覧は遷移後も <Activity> で隠れて残る。ブラウザバックで戻ったときに新しい成績表が出るよう、先に更新しておく
+  refresh();
   redirect(`/matches/${id}`);
 }

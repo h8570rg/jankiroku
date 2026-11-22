@@ -23,7 +23,9 @@ export async function requestOtp(_prevState: unknown, formData: FormData) {
   }
   const { email } = result.data;
 
-  const error = await sendOtp(email);
+  // Turnstile が隠しフィールドに入れたトークン
+  const captchaToken = formData.get("cf-turnstile-response");
+  const error = await sendOtp(email, typeof captchaToken === "string" ? captchaToken : undefined);
 
   if (error) {
     return report(submission, {
