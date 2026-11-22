@@ -4,26 +4,21 @@ import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import type { Ref } from "react";
 import { TURNSTILE_SITE_KEY } from "@/lib/config";
 
-export type CaptchaStatus = "loading" | "ready" | "error";
-
 /**
- * ログインコードの送信を Cloudflare Turnstile で守る。ボットが Auth API を直接叩いて
- * 任意のアドレスにメールを送らせるのを防ぐため、トークンは Supabase（signInWithOtp の captchaToken）が検証する。
+ * Cloudflare Turnstile。トークンは Supabase が検証する（signInWithOtp の captchaToken）。
+ * ふだんは隠れていて、Cloudflare が操作を求めたときだけチェックボックスを出す。
+ * フォームの中に置くとトークンが隠しフィールド cf-turnstile-response に入る。1 回しか使えないので、使ったら ref.reset() で取り直す。
  *
- * ふだんは何も表示せず、Turnstile が操作を求めたときだけチェックボックスを出す（interaction-only）。
- * フォームの中に置くと、トークンが cf-turnstile-response という隠しフィールドに入る。
- * トークンは 1 回しか使えないので、送信が終わったら ref.reset() で取り直す。
- * サイトキーがない（本番で未設定）なら何も描画しない。
- *
- * 隠れている間も枠の要素は高さ 0 で残る。余白は、置く側でマージンの相殺を使って付ける（login-form を参照）。
+ * @param onReadyChange 送信してよいかが変わったときに呼ぶ。確認に失敗したときも true にして、
+ *   送信させて Supabase のエラー（captcha_failed）を出す
  */
 export function Captcha({
   ref,
-  onStatusChange,
+  onReadyChange,
   className,
 }: {
   ref?: Ref<TurnstileInstance | undefined>;
-  onStatusChange?: (status: CaptchaStatus) => void;
+  onReadyChange?: (isReady: boolean) => void;
   className?: string;
 }) {
   if (!TURNSTILE_SITE_KEY) {
@@ -40,14 +35,10 @@ export function Captcha({
         language: "ja",
         size: "flexible",
       }}
-      onWidgetLoad={() => onStatusChange?.("loading")}
-      onSuccess={() => onStatusChange?.("ready")}
-      onExpire={() => onStatusChange?.("loading")}
-      onError={() => onStatusChange?.("error")}
-      onUnsupported={() => onStatusChange?.("error")}
+      onSuccess={() => onReadyChange?.(true)}
+      onExpire={() => onReadyChange?.(false)}
+      onError={() => onReadyChange?.(true)}
+      onUnsupported={() => onReadyChange?.(true)}
     />
   );
 }
-
-/** CAPTCHA を出さない環境では、最初から送信できる状態にする */
-export const INITIAL_CAPTCHA_STATUS: CaptchaStatus = TURNSTILE_SITE_KEY ? "loading" : "ready";

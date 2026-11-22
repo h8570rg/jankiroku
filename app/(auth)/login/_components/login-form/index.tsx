@@ -1,14 +1,15 @@
 "use client";
 
 import { useForm } from "@conform-to/react/future";
-import { ErrorMessage, FieldError, InputGroup, Label, TextField, Typography } from "@heroui/react";
+import { FieldError, InputGroup, Label, TextField, Typography } from "@heroui/react";
 import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { Mail } from "lucide-react";
 import { useActionState, useRef, useState } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
+import { TURNSTILE_SITE_KEY } from "@/lib/config";
 import { createSubmitHandler } from "@/lib/utils/form";
-import { Captcha, INITIAL_CAPTCHA_STATUS } from "../captcha";
+import { Captcha } from "../captcha";
 import { requestOtp } from "./actions";
 import { requestOtpSchema } from "./schema";
 
@@ -19,7 +20,8 @@ import { requestOtpSchema } from "./schema";
 export function LoginForm({ className }: { className?: string }) {
   const [lastResult, formAction, isPending] = useActionState(requestOtp, null);
   const captchaRef = useRef<TurnstileInstance>(undefined);
-  const [captchaStatus, setCaptchaStatus] = useState(INITIAL_CAPTCHA_STATUS);
+  // CAPTCHA を出さない環境（本番でサイトキーが未設定）では、ずっと送信できる
+  const [isCaptchaReady, setIsCaptchaReady] = useState(!TURNSTILE_SITE_KEY);
   const submit = createSubmitHandler(formAction);
   const { form, fields } = useForm(requestOtpSchema, {
     lastResult,
@@ -27,7 +29,7 @@ export function LoginForm({ className }: { className?: string }) {
       submit(event, context);
       // トークンは 1 回しか使えない。送信に失敗して画面に残ったときのために、すぐ取り直しておく
       captchaRef.current?.reset();
-      setCaptchaStatus(INITIAL_CAPTCHA_STATUS);
+      setIsCaptchaReady(!TURNSTILE_SITE_KEY);
     },
   });
 
@@ -44,22 +46,15 @@ export function LoginForm({ className }: { className?: string }) {
         <FieldError />
       </TextField>
       {/*
-        CAPTCHA はふだん隠れていて、枠の要素だけが高さ 0 で残る。高さ 0 の要素の上下のマージンは
-        前後のマージンと重なる（マージンの相殺）ので、隠れているときは入力欄とボタンの間が 16px のまま、
-        見えているときは入力欄・CAPTCHA・ボタンの間がそれぞれ 16px になる。
-        Button はもともと inline-flex で、インラインの要素のマージンは重ならないため、flex（ブロック）にしている。
+        CAPTCHA は隠れている間も高さ 0 の枠が残る。上下のマージンをボタンのマージンと重ねて（マージンの相殺）、
+        見えているときだけ余白が付くようにする。Button は inline-flex だとマージンが重ならないので flex にする
       */}
-      <Captcha ref={captchaRef} onStatusChange={setCaptchaStatus} className="my-4" />
-      {captchaStatus === "error" && (
-        <ErrorMessage>
-          ロボットでないことを確認できませんでした。ページを再読み込みしてください。
-        </ErrorMessage>
-      )}
+      <Captcha ref={captchaRef} onReadyChange={setIsCaptchaReady} className="my-4" />
       <Button
         className="mt-4 flex w-full"
         type="submit"
         isPending={isPending}
-        isDisabled={captchaStatus !== "ready"}
+        isDisabled={!isCaptchaReady}
       >
         ログインコードを送信
       </Button>

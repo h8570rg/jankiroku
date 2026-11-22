@@ -75,7 +75,7 @@ const CAPTCHA_TIMEOUT_MS = 60_000;
 
 /**
  * 再送はサーバー側の送信間隔に合わせてカウントダウン後に押せるようにする。
- * 再送にも CAPTCHA のトークンが要る。トークンは 1 回しか使えないので、再送のたびに取り直す。
+ * 再送にも CAPTCHA のトークンが要るので、押したときにトークンを待つ。
  */
 function ResendButton() {
   const [secondsLeft, setSecondsLeft] = useState(OTP_RESEND_INTERVAL_SECONDS);
@@ -90,17 +90,10 @@ function ResendButton() {
 
   const handleResend = () => {
     startTransition(async () => {
-      let captchaToken: string | undefined;
-      if (captchaRef.current) {
-        try {
-          captchaToken = await captchaRef.current.getResponsePromise(CAPTCHA_TIMEOUT_MS);
-        } catch {
-          toast.danger(
-            "ロボットでないことを確認できませんでした。ページを再読み込みしてください。",
-          );
-          return;
-        }
-      }
+      // 取れなかったときはトークンなしで送り、Supabase のエラー（captcha_failed）を出す
+      const captchaToken = await captchaRef.current
+        ?.getResponsePromise(CAPTCHA_TIMEOUT_MS)
+        .catch(() => undefined);
       const error = await resendOtp(captchaToken);
       captchaRef.current?.reset();
       if (error) {
@@ -113,9 +106,7 @@ function ResendButton() {
   };
 
   return (
-    // 余白の付け方は login-form と同じ（隠れている CAPTCHA の上下のマージンを、ボタンのマージンと重ねる）。
-    // flex の子どうしのマージンは重ならないので、親の flex から切り離すためにブロックの div で包む。
-    // ボタンも inline-flex のままだとマージンが重ならないので、flex にして mx-auto で中央に置く
+    // 余白の付け方は login-form と同じ。親の flex の中ではマージンが重ならないので、ブロックの div で包む
     <div>
       <Captcha ref={captchaRef} className="my-4" />
       <Button

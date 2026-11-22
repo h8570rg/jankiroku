@@ -5,8 +5,7 @@ export const OTP_EXPIRY_MINUTES = 10;
 /** 本番 Supabase の同一アドレスへの再送間隔（60 秒）に合わせる */
 export const OTP_RESEND_INTERVAL_SECONDS = 60;
 /**
- * Cloudflare Turnstile のサイトキー。本番以外では、未設定なら Cloudflare のテスト用キー（必ず通る）を使う。
- * 本番で未設定なら CAPTCHA を出さない（Supabase 側の CAPTCHA が無効な間はそれでもログインできる）。
+ * Cloudflare Turnstile のサイトキー。開発環境では Cloudflare のテスト用キー（必ず通る）を使う
  * @see https://developers.cloudflare.com/turnstile/troubleshooting/testing/
  */
 export const TURNSTILE_SITE_KEY =
