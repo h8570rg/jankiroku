@@ -43,7 +43,7 @@ export function LoginForm({ className }: { className?: string }) {
         </InputGroup>
         <FieldError />
       </TextField>
-      <Captcha ref={captchaRef} onStatusChange={setCaptchaStatus} className="mt-4" />
+      <Captcha ref={captchaRef} onStatusChange={setCaptchaStatus} visibleClassName="mt-4" />
       {captchaStatus === "error" && (
         <ErrorMessage className="mt-2">
           ロボットでないことを確認できませんでした。ページを再読み込みしてください。
@@ -52,8 +52,8 @@ export function LoginForm({ className }: { className?: string }) {
       <Button
         className="mt-4 w-full"
         type="submit"
-        isPending={isPending || captchaStatus === "loading"}
-        isDisabled={captchaStatus === "error"}
+        isPending={isPending}
+        isDisabled={captchaStatus !== "ready"}
       >
         ログインコードを送信
       </Button>

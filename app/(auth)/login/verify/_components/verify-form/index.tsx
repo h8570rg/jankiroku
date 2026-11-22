@@ -124,7 +124,7 @@ function ResendButton() {
       >
         {secondsLeft > 0 ? `コードを再送（${secondsLeft}秒後）` : "コードを再送"}
       </Button>
-      <Captcha ref={captchaRef} className="mt-4" />
+      <Captcha ref={captchaRef} visibleClassName="mt-4" />
     </>
   );
 }
