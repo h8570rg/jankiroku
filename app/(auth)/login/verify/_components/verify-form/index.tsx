@@ -72,7 +72,6 @@ export function VerifyForm({ className }: { className?: string }) {
 
 /**
  * 再送はサーバー側の送信間隔に合わせてカウントダウン後に押せるようにする。
- * 再送にも CAPTCHA のトークンが要る。ログインと同じく、トークンを待たずにその時点のものを送る。
  */
 function ResendButton() {
   const [secondsLeft, setSecondsLeft] = useState(OTP_RESEND_INTERVAL_SECONDS);
@@ -88,6 +87,7 @@ function ResendButton() {
   const handleResend = () => {
     startTransition(async () => {
       const error = await resendOtp(captchaRef.current?.getResponse());
+      // トークンは 1 回しか使えないので、次の再送のために取り直す
       captchaRef.current?.reset();
       if (error) {
         toast.danger(error);
@@ -99,7 +99,7 @@ function ResendButton() {
   };
 
   return (
-    // 余白の付け方は login-form と同じ。親の flex の中ではマージンが重ならないので、ブロックの div で包む
+    // 余白の付け方は login-form と同じ。flex の中ではマージンが重ならないので div で包む
     <div>
       <Captcha ref={captchaRef} className="my-4" />
       <Button

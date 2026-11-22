@@ -35,7 +35,7 @@ export async function clearPendingEmail() {
 /**
  * メールアドレス宛にログイン用のワンタイムコードを送信する。未登録ならユーザーを作成する。
  * 登録済みかどうかで結果を変えないため、アカウントの有無は外から判別できない。
- * captchaToken は Supabase が検証する。Supabase 側の CAPTCHA が無効なら無視される。
+ * captchaToken は Supabase 側で CAPTCHA が有効なときだけ検証される。
  * @see https://supabase.com/docs/guides/auth/auth-email-passwordless
  * @see https://supabase.com/docs/guides/auth/auth-captcha
  * @returns エラー時は画面に出すメッセージ、成功時は null

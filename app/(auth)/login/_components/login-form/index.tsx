@@ -34,8 +34,8 @@ export function LoginForm({ className }: { className?: string }) {
         <FieldError />
       </TextField>
       {/*
-        CAPTCHA は隠れている間も高さ 0 の枠が残る。上下のマージンをボタンのマージンと重ねて（マージンの相殺）、
-        見えているときだけ余白が付くようにする。Button は inline-flex だとマージンが重ならないので flex にする
+        CAPTCHA は隠れていても高さ 0 の枠が残るので、マージンの相殺で見えているときだけ余白を付ける。
+        Button は inline-flex だとマージンが重ならないので flex にする
       */}
       <Captcha className="my-4" />
       <Button className="mt-4 flex w-full" type="submit" isPending={isPending}>

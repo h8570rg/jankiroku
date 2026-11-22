@@ -54,7 +54,6 @@ export async function verifyOtp(_prevState: unknown, formData: FormData) {
 
 /**
  * Cookie に残っている送信先へコードを再送する。
- * @param captchaToken CAPTCHA を出していなければ undefined
  * @returns エラー時は画面に出すメッセージ、成功時は null
  */
 export async function resendOtp(captchaToken: string | undefined): Promise<string | null> {
