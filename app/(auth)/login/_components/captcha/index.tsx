@@ -7,7 +7,7 @@ import { TURNSTILE_SITE_KEY } from "@/lib/config";
 /**
  * Cloudflare Turnstile。トークンは Supabase が検証する（signInWithOtp の captchaToken）。
  * ふだんは隠れていて、Cloudflare が操作を求めたときだけチェックボックスを出す。
- * フォームの中に置くとトークンが隠しフィールド cf-turnstile-response に入る。1 回しか使えないので、使ったら ref.reset() で取り直す。
+ * フォームの中に置くとトークンが隠しフィールド cf-turnstile-response に入る。1 回しか使えないので、同じ画面で何度も送るとき（再送）は、使ったら ref.reset() で取り直す。
  * 送信ボタンはトークンを待たずに押せる。トークンがないまま送ると Supabase が断る（captcha_failed）。
  */
 export function Captcha({
