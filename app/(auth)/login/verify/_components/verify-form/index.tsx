@@ -85,9 +85,15 @@ function ResendButton() {
   }, [secondsLeft]);
 
   const handleResend = () => {
+    // 押したときに確認を始める。チェックが必要なら、ボタンの下にチェックボックスが出る。
+    // execute() はウィジェットの表示を state で切り替えるので、トランジションの外で呼ぶ（中だと処理が終わるまで表示されない）
+    captchaRef.current?.execute();
     startTransition(async () => {
-      const error = await resendOtp(captchaRef.current?.getResponse());
-      // トークンは 1 回しか使えないので、次の再送のために取り直す
+      const captchaToken = await captchaRef.current
+        ?.getResponsePromise(60_000)
+        .catch(() => undefined);
+      const error = await resendOtp(captchaToken);
+      // トークンは 1 回しか使えないので、次の再送に備えて戻す
       captchaRef.current?.reset();
       if (error) {
         toast.danger(error);
@@ -99,11 +105,9 @@ function ResendButton() {
   };
 
   return (
-    // 余白の付け方は login-form と同じ。flex の中ではマージンが重ならないので div で包む
-    <div>
-      <Captcha ref={captchaRef} className="my-4" />
+    <>
       <Button
-        className="mx-auto mt-4 flex"
+        className="mt-4"
         variant="outline"
         size="sm"
         onPress={handleResend}
@@ -112,6 +116,7 @@ function ResendButton() {
       >
         {secondsLeft > 0 ? `コードを再送（${secondsLeft}秒後）` : "コードを再送"}
       </Button>
-    </div>
+      <Captcha ref={captchaRef} execution="execute" className="mt-4" />
+    </>
   );
 }
