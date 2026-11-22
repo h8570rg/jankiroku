@@ -213,6 +213,7 @@ playwright.config.ts  # Playwright設定
 - [Local development workflow](https://supabase.com/docs/guides/local-development/cli-workflows)
 - [Database migrations](https://supabase.com/docs/guides/deployment/database-migrations)
 - [supabase](https://supabase.com/docs)
+- [Figma（デザイン・アイコン）](https://www.figma.com/design/UCGzyKbyKlVmgoAqUcFjKH/%E9%9B%80%E9%AC%BC%E9%8C%B2?node-id=32-178&t=ov1wYg4v7PxchOs7-11)
 
 # 用語
 
