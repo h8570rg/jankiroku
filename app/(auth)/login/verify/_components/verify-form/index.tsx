@@ -70,12 +70,9 @@ export function VerifyForm({ className }: { className?: string }) {
   );
 }
 
-/** CAPTCHA のトークンを待つ上限。interaction-only でチェックボックスが出たときは、押してもらう時間も含む */
-const CAPTCHA_TIMEOUT_MS = 60_000;
-
 /**
  * 再送はサーバー側の送信間隔に合わせてカウントダウン後に押せるようにする。
- * 再送にも CAPTCHA のトークンが要るので、押したときにトークンを待つ。
+ * 再送にも CAPTCHA のトークンが要る。ログインと同じく、トークンを待たずにその時点のものを送る。
  */
 function ResendButton() {
   const [secondsLeft, setSecondsLeft] = useState(OTP_RESEND_INTERVAL_SECONDS);
@@ -90,11 +87,7 @@ function ResendButton() {
 
   const handleResend = () => {
     startTransition(async () => {
-      // 取れなかったときはトークンなしで送り、Supabase のエラー（captcha_failed）を出す
-      const captchaToken = await captchaRef.current
-        ?.getResponsePromise(CAPTCHA_TIMEOUT_MS)
-        .catch(() => undefined);
-      const error = await resendOtp(captchaToken);
+      const error = await resendOtp(captchaRef.current?.getResponse());
       captchaRef.current?.reset();
       if (error) {
         toast.danger(error);
