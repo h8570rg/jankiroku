@@ -26,7 +26,7 @@ pnpm run supabase:start
 ```
 
 - worktree（ブランチ）ごとに別の DB が起動します。接続先は `.env.local` に書き出されるので、手で設定する必要はありません
-- 各サービスの URL（Studio・Mailpit など）は `pnpm exec supabase status` で確認します
+- 各サービスの URL（Studio・Mailpit など）は `pnpm run supabase:status` で確認します
 - Claude Code のセッションが終わると、その worktree の DB は削除されます。次の作業は `pnpm run supabase:start` から始めます
 - 残っている DB は `pnpm exec supabase stack list` で確認し、`pnpm exec supabase stack destroy --yes --stack-id <id>` で消します
 - 本番のメールテンプレートは、Supabase の管理画面で `supabase/templates/` のファイルを設定します
@@ -49,6 +49,16 @@ pnpm run dev
 ```
 
 アプリ: 起動時に表示される URL
+
+## ローカルでのログイン
+
+ローカルではメールのログインコードでログインします（Google ログインはローカルでは使えません）。メールは実際には送られず、ローカルの Mailpit に届きます。
+
+1. ログイン画面でメールアドレスを入力し、コードを送信する
+2. `pnpm run supabase:status` を実行し、表示される `MAILPIT_URL` をブラウザで開く
+3. 届いたメールに書かれた 6 桁のコードを入力する（有効期限は 10 分）
+
+メールアドレスは何でも構いません。シードのユーザー（`test@example.com`・`alice@example.com` など。`supabase/seed.sql` を参照）を使うと、登録済みのデータでログインできます。
 
 # データベーススキーマの変更
 
@@ -75,7 +85,7 @@ pnpm run supabase:start
 pnpm run dev
 ```
 
-ローカル Studio の URL は `pnpm exec supabase status` の `STUDIO_URL` で確認します。
+ローカル Studio の URL は `pnpm run supabase:status` の `STUDIO_URL` で確認します。
 
 ### 2. スキーマを変更する
 
