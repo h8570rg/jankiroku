@@ -3,7 +3,6 @@
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import type { Ref } from "react";
 import { TURNSTILE_SITE_KEY } from "@/lib/config";
-import { CAPTCHA_FIELD_NAME } from "../../_lib/captcha";
 
 export type CaptchaStatus = "loading" | "ready" | "error";
 
@@ -12,7 +11,7 @@ export type CaptchaStatus = "loading" | "ready" | "error";
  * 任意のアドレスにメールを送らせるのを防ぐため、トークンは Supabase（signInWithOtp の captchaToken）が検証する。
  *
  * ふだんは何も表示せず、Turnstile が操作を求めたときだけチェックボックスを出す（interaction-only）。
- * フォームの中に置くと、トークンが CAPTCHA_FIELD_NAME の隠しフィールドに入る。
+ * フォームの中に置くと、トークンが cf-turnstile-response という隠しフィールドに入る。
  * トークンは 1 回しか使えないので、送信が終わったら ref.reset() で取り直す。
  * サイトキーがない（本番で未設定）なら何も描画しない。
  *
@@ -40,7 +39,6 @@ export function Captcha({
         appearance: "interaction-only",
         language: "ja",
         size: "flexible",
-        responseFieldName: CAPTCHA_FIELD_NAME,
       }}
       onWidgetLoad={() => onStatusChange?.("loading")}
       onSuccess={() => onStatusChange?.("ready")}

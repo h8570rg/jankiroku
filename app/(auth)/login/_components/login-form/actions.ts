@@ -4,7 +4,6 @@ import { parseSubmission, report } from "@conform-to/react/future";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getURL } from "@/lib/utils/url";
-import { getCaptchaToken } from "../../_lib/captcha";
 import { sendOtp, setPendingEmail } from "../../_lib/otp";
 import { requestOtpSchema } from "./schema";
 
@@ -24,7 +23,9 @@ export async function requestOtp(_prevState: unknown, formData: FormData) {
   }
   const { email } = result.data;
 
-  const error = await sendOtp(email, getCaptchaToken(formData));
+  // Turnstile がフォームの隠しフィールドに入れたトークン。CAPTCHA を出していなければ無い
+  const captchaToken = formData.get("cf-turnstile-response");
+  const error = await sendOtp(email, typeof captchaToken === "string" ? captchaToken : undefined);
 
   if (error) {
     return report(submission, {
