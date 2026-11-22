@@ -2,11 +2,13 @@
 
 import { useForm } from "@conform-to/react/future";
 import { cn, ErrorMessage, InputOTP, toast } from "@heroui/react";
+import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
 import { OTP_LENGTH, OTP_RESEND_INTERVAL_SECONDS } from "@/lib/config";
 import { createSubmitHandler } from "@/lib/utils/form";
+import { Captcha } from "../../../_components/captcha";
 import { resendOtp, verifyOtp } from "./actions";
 import { verifyOtpSchema } from "./schema";
 
@@ -68,12 +70,17 @@ export function VerifyForm({ className }: { className?: string }) {
   );
 }
 
+/** CAPTCHA のトークンを待つ上限。interaction-only でチェックボックスが出たときは、押してもらう時間も含む */
+const CAPTCHA_TIMEOUT_MS = 60_000;
+
 /**
  * 再送はサーバー側の送信間隔に合わせてカウントダウン後に押せるようにする。
+ * 再送にも CAPTCHA のトークンが要る。トークンは 1 回しか使えないので、再送のたびに取り直す。
  */
 function ResendButton() {
   const [secondsLeft, setSecondsLeft] = useState(OTP_RESEND_INTERVAL_SECONDS);
   const [isPending, startTransition] = useTransition();
+  const captchaRef = useRef<TurnstileInstance>(undefined);
 
   useEffect(() => {
     if (secondsLeft <= 0) return;
@@ -83,7 +90,19 @@ function ResendButton() {
 
   const handleResend = () => {
     startTransition(async () => {
-      const error = await resendOtp();
+      let captchaToken: string | undefined;
+      if (captchaRef.current) {
+        try {
+          captchaToken = await captchaRef.current.getResponsePromise(CAPTCHA_TIMEOUT_MS);
+        } catch {
+          toast.danger(
+            "ロボットでないことを確認できませんでした。ページを再読み込みしてください。",
+          );
+          return;
+        }
+      }
+      const error = await resendOtp(captchaToken);
+      captchaRef.current?.reset();
       if (error) {
         toast.danger(error);
         return;
@@ -94,15 +113,18 @@ function ResendButton() {
   };
 
   return (
-    <Button
-      className="mt-4"
-      variant="outline"
-      size="sm"
-      onPress={handleResend}
-      isDisabled={secondsLeft > 0}
-      isPending={isPending}
-    >
-      {secondsLeft > 0 ? `コードを再送（${secondsLeft}秒後）` : "コードを再送"}
-    </Button>
+    <>
+      <Button
+        className="mt-4"
+        variant="outline"
+        size="sm"
+        onPress={handleResend}
+        isDisabled={secondsLeft > 0}
+        isPending={isPending}
+      >
+        {secondsLeft > 0 ? `コードを再送（${secondsLeft}秒後）` : "コードを再送"}
+      </Button>
+      <Captcha ref={captchaRef} className="mt-4" />
+    </>
   );
 }
