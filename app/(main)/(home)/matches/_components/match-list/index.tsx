@@ -1,5 +1,3 @@
-"use client";
-
 import { MATCHES_PAGE_SIZE } from "@/lib/config";
 import type { Match } from "@/lib/type";
 import { MatchCard } from "../match-card";
