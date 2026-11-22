@@ -56,12 +56,12 @@ export async function verifyOtp(_prevState: unknown, formData: FormData) {
  * Cookie に残っている送信先へコードを再送する。
  * @returns エラー時は画面に出すメッセージ、成功時は null
  */
-export async function resendOtp(): Promise<string | null> {
+export async function resendOtp(captchaToken: string | undefined): Promise<string | null> {
   const email = await getPendingEmail();
   if (!email) {
     redirect("/login");
   }
-  const error = await sendOtp(email);
+  const error = await sendOtp(email, captchaToken);
   if (!error) {
     // Cookie の有効期限を新しいコードに合わせて延ばす
     await setPendingEmail(email);

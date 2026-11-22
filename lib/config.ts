@@ -4,6 +4,13 @@ export const OTP_LENGTH = 6;
 export const OTP_EXPIRY_MINUTES = 10;
 /** 本番 Supabase の同一アドレスへの再送間隔（60 秒）に合わせる */
 export const OTP_RESEND_INTERVAL_SECONDS = 60;
+/**
+ * Cloudflare Turnstile のサイトキー。開発環境では Cloudflare のテスト用キー（必ず通る）を使う
+ * @see https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+ */
+export const TURNSTILE_SITE_KEY =
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
+  (process.env.NODE_ENV === "production" ? undefined : "1x00000000000000000000AA");
 export const NAME_MAX_LENGTH = 12;
 export const AVATAR_MAX_SIZE = 2 * 1024 * 1024;
 export const AVATAR_ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;

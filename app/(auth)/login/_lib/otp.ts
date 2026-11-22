@@ -35,16 +35,19 @@ export async function clearPendingEmail() {
 /**
  * メールアドレス宛にログイン用のワンタイムコードを送信する。未登録ならユーザーを作成する。
  * 登録済みかどうかで結果を変えないため、アカウントの有無は外から判別できない。
+ * captchaToken は Supabase 側で CAPTCHA が有効なときだけ検証される。
  * @see https://supabase.com/docs/guides/auth/auth-email-passwordless
+ * @see https://supabase.com/docs/guides/auth/auth-captcha
  * @returns エラー時は画面に出すメッセージ、成功時は null
  */
-export async function sendOtp(email: string): Promise<string | null> {
+export async function sendOtp(email: string, captchaToken?: string): Promise<string | null> {
   const supabase = await createClient();
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
       shouldCreateUser: true,
+      captchaToken,
     },
   });
 
@@ -53,6 +56,9 @@ export async function sendOtp(email: string): Promise<string | null> {
   }
   if (error.code === "over_email_send_rate_limit") {
     return "短時間に送信できる回数を超えました。しばらくしてから再度お試しください。";
+  }
+  if (error.code === "captcha_failed") {
+    return "ロボットでないことを確認できませんでした。ページを再読み込みして、もう一度お試しください。";
   }
   return "コードを送信できませんでした。";
 }

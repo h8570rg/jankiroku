@@ -2,11 +2,13 @@
 
 import { useForm } from "@conform-to/react/future";
 import { cn, ErrorMessage, InputOTP, toast } from "@heroui/react";
+import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "@/components/button";
 import { Form } from "@/components/form";
 import { OTP_LENGTH, OTP_RESEND_INTERVAL_SECONDS } from "@/lib/config";
 import { createSubmitHandler } from "@/lib/utils/form";
+import { Captcha } from "../../../_components/captcha";
 import { resendOtp, verifyOtp } from "./actions";
 import { verifyOtpSchema } from "./schema";
 
@@ -74,6 +76,7 @@ export function VerifyForm({ className }: { className?: string }) {
 function ResendButton() {
   const [secondsLeft, setSecondsLeft] = useState(OTP_RESEND_INTERVAL_SECONDS);
   const [isPending, startTransition] = useTransition();
+  const captchaRef = useRef<TurnstileInstance>(undefined);
 
   useEffect(() => {
     if (secondsLeft <= 0) return;
@@ -83,7 +86,9 @@ function ResendButton() {
 
   const handleResend = () => {
     startTransition(async () => {
-      const error = await resendOtp();
+      const error = await resendOtp(captchaRef.current?.getResponse());
+      // トークンは 1 回しか使えないので、次の再送のために取り直す
+      captchaRef.current?.reset();
       if (error) {
         toast.danger(error);
         return;
@@ -94,15 +99,19 @@ function ResendButton() {
   };
 
   return (
-    <Button
-      className="mt-4"
-      variant="outline"
-      size="sm"
-      onPress={handleResend}
-      isDisabled={secondsLeft > 0}
-      isPending={isPending}
-    >
-      {secondsLeft > 0 ? `コードを再送（${secondsLeft}秒後）` : "コードを再送"}
-    </Button>
+    // 余白の付け方は login-form と同じ。flex の中ではマージンが重ならないので div で包む
+    <div>
+      <Captcha ref={captchaRef} className="my-4" />
+      <Button
+        className="mx-auto mt-4 flex"
+        variant="outline"
+        size="sm"
+        onPress={handleResend}
+        isDisabled={secondsLeft > 0}
+        isPending={isPending}
+      >
+        {secondsLeft > 0 ? `コードを再送（${secondsLeft}秒後）` : "コードを再送"}
+      </Button>
+    </div>
   );
 }
