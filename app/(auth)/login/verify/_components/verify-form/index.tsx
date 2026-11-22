@@ -113,9 +113,13 @@ function ResendButton() {
   };
 
   return (
-    <>
+    // 余白の付け方は login-form と同じ（隠れている CAPTCHA の上下のマージンを、ボタンのマージンと重ねる）。
+    // flex の子どうしのマージンは重ならないので、親の flex から切り離すためにブロックの div で包む。
+    // ボタンも inline-flex のままだとマージンが重ならないので、flex にして mx-auto で中央に置く
+    <div>
+      <Captcha ref={captchaRef} className="my-4" />
       <Button
-        className="mt-4"
+        className="mx-auto mt-4 flex"
         variant="outline"
         size="sm"
         onPress={handleResend}
@@ -124,7 +128,6 @@ function ResendButton() {
       >
         {secondsLeft > 0 ? `コードを再送（${secondsLeft}秒後）` : "コードを再送"}
       </Button>
-      <Captcha ref={captchaRef} visibleClassName="mt-4" />
-    </>
+    </div>
   );
 }

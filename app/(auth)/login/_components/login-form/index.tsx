@@ -43,14 +43,20 @@ export function LoginForm({ className }: { className?: string }) {
         </InputGroup>
         <FieldError />
       </TextField>
-      <Captcha ref={captchaRef} onStatusChange={setCaptchaStatus} visibleClassName="mt-4" />
+      {/*
+        CAPTCHA はふだん隠れていて、枠の要素だけが高さ 0 で残る。高さ 0 の要素の上下のマージンは
+        前後のマージンと重なる（マージンの相殺）ので、隠れているときは入力欄とボタンの間が 16px のまま、
+        見えているときは入力欄・CAPTCHA・ボタンの間がそれぞれ 16px になる。
+        Button はもともと inline-flex で、インラインの要素のマージンは重ならないため、flex（ブロック）にしている。
+      */}
+      <Captcha ref={captchaRef} onStatusChange={setCaptchaStatus} className="my-4" />
       {captchaStatus === "error" && (
-        <ErrorMessage className="mt-2">
+        <ErrorMessage>
           ロボットでないことを確認できませんでした。ページを再読み込みしてください。
         </ErrorMessage>
       )}
       <Button
-        className="mt-4 w-full"
+        className="mt-4 flex w-full"
         type="submit"
         isPending={isPending}
         isDisabled={captchaStatus !== "ready"}
