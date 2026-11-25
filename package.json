@@ -32,8 +32,8 @@
   "dependencies": {
     "@conform-to/react": "1.21.3",
     "@conform-to/zod": "1.21.3",
-    "@heroui/react": "3.2.7",
-    "@heroui/styles": "3.2.7",
+    "@heroui/react": "3.2.8",
+    "@heroui/styles": "3.2.8",
     "@iconify/react": "6.0.4",
     "@marsidev/react-turnstile": "1.6.3",
     "@supabase/ssr": "0.12.7",
