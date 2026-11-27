@@ -12,12 +12,12 @@ export default function MaintenancePage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   return (
     <main className="relative flex min-h-dvh flex-col">
-      <Navbar>
+      <Navbar contentClassName="mx-auto max-w-2xl px-4">
         <NavbarBrand>
           <Logo className="text-lg" />
         </NavbarBrand>
       </Navbar>
-      <div className="flex grow items-center justify-center px-4">
+      <div className="mx-auto flex w-full max-w-2xl grow items-center justify-center px-4">
         <div className="flex flex-col items-center gap-4">
           <Typography type="h1" align="center" className="text-lg">
             メンテナンス中

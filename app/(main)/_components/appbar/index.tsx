@@ -7,7 +7,7 @@ import { AppbarAvatar } from "./appbar-avatar";
 
 export default function Appbar() {
   return (
-    <Navbar shouldHideOnScroll>
+    <Navbar shouldHideOnScroll contentClassName="mx-auto max-w-2xl px-4">
       <NavbarContent>
         <NavbarBrand>
           <NextLink href="/matches">

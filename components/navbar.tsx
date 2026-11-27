@@ -23,8 +23,10 @@ export const Navbar = forwardRef<
   HTMLElement,
   ComponentPropsWithoutRef<"header"> & {
     shouldHideOnScroll?: boolean;
+    /** 内側の nav に付けるクラス。中身の幅を本文と揃えるときに使う */
+    contentClassName?: string;
   }
->(({ className, shouldHideOnScroll, children, ...restProps }, ref) => {
+>(({ className, contentClassName, shouldHideOnScroll, children, ...restProps }, ref) => {
   const [isHidden, setIsHidden] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const prevScrollY = useRef(0);
@@ -71,7 +73,12 @@ export const Navbar = forwardRef<
         variants={hideOnScrollVariants}
         {...(htmlProps as Record<string, unknown>)}
       >
-        <nav className="relative z-40 flex h-16 w-full flex-row flex-nowrap items-center justify-between gap-4 px-6">
+        <nav
+          className={cn(
+            "relative z-40 flex h-16 w-full flex-row flex-nowrap items-center justify-between gap-4 px-6",
+            contentClassName,
+          )}
+        >
           {children}
         </nav>
       </motion.header>
@@ -87,7 +94,12 @@ export const Navbar = forwardRef<
       )}
       {...restProps}
     >
-      <nav className="relative z-40 flex h-16 w-full flex-row flex-nowrap items-center justify-between gap-4 px-6">
+      <nav
+        className={cn(
+          "relative z-40 flex h-16 w-full flex-row flex-nowrap items-center justify-between gap-4 px-6",
+          contentClassName,
+        )}
+      >
         {children}
       </nav>
     </header>
