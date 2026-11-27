@@ -10,7 +10,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <RegistrationGuard />
       </Suspense>
       <Appbar />
-      <main className="flex-1 px-4">{children}</main>
+      <main className="mx-auto w-full max-w-2xl flex-1 px-4">{children}</main>
     </div>
   );
 }

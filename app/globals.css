@@ -35,4 +35,9 @@
   .input-otp {
     @apply w-fit;
   }
+
+  /* PC で画面いっぱいに広がらないよう、本文と同じ最大幅で中央に置く */
+  .drawer__dialog[data-placement="bottom"] {
+    @apply mx-auto max-w-2xl;
+  }
 }
